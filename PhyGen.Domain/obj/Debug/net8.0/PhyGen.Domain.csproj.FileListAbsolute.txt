@@ -1,0 +1,16 @@
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\bin\Debug\net8.0\PhyGen.Domain.deps.json
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\bin\Debug\net8.0\PhyGen.Domain.dll
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\bin\Debug\net8.0\PhyGen.Domain.pdb
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\bin\Debug\net8.0\PhyGen.Shared.dll
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\bin\Debug\net8.0\PhyGen.Shared.pdb
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\PhyGen.Domain.csproj.AssemblyReference.cache
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\PhyGen.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\PhyGen.Domain.AssemblyInfoInputs.cache
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\PhyGen.Domain.AssemblyInfo.cs
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\PhyGen.Domain.csproj.CoreCompileInputs.cache
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\PhyGen.D.E5261604.Up2Date
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\PhyGen.Domain.dll
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\refint\PhyGen.Domain.dll
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\PhyGen.Domain.pdb
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\ref\PhyGen.Domain.dll
+D:\Private_Space\Learn_Space\FPT QN\SE\Semester 9\SE_GRA_ELE\Đồ án - PhyGen\PhyGen_BE\PhyGen.Domain\obj\Debug\net8.0\PhyGen.Domain.sourcelink.json
