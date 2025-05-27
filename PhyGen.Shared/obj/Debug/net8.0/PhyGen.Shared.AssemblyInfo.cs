@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PhyGen.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+51ea8e26e66d8fbeccd4cabca40989f1a255755b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ddcb4b051955f77432217de6ab65201356a0cf70")]
 [assembly: System.Reflection.AssemblyProductAttribute("PhyGen.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PhyGen.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

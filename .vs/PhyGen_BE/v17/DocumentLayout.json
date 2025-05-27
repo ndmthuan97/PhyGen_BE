@@ -3,8 +3,136 @@
   "WorkspaceRootPath": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.insfrastructure\\persistence\\dbcontexts\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|solutionrelative:phygen.insfrastructure\\persistence\\dbcontexts\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\exam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\exam.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.insfrastructure\\extensions\\dbextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|solutionrelative:phygen.insfrastructure\\extensions\\dbextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B0EE0F09-3D22-4467-80BB-BA5471F40776}|PhyGen.API\\PhyGen.API.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B0EE0F09-3D22-4467-80BB-BA5471F40776}|PhyGen.API\\PhyGen.API.csproj|solutionrelative:phygen.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.insfrastructure\\extensions\\appdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|solutionrelative:phygen.insfrastructure\\extensions\\appdbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B0EE0F09-3D22-4467-80BB-BA5471F40776}|PhyGen.API\\PhyGen.API.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B0EE0F09-3D22-4467-80BB-BA5471F40776}|PhyGen.API\\PhyGen.API.csproj|solutionrelative:phygen.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B0EE0F09-3D22-4467-80BB-BA5471F40776}|PhyGen.API\\PhyGen.API.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{B0EE0F09-3D22-4467-80BB-BA5471F40776}|PhyGen.API\\PhyGen.API.csproj|solutionrelative:phygen.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.insfrastructure\\persistence\\dbcontexts\\useridentitydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|solutionrelative:phygen.insfrastructure\\persistence\\dbcontexts\\useridentitydbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.insfrastructure\\identity\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|solutionrelative:phygen.insfrastructure\\identity\\customer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}|PhyGen.Shared\\PhyGen.Shared.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.shared\\constants\\responsemessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}|PhyGen.Shared\\PhyGen.Shared.csproj|solutionrelative:phygen.shared\\constants\\responsemessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.insfrastructure\\extensions\\infrastructureextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{527D8ED2-89CA-4197-841A-FBF9648F4CA0}|PhyGen.Insfrastructure\\PhyGen.Insfrastructure.csproj|solutionrelative:phygen.insfrastructure\\extensions\\infrastructureextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}|PhyGen.Shared\\PhyGen.Shared.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.shared\\constants\\typesafe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}|PhyGen.Shared\\PhyGen.Shared.csproj|solutionrelative:phygen.shared\\constants\\typesafe.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\chapter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\chapter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\answer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\answer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\book.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\bookseries.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\bookseries.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\transaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\transaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\exampaperquestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\exampaperquestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\exampaper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\exampaper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\examcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\examcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\question.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\matrixdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\matrixdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\matrix.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\matrix.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\entitybase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\entitybase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\curriculum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\curriculum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\chapterunit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\chapterunit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\exceptions\\appexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\exceptions\\appexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.domain\\exceptions\\authexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D35035E-6799-40AF-947E-62D5105B5FBE}|PhyGen.Domain\\PhyGen.Domain.csproj|solutionrelative:phygen.domain\\exceptions\\authexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}|PhyGen.Shared\\PhyGen.Shared.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.shared\\constants\\appconstant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}|PhyGen.Shared\\PhyGen.Shared.csproj|solutionrelative:phygen.shared\\constants\\appconstant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}|PhyGen.Shared\\PhyGen.Shared.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.shared\\constants\\statuscode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}|PhyGen.Shared\\PhyGen.Shared.csproj|solutionrelative:phygen.shared\\constants\\statuscode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}|PhyGen.Shared\\PhyGen.Shared.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.shared\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}|PhyGen.Shared\\PhyGen.Shared.csproj|solutionrelative:phygen.shared\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,7 +142,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 15,
           "Children": [
             {
               "$type": "Bookmark",
@@ -66,7 +194,59 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AppDbContextFactory.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Extensions\\AppDbContextFactory.cs",
+              "RelativeDocumentMoniker": "PhyGen.Insfrastructure\\Extensions\\AppDbContextFactory.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Extensions\\AppDbContextFactory.cs",
+              "RelativeToolTip": "PhyGen.Insfrastructure\\Extensions\\AppDbContextFactory.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAwwBUAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T17:06:46.053Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.API\\appsettings.json",
+              "RelativeDocumentMoniker": "PhyGen.API\\appsettings.json",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.API\\appsettings.json",
+              "RelativeToolTip": "PhyGen.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAACTAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-27T16:09:24.263Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.API\\Program.cs",
+              "RelativeDocumentMoniker": "PhyGen.API\\Program.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.API\\Program.cs",
+              "RelativeToolTip": "PhyGen.API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T16:09:07.488Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Persistence\\DbContexts\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "PhyGen.Insfrastructure\\Persistence\\DbContexts\\AppDbContext.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Persistence\\DbContexts\\AppDbContext.cs",
+              "RelativeToolTip": "PhyGen.Insfrastructure\\Persistence\\DbContexts\\AppDbContext.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAAAH4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:59:57.443Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.API\\appsettings.Development.json",
               "RelativeDocumentMoniker": "PhyGen.API\\appsettings.Development.json",
@@ -74,8 +254,345 @@
               "RelativeToolTip": "PhyGen.API\\appsettings.Development.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-25T01:59:24.136Z",
+              "WhenOpened": "2025-05-25T01:59:24.136Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DbExtension.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Extensions\\DbExtension.cs",
+              "RelativeDocumentMoniker": "PhyGen.Insfrastructure\\Extensions\\DbExtension.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Extensions\\DbExtension.cs",
+              "RelativeToolTip": "PhyGen.Insfrastructure\\Extensions\\DbExtension.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAQwCQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:38:15.486Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Exam.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Exam.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\Exam.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Exam.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\Exam.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAYwC8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:26:03.307Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UserIdentityDbContext.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Persistence\\DbContexts\\UserIdentityDbContext.cs",
+              "RelativeDocumentMoniker": "PhyGen.Insfrastructure\\Persistence\\DbContexts\\UserIdentityDbContext.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Persistence\\DbContexts\\UserIdentityDbContext.cs",
+              "RelativeToolTip": "PhyGen.Insfrastructure\\Persistence\\DbContexts\\UserIdentityDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T15:43:02.426Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Customer.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Identity\\Customer.cs",
+              "RelativeDocumentMoniker": "PhyGen.Insfrastructure\\Identity\\Customer.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Identity\\Customer.cs",
+              "RelativeToolTip": "PhyGen.Insfrastructure\\Identity\\Customer.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAQAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T15:44:30.917Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ResponseMessages.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Shared\\Constants\\ResponseMessages.cs",
+              "RelativeDocumentMoniker": "PhyGen.Shared\\Constants\\ResponseMessages.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Shared\\Constants\\ResponseMessages.cs",
+              "RelativeToolTip": "PhyGen.Shared\\Constants\\ResponseMessages.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T15:54:37.145Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "InfrastructureExtension.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Extensions\\InfrastructureExtension.cs",
+              "RelativeDocumentMoniker": "PhyGen.Insfrastructure\\Extensions\\InfrastructureExtension.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Insfrastructure\\Extensions\\InfrastructureExtension.cs",
+              "RelativeToolTip": "PhyGen.Insfrastructure\\Extensions\\InfrastructureExtension.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T15:54:01.404Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "TypeSafe.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Shared\\Constants\\TypeSafe.cs",
+              "RelativeDocumentMoniker": "PhyGen.Shared\\Constants\\TypeSafe.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Shared\\Constants\\TypeSafe.cs",
+              "RelativeToolTip": "PhyGen.Shared\\Constants\\TypeSafe.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T15:46:45.725Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Book.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Book.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\Book.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Book.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\Book.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAA3wCkAAABZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:31:55.779Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "BookSeries.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\BookSeries.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\BookSeries.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\BookSeries.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\BookSeries.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAzwCAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:27:52.557Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Transaction.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Transaction.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\Transaction.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Transaction.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\Transaction.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:27:31.089Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Notification.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Notification.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\Notification.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Notification.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\Notification.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:27:11.289Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ExamPaperQuestion.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\ExamPaperQuestion.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\ExamPaperQuestion.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\ExamPaperQuestion.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\ExamPaperQuestion.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAA3wCYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:26:52.44Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Chapter.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Chapter.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\Chapter.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Chapter.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\Chapter.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAewCkAAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:22:17.672Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ExamPaper.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\ExamPaper.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\ExamPaper.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\ExamPaper.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\ExamPaper.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwCIAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:26:31.859Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Answer.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Answer.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\Answer.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Answer.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\Answer.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwCQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:25:19.572Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "ExamCategory.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\ExamCategory.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\ExamCategory.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\ExamCategory.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\ExamCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:25:43.434Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Question.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Question.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\Question.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Question.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\Question.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAmwC8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:24:54.559Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "MatrixDetail.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\MatrixDetail.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\MatrixDetail.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\MatrixDetail.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\MatrixDetail.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAzwCQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:24:22.292Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Matrix.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Matrix.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\Matrix.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Matrix.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\Matrix.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAzwCkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:23:19.902Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "ChapterUnit.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\ChapterUnit.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\ChapterUnit.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\ChapterUnit.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\ChapterUnit.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAgwCYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:22:44.786Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Curriculum.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Curriculum.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\Curriculum.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\Curriculum.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\Curriculum.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAA3wCUAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:21:48.848Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\User.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\User.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\User.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\User.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAzwC4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:21:21.789Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "EntityBase.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\EntityBase.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Entities\\EntityBase.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Entities\\EntityBase.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Entities\\EntityBase.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T14:20:54.858Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "AppConstant.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Shared\\Constants\\AppConstant.cs",
+              "RelativeDocumentMoniker": "PhyGen.Shared\\Constants\\AppConstant.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Shared\\Constants\\AppConstant.cs",
+              "RelativeToolTip": "PhyGen.Shared\\Constants\\AppConstant.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T13:44:44.651Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "StatusCode.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Shared\\Constants\\StatusCode.cs",
+              "RelativeDocumentMoniker": "PhyGen.Shared\\Constants\\StatusCode.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Shared\\Constants\\StatusCode.cs",
+              "RelativeToolTip": "PhyGen.Shared\\Constants\\StatusCode.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T13:44:35.968Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "AppException.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Exceptions\\AppException.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Exceptions\\AppException.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Exceptions\\AppException.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Exceptions\\AppException.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T13:43:17.032Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "AuthException.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Exceptions\\AuthException.cs",
+              "RelativeDocumentMoniker": "PhyGen.Domain\\Exceptions\\AuthException.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Domain\\Exceptions\\AuthException.cs",
+              "RelativeToolTip": "PhyGen.Domain\\Exceptions\\AuthException.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T13:43:09.395Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "ApiResponse.cs",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Shared\\ApiResponse.cs",
+              "RelativeDocumentMoniker": "PhyGen.Shared\\ApiResponse.cs",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.Shared\\ApiResponse.cs",
+              "RelativeToolTip": "PhyGen.Shared\\ApiResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T13:41:22.23Z"
             }
           ]
         }
