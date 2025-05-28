@@ -2,5 +2,26 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build results
+bin/
+obj/
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# Others
+*.log
+*.db
+appsettings.*.json
+.env
+
 /PhyGen.API/appsettings.Development.json
 /PhyGen.API/appsettings.json
