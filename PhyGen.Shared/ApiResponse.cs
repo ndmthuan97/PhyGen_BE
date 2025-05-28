@@ -13,5 +13,13 @@ namespace PhyGen.Shared
         public T? Data { get; set; }
         public string Message { get; set; } = string.Empty;
         public IEnumerable<string>? Errors { get; set; }
+
+        public ApiResponse(int statusCode, T? data = default, string message = "", IEnumerable<string>? errors = null)
+        {
+            StatusCode = statusCode;
+            Data = data;
+            Message = message;
+            Errors = errors;
+        }
     }
 }
