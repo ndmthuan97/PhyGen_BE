@@ -1,27 +1,101 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-# Visual Studio
+﻿# 👉 Visual Studio - file cấu hình người dùng
 .vs/
 *.user
 *.suo
+*.rsuser
+*.sln.docstates
 
-# Build results
+# 👉 Build output
 bin/
 obj/
-
-# NuGet
+artifacts/
+*.dll
+*.exe
+*.appx
+*.appxbundle
+*.msi
 *.nupkg
-packages/
-project.lock.json
-project.fragment.lock.json
+*.snupkg
 
-# Others
+# 👉 File log và cache
 *.log
+*.tlog
+*.cache
+*.tmp
+*.tmp_proj
+*.pdb
+
+# 👉 Test results
+TestResults/
+*.TestResults
+*.trx
+*.coverage
+*.coveragexml
+
+# 👉 File dữ liệu local, file nhạy cảm
 *.db
-appsettings.*.json
+*.mdf
+*.ldf
+*.dbmdl
+*.sqlite
+*.bak
+
+# 👉 Settings cá nhân hoặc publish (không nên đưa lên Git)
+*.publishsettings
+*.pubxml
+*.azurePubxml
+*.Publish.xml
+*.pfx
+*.key
+*.jfm
+
+# 👉 Môi trường và secrets
 .env
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+
+# 👉 Node.js (nếu bạn dùng frontend)
+node_modules/
+
+# 👉 VS Code (giữ lại config team)
+.vscode/
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# 👉 ReSharper và Rider
+_ReSharper*/
+*.DotSettings.user
+.idea/
+*.sln.iml
+
+# 👉 Các thư mục tạm thời phổ biến khác
+packages/
+bower_components/
+*.bak
+*.old
+*.orig
+
+# 👉 Tạm thời của Azure hoặc các công cụ dev khác
+.publish/
+PublishScripts/
+csx/
+ecf/
+rcf/
+
+# 👉 Công cụ kiểm thử (nếu không dùng thì bỏ)
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# 👉 Local history VS/VS Code
+.localhistory/
+.vshistory/
+.history/
+
+# 👉 Chỉ giữ lại các file cấu hình cấu trúc nếu có
+!Directory.Build.rsp
 
 /PhyGen.API/appsettings.Development.json
 /PhyGen.API/appsettings.json
