@@ -10,4 +10,13 @@
     <ProjectReference Include="..\PhyGen.Shared\PhyGen.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Specs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
+  </ItemGroup>
+
 </Project>

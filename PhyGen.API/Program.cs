@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+using PhyGen.Domain.Entities;
+using PhyGen.Insfrastructure.Extensions;
+using PhyGen.Insfrastructure.Persistence.DbContexts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +12,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddIdentity<User, IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddDatabase<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidDataException("The DefaultConnection string is missing in the configuration."));
+builder.Services.AddHealthChecks().Services.AddDbContext<AppDbContext>();
+
 var app = builder.Build();
+
+await app.MigrateDatabaseAsync<AppDbContext>();
+
+await app.SeedAuthDataAsync();
+await app.SeedCoreDataAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -22,4 +40,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
