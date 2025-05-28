@@ -6,26 +6,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Microsoft.AspNetCore.Identity;
 
 namespace PhyGen.Domain.Entities
 {
-    public class User : EntityBase<Guid>
+    public class User : IdentityUser<Guid>
     {
-        [Required]
-        public string Username { get; set; } = string.Empty;
+        [MaxLength(50)]
+        public string FirstName { get; set; } = string.Empty;
 
-        [Required]
-        public string Email { get; set; } = string.Empty;
+        [MaxLength(50)]
+        public string LastName { get; set; } = string.Empty;
 
-        [Required]
-        public string Password { get; set; } = string.Empty;
+        public string? RefreshToken { get; set; }
+
+        public DateTime? RefreshTokenExpiryTime { get; set; }
 
         public string? Role { get; set; }
 
         public string? Address { get; set; }
-
         [Column(TypeName = "decimal(18,2)")]
-        public decimal? Phone { get; set; }
+        public decimal? PhoneDecimal { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using PhyGen.Domain.Entities;
 using PhyGen.Insfrastructure.Extensions;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 
@@ -9,6 +11,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddIdentity<User, IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddDatabase<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidDataException("The DefaultConnection string is missing in the configuration."));

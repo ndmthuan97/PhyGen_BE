@@ -23,4 +23,8 @@
     <ProjectReference Include="..\PhyGen.Application\PhyGen.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Identity\" />
+  </ItemGroup>
+
 </Project>

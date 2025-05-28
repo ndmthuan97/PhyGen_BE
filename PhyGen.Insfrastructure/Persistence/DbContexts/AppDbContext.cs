@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PhyGen.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Insfrastructure.Persistence.DbContexts
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        // Declare DbSets corresponding to tables in the database
         public DbSet<Curriculum> Curriculums { get; set; }
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<ChapterUnit> ChapterUnits { get; set; }
@@ -29,14 +31,15 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
         public DbSet<BookSeries> BookSeries { get; set; }
         public DbSet<Book> Books { get; set; }
 
+        // Configure entities and table mappings, set constraints and properties for columns
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Cấu hình thực thể
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasIndex(e => e.Email).IsUnique();
-                entity.HasIndex(e => e.Username).IsUnique();
-                entity.Property(e => e.Phone).HasPrecision(18, 0);
+                entity.HasIndex(e => e.UserName).IsUnique();  
             });
 
             modelBuilder.Entity<Transaction>(e => e.Property(p => p.Amount).HasPrecision(18, 2));
@@ -98,6 +101,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
             ConfigureSoftDeleteFilter(modelBuilder);
         }
 
+        // Configure all relationships in the model to not cascade deletion (restricted deletion)
         private void ConfigureCascadeDelete(ModelBuilder modelBuilder)
         {
             foreach (var relationship in modelBuilder.Model.GetEntityTypes()
@@ -107,6 +111,8 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
             }
         }
 
+        // Set soft delete filter for entities with DeletedAt attribute
+        // Records with DeletedAt != null will be automatically hidden from the default query
         private void ConfigureSoftDeleteFilter(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasQueryFilter(e => e.DeletedAt == null);

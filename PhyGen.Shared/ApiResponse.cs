@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Shared
 {
-    internal class ApiResponse
+    //The ApiResponse<T> class is used to package response data from an API in a uniform format.
+    public class ApiResponse<T>
     {
+        public int StatusCode { get; set; }
+        public T? Data { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public IEnumerable<string>? Errors { get; set; }
     }
 }

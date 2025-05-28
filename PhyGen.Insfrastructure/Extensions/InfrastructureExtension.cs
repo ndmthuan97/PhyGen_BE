@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Insfrastructure.Extensions
 {
+    // Extension methods for setting up infrastructure-related services, including authentication, identity, repository injection...
     public static class InfrastructureExtension
     {
     }

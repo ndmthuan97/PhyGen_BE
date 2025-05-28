@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PhyGen.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ddcb4b051955f77432217de6ab65201356a0cf70")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+45690ab0b395347b8a99bd33d458c79fe885000a")]
 [assembly: System.Reflection.AssemblyProductAttribute("PhyGen.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PhyGen.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
