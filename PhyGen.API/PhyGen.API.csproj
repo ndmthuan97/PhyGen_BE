@@ -20,4 +20,8 @@
     <ProjectReference Include="..\PhyGen.Shared\PhyGen.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
