@@ -16,9 +16,12 @@ namespace PhyGen.Domain.Entities
         [Required]
         public Guid CurriculumId { get; set; }
 
-        public Guid? BookId { get; set; }
+        [Required]
+        public Guid BookId { get; set; }
 
         public int? OrderNo { get; set; }
+
+        public string? CreatedBy { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
