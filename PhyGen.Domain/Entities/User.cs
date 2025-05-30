@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PhyGen.Domain.Entities
 {
-    public class User : EntityBase<Guid>
+    public class User : IdentityUser<Guid>
     {
         [MaxLength(50)]
         public string FirstName { get; set; } = string.Empty;
@@ -18,17 +18,15 @@ namespace PhyGen.Domain.Entities
         [MaxLength(50)]
         public string LastName { get; set; } = string.Empty;
 
-        public string Email { get; set; } = string.Empty;
+        public string? RefreshToken { get; set; }
 
-        public string Password { get; set; } = string.Empty;
-
-        public string UrlAvatar { get; set; } = string.Empty;
+        public DateTime? RefreshTokenExpiryTime { get; set; }
 
         public string? Role { get; set; }
 
         public string? Address { get; set; }
-
-        public string? Phone { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal? PhoneDecimal { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

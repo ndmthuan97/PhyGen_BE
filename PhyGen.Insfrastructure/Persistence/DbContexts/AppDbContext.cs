@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PhyGen.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -8,12 +10,11 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Insfrastructure.Persistence.DbContexts
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         // Declare DbSets corresponding to tables in the database
-        public DbSet<User> Users { get; set; }
         public DbSet<Curriculum> Curriculums { get; set; }
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<ChapterUnit> ChapterUnits { get; set; }
@@ -35,23 +36,11 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>(e =>
+            modelBuilder.Entity<User>(entity =>
             {
-                e.Property(p => p.FirstName).HasMaxLength(50);
-                e.Property(p => p.LastName).HasMaxLength(50);
-                e.Property(p => p.Email).IsRequired();
-                e.Property(p => p.Password).IsRequired();
-                e.Property(p => p.UrlAvatar);
-                e.Property(p => p.Role);
-                e.Property(p => p.Address);
-                e.Property(p => p.Phone);
-                e.Property(p => p.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
-                e.Property(p => p.UpdatedBy);
-                e.Property(p => p.UpdatedAt);
-                e.Property(p => p.DeletedBy);
-                e.Property(p => p.DeletedAt);
+                entity.HasIndex(e => e.Email).IsUnique();
+                entity.HasIndex(e => e.UserName).IsUnique();  
             });
-
 
             modelBuilder.Entity<Transaction>(e => e.Property(p => p.Amount).HasPrecision(18, 2));
 
