@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using PhyGen.Application.Systems.Users;
+using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.API.Models.Curriculums;
 using PhyGen.Application.Curriculums.Commands;
 
@@ -8,6 +10,16 @@ namespace PhyGen.API.Mapping
     {
         public ModelMappingProfile()
         {
+            CreateMap<RegisterDto, RegisterRequest>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName.Trim()))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName.Trim()))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName.Trim()))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Trim()))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber.Trim()))
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password.Trim()))
+                .ReverseMap();
+
+            CreateMap<LoginDto, LoginRequest>().ReverseMap();
             // Add your mapping configurations here
 
             // Mapping for Curriculum

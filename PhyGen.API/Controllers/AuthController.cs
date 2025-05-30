@@ -1,81 +1,44 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using PhyGen.API.DTOs;
-using PhyGen.Domain.Entities;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using AutoMapper;
+using PhyGen.API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class AuthController : ControllerBase
+using PhyGen.Application.Authentication.DTOs.Dtos;
+using PhyGen.Application.Authentication.Interface;
+using PhyGen.Shared.Constants;
+using PhyGen.Application.Systems.Users;
+
+
+namespace PhyGen.API.Controllers
 {
-    private readonly UserManager<User> _userManager;
-    private readonly SignInManager<User> _signInManager;
-    private readonly IConfiguration _configuration;
-
-    public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthController : BaseController<AuthController>
     {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _configuration = configuration;
-    }
+        private readonly IAuthService _authService;
+        private readonly IMapper _mapper;
 
-    [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterDto model)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var user = new User
+        public AuthController(IAuthService authService, IMapper mapper, ILogger<AuthController> logger)
+            : base(logger)
         {
-            Id = Guid.NewGuid(),
-            UserName = model.UserName,
-            Email = model.Email,
-            FirstName = model.FirstName,
-            LastName = model.LastName,
-            PhoneNumber = model.PhoneNumber,
-            Role = "User",
-            CreatedAt = DateTime.UtcNow
-        };
+            _authService = authService;
+            _mapper = mapper;
+        }
 
-        var result = await _userManager.CreateAsync(user, model.Password);
-        if (!result.Succeeded)
-            return BadRequest(result.Errors);
-
-        await _userManager.AddToRoleAsync(user, "User");
-
-        return Ok("User registered successfully");
-    }
-
-    [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginDto model)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var user = await _userManager.FindByEmailAsync(model.Email);
-        if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-            return Unauthorized("Invalid username or password");
-
-        var userRoles = await _userManager.GetRolesAsync(user);
-
-        return Ok(new
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            id = user.Id,
-            username = user.UserName,
-            email = user.Email,
-            fullName = $"{user.FirstName} {user.LastName}",
-            roles = userRoles
-        });
-    }
+            var dto = _mapper.Map<RegisterDto>(request);
+            var response = await _authService.RegisterAsync(dto);
+            return Ok(response);
+        }
 
-    [HttpPost("logout")]
-    public async Task<IActionResult> Logout()
-    {
-        await _signInManager.SignOutAsync();
-        return Ok(new { message = "Logged out successfully" });
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var dto = _mapper.Map<LoginDto>(request);
+            var response = await _authService.LoginAsync(dto);
+            return Ok(response);
+        }
     }
 }
