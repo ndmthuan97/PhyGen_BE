@@ -52,36 +52,56 @@ public class AuthService : IAuthService
             Email = user.Email,
         };
     }
-    public async Task<AuthenticationResponse> ConfirmRegister(int userid, string username, string otptext)
+    public async Task<AuthenticationResponse> ConfirmRegister(int userid, string email, string otptext)
     {
         AuthenticationResponse response = new AuthenticationResponse();
-        bool otpresponse = await ValidateOTP(username, otptext);
+
+        // Bước 1: Kiểm tra OTP
+        bool otpresponse = await ValidateOTP(email, otptext);
         if (!otpresponse)
         {
             response.Result = "fail";
             response.Message = "Invalid OTP or Expired";
-        }
-        else
-        {
-            var _tempdata = await this._context.ReserveUsers.FirstOrDefaultAsync(item => item.Email == username);
-            var _user = new User()
-            {
-                Id = Guid.NewGuid(),
-                FirstName = _tempdata.FirstName,
-                LastName = _tempdata.LastName,
-                Phone = _tempdata.Phone,
-                Email = _tempdata.Email,
-                Role = "User",
-                Password = _tempdata.Password
-            };
-            await this._context.Users.AddAsync(_user);
-            await this._context.SaveChangesAsync();
-            response.Result = "pass";
-            response.Message = "Registered successfully.";
+            return response;
         }
 
+        // Bước 2: Kiểm tra email đã tồn tại trong bảng Users chưa
+        var existingUser = await this._context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        if (existingUser != null)
+        {
+            response.Result = "fail";
+            response.Message = "Email already exists.";
+            return response;
+        }
+
+        // Bước 3: Lấy thông tin tạm và thêm user mới
+        var _tempdata = await this._context.ReserveUsers.FirstOrDefaultAsync(item => item.Email == email);
+        if (_tempdata == null)
+        {
+            response.Result = "fail";
+            response.Message = "Temporary user data not found.";
+            return response;
+        }
+
+        var _user = new User()
+        {
+            Id = Guid.NewGuid(),
+            FirstName = _tempdata.FirstName,
+            LastName = _tempdata.LastName,
+            Phone = _tempdata.Phone,
+            Email = _tempdata.Email,
+            Role = "User",
+            Password = _tempdata.Password,           
+        };
+
+        await this._context.Users.AddAsync(_user);
+        await this._context.SaveChangesAsync();
+
+        response.Result = "pass";
+        response.Message = "Registered successfully.";
         return response;
     }
+
 
     private async Task<bool> ValidateOTP(string username, string OTPText)
     {
