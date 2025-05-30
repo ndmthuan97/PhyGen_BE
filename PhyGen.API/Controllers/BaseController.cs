@@ -15,8 +15,9 @@ namespace PhyGen.API.Controllers
         private readonly IMediator _mediator;
         private readonly ILogger<BaseController<TController>> _logger;
 
-        protected BaseController(ILogger<BaseController<TController>> logger)
+        protected BaseController(IMediator mediator, ILogger<BaseController<TController>> logger)
         {
+            _mediator = mediator;
             _logger = logger;
         }
 
@@ -111,32 +112,7 @@ namespace PhyGen.API.Controllers
             });
         }
 
-        protected async Task<IActionResult> HandleRequestWithResponseAsync<TRequest, TResponse>
-            (TRequest request, Func<TRequest, Task<(StatusCode, TResponse)>> serviceCall)
-        {
-            var badRequestResponse = CheckModelStateValidity();
-            if (badRequestResponse != null)
-            {
-                return badRequestResponse;
-            }
-
-            try
-            {
-                var (statusCode, response) = await serviceCall(request);
-
-                return Ok(new ApiResponse<TResponse>
-                {
-                    StatusCode = (int)statusCode,
-                    Message = ResponseMessages.GetMessage(statusCode),
-                    Data = response
-                });
-            }
-            catch (Exception ex)
-            {
-                return HandleError(ex);
-            }
-        }
-
+        
 
         // Handle errors that arise during request processing, classify errors and return appropriate responses.
         private IActionResult HandleError<TResponse>(Exception ex)
@@ -196,28 +172,6 @@ namespace PhyGen.API.Controllers
 
             return null!;
         }
-        protected async Task<IActionResult> HandleRequestAsync<TRequest>(TRequest request, Func<TRequest, Task<StatusCode>> serviceCall)
-        {
-            var badRequestResponse = CheckModelStateValidity();
-            if (badRequestResponse != null)
-            {
-                return badRequestResponse;
-            }
-
-            try
-            {
-                var statusCode = await serviceCall(request);
-
-                return Ok(new ApiResponse<object>
-                {
-                    StatusCode = (int)statusCode,
-                    Message = ResponseMessages.GetMessage(statusCode),
-                });
-            }
-            catch (Exception ex)
-            {
-                return HandleError(ex);
-            }
-        }
+        
     }
 }

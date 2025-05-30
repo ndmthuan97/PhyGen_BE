@@ -7,6 +7,7 @@ using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Interface;
 using PhyGen.Shared.Constants;
 using PhyGen.Application.Systems.Users;
+using MediatR;
 
 
 namespace PhyGen.API.Controllers
@@ -18,8 +19,8 @@ namespace PhyGen.API.Controllers
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
-        public AuthController(IAuthService authService, IMapper mapper, ILogger<AuthController> logger)
-            : base(logger)
+        public AuthController(IAuthService authService, IMapper mapper, IMediator mediator, ILogger<AuthController> logger)
+            : base(mediator, logger)
         {
             _authService = authService;
             _mapper = mapper;
