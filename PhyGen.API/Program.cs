@@ -16,27 +16,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddIdentity<User, IdentityRole<Guid>>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
-builder.Services.AddScoped<IAuthService, AuthService>();
-
 builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 {
     builder.AllowAnyOrigin()
            .AllowAnyMethod()
            .AllowAnyHeader();
 }));
-builder.Services.Configure<JwtSettings>(
-    builder.Configuration.GetSection("JwtSettings"));
 
 builder.Services.AddDatabase<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidDataException("The DefaultConnection string is missing in the configuration."));
 
 builder.Services.AddHealthChecks().Services.AddDbContext<AppDbContext>();
-builder.Services.AddAutoMapper(typeof(ModelMappingProfile).Assembly);
 builder.Services.AddCoreInfrastructure(builder.Configuration);
-builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.AddAutoMapper(typeof(ModelMappingProfile).Assembly);
 
 var app = builder.Build();
 

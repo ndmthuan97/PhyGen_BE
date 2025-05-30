@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using Microsoft.AspNetCore.Identity;
 
 namespace PhyGen.Domain.Entities
 {
