@@ -20,29 +20,30 @@ namespace PhyGen.Insfrastructure.Identity
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
-        private readonly object _jwtTokenService;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
         public AuthService(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+    IJwtTokenGenerator jwtTokenGenerator)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
         public async Task<AuthenticationResponse> RegisterAsync(RegisterDto dto)
         {
-            
-
             var user = new User
             {
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 PhoneNumber = dto.PhoneNumber,
                 UserName = dto.Username,
-                Email = dto.Email
+                Email = dto.Email,
+                Role = "User"
             };
 
             var result = await _userManager.CreateAsync(user, dto.Password);
@@ -57,6 +58,7 @@ namespace PhyGen.Insfrastructure.Identity
             {
                 Email = user.Email,
                 Username = user.UserName,
+                Token = _jwtTokenGenerator.GenerateToken(user)
             };
         }
 
@@ -73,32 +75,10 @@ namespace PhyGen.Insfrastructure.Identity
             return new AuthenticationResponse
             {
                 Email = user.Email,
-                Username = user.UserName
+                Username = user.UserName,
+                Token = _jwtTokenGenerator.GenerateToken(user)
             };
         }
-
-        //private string GenerateJwtToken(IdentityUser user)
-        //{
-        //    var claims = new[]
-        //    {
-        //    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-        //    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        //    new Claim(ClaimTypes.NameIdentifier, user.Id)
-        //};
-
-        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-        //    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        //    var token = new JwtSecurityToken(
-        //        issuer: _configuration["Jwt:Issuer"],
-        //        audience: _configuration["Jwt:Audience"],
-        //        claims: claims,
-        //        expires: DateTime.UtcNow.AddHours(1),
-        //        signingCredentials: creds
-        //    );
-
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
     }
 
 }

@@ -33,6 +33,7 @@ builder.Services.AddDatabase<AppDbContext>(builder.Configuration.GetConnectionSt
 builder.Services.AddHealthChecks().Services.AddDbContext<AppDbContext>();
 builder.Services.AddAutoMapper(typeof(ModelMappingProfile).Assembly);
 builder.Services.AddCoreInfrastructure(builder.Configuration);
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
 var app = builder.Build();
 
