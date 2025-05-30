@@ -1,4 +1,4 @@
-﻿namespace PhyGen.API.DTOs
+﻿namespace PhyGen.Application.Authentication.DTOs.Dtos
 {
     public class LoginDto
     {

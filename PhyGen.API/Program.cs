@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using PhyGen.API.Mapping;
+using PhyGen.Application.Authentication.Interface;
 using PhyGen.Domain.Entities;
 using PhyGen.Insfrastructure.Extensions;
+using PhyGen.Insfrastructure.Identity;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +18,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 {
@@ -27,6 +31,7 @@ builder.Services.AddDatabase<AppDbContext>(builder.Configuration.GetConnectionSt
                 ?? throw new InvalidDataException("The DefaultConnection string is missing in the configuration."));
 
 builder.Services.AddHealthChecks().Services.AddDbContext<AppDbContext>();
+builder.Services.AddAutoMapper(typeof(ModelMappingProfile).Assembly);
 builder.Services.AddCoreInfrastructure(builder.Configuration);
 
 var app = builder.Build();
