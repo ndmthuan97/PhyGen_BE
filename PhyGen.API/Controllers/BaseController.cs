@@ -80,6 +80,39 @@ namespace PhyGen.API.Controllers
                 return HandleError<TResponse>(ex);
             }
         }
+        private IActionResult HandleError(Exception ex)
+        {
+            if (ex is AuthException authException)
+            {
+                return Unauthorized(new ApiResponse<object>
+                {
+                    StatusCode = (int)authException.StatusCode,
+                    Message = authException.Message,
+                    Errors = authException.Errors
+                });
+            }
+
+            if (ex is AppException appException)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)appException.StatusCode,
+                    Message = appException.Message,
+                    Errors = appException.Errors
+                });
+            }
+
+            _logger.LogError(ex, "An error occurred while processing request for {ControllerName}", typeof(TController).Name);
+
+            return StatusCode((int)HttpStatusCode.InternalServerError, new ApiResponse<object>
+            {
+                StatusCode = (int)Shared.Constants.StatusCode.UserAuthenticationFailed,
+                Message = ex.Message,
+                Errors = [ex.InnerException?.Message ?? "The system encountered an unexpected error while processing the request"]
+            });
+        }
+
+        
 
         // Handle errors that arise during request processing, classify errors and return appropriate responses.
         private IActionResult HandleError<TResponse>(Exception ex)
@@ -115,5 +148,30 @@ namespace PhyGen.API.Controllers
                 Errors = [ex.InnerException?.Message ?? "The system encountered an unexpected error while processing the request"]
             });
         }
+        protected IActionResult CheckModelStateValidity()
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(x => x.Errors.Select(e => e.ErrorMessage))
+                    .ToList();
+
+                _logger.LogWarning("Request validation failed for {ControllerName}: {ErrorMessages}",
+                        typeof(TController).Name,
+                        string.Join(", ", errors));
+
+                var statusCode = Shared.Constants.StatusCode.ModelInvalid;
+
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)statusCode,
+                    Message = ResponseMessages.GetMessage(statusCode),
+                    Errors = errors
+                });
+            }
+
+            return null!;
+        }
+        
     }
 }

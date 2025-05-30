@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using PhyGen.API.Mapping;
+using PhyGen.Application.Authentication.DTOs.Dtos;
+using PhyGen.Application.Authentication.Interface;
 using PhyGen.Domain.Entities;
 using PhyGen.Insfrastructure.Extensions;
+using PhyGen.Insfrastructure.Identity;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +28,9 @@ builder.Services.AddDatabase<AppDbContext>(builder.Configuration.GetConnectionSt
 
 builder.Services.AddHealthChecks().Services.AddDbContext<AppDbContext>();
 builder.Services.AddCoreInfrastructure(builder.Configuration);
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.AddAutoMapper(typeof(ModelMappingProfile).Assembly);
 
 var app = builder.Build();
 

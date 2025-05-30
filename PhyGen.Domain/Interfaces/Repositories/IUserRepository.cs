@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Interfaces.Repositories
 {
-    internal class IUserRepository
+    public interface IUserRepository
     {
     }
 }
