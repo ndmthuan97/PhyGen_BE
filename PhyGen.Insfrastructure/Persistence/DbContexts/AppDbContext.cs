@@ -3,6 +3,7 @@ using PhyGen.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +30,8 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<BookSeries> BookSeries { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<EmailOtpManager> EmailOtpManager { get; set; }
+        public DbSet<ReserveUsers> ReserveUsers { get; set; }
 
         // Configure entities and table mappings, set constraints and properties for columns
         protected override void OnModelCreating(ModelBuilder modelBuilder)

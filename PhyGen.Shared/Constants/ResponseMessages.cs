@@ -9,11 +9,16 @@ namespace PhyGen.Shared.Constants
         {
             // Success messages
             { StatusCode.RequestProcessedSuccessfully, "Request processed successfully." },
+
+            // Authentication success messages
             { StatusCode.RegisterSuccess, "Register succeeded" },
             { StatusCode.LoginSuccess, "Login succeeded" },
 
             // Error messages
             { StatusCode.ModelInvalid, "Model is invalid. Please check the request body." },
+
+
+            // Authentication error messages
             { StatusCode.UserAuthenticationFailed, "User authentication failed" },
             { StatusCode.EmailAlreadyExists, "Email already exists" },
             { StatusCode.RegisterFailed, "Register failed" },
@@ -23,7 +28,16 @@ namespace PhyGen.Shared.Constants
 
             // Curriculum messages
             { StatusCode.CurriculumNotFound, "Curriculum with Id does not exist." },
-            { StatusCode.CurriculumSameName, "Curriculum with the same name already exists." }
+            { StatusCode.CurriculumSameName, "Curriculum with the same name already exists." },
+
+            // Chapter messages
+            { StatusCode.ChapterNotFound, "Chapter with Id does not exist." },
+            { StatusCode.ChapterSameName, "Chapter with the same name already exists." },
+
+            // Book messages
+            { StatusCode.BookNotFound, "Book with Id does not exist." },
+            { StatusCode.BookSameName, "Book with the same name already exists." }
+
         };
 
         public static string GetMessage(StatusCode code)
