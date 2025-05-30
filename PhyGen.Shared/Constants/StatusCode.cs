@@ -27,7 +27,15 @@ namespace PhyGen.Shared.Constants
         InvalidPassword = 2009,
 
         // Curriculum error
-        CurriculumSameName = 2002,
-        CurriculumNotFound = 2003,
+        CurriculumSameName = 2010,
+        CurriculumNotFound = 2011,
+
+        // Chapter error
+        ChapterNotFound = 2012,
+        ChapterSameName = 2013,
+
+        // Book error
+        BookNotFound = 2014,
+        BookSameName = 2015,
     }
 }

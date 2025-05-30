@@ -3,6 +3,8 @@ using PhyGen.Application.Systems.Users;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.API.Models.Curriculums;
 using PhyGen.Application.Curriculums.Commands;
+using PhyGen.Application.Chapters.Commands;
+using PhyGen.API.Models.Chapters;
 
 namespace PhyGen.API.Mapping
 {
@@ -24,8 +26,12 @@ namespace PhyGen.API.Mapping
             // Mapping for Curriculum
             CreateMap<CreateCurriculumRequest, CreateCurriculumCommand>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
-
             CreateMap<UpdateCurriculumRequest, UpdateCurriculumCommand>();
+
+            // Mapping for Chapter
+            CreateMap<CreateChapterRequest, CreateChapterCommand>()
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateChapterRequest, UpdateChapterCommand>();
         }
     }
 }

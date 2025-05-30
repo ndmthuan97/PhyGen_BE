@@ -19,7 +19,7 @@ namespace PhyGen.Domain.Entities
         public string? Description { get; set; }
 
         [Required]
-        public Guid CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -31,9 +31,6 @@ namespace PhyGen.Domain.Entities
 
         public DateTime? DeletedAt { get; set; }
 
-        // Navigation Properties
-        [ForeignKey("CreatedBy")]
-        public virtual User Creator { get; set; } = null!;
         public virtual ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
     }
 }

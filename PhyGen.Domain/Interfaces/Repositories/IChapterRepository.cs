@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Interfaces.Repositories
 {
-    public interface IUserRepository : IAsyncRepository<User, Guid>
+    public interface IChapterRepository : IAsyncRepository<Chapter, Guid>
     {
-        Task<User?> GetUserByEmailAsync(string email);
+        Task<Chapter?> GetChapterByTitleAsync(string title);
     }
 }
