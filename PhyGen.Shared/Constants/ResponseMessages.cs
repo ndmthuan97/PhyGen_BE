@@ -19,27 +19,8 @@ namespace PhyGen.Shared.Constants
             // Curriculum messages
             { StatusCode.CurriculumNotFound, "Curriculum with Id does not exist." },
             { StatusCode.CurriculumSameName, "Curriculum with the same name already exists." },
-  
-               { StatusCode.ModelInvalid, "Model is invalid" },
-               { StatusCode.UserAuthenticationFailed, "User authentication failed" },
-               { StatusCode.EmailAlreadyExists, "Email already exists" },
-               { StatusCode.RegisterFailed, "Register failed" },
-               { StatusCode.RegisterSuccess, "Register succeeded" },
-               { StatusCode.LoginFailed, "Login failed" },
-               { StatusCode.LoginSuccess, "Login succeeded" },
-               { StatusCode.UserNotFound, "User not found" },
-               { StatusCode.InvalidPassword, "Invalid password" }
-           };
+        };
 
-        public static string GetMessage(StatusCode code)
-        {
-            if (_messages.TryGetValue(code, out var message))
-            {
-                return message;
-            }
-            throw new ArgumentException($"No message found for status code: {code}", nameof(code));
-        }
-   
+        public static string GetMessage(StatusCode code) => _messages[code];
     }
-
 }
