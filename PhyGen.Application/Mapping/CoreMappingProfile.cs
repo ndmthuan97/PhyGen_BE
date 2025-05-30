@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.Curriculums.Responses;
+using PhyGen.Application.Questions.Commands;
+using PhyGen.Application.Questions.Responses;
 using PhyGen.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -25,7 +27,18 @@ namespace PhyGen.Application.Mapping
             CreateMap<UpdateCurriculumCommand, Curriculum>()
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
-            
+
+
+            // Mapping for Question
+            CreateMap<CreateQuestionCommand, Question>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateQuestionCommand, Question>()
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+            //CreateMap<Question, QuestionResponse>()
+            //    .ForMember(dest => dest.Answers, opt => opt.MapFrom(src => src.Answers));
+
 
 
         }
