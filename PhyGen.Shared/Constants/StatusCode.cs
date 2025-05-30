@@ -13,5 +13,9 @@ namespace PhyGen.Shared.Constants
 
         // Error code 2xxx
         ModelInvalid = 2001,
+
+        // Curriculum error
+        CurriculumSameName = 2002,
+        CurriculumNotFound = 2003,
     }
 }
