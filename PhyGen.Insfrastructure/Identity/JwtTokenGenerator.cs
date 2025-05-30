@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+namespace PhyGen.Insfrastructure.Identity;
 public class JwtTokenGenerator : IJwtTokenGenerator
 {
     private readonly IConfiguration _configuration;
@@ -31,7 +32,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new Claim(ClaimTypes.Role, user.Role),
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+        var key = new SymmetricSecurityKey(Convert.FromBase64String(secretKey));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(

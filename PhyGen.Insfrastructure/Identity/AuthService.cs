@@ -19,7 +19,6 @@ namespace PhyGen.Insfrastructure.Identity
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IConfiguration _configuration;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
         public AuthService(
@@ -30,7 +29,6 @@ namespace PhyGen.Insfrastructure.Identity
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _configuration = configuration;
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
@@ -50,7 +48,6 @@ namespace PhyGen.Insfrastructure.Identity
 
             if (!result.Succeeded)
             {
-                var errors = result.Errors.Select(e => e.Description).ToList();
                 throw new AppException(StatusCode.RegisterFailed);
             }
 
