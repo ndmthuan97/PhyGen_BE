@@ -20,7 +20,6 @@ namespace PhyGen.Shared.Constants
             { StatusCode.CurriculumNotFound, "Curriculum with Id does not exist." },
             { StatusCode.CurriculumSameName, "Curriculum with the same name already exists." },
   
-               { StatusCode.RequestProcessedSuccessfully, "Request processed successfully" },
                { StatusCode.ModelInvalid, "Model is invalid" },
                { StatusCode.UserAuthenticationFailed, "User authentication failed" },
                { StatusCode.EmailAlreadyExists, "Email already exists" },
