@@ -9,11 +9,16 @@ namespace PhyGen.Shared.Constants
         {
             // Success messages
             { StatusCode.RequestProcessedSuccessfully, "Request processed successfully." },
+
+            // Authentication success messages
             { StatusCode.RegisterSuccess, "Register succeeded" },
             { StatusCode.LoginSuccess, "Login succeeded" },
 
             // Error messages
             { StatusCode.ModelInvalid, "Model is invalid. Please check the request body." },
+
+
+            // Authentication error messages
             { StatusCode.UserAuthenticationFailed, "User authentication failed" },
             { StatusCode.EmailAlreadyExists, "Email already exists" },
             { StatusCode.RegisterFailed, "Register failed" },
