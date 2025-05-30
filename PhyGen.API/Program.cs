@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using PhyGen.API.Mapping;
+using PhyGen.Application.Authentication.DTOs.Dtos;
+using PhyGen.Application.Authentication.Interface;
 using PhyGen.Domain.Entities;
 using PhyGen.Insfrastructure.Extensions;
+using PhyGen.Insfrastructure.Identity;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,12 +22,16 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
            .AllowAnyMethod()
            .AllowAnyHeader();
 }));
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("JwtSettings"));
 
 builder.Services.AddDatabase<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidDataException("The DefaultConnection string is missing in the configuration."));
 
 builder.Services.AddHealthChecks().Services.AddDbContext<AppDbContext>();
+builder.Services.AddAutoMapper(typeof(ModelMappingProfile).Assembly);
 builder.Services.AddCoreInfrastructure(builder.Configuration);
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
 var app = builder.Build();
 
