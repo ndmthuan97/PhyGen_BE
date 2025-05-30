@@ -11,7 +11,6 @@ namespace PhyGen.API.Mapping
         public ModelMappingProfile()
         {
             CreateMap<RegisterDto, RegisterRequest>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName.Trim()))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName.Trim()))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName.Trim()))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Trim()))

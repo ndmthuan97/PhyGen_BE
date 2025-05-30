@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Curriculums.Queries;
 using PhyGen.Domain.Interfaces.Repositories;
+using PhyGen.Insfrastructure.Identity;
 using PhyGen.Insfrastructure.Persistence.Repositories;
+using PhyGen.Insfrastructure.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +20,14 @@ namespace PhyGen.Insfrastructure.Extensions
         public static IServiceCollection AddCoreInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             var applicationAssemblies = new[] {
-                typeof(GetAllCurriculumsQuery).Assembly
+                typeof(GetAllCurriculumsQuery).Assembly,
+                //typeof(ModelMappingProfile).Assembly
             };
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(applicationAssemblies));
             services.AddAutoMapper(applicationAssemblies);
 
+            
             CommonInfrastrucutre(services, configuration);
             return services;
         }
@@ -30,6 +35,10 @@ namespace PhyGen.Insfrastructure.Extensions
         private static void CommonInfrastrucutre(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped(typeof(IAsyncRepository<,>), typeof(RepositoryBase<,>));
+
+            services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
             services.AddScoped<ICurriculumRepository, CurriculumRepository>();
         }
