@@ -16,9 +16,18 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
+
 builder.Services.AddDatabase<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidDataException("The DefaultConnection string is missing in the configuration."));
+
 builder.Services.AddHealthChecks().Services.AddDbContext<AppDbContext>();
+builder.Services.AddCoreInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
@@ -35,6 +44,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
