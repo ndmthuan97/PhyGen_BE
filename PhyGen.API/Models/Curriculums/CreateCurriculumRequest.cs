@@ -13,7 +13,6 @@ namespace PhyGen.API.Models.Curriculums
 
         public string? Description { get; set; }
 
-        [JsonRequired]
-        public Guid CreatedBy { get; set; }
+        public string CreatedBy { get; set; } = string.Empty;
     }
 }

@@ -4,17 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhyGen.Application.Curriculums.Responses
+namespace PhyGen.Application.Chapters.Responses
 {
-    public class CurriculumResponse
+    public class ChapterResponse
     {
         public Guid Id { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
 
-        public string? Grade { get; set; }
+        public Guid CurriculumId { get; set; }
 
-        public string? Description { get; set; }
+        public Guid BookId { get; set; }
+
+        public int OrderNo { get; set; }
 
         public string? CreatedBy { get; set; }
 
@@ -22,6 +24,6 @@ namespace PhyGen.Application.Curriculums.Responses
 
         public string? UpdatedBy { get; set; }
 
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

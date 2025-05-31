@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using PhyGen.Application.Curriculums.Queries;
 using PhyGen.Application.Curriculums.Responses;
+using PhyGen.Application.Exceptions.Curriculums;
 using PhyGen.Application.Mapping;
 using PhyGen.Domain.Interfaces.Repositories;
 using System;
@@ -23,7 +24,7 @@ namespace PhyGen.Application.Curriculums.Handlers
 
         public async Task<CurriculumResponse> Handle(GetCurriculumByIdQuery request, CancellationToken cancellationToken)
         {
-            var curriculum = await _curriculumRepository.GetByIdAsync(request.CurriculumId) ?? throw new CultureNotFoundException();
+            var curriculum = await _curriculumRepository.GetByIdAsync(request.CurriculumId) ?? throw new CurriculumNotFoundException();
             return AppMapper<CoreMappingProfile>.Mapper.Map<CurriculumResponse>(curriculum);
         }
     }

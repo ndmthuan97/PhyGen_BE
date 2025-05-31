@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.Exceptions.Curriculums;
+using PhyGen.Application.Exceptions.Users;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces.Repositories;
 using System;
@@ -14,10 +15,12 @@ namespace PhyGen.Application.Curriculums.Handlers
     public class UpdateCurriculumCommandHandler : IRequestHandler<UpdateCurriculumCommand, Unit>
     {
         private readonly ICurriculumRepository _curriculumRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UpdateCurriculumCommandHandler(ICurriculumRepository curriculumRepository)
+        public UpdateCurriculumCommandHandler(ICurriculumRepository curriculumRepository, IUserRepository userRepository)
         {
             _curriculumRepository = curriculumRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<Unit> Handle(UpdateCurriculumCommand request, CancellationToken cancellationToken)
@@ -29,6 +32,9 @@ namespace PhyGen.Application.Curriculums.Handlers
 
             if (await _curriculumRepository.GetCurriculumByNameAsync(request.Name) != null)
                 throw new CurriculumSameNameException();
+
+            if (await _userRepository.GetUserByEmailAsync(request.UpdatedBy) == null)
+                throw new UserNotFoundException();
 
             curriculum.Name = request.Name;
             curriculum.Grade = request.Grade;
