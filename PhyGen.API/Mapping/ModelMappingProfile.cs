@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
-using PhyGen.Application.Systems.Users;
-using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.API.Models.Curriculums;
+using PhyGen.API.Models.Questions;
+using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.Chapters.Commands;
 using PhyGen.API.Models.Chapters;
+using PhyGen.Application.Questions.Commands;
+using PhyGen.Application.Systems.Users;
 
 namespace PhyGen.API.Mapping
 {
@@ -32,6 +34,12 @@ namespace PhyGen.API.Mapping
             CreateMap<CreateChapterRequest, CreateChapterCommand>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
             CreateMap<UpdateChapterRequest, UpdateChapterCommand>();
+
+            // Mapping for Question
+            CreateMap<CreateQuestionRequest, CreateQuestionCommand>()
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateQuestionRequest, UpdateQuestionCommand>()
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
         }
     }
 }
