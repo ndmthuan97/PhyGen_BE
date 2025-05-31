@@ -39,7 +39,7 @@ namespace PhyGen.API.Controllers
         [HttpPost("confirmregisteration")]
         public async Task<IActionResult> Confirmregisteration(Confirmpassword _data)
         {
-            var data = await _authService.ConfirmRegister(_data.userid, _data.email, _data.otptext);
+            var data = await _authService.ConfirmRegister(_data.email, _data.otptext);
             return Ok(data);
         }
 
@@ -48,7 +48,13 @@ namespace PhyGen.API.Controllers
         {
             var dto = _mapper.Map<LoginDto>(request);
             var response = await _authService.LoginAsync(dto);
-            return Ok(response);
+            return Ok(new
+            {
+                response.Response.Email,
+                response.Response.StatusCode,
+                response.Response.Message,
+                Token = response.Token
+            });
         }
 
         [HttpGet("forgetpassword")]

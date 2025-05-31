@@ -11,6 +11,7 @@ using PhyGen.Shared;
 using Microsoft.EntityFrameworkCore;
 using Azure;
 using Newtonsoft.Json.Linq;
+using PhyGen.Application.Authentication.DTOs.Responses;
 
 namespace PhyGen.Insfrastructure.Service;
 
@@ -29,95 +30,96 @@ public class AuthService : IAuthService
 
     public async Task<AuthenticationResponse> RegisterAsync(RegisterDto dto)
     {
-        AuthenticationResponse response = new AuthenticationResponse();
-        string email = dto.Email.ToLower();
+        var email = dto.Email.ToLower();
         if (_context.Users.Any(u => u.Email.ToLower() == email))
         {
-            response.Result = "fails";
-            response.Message = "Email already exists";
-            return response;
-        }
-        else
-        {
-            response.Result = "pass";
-            response.Message = "Please verify OTP";
-            response.Email = dto.Email;
-        }
-        var existingReserveUser = _context.ReserveUsers.FirstOrDefault(u => u.Email.ToLower() == email);
-        if (existingReserveUser != null)
-        {
-            _context.ReserveUsers.Remove(existingReserveUser);
-            await _context.SaveChangesAsync(); // Lưu thay đổi trước khi thêm mới
-        }
-        var user = new ReserveUsers
+            return new AuthenticationResponse
             {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                Phone = dto.PhoneNumber,
                 Email = dto.Email,
-                Password = dto.Password
+                StatusCode = StatusCode.EmailAlreadyExists
             };
-        string OTPText = Generaterandomnumber();
-        await UpdateOtp(dto.Email, OTPText, "register");
-        await SendOtpMail(dto.Email, OTPText, dto.Email, "register");
+        }
 
-        _context.ReserveUsers.Add(user);
+        var users = new User
+        {
+            Id = Guid.NewGuid(),
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            Phone = dto.PhoneNumber,
+            Email = dto.Email.ToLower(),
+            Password = dto.Password,
+            Role = "User"
+        };
+
+        string otp = Generaterandomnumber();
+        await UpdateOtp(dto.Email, otp, "register");
+        await SendOtpMail(dto.Email, otp, dto.Email, "register");
+
         await _context.SaveChangesAsync();
 
-        return response;
+        return new AuthenticationResponse
+        {
+            Email = dto.Email,
+            StatusCode = StatusCode.RegisterSuccess
+        };
     }
-    public async Task<AuthenticationResponse> ConfirmRegister(int userid, string email, string otptext)
-    {
-        AuthenticationResponse response = new AuthenticationResponse();
 
+    public async Task<AuthenticationResponse> ConfirmRegister(string email, string otptext)
+    {
         // Bước 1: Kiểm tra OTP
         bool otpresponse = await ValidateOTP(email, otptext);
         if (!otpresponse)
         {
-            response.Result = "fail";
-            response.Message = "Invalid OTP or Expired";
-            return response;
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.UserAuthenticationFailed
+            };
         }
 
         // Bước 2: Kiểm tra email đã tồn tại trong bảng Users chưa
-        var existingUser = await this._context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
         if (existingUser != null)
         {
-            response.Result = "fail";
-            response.Message = "Email already exists.";
-            return response;
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.EmailAlreadyExists
+            };
         }
 
         // Bước 3: Lấy thông tin tạm và thêm user mới
-        var _tempdata = await this._context.ReserveUsers.FirstOrDefaultAsync(item => item.Email == email);
-        if (_tempdata == null)
+        var tempData = await _context.ReserveUsers.FirstOrDefaultAsync(item => item.Email.ToLower() == email.ToLower());
+        if (tempData == null)
         {
-            response.Result = "fail";
-            response.Message = "Temporary user data not found.";
-            return response;
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.RegisterFailed
+            };
         }
 
-        var _user = new User()
+        var user = new User
         {
             Id = Guid.NewGuid(),
-            FirstName = _tempdata.FirstName,
-            LastName = _tempdata.LastName,
-            Phone = _tempdata.Phone,
-            Email = _tempdata.Email,
+            FirstName = tempData.FirstName,
+            LastName = tempData.LastName,
+            Phone = tempData.Phone,
+            Email = tempData.Email,
             Role = "User",
-            Password = _tempdata.Password,           
+            Password = tempData.Password
         };
 
-        await this._context.Users.AddAsync(_user);
-        await this._context.SaveChangesAsync();
+        await _context.Users.AddAsync(user);
+        _context.ReserveUsers.Remove(tempData);
+        await _context.SaveChangesAsync();
 
-        response.Result = "pass";
-        response.Message = "Registered successfully.";
-        response.Email = _tempdata.Email;
-        response.Token = _jwtTokenGenerator.GenerateToken(_user);
-        return response;
+        return new AuthenticationResponse
+        {
+            Email = email,
+            StatusCode = StatusCode.RegisterSuccess
+        };
     }
-
 
     private async Task<bool> ValidateOTP(string username, string OTPText)
     {
@@ -131,125 +133,142 @@ public class AuthService : IAuthService
         return response;
     }
 
-        private async Task UpdateOtp(string username, string otptext, string otptype)
-        {
-            var _opt = new EmailOtpManager()
-            {
-                Email = username,
-                Otptext = otptext,
-                Expiration = DateTime.Now.AddMinutes(30),
-                Createddate = DateTime.Now,
-                Otptype = otptype
-            };
-            await this._context.EmailOtpManager.AddAsync(_opt);
-            await this._context.SaveChangesAsync();
-        }
-
-    public async Task<AuthenticationResponse> LoginAsync(LoginDto dto)
+    private async Task UpdateOtp(string username, string otptext, string otptype)
     {
-        AuthenticationResponse response = new AuthenticationResponse();
+        var _opt = new EmailOtpManager()
+        {
+            Email = username,
+            Otptext = otptext,
+            Expiration = DateTime.Now.AddMinutes(30),
+            Createddate = DateTime.Now,
+            Otptype = otptype
+        };
+        await this._context.EmailOtpManager.AddAsync(_opt);
+        await this._context.SaveChangesAsync();
+    }
+
+    public async Task<LoginResponse> LoginAsync(LoginDto dto)
+    {
         var email = dto.Email.Trim().ToLower();
-        var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == email);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+
         if (user == null)
         {
-            response.Result = "fail";
-            response.Message = "Email already exists.";
-            return response;
+            return new LoginResponse
+            {
+                Response = new AuthenticationResponse
+                {
+                    Email = email,
+                    StatusCode = StatusCode.EmailAlreadyExists
+                },
+                Token = null
+            };
         }
-            
         if (user.Password != dto.Password)
         {
-            response.Result = "fail";
-            response.Message = "Password incorrect.";
-            return response;
+            return new LoginResponse
+            {
+                Response = new AuthenticationResponse
+                {
+                    Email = email,
+                    StatusCode = StatusCode.InvalidPassword
+                },
+                Token = null
+            };
         }
-        else
-        {
-            response.Result = "pass";
-            response.Message = "Login Successful.";
-            response.Email = user.Email;
-            response.Token = _jwtTokenGenerator.GenerateToken(user);
-        }
+        var token = _jwtTokenGenerator.GenerateToken(user);
 
-        return response;
+        return new LoginResponse
+        {
+            Response = new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.LoginSuccess
+            },
+            Token = token
+        };
     }
 
     public async Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordDto dto)
     {
-        AuthenticationResponse response = new AuthenticationResponse();
         var email = dto.Email.Trim().ToLower();
         var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == email);
         if (user == null)
         {
-            response.Result = "fail";
-            response.Message = "Email does not exists.";
-            return response;
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.EmailDoesNotExists 
+            };          
         }
 
         if (user.Password != dto.CurrentPassword)
         {
-            response.Result = "fail";
-            response.Message = "Password incorrect.";
-            return response;
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.InvalidPassword
+            };           
         }
-        else
-        {
-            response.Result = "pass";
-            response.Message = "Password has changed.";
-            response.Email = email;
-        }
-            // 3. Cập nhật mật khẩu mới (plain text)
-            user.Password = dto.NewPassword;
+                
+        // 3. Cập nhật mật khẩu mới (plain text)
+        user.Password = dto.NewPassword;
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
-        return response;
+        return new AuthenticationResponse
+        {
+            Email = email,
+            StatusCode = StatusCode.ChangedPasswordSuccess
+        }; 
 
     }
     public async Task<AuthenticationResponse> ForgetPassword(string email)
     {
-        AuthenticationResponse response = new AuthenticationResponse();
         var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);
         if (_user != null)
         {
             string otptext = Generaterandomnumber();
             await UpdateOtp(email, otptext, "forgetpassword");
-            await SendOtpMail(_user.Email, otptext, _user.Email, "forgetpassword");
-            response.Result = "pass";
-            response.Message = "OTP sent";
-            response.Email = email;
-
+            await SendOtpMail(_user.Email, otptext, _user.Email, "forgetpassword");          
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.OtpSendSuccess
+            };
         }
         else
         {
-            response.Result = "fail";
-            response.Message = "Invalid User";
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.InvalidUser
+            };
         }
-        return response;
     }
 
     public async Task<AuthenticationResponse> UpdatePassword(string email, string Password, string Otptext)
     {
-        AuthenticationResponse response = new AuthenticationResponse();
 
         bool otpvalidation = await ValidateOTP(email, Otptext);
         if (otpvalidation)
         {
-                var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);
-                if (_user != null)
+            var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);
+            if (_user != null)
+            {
+                _user.Password = Password;
+                await _context.SaveChangesAsync();
+                return new AuthenticationResponse
                 {
-                    _user.Password = Password;
-                    await _context.SaveChangesAsync();
-                    response.Result = "pass";
-                    response.Message = "Password changed";
-                    response.Email = email;
-                }
+                    Email = email,
+                    StatusCode = StatusCode.ChangedPasswordSuccess
+                };
+            }
         }
-        else
+        return new AuthenticationResponse
         {
-            response.Result = "fail";
-            response.Message = "Invalid OTP";
-        }
-        return response;
+            Email = email,
+            StatusCode = StatusCode.InvalidOtp
+        };
     }
     private string Generaterandomnumber()
     {
