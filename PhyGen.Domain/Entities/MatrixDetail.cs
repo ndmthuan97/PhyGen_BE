@@ -20,14 +20,6 @@ namespace PhyGen.Domain.Entities
 
         public int? Quantity { get; set; }
 
-        public string? UpdatedBy { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public string? DeletedBy { get; set; }
-
-        public DateTime? DeletedAt { get; set; }
-
         // Navigation Properties
         [ForeignKey("MatrixId")]
         public virtual Matrix Matrix { get; set; } = null!;

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PhyGen.Application.Chapters.Queries;
 using PhyGen.Application.Chapters.Responses;
 using PhyGen.Application.Exceptions.Chapters;
 using PhyGen.Application.Mapping;

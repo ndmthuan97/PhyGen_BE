@@ -9,6 +9,8 @@ using PhyGen.Application.Chapters.Commands;
 using PhyGen.API.Models.Chapters;
 using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Systems.Users;
+using PhyGen.Application.ChapterUnits.Commands;
+using PhyGen.API.Models.ChapterUnits;
 
 namespace PhyGen.API.Mapping
 {
@@ -35,7 +37,16 @@ namespace PhyGen.API.Mapping
             // Mapping for Chapter
             CreateMap<CreateChapterRequest, CreateChapterCommand>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
-            CreateMap<UpdateChapterRequest, UpdateChapterCommand>();
+            CreateMap<UpdateChapterRequest, UpdateChapterCommand>()
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+            CreateMap<DeleteChapterRequest, DeleteChapterCommand>()
+                .ForMember(dest => dest.DeletedBy, opt => opt.MapFrom(src => src.DeletedBy));
+
+            // Mapping for Chapter Unit
+            CreateMap<CreateChapterUnitRequest, CreateChapterUnitCommand>()
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateChapterUnitRequest, UpdateChapterUnitCommand>()
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
 
             // Mapping for Question
             CreateMap<CreateQuestionRequest, CreateQuestionCommand>()

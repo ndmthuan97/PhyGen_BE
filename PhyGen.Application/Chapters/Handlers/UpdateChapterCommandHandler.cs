@@ -39,12 +39,6 @@ namespace PhyGen.Application.Chapters.Handlers
             if (await _chapterRepository.GetChapterByTitleAsync(request.Title) != null)
                 throw new ChapterSameNameException();
 
-            if (await _curriculumRepository.GetByIdAsync(request.CurriculumId) == null)
-                throw new CurriculumNotFoundException();
-
-            if (await _bookRepository.GetByIdAsync(request.BookId) == null)
-                throw new BookNotFoundException();
-
             chapter.Title = request.Title;
             chapter.CurriculumId = request.CurriculumId;
             chapter.BookId = request.BookId;

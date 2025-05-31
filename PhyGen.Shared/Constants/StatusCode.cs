@@ -42,5 +42,9 @@ namespace PhyGen.Shared.Constants
         // Book error
         BookNotFound = 2014,
         BookSameName = 2015,
+
+        // Chapter Unit error
+        ChapterUnitNotFound = 2016,
+        ChapterUnitSameName = 2017,
     }
 }

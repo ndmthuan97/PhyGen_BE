@@ -5,18 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhyGen.Application.Chapters.Commands
+namespace PhyGen.Application.ChapterUnits.Commands
 {
-    public class CreateChapterCommand : IRequest<Guid>
+    public class CreateChapterUnitCommand : IRequest<Guid>
     {
         public string Title { get; set; } = string.Empty;
-
-        public Guid? CurriculumId { get; set; }
-
-        public Guid? BookId { get; set; }
-
+        public string? Description { get; set; }
         public int? OrderNo { get; set; }
-
         public string CreatedBy { get; set; } = string.Empty;
+        public Guid ChapterId { get; set; }
     }
 }

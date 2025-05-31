@@ -37,21 +37,37 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
         {
             base.OnModelCreating(modelBuilder);
 
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(string))
+                    {
+                        property.SetIsUnicode(true);
+                    }
+                }
+            }
+
             modelBuilder.Entity<User>(e =>
             {
-                e.Property(p => p.FirstName).HasMaxLength(50);
-                e.Property(p => p.LastName).HasMaxLength(50);
+                e.Property(p => p.FirstName).HasMaxLength(50).IsRequired();
+                e.Property(p => p.LastName).HasMaxLength(50).IsRequired();
                 e.Property(p => p.Email).IsRequired();
                 e.Property(p => p.Password).IsRequired();
-                e.Property(p => p.UrlAvatar);
+                e.Property(p => p.photoURL);
                 e.Property(p => p.Role);
                 e.Property(p => p.Address);
                 e.Property(p => p.Phone);
-                e.Property(p => p.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
-                e.Property(p => p.UpdatedBy);
-                e.Property(p => p.UpdatedAt);
-                e.Property(p => p.DeletedBy);
-                e.Property(p => p.DeletedAt);
+                e.Property(p => p.isConfirm).IsRequired();
+            });
+
+            modelBuilder.Entity<EmailOtpManager>(e =>
+            {
+                e.Property(p => p.Email).HasMaxLength(256);
+                e.Property(p => p.Otptext).IsRequired();
+                e.Property(p => p.Otptype).HasMaxLength(50);
+                e.Property(p => p.Expiration).IsRequired();
+                e.Property(p => p.Createddate);
             });
 
 
@@ -61,38 +77,71 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
                 e.Property(p => p.Grade).HasMaxLength(50);
+                e.Property(p => p.Description).HasColumnType("nvarchar(max)");
             });
 
-            modelBuilder.Entity<Chapter>(e => e.Property(p => p.Title).HasMaxLength(255).IsRequired());
+
+            modelBuilder.Entity<Chapter>(e =>
+            {
+                e.Property(p => p.Title).HasMaxLength(255).IsRequired();
+                e.Property(p => p.CurriculumId);
+                e.Property(p => p.BookId);
+                e.Property(p => p.OrderNo);
+
+                e.HasOne(p => p.Book)
+                    .WithMany()
+                    .HasForeignKey(p => p.BookId)
+                    .IsRequired(false)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                e.HasOne(p => p.Curriculum)
+                    .WithMany()
+                    .HasForeignKey(p => p.CurriculumId)
+                    .IsRequired(false)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+
+            modelBuilder.Entity<ChapterUnit>(e => e.Property(p => p.Description).HasColumnType("nvarchar(max)"));
 
             modelBuilder.Entity<Question>(e =>
             {
+                e.Property(p => p.Content).HasColumnType("nvarchar(max)").IsRequired();
                 e.Property(p => p.Type).HasMaxLength(50);
                 e.Property(p => p.Level).HasMaxLength(50);
                 e.Property(p => p.Image).HasMaxLength(500);
             });
 
-            modelBuilder.Entity<Answer>(e => e.Property(p => p.IsCorrect).HasDefaultValue(false));
+
+            modelBuilder.Entity<Answer>(e =>
+            {
+                e.Property(p => p.Content).HasColumnType("nvarchar(max)").IsRequired();
+                e.Property(p => p.QuestionId).IsRequired();
+            });
+
 
             modelBuilder.Entity<Matrix>(e =>
             {
-                e.Property(p => p.Name).HasMaxLength(255);
-                e.Property(p => p.Grade).HasMaxLength(50);
+                e.Property(p => p.Name).IsRequired();
+                e.Property(p => p.Description).HasColumnType("nvarchar(max)");
+                e.Property(p => p.Grade);
+                e.Property(p => p.UserId).IsRequired();
             });
 
             modelBuilder.Entity<MatrixDetail>(e =>
             {
-                e.Property(p => p.Level).HasMaxLength(50);
-                e.Property(p => p.Quantity).HasDefaultValue(0);
+                e.Property(p => p.MatrixId).IsRequired();
+                e.Property(p => p.ChapterId).IsRequired();
+                e.Property(p => p.Level);
+                e.Property(p => p.Quantity);
             });
 
             modelBuilder.Entity<Exam>(e =>
             {
-                e.Property(p => p.Title).HasMaxLength(255);
-                e.HasOne(p => p.Creator)
-                 .WithMany()
-                 .HasForeignKey(p => p.CreatedBy)
-                 .OnDelete(DeleteBehavior.Restrict); // quan trọng!
+                e.Property(p => p.Title).IsRequired();
+                e.Property(p => p.MatrixId).IsRequired();
+                e.Property(p => p.CategoryId).IsRequired();
+                e.Property(p => p.CreatedBy).IsRequired();
             });
 
             modelBuilder.Entity<ExamPaper>(e => e.Property(p => p.Version).HasMaxLength(50));
@@ -128,12 +177,10 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
         // Records with DeletedAt != null will be automatically hidden from the default query
         private void ConfigureSoftDeleteFilter(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().HasQueryFilter(e => e.DeletedAt == null);
             modelBuilder.Entity<Curriculum>().HasQueryFilter(e => e.DeletedAt == null);
             modelBuilder.Entity<Chapter>().HasQueryFilter(e => e.DeletedAt == null);
             modelBuilder.Entity<ChapterUnit>().HasQueryFilter(e => e.DeletedAt == null);
             modelBuilder.Entity<Matrix>().HasQueryFilter(e => e.DeletedAt == null);
-            modelBuilder.Entity<MatrixDetail>().HasQueryFilter(e => e.DeletedAt == null);
             modelBuilder.Entity<Question>().HasQueryFilter(e => e.DeletedAt == null);
             modelBuilder.Entity<Answer>().HasQueryFilter(e => e.DeletedAt == null);
             modelBuilder.Entity<Exam>().HasQueryFilter(e => e.DeletedAt == null);

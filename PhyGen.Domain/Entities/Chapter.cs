@@ -13,11 +13,9 @@ namespace PhyGen.Domain.Entities
         [Required]
         public string Title { get; set; } = string.Empty;
 
-        [Required]
-        public Guid CurriculumId { get; set; }
+        public Guid? CurriculumId { get; set; }
 
-        [Required]
-        public Guid BookId { get; set; }
+        public Guid? BookId { get; set; }
 
         public int? OrderNo { get; set; }
 
@@ -35,7 +33,7 @@ namespace PhyGen.Domain.Entities
 
         // Navigation Properties
         [ForeignKey("CurriculumId")]
-        public virtual Curriculum Curriculum { get; set; } = null!;
+        public virtual Curriculum? Curriculum { get; set; }
 
         [ForeignKey("BookId")]
         public virtual Book? Book { get; set; }

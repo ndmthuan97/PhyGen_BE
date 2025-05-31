@@ -16,7 +16,7 @@ namespace PhyGen.Domain.Entities
         [Required]
         public string Title { get; set; } = string.Empty;
 
-        [Column(TypeName = "text")]
+        [Column(TypeName = "nvarchar(max)")]
         public string? Description { get; set; }
 
         public int? OrderNo { get; set; }
