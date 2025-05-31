@@ -20,7 +20,6 @@ namespace PhyGen.API.Controllers
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
 
-
         public AuthController(IAuthService authService, IMapper mapper, IMediator mediator, ILogger<AuthController> logger)
             : base(mediator, logger)
         {
@@ -36,6 +35,7 @@ namespace PhyGen.API.Controllers
             var response = await _authService.RegisterAsync(dto);
             return Ok(response);
         }
+
         [HttpPost("confirmregisteration")]
         public async Task<IActionResult> Confirmregisteration(Confirmpassword _data)
         {
@@ -63,6 +63,13 @@ namespace PhyGen.API.Controllers
         {
             var data = await this._authService.UpdatePassword(_data.email, _data.new_password, _data.otptext);
             return Ok(data);
+        }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto dto)
+        {
+            await _authService.ChangePasswordAsync(dto);
+            return Ok(new { Message = "Password changed successfully." });
         }
 
     }

@@ -42,7 +42,7 @@ public class AuthService : IAuthService
         };
         string OTPText = Generaterandomnumber();
         await UpdateOtp(dto.Email, OTPText, "register");
-        await SendOtpMail(dto.Email, OTPText, dto.Email);
+        await SendOtpMail(dto.Email, OTPText, dto.Email, "register");
 
         _context.ReserveUsers.Add(user);
         await _context.SaveChangesAsync();
@@ -115,19 +115,19 @@ public class AuthService : IAuthService
         return response;
     }
 
-    private async Task UpdateOtp(string username, string otptext, string otptype)
-    {
-        var _opt = new EmailOtpManager()
+        private async Task UpdateOtp(string username, string otptext, string otptype)
         {
-            Email = username,
-            Otptext = otptext,
-            Expiration = DateTime.Now.AddMinutes(30),
-            Createddate = DateTime.Now,
-            Otptype = otptype
-        };
-        await this._context.EmailOtpManager.AddAsync(_opt);
-        await this._context.SaveChangesAsync();
-    }
+            var _opt = new EmailOtpManager()
+            {
+                Email = username,
+                Otptext = otptext,
+                Expiration = DateTime.Now.AddMinutes(30),
+                Createddate = DateTime.Now,
+                Otptype = otptype
+            };
+            await this._context.EmailOtpManager.AddAsync(_opt);
+            await this._context.SaveChangesAsync();
+        }
 
     public async Task<AuthenticationResponse> LoginAsync(LoginDto dto)
     {
@@ -170,7 +170,7 @@ public class AuthService : IAuthService
         {
             string otptext = Generaterandomnumber();
             await UpdateOtp(email, otptext, "forgetpassword");
-            await SendOtpMail(_user.Email, otptext, _user.Email);
+            await SendOtpMail(_user.Email, otptext, _user.Email, "forgetpassword");
             response.Result = "pass";
             response.Message = "OTP sent";
 
@@ -213,15 +213,25 @@ public class AuthService : IAuthService
         return randomno;
     }
 
-    private async Task SendOtpMail(string useremail, string OtpText, string Name)
+    private async Task SendOtpMail(string useremail, string OtpText, string Name, string type)
     {
         var mailrequest = new EmailRequest();
         mailrequest.Email = useremail;
-        mailrequest.Subject = "Thanks for registering : OTP";
-        mailrequest.Emailbody = GenerateEmailBody(Name, OtpText);
+
+        if (type == "register")
+        {
+            mailrequest.Subject = "Thanks for registering : OTP";
+            mailrequest.Emailbody = GenerateEmailBody(Name, OtpText);
+        }
+        else if (type == "forgetpassword")
+        {
+            mailrequest.Subject = "Password Reset Request : OTP";
+            mailrequest.Emailbody = GenerateForgetPasswordEmail(Name, OtpText);
+        }
+
         await this._emailService.SendEmailAsync(mailrequest);
     }
-    
+
     private static string GenerateEmailBody(string name, string otptext)
     {
 
@@ -235,6 +245,25 @@ public class AuthService : IAuthService
         emailBody += "</div>";
         emailBody += "<p style='font-size: 14px; color: #888;'>This code will expire in 5 minutes.</p>";
         emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;'/>";
+        emailBody += "<p style='font-size: 12px; color: #aaa;'>Regards,<br/>PhyGen Team</p>";
+        emailBody += "</div>";
+        emailBody += "</div>";
+
+        return emailBody;
+    }
+
+    private static string GenerateForgetPasswordEmail(string name, string otptext)
+    {
+        string emailBody = "<div style='width: 100%; background-color: #f4f4f4; padding: 20px 0; font-family: Arial, sans-serif;'>";
+        emailBody += "<div style='max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>";
+        emailBody += "<h2 style='color: #333;'>Hi " + name + ",</h2>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>We received a request to reset your password for your <strong>PhyGen System</strong> account.</p>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Please use the OTP code below to proceed with resetting your password:</p>";
+        emailBody += "<div style='margin: 30px 0; text-align: center;'>";
+        emailBody += "<span style='display: inline-block; background-color: #28a745; color: #fff; padding: 12px 20px; font-size: 20px; border-radius: 5px; letter-spacing: 2px;'>" + otptext + "</span>";
+        emailBody += "</div>";
+        emailBody += "<p style='font-size: 14px; color: #888;'>This code will expire in 5 minutes. If you didn't request a password reset, please ignore this email.</p>";
+        emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;' />";
         emailBody += "<p style='font-size: 12px; color: #aaa;'>Regards,<br/>PhyGen Team</p>";
         emailBody += "</div>";
         emailBody += "</div>";
