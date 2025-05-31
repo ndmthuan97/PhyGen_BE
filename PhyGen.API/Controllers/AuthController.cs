@@ -56,6 +56,18 @@ namespace PhyGen.API.Controllers
                 Token = response.Token
             });
         }
+        [HttpPost("confirmlogin")]
+        public async Task<IActionResult> Confirmlogin(Confirmpassword _data)
+        {
+            var response = await _authService.ConfirmLogin(_data.email, _data.otptext);
+            return Ok(new
+            {
+                response.Response.Email,
+                response.Response.StatusCode,
+                response.Response.Message,
+                Token = response.Token
+            });
+        }
 
         [HttpGet("forgetpassword")]
         public async Task<IActionResult> Forgetpassword(string email)
