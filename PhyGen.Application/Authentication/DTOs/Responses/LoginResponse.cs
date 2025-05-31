@@ -11,5 +11,6 @@ namespace PhyGen.Application.Authentication.DTOs.Responses
     {
         public AuthenticationResponse Response { get; set; }
         public string Token { get; set; }
+        public string Role { get; set; } 
     }
 }

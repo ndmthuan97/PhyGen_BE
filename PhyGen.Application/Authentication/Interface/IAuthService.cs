@@ -10,10 +10,10 @@ namespace PhyGen.Application.Authentication.Interface
     public interface IAuthService
     {
         Task<AuthenticationResponse> RegisterAsync(RegisterDto dto);
-        Task<LoginResponse> LoginAsync(LoginDto dto);
+        Task<object> LoginAsync(LoginDto dto);
         Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordDto dto);
         Task<AuthenticationResponse> ConfirmRegister(string username, string otptext);
-        Task<LoginResponse> ConfirmLogin(string username, string otptext);
+        Task<object> ConfirmLogin(string username, string otptext);
         Task<AuthenticationResponse> ForgetPassword(string username);
         Task<AuthenticationResponse> UpdatePassword(string username, string Password, string Otptext);
     }

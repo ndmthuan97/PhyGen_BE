@@ -9,6 +9,8 @@ using PhyGen.Shared.Constants;
 using PhyGen.Application.Systems.Users;
 using MediatR;
 using PhyGen.Application.Authentication.Models.Requests;
+using PhyGen.Application.Authentication.Responses;
+using PhyGen.Application.Authentication.DTOs.Responses;
 
 
 namespace PhyGen.API.Controllers
@@ -44,29 +46,67 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+public async Task<IActionResult> Login([FromBody] LoginRequest request)
+{
+    var dto = _mapper.Map<LoginDto>(request);
+    var result = await _authService.LoginAsync(dto);
+
+    if (result is AuthenticationResponse authResponse)
+    {
+        // Thất bại => chỉ trả về email, mã lỗi và message
+        return BadRequest(new
         {
-            var dto = _mapper.Map<LoginDto>(request);
-            var response = await _authService.LoginAsync(dto);
-            return Ok(new
-            {
-                response.Response.Email,
-                response.Response.StatusCode,
-                response.Response.Message,
-                Token = response.Token
-            });
-        }
+            authResponse.Email,
+            authResponse.StatusCode,
+            authResponse.Message
+        });
+    }
+
+    if (result is LoginResponse loginResponse)
+    {
+        // Thành công => trả về cả Token và Role
+        return Ok(new
+        {
+            loginResponse.Response.Email,
+            loginResponse.Response.StatusCode,
+            loginResponse.Response.Message,
+            Token = loginResponse.Token,
+            Role = loginResponse.Role
+        });
+    }
+    // Fallback
+    return StatusCode(500, "Unexpected error occurred.");
+}
+
         [HttpPost("confirmlogin")]
         public async Task<IActionResult> Confirmlogin(Confirmpassword _data)
         {
             var response = await _authService.ConfirmLogin(_data.email, _data.otptext);
-            return Ok(new
+            if (response is AuthenticationResponse authResponse)
             {
-                response.Response.Email,
-                response.Response.StatusCode,
-                response.Response.Message,
-                Token = response.Token
-            });
+                // Thất bại => chỉ trả về email, mã lỗi và message
+                return BadRequest(new
+                {
+                    authResponse.Email,
+                    authResponse.StatusCode,
+                    authResponse.Message
+                });
+            }
+
+            if (response is LoginResponse loginResponse)
+            {
+                // Thành công => trả về cả Token và Role
+                return Ok(new
+                {
+                    loginResponse.Response.Email,
+                    loginResponse.Response.StatusCode,
+                    loginResponse.Response.Message,
+                    Token = loginResponse.Token,
+                    Role = loginResponse.Role
+                });
+            }
+            // Fallback
+            return StatusCode(500, "Unexpected error occurred.");
         }
 
         [HttpGet("forgetpassword")]

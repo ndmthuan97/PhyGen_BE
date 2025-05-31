@@ -74,7 +74,18 @@ public class AuthService : IAuthService
     {
         email = email.ToLower();
 
-        // Bước 1: Kiểm tra OTP
+        // Bước 1: Tìm người dùng trong bảng Users
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+        if (user == null)
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.EmailAlreadyExists
+            };
+        }
+
+        // Bước 2: Kiểm tra OTP
         bool otpresponse = await ValidateOTP(email, otptext);
         if (!otpresponse)
         {
@@ -85,24 +96,13 @@ public class AuthService : IAuthService
             };
         }
 
-        // Bước 2: Tìm người dùng trong bảng Users
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
-        if (user == null)
-        {
-            return new AuthenticationResponse
-            {
-                Email = email,
-                StatusCode = StatusCode.RegisterFailed
-            };
-        }
-
         // Bước 3: Kiểm tra xem đã confirm hay chưa
         if (user.isConfirm)
         {
             return new AuthenticationResponse
             {
                 Email = email,
-                StatusCode = StatusCode.EmailAlreadyExists
+                StatusCode = StatusCode.AccountNotConfirmed
             };
         }
 
@@ -144,33 +144,26 @@ public class AuthService : IAuthService
         await this._context.SaveChangesAsync();
     }
 
-    public async Task<LoginResponse> LoginAsync(LoginDto dto)
+    public async Task<object> LoginAsync(LoginDto dto)
     {
         var email = dto.Email.Trim().ToLower();
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
 
         if (user == null)
         {
-            return new LoginResponse
+            return new AuthenticationResponse
             {
-                Response = new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.EmailNotFound
-                },
-                Token = null
+                Email = email,
+                StatusCode = StatusCode.EmailNotFound
             };
+                
         }
         if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
         {
-            return new LoginResponse
+            return new AuthenticationResponse
             {
-                Response = new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.InvalidPassword
-                },
-                Token = null
+                Email = email,
+                StatusCode = StatusCode.InvalidPassword
             };
         }
 
@@ -181,14 +174,10 @@ public class AuthService : IAuthService
             await UpdateOtp(email, otp, "login");
             await SendOtpMail(email, otp, email, "login");
 
-            return new LoginResponse
+            return new AuthenticationResponse
             {
-                Response = new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.AccountNotConfirmed
-                },
-                Token = null
+                Email = email,
+                StatusCode = StatusCode.AccountNotConfirmed
             };
         }
 
@@ -202,52 +191,41 @@ public class AuthService : IAuthService
                 Email = email,
                 StatusCode = StatusCode.LoginSuccess
             },
-            Token = token
+            Token = token,
+            Role = user.Role
         };
     }
 
-    public async Task<LoginResponse> ConfirmLogin(string email, string otpText)
+    public async Task<object> ConfirmLogin(string email, string otpText)
     {
         email = email.ToLower();
-
-        bool otpValid = await ValidateOTP(email, otpText);
-        if (!otpValid)
-        {
-            return new LoginResponse
-            {
-                Response = new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.UserAuthenticationFailed
-                },
-                Token = null
-            };
-        }
 
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
         if (user == null)
         {
-            return new LoginResponse
+            return new AuthenticationResponse
             {
-                Response = new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.EmailNotFound
-                },
-                Token = null
+                Email = email,
+                StatusCode = StatusCode.EmailNotFound
             };
+        }
+
+        bool otpValid = await ValidateOTP(email, otpText);
+        if (!otpValid)
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.UserAuthenticationFailed
+            };       
         }
 
         if (user.isConfirm)
         {
-            return new LoginResponse
+            return new AuthenticationResponse
             {
-                Response = new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.AlreadyConfirmed
-                },
-                Token = null
+                Email = email,
+                StatusCode = StatusCode.AlreadyConfirmed
             };
         }
         user.isConfirm = true;
@@ -261,9 +239,10 @@ public class AuthService : IAuthService
                     Email = email,
                     StatusCode = StatusCode.ConfirmSuccess
                 },
-                Token = _jwtTokenGenerator.GenerateToken(user)
+                Token = _jwtTokenGenerator.GenerateToken(user),
+                Role = user.Role
             };
-        }
+            }
 
     public async Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordDto dto)
     {
