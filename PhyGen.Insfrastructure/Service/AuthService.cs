@@ -4,8 +4,14 @@ using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Responses;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Exceptions;
+using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 using PhyGen.Shared.Constants;
+using PhyGen.Shared;
+using Microsoft.EntityFrameworkCore;
+using Azure;
+using Newtonsoft.Json.Linq;
+using PhyGen.Application.Authentication.DTOs.Responses;
 
 namespace PhyGen.Insfrastructure.Service;
 
@@ -13,55 +19,319 @@ public class AuthService : IAuthService
 {
     private readonly AppDbContext _context;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IEmailService _emailService;
 
-    public AuthService(AppDbContext context, IJwtTokenGenerator jwtTokenGenerator)
+    public AuthService(AppDbContext context, IJwtTokenGenerator jwtTokenGenerator, IEmailService emailService)
     {
         _context = context;
         _jwtTokenGenerator = jwtTokenGenerator;
+        _emailService = emailService;
     }
 
     public async Task<AuthenticationResponse> RegisterAsync(RegisterDto dto)
     {
-        if (_context.Users.Any(u => u.Email.ToLower() == dto.Email.ToLower()))
+        var email = dto.Email.ToLower();
+        if (_context.Users.Any(u => u.Email.ToLower() == email))
         {
-            throw new AppException(StatusCode.EmailAlreadyExists);
+            return new AuthenticationResponse
+            {
+                Email = dto.Email,
+                StatusCode = StatusCode.EmailAlreadyExists
+            };
         }
 
-        var user = new User
+        var users = new User
         {
             Id = Guid.NewGuid(),
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             Phone = dto.PhoneNumber,
-            Email = dto.Email,
-            Role = "User",
-            Password = dto.Password // ❗Lưu mật khẩu plaintext (KHÔNG NÊN dùng thật)
+            Email = dto.Email.ToLower(),
+            Password = dto.Password,
+            Role = "User"
         };
 
-        _context.Users.Add(user);
+        string otp = Generaterandomnumber();
+        await UpdateOtp(dto.Email, otp, "register");
+        await SendOtpMail(dto.Email, otp, dto.Email, "register");
+
         await _context.SaveChangesAsync();
 
         return new AuthenticationResponse
         {
-            Email = user.Email,
-            Token = _jwtTokenGenerator.GenerateToken(user)
+            Email = dto.Email,
+            StatusCode = StatusCode.RegisterSuccess
         };
     }
 
-    public async Task<AuthenticationResponse> LoginAsync(LoginDto dto)
+    public async Task<AuthenticationResponse> ConfirmRegister(string email, string otptext)
+    {
+        // Bước 1: Kiểm tra OTP
+        bool otpresponse = await ValidateOTP(email, otptext);
+        if (!otpresponse)
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.UserAuthenticationFailed
+            };
+        }
+
+        // Bước 2: Kiểm tra email đã tồn tại trong bảng Users chưa
+        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+        if (existingUser != null)
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.EmailAlreadyExists
+            };
+        }
+
+        // Bước 3: Lấy thông tin tạm và thêm user mới
+        var tempData = await _context.ReserveUsers.FirstOrDefaultAsync(item => item.Email.ToLower() == email.ToLower());
+        if (tempData == null)
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.RegisterFailed
+            };
+        }
+
+        var user = new User
+        {
+            Id = Guid.NewGuid(),
+            FirstName = tempData.FirstName,
+            LastName = tempData.LastName,
+            Phone = tempData.Phone,
+            Email = tempData.Email,
+            Role = "User",
+            Password = tempData.Password
+        };
+
+        await _context.Users.AddAsync(user);
+        _context.ReserveUsers.Remove(tempData);
+        await _context.SaveChangesAsync();
+
+        return new AuthenticationResponse
+        {
+            Email = email,
+            StatusCode = StatusCode.RegisterSuccess
+        };
+    }
+
+    private async Task<bool> ValidateOTP(string username, string OTPText)
+    {
+        bool response = false;
+        var _data = await this._context.EmailOtpManager.FirstOrDefaultAsync(item => item.Email == username
+        && item.Otptext == OTPText && item.Expiration > DateTime.Now);
+        if (_data != null)
+        {
+            response = true;
+        }
+        return response;
+    }
+
+    private async Task UpdateOtp(string username, string otptext, string otptype)
+    {
+        var _opt = new EmailOtpManager()
+        {
+            Email = username,
+            Otptext = otptext,
+            Expiration = DateTime.Now.AddMinutes(30),
+            Createddate = DateTime.Now,
+            Otptype = otptype
+        };
+        await this._context.EmailOtpManager.AddAsync(_opt);
+        await this._context.SaveChangesAsync();
+    }
+
+    public async Task<LoginResponse> LoginAsync(LoginDto dto)
+    {
+        var email = dto.Email.Trim().ToLower();
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+
+        if (user == null)
+        {
+            return new LoginResponse
+            {
+                Response = new AuthenticationResponse
+                {
+                    Email = email,
+                    StatusCode = StatusCode.EmailAlreadyExists
+                },
+                Token = null
+            };
+        }
+        if (user.Password != dto.Password)
+        {
+            return new LoginResponse
+            {
+                Response = new AuthenticationResponse
+                {
+                    Email = email,
+                    StatusCode = StatusCode.InvalidPassword
+                },
+                Token = null
+            };
+        }
+        var token = _jwtTokenGenerator.GenerateToken(user);
+
+        return new LoginResponse
+        {
+            Response = new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.LoginSuccess
+            },
+            Token = token
+        };
+    }
+
+    public async Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordDto dto)
     {
         var email = dto.Email.Trim().ToLower();
         var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == email);
         if (user == null)
-            throw new AuthException(StatusCode.UserNotFound);
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.EmailDoesNotExists 
+            };          
+        }
 
-        if (user.Password != dto.Password)
-            throw new AuthException(StatusCode.InvalidPassword);
-
+        if (user.Password != dto.CurrentPassword)
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.InvalidPassword
+            };           
+        }
+                
+        // 3. Cập nhật mật khẩu mới (plain text)
+        user.Password = dto.NewPassword;
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
         return new AuthenticationResponse
         {
-            Email = user.Email,
-            Token = _jwtTokenGenerator.GenerateToken(user)
+            Email = email,
+            StatusCode = StatusCode.ChangedPasswordSuccess
+        }; 
+
+    }
+    public async Task<AuthenticationResponse> ForgetPassword(string email)
+    {
+        var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);
+        if (_user != null)
+        {
+            string otptext = Generaterandomnumber();
+            await UpdateOtp(email, otptext, "forgetpassword");
+            await SendOtpMail(_user.Email, otptext, _user.Email, "forgetpassword");          
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.OtpSendSuccess
+            };
+        }
+        else
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.InvalidUser
+            };
+        }
+    }
+
+    public async Task<AuthenticationResponse> UpdatePassword(string email, string Password, string Otptext)
+    {
+
+        bool otpvalidation = await ValidateOTP(email, Otptext);
+        if (otpvalidation)
+        {
+            var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);
+            if (_user != null)
+            {
+                _user.Password = Password;
+                await _context.SaveChangesAsync();
+                return new AuthenticationResponse
+                {
+                    Email = email,
+                    StatusCode = StatusCode.ChangedPasswordSuccess
+                };
+            }
+        }
+        return new AuthenticationResponse
+        {
+            Email = email,
+            StatusCode = StatusCode.InvalidOtp
         };
+    }
+    private string Generaterandomnumber()
+    {
+        Random random = new Random();
+        string randomno = random.Next(100000, 1000000).ToString("D6");
+        return randomno;
+    }
+
+    private async Task SendOtpMail(string useremail, string OtpText, string Name, string type)
+    {
+        var mailrequest = new EmailRequest();
+        mailrequest.Email = useremail;
+
+        if (type == "register")
+        {
+            mailrequest.Subject = "Thanks for registering : OTP";
+            mailrequest.Emailbody = GenerateEmailBody(Name, OtpText);
+        }
+        else if (type == "forgetpassword")
+        {
+            mailrequest.Subject = "Password Reset Request : OTP";
+            mailrequest.Emailbody = GenerateForgetPasswordEmail(Name, OtpText);
+        }
+
+        await this._emailService.SendEmailAsync(mailrequest);
+    }
+
+    private static string GenerateEmailBody(string name, string otptext)
+    {
+
+        string emailBody = "<div style='width: 100%; background-color: #f4f4f4; padding: 20px 0; font-family: Arial, sans-serif;'>";
+        emailBody += "<div style='max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>";
+        emailBody += "<h2 style='color: #333;'>Hi " + name + ",</h2>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Thanks for registering at <strong>PhyGen System</strong>.</p>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Please enter the OTP code below to complete your registration:</p>";
+        emailBody += "<div style='margin: 30px 0; text-align: center;'>";
+        emailBody += "<span style='display: inline-block; background-color: #007BFF; color: #fff; padding: 12px 20px; font-size: 20px; border-radius: 5px; letter-spacing: 2px;'>" + otptext + "</span>";
+        emailBody += "</div>";
+        emailBody += "<p style='font-size: 14px; color: #888;'>This code will expire in 5 minutes.</p>";
+        emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;'/>";
+        emailBody += "<p style='font-size: 12px; color: #aaa;'>Regards,<br/>PhyGen Team</p>";
+        emailBody += "</div>";
+        emailBody += "</div>";
+
+        return emailBody;
+    }
+
+    private static string GenerateForgetPasswordEmail(string name, string otptext)
+    {
+        string emailBody = "<div style='width: 100%; background-color: #f4f4f4; padding: 20px 0; font-family: Arial, sans-serif;'>";
+        emailBody += "<div style='max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>";
+        emailBody += "<h2 style='color: #333;'>Hi " + name + ",</h2>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>We received a request to reset your password for your <strong>PhyGen System</strong> account.</p>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Please use the OTP code below to proceed with resetting your password:</p>";
+        emailBody += "<div style='margin: 30px 0; text-align: center;'>";
+        emailBody += "<span style='display: inline-block; background-color: #28a745; color: #fff; padding: 12px 20px; font-size: 20px; border-radius: 5px; letter-spacing: 2px;'>" + otptext + "</span>";
+        emailBody += "</div>";
+        emailBody += "<p style='font-size: 14px; color: #888;'>This code will expire in 5 minutes. If you didn't request a password reset, please ignore this email.</p>";
+        emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;' />";
+        emailBody += "<p style='font-size: 12px; color: #aaa;'>Regards,<br/>PhyGen Team</p>";
+        emailBody += "</div>";
+        emailBody += "</div>";
+
+        return emailBody;
     }
 }

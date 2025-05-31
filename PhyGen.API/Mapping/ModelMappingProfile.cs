@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using PhyGen.API.Models.Answers;
 using PhyGen.API.Models.Curriculums;
 using PhyGen.API.Models.Questions;
+using PhyGen.Application.Answers.Commands;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.Chapters.Commands;
@@ -50,6 +52,12 @@ namespace PhyGen.API.Mapping
             CreateMap<CreateQuestionRequest, CreateQuestionCommand>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
             CreateMap<UpdateQuestionRequest, UpdateQuestionCommand>()
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+
+            // Mapping for Answer
+            CreateMap<CreateAnswerRequest, CreateAnswerCommand>()
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateAnswerRequest, UpdateAnswerCommand>()
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
         }
     }
