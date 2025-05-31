@@ -9,6 +9,8 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using Microsoft.EntityFrameworkCore;
+using Azure;
+using Newtonsoft.Json.Linq;
 
 namespace PhyGen.Insfrastructure.Service;
 
@@ -27,19 +29,34 @@ public class AuthService : IAuthService
 
     public async Task<AuthenticationResponse> RegisterAsync(RegisterDto dto)
     {
-        if (_context.Users.Any(u => u.Email.ToLower() == dto.Email.ToLower()))
+        AuthenticationResponse response = new AuthenticationResponse();
+        string email = dto.Email.ToLower();
+        if (_context.Users.Any(u => u.Email.ToLower() == email))
         {
-            throw new AppException(StatusCode.EmailAlreadyExists);
+            response.Result = "fails";
+            response.Message = "Email already exists";
+            return response;
         }
-
-        var user = new ReserveUsers
+        else
         {
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
-            Phone = dto.PhoneNumber,
-            Email = dto.Email,
-            Password = dto.Password
-        };
+            response.Result = "pass";
+            response.Message = "Please verify OTP";
+            response.Email = dto.Email;
+        }
+        var existingReserveUser = _context.ReserveUsers.FirstOrDefault(u => u.Email.ToLower() == email);
+        if (existingReserveUser != null)
+        {
+            _context.ReserveUsers.Remove(existingReserveUser);
+            await _context.SaveChangesAsync(); // Lưu thay đổi trước khi thêm mới
+        }
+        var user = new ReserveUsers
+            {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Phone = dto.PhoneNumber,
+                Email = dto.Email,
+                Password = dto.Password
+            };
         string OTPText = Generaterandomnumber();
         await UpdateOtp(dto.Email, OTPText, "register");
         await SendOtpMail(dto.Email, OTPText, dto.Email, "register");
@@ -47,10 +64,7 @@ public class AuthService : IAuthService
         _context.ReserveUsers.Add(user);
         await _context.SaveChangesAsync();
 
-        return new AuthenticationResponse
-        {
-            Email = user.Email,
-        };
+        return response;
     }
     public async Task<AuthenticationResponse> ConfirmRegister(int userid, string email, string otptext)
     {
@@ -99,6 +113,8 @@ public class AuthService : IAuthService
 
         response.Result = "pass";
         response.Message = "Registered successfully.";
+        response.Email = _tempdata.Email;
+        response.Token = _jwtTokenGenerator.GenerateToken(_user);
         return response;
     }
 
@@ -131,36 +147,63 @@ public class AuthService : IAuthService
 
     public async Task<AuthenticationResponse> LoginAsync(LoginDto dto)
     {
+        AuthenticationResponse response = new AuthenticationResponse();
         var email = dto.Email.Trim().ToLower();
         var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == email);
         if (user == null)
-            throw new AuthException(StatusCode.UserNotFound);
-
-        if (user.Password != dto.Password)
-            throw new AuthException(StatusCode.InvalidPassword);
-
-        return new AuthenticationResponse
         {
-            Email = user.Email,
-            Token = _jwtTokenGenerator.GenerateToken(user)
-        };
+            response.Result = "fail";
+            response.Message = "Email already exists.";
+            return response;
+        }
+            
+        if (user.Password != dto.Password)
+        {
+            response.Result = "fail";
+            response.Message = "Password incorrect.";
+            return response;
+        }
+        else
+        {
+            response.Result = "pass";
+            response.Message = "Login Successful.";
+            response.Email = user.Email;
+            response.Token = _jwtTokenGenerator.GenerateToken(user);
+        }
+
+        return response;
     }
 
-    public async Task ChangePasswordAsync(ChangePasswordDto dto)
+    public async Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordDto dto)
     {
+        AuthenticationResponse response = new AuthenticationResponse();
         var email = dto.Email.Trim().ToLower();
         var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == email);
         if (user == null)
-            throw new AuthException(StatusCode.UserNotFound);
+        {
+            response.Result = "fail";
+            response.Message = "Email does not exists.";
+            return response;
+        }
 
         if (user.Password != dto.CurrentPassword)
-            throw new AuthException(StatusCode.InvalidPassword);
-
-        // 3. Cập nhật mật khẩu mới (plain text)
-        user.Password = dto.NewPassword;
-
+        {
+            response.Result = "fail";
+            response.Message = "Password incorrect.";
+            return response;
+        }
+        else
+        {
+            response.Result = "pass";
+            response.Message = "Password has changed.";
+            response.Email = email;
+        }
+            // 3. Cập nhật mật khẩu mới (plain text)
+            user.Password = dto.NewPassword;
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
+        return response;
+
     }
     public async Task<AuthenticationResponse> ForgetPassword(string email)
     {
@@ -173,6 +216,7 @@ public class AuthService : IAuthService
             await SendOtpMail(_user.Email, otptext, _user.Email, "forgetpassword");
             response.Result = "pass";
             response.Message = "OTP sent";
+            response.Email = email;
 
         }
         else
@@ -197,6 +241,7 @@ public class AuthService : IAuthService
                     await _context.SaveChangesAsync();
                     response.Result = "pass";
                     response.Message = "Password changed";
+                    response.Email = email;
                 }
         }
         else

@@ -68,8 +68,8 @@ namespace PhyGen.API.Controllers
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto dto)
         {
-            await _authService.ChangePasswordAsync(dto);
-            return Ok(new { Message = "Password changed successfully." });
+            var data = await _authService.ChangePasswordAsync(dto);
+            return Ok(data);
         }
 
     }
