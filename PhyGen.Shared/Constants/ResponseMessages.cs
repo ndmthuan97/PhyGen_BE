@@ -28,7 +28,16 @@ namespace PhyGen.Shared.Constants
 
             // Curriculum messages
             { StatusCode.CurriculumNotFound, "Curriculum with Id does not exist." },
-            { StatusCode.CurriculumSameName, "Curriculum with the same name already exists." }
+            { StatusCode.CurriculumSameName, "Curriculum with the same name already exists." },
+
+            // Chapter messages
+            { StatusCode.ChapterNotFound, "Chapter with Id does not exist." },
+            { StatusCode.ChapterSameName, "Chapter with the same name already exists." },
+
+            // Book messages
+            { StatusCode.BookNotFound, "Book with Id does not exist." },
+            { StatusCode.BookSameName, "Book with the same name already exists." }
+
         };
 
         public static string GetMessage(StatusCode code)

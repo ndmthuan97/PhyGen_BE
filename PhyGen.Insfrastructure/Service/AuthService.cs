@@ -22,7 +22,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthenticationResponse> RegisterAsync(RegisterDto dto)
     {
-        if (_context.Users.Any(u => u.Email == dto.Email))
+        if (_context.Users.Any(u => u.Email.ToLower() == dto.Email.ToLower()))
         {
             throw new AppException(StatusCode.EmailAlreadyExists);
         }
@@ -50,7 +50,8 @@ public class AuthService : IAuthService
 
     public async Task<AuthenticationResponse> LoginAsync(LoginDto dto)
     {
-        var user = _context.Users.FirstOrDefault(u => u.Email == dto.Email);
+        var email = dto.Email.Trim().ToLower();
+        var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == email);
         if (user == null)
             throw new AuthException(StatusCode.UserNotFound);
 

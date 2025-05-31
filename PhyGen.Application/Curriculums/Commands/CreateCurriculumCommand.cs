@@ -15,6 +15,6 @@ namespace PhyGen.Application.Curriculums.Commands
 
         public string? Description { get; set; }
 
-        public Guid CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
     }
 }

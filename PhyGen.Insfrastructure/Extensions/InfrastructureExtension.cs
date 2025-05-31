@@ -41,6 +41,9 @@ namespace PhyGen.Insfrastructure.Extensions
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
             services.AddScoped<ICurriculumRepository, CurriculumRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IChapterRepository, ChapterRepository>();
+            services.AddScoped<IBookRepository, BookRepository>();
         }
     }
 }
