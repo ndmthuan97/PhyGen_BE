@@ -15,10 +15,9 @@ namespace PhyGen.Domain.Entities
 
         public string? Grade { get; set; }
 
-        [Column(TypeName = "text")]
+        [Column(TypeName = "nvarchar(max)")]
         public string? Description { get; set; }
 
-        [Required]
         public string? CreatedBy { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -14,9 +14,6 @@ namespace PhyGen.Domain.Entities
         public string Title { get; set; } = string.Empty;
 
         [Required]
-        public Guid ChapterId { get; set; }
-
-        [Required]
         public Guid SeriesId { get; set; }
 
         public string? Author { get; set; }

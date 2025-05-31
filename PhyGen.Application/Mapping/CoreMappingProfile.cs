@@ -1,4 +1,8 @@
 ﻿using AutoMapper;
+using PhyGen.Application.Chapters.Commands;
+using PhyGen.Application.Chapters.Responses;
+using PhyGen.Application.ChapterUnits.Commands;
+using PhyGen.Application.ChapterUnits.Responses;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.Curriculums.Responses;
 using PhyGen.Application.Questions.Commands;
@@ -27,6 +31,30 @@ namespace PhyGen.Application.Mapping
             CreateMap<UpdateCurriculumCommand, Curriculum>()
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy))
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
+
+            // Mapping for Chapter
+            CreateMap<Chapter, ChapterResponse>();
+
+            CreateMap<CreateChapterCommand, Chapter>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateChapterCommand, Chapter>()
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+            CreateMap<DeleteChapterCommand, Chapter>()
+                .ForMember(dest => dest.DeletedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.DeletedBy, opt => opt.MapFrom(src => src.DeletedBy));
+
+            // Mapping for Chapter Unit
+            CreateMap<ChapterUnit, ChapterUnitResponse>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Chapter.Title));
+
+            CreateMap<CreateChapterUnitCommand, ChapterUnit>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateChapterUnitCommand, ChapterUnit>()
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
 
 
             // Mapping for Question

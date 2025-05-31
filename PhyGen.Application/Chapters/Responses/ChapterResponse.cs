@@ -12,11 +12,11 @@ namespace PhyGen.Application.Chapters.Responses
 
         public string Title { get; set; } = string.Empty;
 
-        public Guid CurriculumId { get; set; }
+        public Guid? CurriculumId { get; set; }
 
-        public Guid BookId { get; set; }
+        public Guid? BookId { get; set; }
 
-        public int OrderNo { get; set; }
+        public int? OrderNo { get; set; }
 
         public string? CreatedBy { get; set; }
 
@@ -24,6 +24,10 @@ namespace PhyGen.Application.Chapters.Responses
 
         public string? UpdatedBy { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+
+        public string? DeletedBy { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
     }
 }

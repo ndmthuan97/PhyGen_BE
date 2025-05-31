@@ -17,7 +17,6 @@ namespace PhyGen.Insfrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -28,6 +27,23 @@ namespace PhyGen.Insfrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BookSeries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmailOtpManager",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Otptext = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Otptype = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Createddate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailOtpManager", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,15 +68,11 @@ namespace PhyGen.Insfrastructure.Migrations
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UrlAvatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    photoURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    isConfirm = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -73,7 +85,6 @@ namespace PhyGen.Insfrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ChapterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Author = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     PublicationYear = table.Column<int>(type: "int", nullable: true),
@@ -102,8 +113,8 @@ namespace PhyGen.Insfrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Grade = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -127,11 +138,11 @@ namespace PhyGen.Insfrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Grade = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Grade = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -201,15 +212,17 @@ namespace PhyGen.Insfrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    CurriculumId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurriculumId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     OrderNo = table.Column<int>(type: "int", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BookId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CurriculumId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -221,8 +234,20 @@ namespace PhyGen.Insfrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Chapters_Books_BookId1",
+                        column: x => x.BookId1,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Chapters_Curriculums_CurriculumId",
                         column: x => x.CurriculumId,
+                        principalTable: "Curriculums",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Chapters_Curriculums_CurriculumId1",
+                        column: x => x.CurriculumId1,
                         principalTable: "Curriculums",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -233,7 +258,7 @@ namespace PhyGen.Insfrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MatrixId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -241,8 +266,7 @@ namespace PhyGen.Insfrastructure.Migrations
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -265,12 +289,6 @@ namespace PhyGen.Insfrastructure.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Exams_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -280,7 +298,7 @@ namespace PhyGen.Insfrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ChapterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrderNo = table.Column<int>(type: "int", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -308,12 +326,8 @@ namespace PhyGen.Insfrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MatrixId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ChapterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Level = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Quantity = table.Column<int>(type: "int", nullable: true, defaultValue: 0),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Level = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -337,7 +351,7 @@ namespace PhyGen.Insfrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Level = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Image = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
@@ -397,8 +411,8 @@ namespace PhyGen.Insfrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false),
-                    IsCorrect = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsCorrect = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -466,9 +480,19 @@ namespace PhyGen.Insfrastructure.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Chapters_BookId1",
+                table: "Chapters",
+                column: "BookId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Chapters_CurriculumId",
                 table: "Chapters",
                 column: "CurriculumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chapters_CurriculumId1",
+                table: "Chapters",
+                column: "CurriculumId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChapterUnits_ChapterId",
@@ -509,11 +533,6 @@ namespace PhyGen.Insfrastructure.Migrations
                 name: "IX_Exams_MatrixId",
                 table: "Exams",
                 column: "MatrixId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Exams_UserId",
-                table: "Exams",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Matrices_UserId",
@@ -559,6 +578,9 @@ namespace PhyGen.Insfrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ChapterUnits");
+
+            migrationBuilder.DropTable(
+                name: "EmailOtpManager");
 
             migrationBuilder.DropTable(
                 name: "ExamPaperQuestions");

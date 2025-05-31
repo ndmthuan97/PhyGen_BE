@@ -21,7 +21,7 @@ namespace PhyGen.Domain.Entities
 
         public string Password { get; set; } = string.Empty;
 
-        public string UrlAvatar { get; set; } = string.Empty;
+        public string photoURL { get; set; } = string.Empty;
 
         public string? Role { get; set; }
 
@@ -29,15 +29,7 @@ namespace PhyGen.Domain.Entities
 
         public string? Phone { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public string? UpdatedBy { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public string? DeletedBy { get; set; }
-
-        public DateTime? DeletedAt { get; set; }
+        public bool isConfirm { get; set; }
 
         // Navigation Properties
         public virtual ICollection<Curriculum> Curriculums { get; set; } = new List<Curriculum>();

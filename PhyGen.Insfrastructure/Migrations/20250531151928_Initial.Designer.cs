@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Insfrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250530163714_Initial")]
+    [Migration("20250531151928_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -33,24 +33,25 @@ namespace PhyGen.Insfrastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsCorrect")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
@@ -59,6 +60,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -76,21 +78,21 @@ namespace PhyGen.Insfrastructure.Migrations
 
                     b.Property<string>("Author")
                         .HasMaxLength(255)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<Guid>("ChapterId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PublicationYear")
@@ -102,12 +104,14 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(255)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -127,26 +131,27 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -160,22 +165,30 @@ namespace PhyGen.Insfrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BookId")
+                    b.Property<Guid?>("BookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BookId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("CurriculumId")
+                    b.Property<Guid?>("CurriculumId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CurriculumId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OrderNo")
@@ -184,19 +197,25 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(255)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BookId");
 
+                    b.HasIndex("BookId1");
+
                     b.HasIndex("CurriculumId");
+
+                    b.HasIndex("CurriculumId1");
 
                     b.ToTable("Chapters");
                 });
@@ -214,28 +233,33 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("OrderNo")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -255,31 +279,36 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Grade")
                         .HasMaxLength(50)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("UserId")
@@ -290,6 +319,37 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Curriculums");
+                });
+
+            modelBuilder.Entity("PhyGen.Domain.Entities.EmailOtpManager", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("Createddate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Otptext")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Otptype")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailOtpManager");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Exam", b =>
@@ -311,6 +371,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("MatrixId")
@@ -318,17 +379,15 @@ namespace PhyGen.Insfrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -337,8 +396,6 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.HasIndex("CreatedBy");
 
                     b.HasIndex("MatrixId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Exams");
                 });
@@ -354,6 +411,7 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
@@ -371,12 +429,14 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ExamId")
@@ -386,10 +446,12 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Version")
                         .HasMaxLength(50)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
@@ -411,12 +473,14 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ExamPaperId")
@@ -432,6 +496,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -453,31 +518,34 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
-                        .IsRequired()
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Grade")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -501,29 +569,15 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.Property<Guid>("ChapterId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Level")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("MatrixId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -549,6 +603,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsRead")
@@ -557,6 +612,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasDefaultValue(false);
 
                     b.Property<string>("Message")
+                        .IsUnicode(true)
                         .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
@@ -580,7 +636,8 @@ namespace PhyGen.Insfrastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -592,24 +649,29 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
                         .HasMaxLength(500)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Level")
                         .HasMaxLength(50)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Type")
                         .HasMaxLength(50)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -635,9 +697,11 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -657,51 +721,45 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("isConfirm")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UrlAvatar")
+                    b.Property<string>("photoURL")
                         .IsRequired()
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -734,16 +792,24 @@ namespace PhyGen.Insfrastructure.Migrations
             modelBuilder.Entity("PhyGen.Domain.Entities.Chapter", b =>
                 {
                     b.HasOne("PhyGen.Domain.Entities.Book", "Book")
-                        .WithMany("Chapters")
+                        .WithMany()
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PhyGen.Domain.Entities.Book", null)
+                        .WithMany("Chapters")
+                        .HasForeignKey("BookId1")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("PhyGen.Domain.Entities.Curriculum", "Curriculum")
-                        .WithMany("Chapters")
+                        .WithMany()
                         .HasForeignKey("CurriculumId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("PhyGen.Domain.Entities.Curriculum", null)
+                        .WithMany("Chapters")
+                        .HasForeignKey("CurriculumId1")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Book");
 
@@ -778,7 +844,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("PhyGen.Domain.Entities.User", "Creator")
-                        .WithMany()
+                        .WithMany("Exams")
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -788,11 +854,6 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasForeignKey("MatrixId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("PhyGen.Domain.Entities.User", null)
-                        .WithMany("Exams")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Category");
 

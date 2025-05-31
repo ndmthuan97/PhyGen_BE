@@ -143,6 +143,37 @@ namespace PhyGen.Insfrastructure.Extensions
                 await context.SaveChangesAsync().ConfigureAwait(false);
             }
 
+            if (!await context.Curriculums.AnyAsync())
+            {
+                var physicsCurriculums = new List<Curriculum>
+                {
+                    new Curriculum
+                    {
+                        Id = new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0"),
+                        Name = "Vật lý 10",
+                        Grade = "10",
+                        Description = "Khung chương trình Vật lý lớp 10."
+                    },
+                    new Curriculum
+                    {
+                        Id = new Guid("b2c3d4e5-f678-9012-3456-789abcdef012"),
+                        Name = "Vật lý 11",
+                        Grade = "11",
+                        Description = "Khung chương trình Vật lý lớp 11."
+                    },
+                    new Curriculum
+                    {
+                        Id = new Guid("c3d4e5f6-7890-1234-5678-90abcdef1234"),
+                        Name = "Vật lý 12",
+                        Grade = "12",
+                        Description = "Khung chương trình Vật lý lớp 12."
+                    }
+                };
+
+                await context.Curriculums.AddRangeAsync(physicsCurriculums);
+                await context.SaveChangesAsync();
+            }
+
             return app;
         }
     }
