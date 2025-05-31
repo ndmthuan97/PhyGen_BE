@@ -21,7 +21,7 @@ namespace PhyGen.Shared.Constants
 
             // Authentication error messages
             { StatusCode.UserAuthenticationFailed, "User authentication failed" },
-            { StatusCode.EmailAlreadyExists, "Email already existsaaa" },
+            { StatusCode.EmailAlreadyExists, "Email already exists" },
             { StatusCode.RegisterFailed, "Register failed" },
             { StatusCode.LoginFailed, "Login failed" },
             { StatusCode.UserNotFound, "User not found" },

@@ -15,21 +15,17 @@ namespace PhyGen.Shared.Constants
         ChangedPasswordSuccess = 1003,
         OtpSendSuccess = 1004,
 
-        // Authentication success
-        RegisterSuccess = 2005,
-        LoginSuccess = 2007,
-
         // Error code 2xxx
-        ModelInvalid = 2001,
-        UserAuthenticationFailed = 2010,
-        EmailAlreadyExists = 2011,
-        RegisterFailed = 2004,
-        LoginFailed = 2006,
-        UserNotFound = 2008,
-        InvalidPassword = 2009,
-        EmailDoesNotExists = 2005,
+        ModelInvalid = 2000,
+        RegisterFailed = 2001,
+        LoginFailed = 2002,
+        UserAuthenticationFailed = 2003,
+        UserNotFound = 2004,
+        EmailAlreadyExists = 2005,
+        EmailDoesNotExists = 2006,
         InvalidUser = 2007,
-        InvalidOtp = 2012,
+        InvalidPassword = 2008,
+        InvalidOtp = 2009,
 
         // Curriculum error
         CurriculumSameName = 2010,
