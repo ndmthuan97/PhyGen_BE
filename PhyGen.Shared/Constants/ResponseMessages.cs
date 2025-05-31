@@ -10,21 +10,25 @@ namespace PhyGen.Shared.Constants
             // Success messages
             { StatusCode.RequestProcessedSuccessfully, "Request processed successfully." },
 
-            // Authentication success messages
-            { StatusCode.RegisterSuccess, "Register succeeded" },
-            { StatusCode.LoginSuccess, "Login succeeded" },
-
+            { StatusCode.RegisterSuccess, "Register succeeded." },
+            { StatusCode.LoginSuccess, "Login succeeded." },
+            { StatusCode.ChangedPasswordSuccess, "Password changed successfully." },
+            { StatusCode.OtpSendSuccess, "Otp Send successfully." }, 
+          
             // Error messages
             { StatusCode.ModelInvalid, "Model is invalid. Please check the request body." },
 
 
             // Authentication error messages
             { StatusCode.UserAuthenticationFailed, "User authentication failed" },
-            { StatusCode.EmailAlreadyExists, "Email already exists" },
+            { StatusCode.EmailAlreadyExists, "Email already existsaaa" },
             { StatusCode.RegisterFailed, "Register failed" },
             { StatusCode.LoginFailed, "Login failed" },
             { StatusCode.UserNotFound, "User not found" },
             { StatusCode.InvalidPassword, "Invalid password" },
+            { StatusCode.EmailDoesNotExists, "Email Doesn't Exists" },
+            { StatusCode.InvalidUser, "Invalid User." },
+            { StatusCode.InvalidOtp, "Invalid Otp." }, 
 
             // Curriculum messages
             { StatusCode.CurriculumNotFound, "Curriculum with Id does not exist." },

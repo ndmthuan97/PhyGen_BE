@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Identity;
 using PhyGen.API.Mapping;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Interface;
-using PhyGen.Domain.Entities;
+using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Insfrastructure.Extensions;
 using PhyGen.Insfrastructure.Identity;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
+using PhyGen.Insfrastructure.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,10 @@ builder.Services.AddCoreInfrastructure(builder.Configuration);
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.AddAutoMapper(typeof(ModelMappingProfile).Assembly);
+
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
 
 var app = builder.Build();
 
