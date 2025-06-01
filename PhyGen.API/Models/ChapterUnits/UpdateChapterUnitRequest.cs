@@ -6,7 +6,7 @@ namespace PhyGen.API.Models.ChapterUnits
     {
         [JsonRequired]
         public Guid ChapterUnitId { get; set; }
-        public string Title { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
         public int? OrderNo { get; set; }
         [JsonRequired]

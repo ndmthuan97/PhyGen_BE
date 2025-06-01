@@ -13,7 +13,7 @@ using System.Net;
 
 namespace PhyGen.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/chapterunits")]
     [ApiController]
     public class ChapterUnitController : BaseController<ChapterUnitController>
     {
@@ -28,7 +28,15 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetAllChapterUnitsQuery, List<ChapterUnitResponse>>(request);
         }
 
-        [HttpGet("{chapterId}")]
+        [HttpGet("{chapterUnitId}")]
+        [ProducesResponseType(typeof(ApiResponse<ChapterUnitResponse>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetChapterUnitById(Guid chapterUnitId)
+        {
+            var request = new GetChapterUnitByIdQuery(chapterUnitId);
+            return await ExecuteAsync<GetChapterUnitByIdQuery, ChapterUnitResponse>(request);
+        }
+
+        [HttpGet("chapters/{chapterId}")]
         [ProducesResponseType(typeof(ApiResponse<List<ChapterUnitResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetChapterUnitsByChapterId(Guid chapterId)
         {

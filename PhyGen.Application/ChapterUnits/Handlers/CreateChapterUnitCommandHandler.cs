@@ -28,7 +28,7 @@ namespace PhyGen.Application.ChapterUnits.Handlers
 
         public async Task<Guid> Handle(CreateChapterUnitCommand request, CancellationToken cancellationToken)
         {
-            if (await _chapterUnitRepository.GetChapterUnitByTitleAsync(request.Title) != null)
+            if (await _chapterUnitRepository.GetChapterUnitByNameAsync(request.Name) != null)
                 throw new ChapterUnitSameNameException();
 
             if (await _chapterRepository.GetByIdAsync(request.ChapterId) == null)
@@ -39,7 +39,7 @@ namespace PhyGen.Application.ChapterUnits.Handlers
 
             var chapterUnit = new ChapterUnit
             {
-                Title = request.Title,
+                Name = request.Name,
                 ChapterId = request.ChapterId,
                 OrderNo = request.OrderNo,
                 CreatedBy = request.CreatedBy,
