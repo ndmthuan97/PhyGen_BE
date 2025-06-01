@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Azure;
 using Newtonsoft.Json.Linq;
 using PhyGen.Application.Authentication.DTOs.Responses;
+using AutoMapper;
 
 namespace PhyGen.Insfrastructure.Service;
 
@@ -30,7 +31,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthenticationResponse> RegisterAsync(RegisterDto dto)
     {
-        var email = dto.Email.ToLower();
+        var email = dto.Email.Trim().ToLower();
         if (_context.Users.Any(u => u.Email.ToLower() == email))
         {
             return new AuthenticationResponse
@@ -40,16 +41,22 @@ public class AuthService : IAuthService
             };
         }
 
-        var users = new User
+        // Hash password
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
+        var user = new User
         {
             Id = Guid.NewGuid(),
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             Phone = dto.PhoneNumber,
-            Email = dto.Email.ToLower(),
-            Password = dto.Password,
-            Role = "User"
+            Email = email,
+            Password = hashedPassword,
+            Role = "User",
+            isConfirm = false
         };
+
+        _context.Users.Add(user);
 
         string otp = Generaterandomnumber();
         await UpdateOtp(dto.Email, otp, "register");
@@ -66,7 +73,20 @@ public class AuthService : IAuthService
 
     public async Task<AuthenticationResponse> ConfirmRegister(string email, string otptext)
     {
-        // Bước 1: Kiểm tra OTP
+        email = email.ToLower();
+
+        // Bước 1: Tìm người dùng trong bảng Users
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+        if (user == null)
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.EmailAlreadyExists
+            };
+        }
+
+        // Bước 2: Kiểm tra OTP
         bool otpresponse = await ValidateOTP(email, otptext);
         if (!otpresponse)
         {
@@ -77,41 +97,19 @@ public class AuthService : IAuthService
             };
         }
 
-        // Bước 2: Kiểm tra email đã tồn tại trong bảng Users chưa
-        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
-        if (existingUser != null)
+        // Bước 3: Kiểm tra xem đã confirm hay chưa
+        if (user.isConfirm)
         {
             return new AuthenticationResponse
             {
                 Email = email,
-                StatusCode = StatusCode.EmailAlreadyExists
+                StatusCode = StatusCode.AccountNotConfirmed
             };
         }
 
-        // Bước 3: Lấy thông tin tạm và thêm user mới
-        var tempData = await _context.ReserveUsers.FirstOrDefaultAsync(item => item.Email.ToLower() == email.ToLower());
-        if (tempData == null)
-        {
-            return new AuthenticationResponse
-            {
-                Email = email,
-                StatusCode = StatusCode.RegisterFailed
-            };
-        }
-
-        var user = new User
-        {
-            Id = Guid.NewGuid(),
-            FirstName = tempData.FirstName,
-            LastName = tempData.LastName,
-            Phone = tempData.Phone,
-            Email = tempData.Email,
-            Role = "User",
-            Password = tempData.Password
-        };
-
-        await _context.Users.AddAsync(user);
-        _context.ReserveUsers.Remove(tempData);
+        // Bước 4: Cập nhật trạng thái isConfirm
+        user.isConfirm = true;
+        _context.Users.Update(user);
         await _context.SaveChangesAsync();
 
         return new AuthenticationResponse
@@ -147,35 +145,44 @@ public class AuthService : IAuthService
         await this._context.SaveChangesAsync();
     }
 
-    public async Task<LoginResponse> LoginAsync(LoginDto dto)
+    public async Task<object> LoginAsync(LoginDto dto)
     {
         var email = dto.Email.Trim().ToLower();
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
 
         if (user == null)
         {
-            return new LoginResponse
+            return new AuthenticationResponse
             {
-                Response = new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.EmailAlreadyExists
-                },
-                Token = null
+                Email = email,
+                StatusCode = StatusCode.EmailNotFound
             };
+                
         }
-        if (user.Password != dto.Password)
+        if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
         {
-            return new LoginResponse
+            return new AuthenticationResponse
             {
-                Response = new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.InvalidPassword
-                },
-                Token = null
+                Email = email,
+                StatusCode = StatusCode.InvalidPassword
             };
         }
+
+        if (!user.isConfirm)
+        {
+            // Gửi lại OTP nếu chưa xác thực
+            string otp = Generaterandomnumber();
+            await UpdateOtp(email, otp, "login");
+            await SendOtpMail(email, otp, email, "login");
+
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.AccountNotConfirmed
+            };
+        }
+
+        // Đã xác thực => đăng nhập thành công
         var token = _jwtTokenGenerator.GenerateToken(user);
 
         return new LoginResponse
@@ -185,9 +192,58 @@ public class AuthService : IAuthService
                 Email = email,
                 StatusCode = StatusCode.LoginSuccess
             },
-            Token = token
+            Token = token,
+            Role = user.Role
         };
     }
+
+    public async Task<object> ConfirmLogin(string email, string otpText)
+    {
+        email = email.ToLower();
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+        if (user == null)
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.EmailNotFound
+            };
+        }
+
+        bool otpValid = await ValidateOTP(email, otpText);
+        if (!otpValid)
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.UserAuthenticationFailed
+            };       
+        }
+
+        if (user.isConfirm)
+        {
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.AlreadyConfirmed
+            };
+        }
+        user.isConfirm = true;
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+
+            return new LoginResponse
+            {
+                Response = new AuthenticationResponse
+                {
+                    Email = email,
+                    StatusCode = StatusCode.ConfirmSuccess
+                },
+                Token = _jwtTokenGenerator.GenerateToken(user),
+                Role = user.Role
+            };
+            }
 
     public async Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordDto dto)
     {
@@ -201,8 +257,8 @@ public class AuthService : IAuthService
                 StatusCode = StatusCode.EmailDoesNotExists 
             };          
         }
-
-        if (user.Password != dto.CurrentPassword)
+        bool verify = BCrypt.Net.BCrypt.Verify(dto.CurrentPassword, user.Password);
+        if (!verify)
         {
             return new AuthenticationResponse
             {
@@ -210,9 +266,9 @@ public class AuthService : IAuthService
                 StatusCode = StatusCode.InvalidPassword
             };           
         }
-                
+
         // 3. Cập nhật mật khẩu mới (plain text)
-        user.Password = dto.NewPassword;
+        user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
         return new AuthenticationResponse
@@ -248,19 +304,26 @@ public class AuthService : IAuthService
 
     public async Task<AuthenticationResponse> UpdatePassword(string email, string Password, string Otptext)
     {
-
         bool otpvalidation = await ValidateOTP(email, Otptext);
         if (otpvalidation)
         {
-            var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);
+            var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);           
             if (_user != null)
             {
-                _user.Password = Password;
+                _user.Password = BCrypt.Net.BCrypt.HashPassword(Password);
                 await _context.SaveChangesAsync();
                 return new AuthenticationResponse
                 {
                     Email = email,
                     StatusCode = StatusCode.ChangedPasswordSuccess
+                };
+            }
+            else
+            {
+                return new AuthenticationResponse
+                {
+                    Email = email,
+                    StatusCode = StatusCode.InvalidUser
                 };
             }
         }
@@ -291,6 +354,11 @@ public class AuthService : IAuthService
         {
             mailrequest.Subject = "Password Reset Request : OTP";
             mailrequest.Emailbody = GenerateForgetPasswordEmail(Name, OtpText);
+        }
+        else if (type == "login")
+        {
+            mailrequest.Subject = "Xác thực đăng nhập: OTP";
+            mailrequest.Emailbody = GenerateLoginConfirmEmail(Name, OtpText);
         }
 
         await this._emailService.SendEmailAsync(mailrequest);
@@ -334,4 +402,23 @@ public class AuthService : IAuthService
 
         return emailBody;
     }
+    private static string GenerateLoginConfirmEmail(string name, string otptext)
+    {
+        string emailBody = "<div style='width: 100%; background-color: #f4f4f4; padding: 20px 0; font-family: Arial, sans-serif;'>";
+        emailBody += "<div style='max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>";
+        emailBody += "<h2 style='color: #333;'>Welcome back, " + name + "!</h2>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>We're glad to see you again at <strong>PhyGen System</strong>.</p>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Please verify the OTP code below to continue accessing the system:</p>";
+        emailBody += "<div style='margin: 30px 0; text-align: center;'>";
+        emailBody += "<span style='display: inline-block; background-color: #17a2b8; color: #fff; padding: 12px 20px; font-size: 20px; border-radius: 5px; letter-spacing: 2px;'>" + otptext + "</span>";
+        emailBody += "</div>";
+        emailBody += "<p style='font-size: 14px; color: #888;'>This OTP code will expire in 5 minutes. If you did not request this, please ignore this email.</p>";
+        emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;' />";
+        emailBody += "<p style='font-size: 12px; color: #aaa;'>Best regards,<br/>The PhyGen Team</p>";
+        emailBody += "</div>";
+        emailBody += "</div>";
+
+        return emailBody;
+    }
+
 }

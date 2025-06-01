@@ -21,14 +21,19 @@ namespace PhyGen.Shared.Constants
 
             // Authentication error messages
             { StatusCode.UserAuthenticationFailed, "User authentication failed" },
-            { StatusCode.EmailAlreadyExists, "Email already existsaaa" },
+            { StatusCode.EmailAlreadyExists, "Email already exists" },
             { StatusCode.RegisterFailed, "Register failed" },
             { StatusCode.LoginFailed, "Login failed" },
             { StatusCode.UserNotFound, "User not found" },
             { StatusCode.InvalidPassword, "Invalid password" },
             { StatusCode.EmailDoesNotExists, "Email Doesn't Exists" },
             { StatusCode.InvalidUser, "Invalid User." },
-            { StatusCode.InvalidOtp, "Invalid Otp." }, 
+            { StatusCode.InvalidOtp, "Invalid Otp." },
+           
+            { StatusCode.EmailNotFound, "Email not found" },
+            { StatusCode.AccountNotConfirmed, "Account has not been accepted" },
+            { StatusCode.AlreadyConfirmed, "Account already accepted" },
+            { StatusCode.ConfirmSuccess, "Account confirmed successfully" },
 
             // Curriculum messages
             { StatusCode.CurriculumNotFound, "Curriculum with Id does not exist." },
