@@ -49,7 +49,20 @@ namespace PhyGen.Shared.Constants
 
             // Book messages
             { StatusCode.BookNotFound, "Book with Id does not exist." },
-            { StatusCode.BookSameName, "Book with the same name already exists." }
+            { StatusCode.BookSameName, "Book with the same name already exists." },
+
+            // Question messages
+            { StatusCode.QuestionNotFound, "Question with this Id does not exist." },
+            { StatusCode.QuestionSameContent, "This question already exists." },
+
+            // Answer messages
+            { StatusCode.AnswerNotFound, "Answer with this Id does not exist." },
+            { StatusCode.AnswerSameContent, "This answer already exists." },
+
+            // Exam messages
+            { StatusCode.ExamNotFound, "Exam with this Id does not exist." },
+            { StatusCode.ExamSameTitle, "Exam with the same title already exists." },
+
 
         };
 

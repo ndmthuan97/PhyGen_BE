@@ -46,5 +46,18 @@ namespace PhyGen.Shared.Constants
         AccountNotConfirmed = 2019,
         AlreadyConfirmed = 2020,
         ConfirmSuccess = 2021,
+
+        // Question error
+        QuestionNotFound = 2022,
+        QuestionSameContent = 2023,
+
+        // Answer error
+        AnswerNotFound = 2024,
+        AnswerSameContent = 2025,
+
+        // Exam error
+        ExamNotFound = 2026,
+        ExamSameTitle = 2027,
+
     }
 }
