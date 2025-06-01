@@ -8,9 +8,9 @@ namespace PhyGen.API.Models.Chapters
         [JsonRequired]
         public Guid ChapterId { get; set; }
 
-        [Required(ErrorMessage = "Title is required.")]
+        [Required(ErrorMessage = "Name is required.")]
         [StringLength(255, MinimumLength = 1, ErrorMessage = "Name must be between 1 and 255 characters.")]
-        public string Title { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         public Guid? CurriculumId { get; set; }
 

@@ -12,6 +12,10 @@ using PhyGen.Application.Systems.Users;
 using PhyGen.Application.ChapterUnits.Commands;
 using PhyGen.API.Models.ChapterUnits;
 using PhyGen.Domain.Entities;
+using PhyGen.Application.BookSeries.Commands;
+using PhyGen.API.Models.BookSeries;
+using PhyGen.Application.Books.Commands;
+using PhyGen.API.Models.Books;
 
 namespace PhyGen.API.Mapping
 {
@@ -48,6 +52,18 @@ namespace PhyGen.API.Mapping
             CreateMap<CreateChapterUnitRequest, CreateChapterUnitCommand>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
             CreateMap<UpdateChapterUnitRequest, UpdateChapterUnitCommand>()
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+
+            // Mapping for Book Series
+            CreateMap<CreateBookSeriesRequest, CreateBookSeriesCommand>()
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateBookSeriesRequest, UpdateBookSeriesCommand>()
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+
+            // Mapping for Book
+            CreateMap<CreateBookRequest, CreateBookCommand>()
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateBookRequest, UpdateBookCommand>()
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
 
             // Mapping for Question

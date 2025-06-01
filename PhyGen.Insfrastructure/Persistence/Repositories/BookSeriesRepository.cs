@@ -1,4 +1,5 @@
-﻿using PhyGen.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces.Repositories;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 using System;
@@ -13,6 +14,12 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
     {
         public BookSeriesRepository(AppDbContext context) : base(context)
         {
+        }
+
+        public async Task<BookSeries?> GetBookSeriesByNameAsync(string name)
+        {
+            return await _context.BookSeries
+                .FirstOrDefaultAsync(bs => bs.Name.ToLower() == name.ToLower());
         }
     }
 }

@@ -26,6 +26,10 @@ namespace PhyGen.Shared.Constants
         InvalidUser = 2007,
         InvalidPassword = 2008,
         InvalidOtp = 2009,
+        EmailNotFound = 2018,
+        AccountNotConfirmed = 2019,
+        AlreadyConfirmed = 2020,
+        ConfirmSuccess = 2021,
 
         // Curriculum error
         CurriculumSameName = 2010,
@@ -42,9 +46,9 @@ namespace PhyGen.Shared.Constants
         // Chapter Unit error
         ChapterUnitNotFound = 2016,
         ChapterUnitSameName = 2017,
-        EmailNotFound = 2018,
-        AccountNotConfirmed = 2019,
-        AlreadyConfirmed = 2020,
-        ConfirmSuccess = 2021,
+
+        // Book Series error
+        BookSeriesNotFound = 2022,
+        BookSeriesSameName = 2023,
     }
 }

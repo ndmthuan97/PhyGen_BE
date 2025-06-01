@@ -16,10 +16,10 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
         {
         }
 
-        public async Task<ChapterUnit?> GetChapterUnitByTitleAsync(string title)
+        public async Task<ChapterUnit?> GetChapterUnitByNameAsync(string name)
         {
             return await _context.ChapterUnits
-                .FirstOrDefaultAsync(cu => cu.Title.ToLower() == title.ToLower());
+                .FirstOrDefaultAsync(cu => cu.Name.ToLower() == name.ToLower());
         }
 
         public async Task<List<ChapterUnit>> GetChapterUnitsByChapterIdAsync(Guid chapterId)
