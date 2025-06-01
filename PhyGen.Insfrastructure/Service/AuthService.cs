@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Azure;
 using Newtonsoft.Json.Linq;
 using PhyGen.Application.Authentication.DTOs.Responses;
+using AutoMapper;
 
 namespace PhyGen.Insfrastructure.Service;
 
@@ -20,12 +21,14 @@ public class AuthService : IAuthService
     private readonly AppDbContext _context;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IEmailService _emailService;
+    private readonly IMapper _mapper;
 
-    public AuthService(AppDbContext context, IJwtTokenGenerator jwtTokenGenerator, IEmailService emailService)
+    public AuthService(AppDbContext context, IJwtTokenGenerator jwtTokenGenerator, IEmailService emailService, IMapper mapper)
     {
         _context = context;
         _jwtTokenGenerator = jwtTokenGenerator;
         _emailService = emailService;
+        _mapper = mapper;
     }
 
     public async Task<AuthenticationResponse> RegisterAsync(RegisterDto dto)
@@ -256,8 +259,8 @@ public class AuthService : IAuthService
                 StatusCode = StatusCode.EmailDoesNotExists 
             };          
         }
-
-        if (user.Password != dto.CurrentPassword)
+        bool verify = BCrypt.Net.BCrypt.Verify(dto.CurrentPassword, user.Password);
+        if (!verify)
         {
             return new AuthenticationResponse
             {
@@ -265,9 +268,9 @@ public class AuthService : IAuthService
                 StatusCode = StatusCode.InvalidPassword
             };           
         }
-                
+
         // 3. Cập nhật mật khẩu mới (plain text)
-        user.Password = dto.NewPassword;
+        user.Password = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
         return new AuthenticationResponse
@@ -303,19 +306,26 @@ public class AuthService : IAuthService
 
     public async Task<AuthenticationResponse> UpdatePassword(string email, string Password, string Otptext)
     {
-
         bool otpvalidation = await ValidateOTP(email, Otptext);
         if (otpvalidation)
         {
-            var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);
+            var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);           
             if (_user != null)
             {
-                _user.Password = Password;
+                _user.Password = BCrypt.Net.BCrypt.HashPassword(Password);
                 await _context.SaveChangesAsync();
                 return new AuthenticationResponse
                 {
                     Email = email,
                     StatusCode = StatusCode.ChangedPasswordSuccess
+                };
+            }
+            else
+            {
+                return new AuthenticationResponse
+                {
+                    Email = email,
+                    StatusCode = StatusCode.InvalidUser
                 };
             }
         }
