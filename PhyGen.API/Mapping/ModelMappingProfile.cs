@@ -11,6 +11,7 @@ using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Systems.Users;
 using PhyGen.Application.ChapterUnits.Commands;
 using PhyGen.API.Models.ChapterUnits;
+using PhyGen.Domain.Entities;
 
 namespace PhyGen.API.Mapping
 {
@@ -27,6 +28,7 @@ namespace PhyGen.API.Mapping
                 .ReverseMap();
 
             CreateMap<LoginDto, LoginRequest>().ReverseMap();
+            CreateMap<User, UserDtos>();
             // Add your mapping configurations here
 
             // Mapping for Curriculum
