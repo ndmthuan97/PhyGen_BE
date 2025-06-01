@@ -3,9 +3,11 @@ using PhyGen.API.Mapping;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
+using PhyGen.Domain.Interfaces.Repositories;
 using PhyGen.Insfrastructure.Extensions;
 using PhyGen.Insfrastructure.Identity;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
+using PhyGen.Insfrastructure.Persistence.Repositories;
 using PhyGen.Insfrastructure.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +37,7 @@ builder.Services.AddAutoMapper(typeof(ModelMappingProfile).Assembly);
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
 
 
 var app = builder.Build();

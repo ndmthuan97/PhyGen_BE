@@ -42,5 +42,9 @@ namespace PhyGen.Shared.Constants
         // Chapter Unit error
         ChapterUnitNotFound = 2016,
         ChapterUnitSameName = 2017,
+        EmailNotFound = 2018,
+        AccountNotConfirmed = 2019,
+        AlreadyConfirmed = 2020,
+        ConfirmSuccess = 2021,
     }
 }
