@@ -11,10 +11,9 @@ namespace PhyGen.Domain.Entities
     public class Book : EntityBase<Guid>
     {
         [Required]
-        public string Title { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-        [Required]
-        public Guid SeriesId { get; set; }
+        public Guid? SeriesId { get; set; }
 
         public string? Author { get; set; }
 

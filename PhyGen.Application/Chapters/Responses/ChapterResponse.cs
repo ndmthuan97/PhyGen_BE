@@ -10,7 +10,7 @@ namespace PhyGen.Application.Chapters.Responses
     {
         public Guid Id { get; set; }
 
-        public string Title { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         public Guid? CurriculumId { get; set; }
 

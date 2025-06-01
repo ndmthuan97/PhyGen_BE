@@ -35,7 +35,7 @@ namespace PhyGen.Application.ChapterUnits.Handlers
             if (await _chapterRepository.GetByIdAsync(request.ChapterId) == null)
                 throw new ChapterNotFoundException();
 
-            chapterUnit.Title = request.Title;
+            chapterUnit.Name = request.Name;
             chapterUnit.ChapterId = request.ChapterId;
             chapterUnit.OrderNo = request.OrderNo;
             chapterUnit.UpdatedBy = request.UpdatedBy;

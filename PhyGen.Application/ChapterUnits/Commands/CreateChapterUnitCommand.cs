@@ -9,7 +9,7 @@ namespace PhyGen.Application.ChapterUnits.Commands
 {
     public class CreateChapterUnitCommand : IRequest<Guid>
     {
-        public string Title { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public int? OrderNo { get; set; }
         public string CreatedBy { get; set; } = string.Empty;

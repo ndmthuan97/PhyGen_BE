@@ -83,7 +83,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
 
             modelBuilder.Entity<Chapter>(e =>
             {
-                e.Property(p => p.Title).HasMaxLength(255).IsRequired();
+                e.Property(p => p.Name).HasMaxLength(255).IsRequired();
                 e.Property(p => p.CurriculumId);
                 e.Property(p => p.BookId);
                 e.Property(p => p.OrderNo);
@@ -152,7 +152,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
 
             modelBuilder.Entity<Book>(e =>
             {
-                e.Property(p => p.Title).HasMaxLength(255);
+                e.Property(p => p.Name).HasMaxLength(255);
                 e.Property(p => p.Author).HasMaxLength(255);
             });
 

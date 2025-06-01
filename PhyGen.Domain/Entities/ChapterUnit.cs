@@ -14,7 +14,7 @@ namespace PhyGen.Domain.Entities
         public Guid ChapterId { get; set; }
 
         [Required]
-        public string Title { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
         [Column(TypeName = "nvarchar(max)")]
         public string? Description { get; set; }

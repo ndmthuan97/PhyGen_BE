@@ -9,5 +9,8 @@ namespace PhyGen.Domain.Interfaces.Repositories
 {
     public interface IBookRepository : IAsyncRepository<Book, Guid>
     {
+        Task<Book?> GetBookByNameAsync(string bookName);
+
+        Task<List<Book>> GetBooksByBookSeriesIdAsync(Guid bookSeriesId);
     }
 }

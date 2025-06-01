@@ -36,10 +36,10 @@ namespace PhyGen.Application.Chapters.Handlers
             if (await _userRepository.GetUserByEmailAsync(request.UpdatedBy) == null)
                 throw new UserNotFoundException();
 
-            if (await _chapterRepository.GetChapterByTitleAsync(request.Title) != null)
+            if (await _chapterRepository.GetChapterByNameAsync(request.Name) != null)
                 throw new ChapterSameNameException();
 
-            chapter.Title = request.Title;
+            chapter.Name = request.Name;
             chapter.CurriculumId = request.CurriculumId;
             chapter.BookId = request.BookId;
             chapter.OrderNo = request.OrderNo;

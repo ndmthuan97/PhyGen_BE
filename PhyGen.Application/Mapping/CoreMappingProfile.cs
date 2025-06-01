@@ -15,6 +15,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PhyGen.Application.BookSeries.Commands;
+using PhyGen.Application.BookSeries.Responses;
+using PhyGen.Application.Books.Commands;
+using PhyGen.Application.Books.Responses;
 using PhyGen.Application.Exams.Commands;
 
 namespace PhyGen.Application.Mapping
@@ -49,8 +53,7 @@ namespace PhyGen.Application.Mapping
                 .ForMember(dest => dest.DeletedBy, opt => opt.MapFrom(src => src.DeletedBy));
 
             // Mapping for Chapter Unit
-            CreateMap<ChapterUnit, ChapterUnitResponse>()
-                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Chapter.Title));
+            CreateMap<ChapterUnit, ChapterUnitResponse>();
 
             CreateMap<CreateChapterUnitCommand, ChapterUnit>()
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
@@ -59,6 +62,26 @@ namespace PhyGen.Application.Mapping
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
 
+            // Mapping for BookSeries
+            CreateMap<CreateBookSeriesCommand, Domain.Entities.BookSeries>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateBookSeriesCommand, Domain.Entities.BookSeries>()
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+            CreateMap<DeleteBookSeriesCommand, Domain.Entities.BookSeries>()
+                .ForMember(dest => dest.DeletedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.DeletedBy, opt => opt.MapFrom(src => src.DeletedBy));
+            CreateMap<Domain.Entities.BookSeries, BookSeriesResponse>();
+
+            // Mapping for Book
+            CreateMap<CreateBookCommand, Book>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateBookCommand, Book>()
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+            CreateMap<Book, BookResponse>();
 
             // Mapping for Question
             CreateMap<CreateQuestionCommand, Question>()

@@ -174,6 +174,25 @@ namespace PhyGen.Insfrastructure.Extensions
                 await context.SaveChangesAsync();
             }
 
+            if (!await context.BookSeries.AnyAsync())
+            {
+                var bookSeries = new List<BookSeries>
+                {
+                    new BookSeries
+                    {
+                        Id = new Guid("d4e5f678-9012-3456-7890-1234567890ab"),
+                        Name = "Kết nối tri thức với cuộc sống",
+                    },
+                    new BookSeries
+                    {
+                        Id = new Guid("e5f67890-1234-5678-90ab-cdef12345678"),
+                        Name = "Cánh Diều",
+                    }
+                };
+                await context.BookSeries.AddRangeAsync(bookSeries).ConfigureAwait(false);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+            }
+
             return app;
         }
     }

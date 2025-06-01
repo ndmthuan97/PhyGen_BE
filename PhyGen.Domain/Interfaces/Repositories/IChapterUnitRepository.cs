@@ -9,7 +9,7 @@ namespace PhyGen.Domain.Interfaces.Repositories
 {
     public interface IChapterUnitRepository : IAsyncRepository<ChapterUnit, Guid>
     {
-        Task<ChapterUnit?> GetChapterUnitByTitleAsync(string title);
+        Task<ChapterUnit?> GetChapterUnitByNameAsync(string name);
         Task<List<ChapterUnit>> GetChapterUnitsByChapterIdAsync(Guid chapterId);
     }
 }

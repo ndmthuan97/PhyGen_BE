@@ -16,11 +16,10 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
         {
         }
 
-        public async Task<Chapter?> GetChapterByTitleAsync(string title)
+        public async Task<Chapter?> GetChapterByNameAsync(string name)
         {
             return await _context.Chapters
-                .FirstOrDefaultAsync(c =>
-                    EF.Functions.Collate(c.Title, "Latin1_General_100_CI_AI_SC") == title);
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == name.ToLower());
         }
     }
 }

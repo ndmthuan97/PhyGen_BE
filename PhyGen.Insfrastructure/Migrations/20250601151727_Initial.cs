@@ -84,8 +84,8 @@ namespace PhyGen.Insfrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Author = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     PublicationYear = table.Column<int>(type: "int", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -211,7 +211,7 @@ namespace PhyGen.Insfrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     CurriculumId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     OrderNo = table.Column<int>(type: "int", nullable: true),
@@ -297,7 +297,7 @@ namespace PhyGen.Insfrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ChapterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OrderNo = table.Column<int>(type: "int", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),

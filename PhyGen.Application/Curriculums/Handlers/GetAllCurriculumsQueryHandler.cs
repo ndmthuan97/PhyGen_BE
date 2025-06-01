@@ -24,9 +24,9 @@ namespace PhyGen.Application.Curriculums.Handlers
         {
             var curriculums = await _curriculumRepository.GetAllAsync();
 
-            var curriculumResponses = AppMapper<CoreMappingProfile>.Mapper.Map<List<CurriculumResponse>>(curriculums);
+            var filteredCurriculums = curriculums.Where(c => c.DeletedAt == null).ToList();
 
-            return curriculumResponses;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<List<CurriculumResponse>>(filteredCurriculums);
         }
     }
 }
