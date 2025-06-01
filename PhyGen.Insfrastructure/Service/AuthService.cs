@@ -21,14 +21,12 @@ public class AuthService : IAuthService
     private readonly AppDbContext _context;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IEmailService _emailService;
-    private readonly IMapper _mapper;
 
-    public AuthService(AppDbContext context, IJwtTokenGenerator jwtTokenGenerator, IEmailService emailService, IMapper mapper)
+    public AuthService(AppDbContext context, IJwtTokenGenerator jwtTokenGenerator, IEmailService emailService)
     {
         _context = context;
         _jwtTokenGenerator = jwtTokenGenerator;
         _emailService = emailService;
-        _mapper = mapper;
     }
 
     public async Task<AuthenticationResponse> RegisterAsync(RegisterDto dto)

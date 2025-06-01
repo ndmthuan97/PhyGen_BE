@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhyGen.Application.Authentication.DTOs.Dtos;
+using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
+using PhyGen.Application.Exceptions.Users;
 using PhyGen.Domain.Entities;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
+namespace PhyGen.Insfrastructure.Service;
 
 public class UserService : IUserService
 {
@@ -34,7 +37,7 @@ public class UserService : IUserService
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
         if (user == null)
         {
-            throw new Exception("User not found");
+            throw new UserNotFoundException();
         }
         user.FirstName = request.FirstName;
         user.LastName = request.LastName;

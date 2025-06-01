@@ -6,6 +6,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using PhyGen.Application.Authentication.Models.Requests;
+using PhyGen.Application.Authentication.Interface;
+using PhyGen.Application.Exceptions.Users;
 
 namespace PhyGen.API.Controllers
 {
@@ -14,13 +16,11 @@ namespace PhyGen.API.Controllers
     public class UserController : BaseController<UserController>
     {
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService, IMapper mapper, IMediator mediator, ILogger<UserController> logger)
+        public UserController(IUserService userService, IMediator mediator, ILogger<UserController> logger)
             : base(mediator, logger)
         {
             _userService = userService;
-            _mapper = mapper;
         }
 
         [HttpGet("profile")]
@@ -30,12 +30,12 @@ namespace PhyGen.API.Controllers
             var email = User.FindFirstValue(ClaimTypes.Email);
 
             if (string.IsNullOrEmpty(email))
-                return Unauthorized(new { message = "Email not found in token" });
+                return Unauthorized(new UserNotFoundException());
 
             var profile = await _userService.ViewProfileAsync(email);
 
             if (profile == null)
-                return NotFound(new { message = "User not found" });
+                return NotFound(new UserNotFoundException());
 
             return Ok(profile);
         }
@@ -46,7 +46,7 @@ namespace PhyGen.API.Controllers
         {
             var email = User.FindFirstValue(ClaimTypes.Email);
             if (string.IsNullOrEmpty(email))
-                return Unauthorized(new { message = "Email not found in token" });
+                return Unauthorized(new UserNotFoundException());
 
             var updatedUser = await _userService.EditProfileAsync(email, request);
             return Ok(updatedUser);
