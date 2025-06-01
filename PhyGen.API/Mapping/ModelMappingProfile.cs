@@ -11,6 +11,8 @@ using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Systems.Users;
 using PhyGen.Application.ChapterUnits.Commands;
 using PhyGen.API.Models.ChapterUnits;
+using PhyGen.API.Models.Exam;
+using PhyGen.Application.Exams.Commands;
 using PhyGen.Domain.Entities;
 using PhyGen.Application.BookSeries.Commands;
 using PhyGen.API.Models.BookSeries;
@@ -76,6 +78,12 @@ namespace PhyGen.API.Mapping
             CreateMap<CreateAnswerRequest, CreateAnswerCommand>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
             CreateMap<UpdateAnswerRequest, UpdateAnswerCommand>()
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+
+            // Mapping for Exam
+            CreateMap<CreateExamRequest, CreateExamCommand>()
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateExamRequest, UpdateExamCommand>()
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
         }
     }
