@@ -42,7 +42,6 @@ namespace PhyGen.Application.Chapters.Handlers
             {
                 Name = request.Name,
                 CurriculumId = request.CurriculumId,
-                BookId = request.BookId,
                 OrderNo = request.OrderNo,
                 CreatedBy = request.CreatedBy,
                 CreatedAt = DateTime.UtcNow

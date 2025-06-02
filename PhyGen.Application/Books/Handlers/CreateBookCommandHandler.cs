@@ -28,9 +28,6 @@ namespace PhyGen.Application.Books.Handlers
 
         public async Task<Guid> Handle(CreateBookCommand request, CancellationToken cancellationToken)
         {
-            if (await _bookRepository.GetBookByNameAsync(request.Name) != null)
-                throw new BookNotFoundException();
-
             if (request.SeriesId != null)
             {
                 if (await _bookSeriesRepository.GetByIdAsync(request.SeriesId.Value) == null)

@@ -10,5 +10,9 @@ namespace PhyGen.Domain.Interfaces.Repositories
     public interface IChapterRepository : IAsyncRepository<Chapter, Guid>
     {
         Task<Chapter?> GetChapterByNameAsync(string name);
+
+        Task<List<Chapter>> GetChaptersByBookIdAsync(Guid bookId);
+
+        Task<List<Chapter>> GetChaptersByCurriculumIdAsync(Guid curriculumId);
     }
 }

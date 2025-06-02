@@ -12,9 +12,23 @@ namespace PhyGen.API.Models.Chapters
         [StringLength(255, MinimumLength = 1, ErrorMessage = "Name must be between 1 and 255 characters.")]
         public string Name { get; set; } = string.Empty;
 
-        public Guid? CurriculumId { get; set; }
+        [JsonPropertyName("curriculumId")]
+        public string? CurriculumIdRaw { get; set; }
 
-        public Guid? BookId { get; set; }
+        [JsonIgnore]
+        public Guid? CurriculumId
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(CurriculumIdRaw))
+                    return null;
+
+                if (Guid.TryParse(CurriculumIdRaw, out var guid))
+                    return guid;
+
+                return null;
+            }
+        }
 
         public int OrderNo { get; set; }
 

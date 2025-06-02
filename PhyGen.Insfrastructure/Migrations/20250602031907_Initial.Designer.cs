@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Insfrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250601151727_Initial")]
+    [Migration("20250602031907_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -121,6 +121,27 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("PhyGen.Domain.Entities.BookDetail", b =>
+                {
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChapterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("OrderNo")
+                        .HasColumnType("int");
+
+                    b.HasKey("BookId", "ChapterId");
+
+                    b.HasIndex("ChapterId");
+
+                    b.ToTable("BookDetails");
+                });
+
             modelBuilder.Entity("PhyGen.Domain.Entities.BookSeries", b =>
                 {
                     b.Property<Guid>("Id")
@@ -165,12 +186,6 @@ namespace PhyGen.Insfrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BookId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BookId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -208,10 +223,6 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("BookId1");
 
                     b.HasIndex("CurriculumId");
 
@@ -791,18 +802,27 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.Navigation("Series");
                 });
 
-            modelBuilder.Entity("PhyGen.Domain.Entities.Chapter", b =>
+            modelBuilder.Entity("PhyGen.Domain.Entities.BookDetail", b =>
                 {
                     b.HasOne("PhyGen.Domain.Entities.Book", "Book")
-                        .WithMany()
+                        .WithMany("BookDetails")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("PhyGen.Domain.Entities.Book", null)
-                        .WithMany("Chapters")
-                        .HasForeignKey("BookId1")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.HasOne("PhyGen.Domain.Entities.Chapter", "Chapter")
+                        .WithMany("BookDetails")
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
+                    b.Navigation("Book");
+
+                    b.Navigation("Chapter");
+                });
+
+            modelBuilder.Entity("PhyGen.Domain.Entities.Chapter", b =>
+                {
                     b.HasOne("PhyGen.Domain.Entities.Curriculum", "Curriculum")
                         .WithMany()
                         .HasForeignKey("CurriculumId")
@@ -812,8 +832,6 @@ namespace PhyGen.Insfrastructure.Migrations
                         .WithMany("Chapters")
                         .HasForeignKey("CurriculumId1")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Book");
 
                     b.Navigation("Curriculum");
                 });
@@ -967,7 +985,7 @@ namespace PhyGen.Insfrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Book", b =>
                 {
-                    b.Navigation("Chapters");
+                    b.Navigation("BookDetails");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.BookSeries", b =>
@@ -977,6 +995,8 @@ namespace PhyGen.Insfrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Chapter", b =>
                 {
+                    b.Navigation("BookDetails");
+
                     b.Navigation("ChapterUnits");
 
                     b.Navigation("MatrixDetails");

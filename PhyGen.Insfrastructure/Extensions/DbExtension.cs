@@ -193,6 +193,65 @@ namespace PhyGen.Insfrastructure.Extensions
                 await context.SaveChangesAsync().ConfigureAwait(false);
             }
 
+            if (!await context.Books.AnyAsync())
+            {
+                var books = new List<Book>
+                    {
+                        new Book
+                        {
+                            Id = new Guid("a1111111-1111-1111-1111-111111111111"),
+                            Name = "Vật lý 10 - Kết nối tri thức với cuộc sống",
+                            SeriesId = new Guid("d4e5f678-9012-3456-7890-1234567890ab"),
+                            Author = "Nhà xuất bản Giáo dục Việt Nam",
+                            PublicationYear = 2018,
+                        },
+                        new Book
+                        {
+                            Id = new Guid("a2222222-2222-2222-2222-222222222222"),
+                            Name = "Vật lý 11 - Kết nối tri thức với cuộc sống",
+                            SeriesId = new Guid("d4e5f678-9012-3456-7890-1234567890ab"),
+                            Author = "Nhà xuất bản Giáo dục Việt Nam",
+                            PublicationYear = 2018,
+                        },
+                        new Book
+                        {
+                            Id = new Guid("a3333333-3333-3333-3333-333333333333"),
+                            Name = "Vật lý 12 - Kết nối tri thức với cuộc sống",
+                            SeriesId = new Guid("d4e5f678-9012-3456-7890-1234567890ab"),
+                            Author = "Nhà xuất bản Giáo dục Việt Nam",
+                            PublicationYear = 2018,
+                        },
+
+                        new Book
+                        {
+                            Id = new Guid("b1111111-1111-1111-1111-111111111111"),
+                            Name = "Vật lý 10 - Cánh Diều",
+                            SeriesId = new Guid("e5f67890-1234-5678-90ab-cdef12345678"),
+                            Author = "Công ty Đầu tư Xuất bản - Thiết bị giáo dục Việt Nam (VEPIC) phối hợp với Nhà xuất bản Đại học Sư phạm Thành phố Hồ Chí Minh, Nhà xuất bản Đại học Huế và Nhà xuất bản Đại học Sư phạm",
+                            PublicationYear = 2018,
+                        },
+                        new Book
+                        {
+                            Id = new Guid("b2222222-2222-2222-2222-222222222222"),
+                            Name = "Vật lý 11 - Cánh Diều",
+                            SeriesId = new Guid("e5f67890-1234-5678-90ab-cdef12345678"),
+                            Author = "Công ty Đầu tư Xuất bản - Thiết bị giáo dục Việt Nam (VEPIC) phối hợp với Nhà xuất bản Đại học Sư phạm Thành phố Hồ Chí Minh, Nhà xuất bản Đại học Huế và Nhà xuất bản Đại học Sư phạm",
+                            PublicationYear = 2018,
+                        },
+                        new Book
+                        {
+                            Id = new Guid("b3333333-3333-3333-3333-333333333333"),
+                            Name = "Vật lý 12 - Cánh Diều",
+                            SeriesId = new Guid("e5f67890-1234-5678-90ab-cdef12345678"),
+                            Author = "Công ty Đầu tư Xuất bản - Thiết bị giáo dục Việt Nam (VEPIC) phối hợp với Nhà xuất bản Đại học Sư phạm Thành phố Hồ Chí Minh, Nhà xuất bản Đại học Huế và Nhà xuất bản Đại học Sư phạm",
+                            PublicationYear = 2018,
+                        }
+                    };
+
+                await context.Books.AddRangeAsync(books).ConfigureAwait(false);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+            }
+
             return app;
         }
     }

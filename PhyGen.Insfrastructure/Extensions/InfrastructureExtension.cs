@@ -48,6 +48,7 @@ namespace PhyGen.Insfrastructure.Extensions
 
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IBookSeriesRepository, BookSeriesRepository>();
+            services.AddScoped<IBookDetailRepository, BookDetailRepository>();
         }
     }
 }

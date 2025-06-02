@@ -38,9 +38,9 @@ namespace PhyGen.API.Controllers
 
         [HttpGet("series/{bookSeriesId}")]
         [ProducesResponseType(typeof(ApiResponse<List<BookResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetBooksByBookSeriesId(Guid chapterId)
+        public async Task<IActionResult> GetBooksByBookSeriesId(Guid bookSeriesId)
         {
-            var request = new GetBooksByBookSeriesIdQuery(chapterId);
+            var request = new GetBooksByBookSeriesIdQuery(bookSeriesId);
             return await ExecuteAsync<GetBooksByBookSeriesIdQuery, List<BookResponse>>(request);
         }
 
@@ -63,7 +63,7 @@ namespace PhyGen.API.Controllers
 
         [HttpPut("{bookId}")]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateBook(Guid BookId, [FromBody] UpdateBookRequest request)
+        public async Task<IActionResult> UpdateBook(Guid bookId, [FromBody] UpdateBookRequest request)
         {
             if (request == null)
             {
@@ -75,7 +75,6 @@ namespace PhyGen.API.Controllers
                 });
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateBookCommand>(request);
-            command.BookId = BookId;
             return await ExecuteAsync<UpdateBookCommand, Unit>(command);
         }
     }

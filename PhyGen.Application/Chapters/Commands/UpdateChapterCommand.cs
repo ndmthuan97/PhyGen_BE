@@ -12,7 +12,6 @@ namespace PhyGen.Application.Chapters.Commands
         public Guid ChapterId { get; set; }
         public string Name { get; set; } = string.Empty;
         public Guid? CurriculumId { get; set; }
-        public Guid? BookId { get; set; }
         public int? OrderNo { get; set; }
         public string UpdatedBy { get; set; } = string.Empty;
     }

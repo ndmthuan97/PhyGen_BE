@@ -27,6 +27,22 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetAllChaptersQuery, List<ChapterResponse>>(request);
         }
 
+        [HttpGet("books/{bookId}")]
+        [ProducesResponseType(typeof(ApiResponse<List<ChapterResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetChaptersByBookId(Guid bookId)
+        {
+            var request = new GetChaptersByBookIdQuery(bookId);
+            return await ExecuteAsync<GetChaptersByBookIdQuery, List<ChapterResponse>>(request);
+        }
+        
+        [HttpGet("curriculums/{curriculumId}")]
+        [ProducesResponseType(typeof(ApiResponse<List<ChapterResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetChaptersByCurriculumId(Guid curriculumId)
+        {
+            var request = new GetChaptersByCurriculumIdQuery(curriculumId);
+            return await ExecuteAsync<GetChaptersByCurriculumIdQuery, List<ChapterResponse>>(request);
+        }
+
         [HttpGet("{chapterId}")]
         [ProducesResponseType(typeof(ApiResponse<ChapterResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetChapterById(Guid ChapterId)

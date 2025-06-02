@@ -50,5 +50,8 @@ namespace PhyGen.Shared.Constants
         // Book Series error
         BookSeriesNotFound = 2022,
         BookSeriesSameName = 2023,
+
+        // Book Detail error
+        BookDetailNotFound = 2024,
     }
 }
