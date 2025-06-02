@@ -21,6 +21,7 @@ using PhyGen.Application.Books.Commands;
 using PhyGen.Application.Books.Responses;
 using PhyGen.Application.BookDetails.Commands;
 using PhyGen.Application.BookDetails.Responses;
+using PhyGen.Application.Exams.Commands;
 
 namespace PhyGen.Application.Mapping
 {
@@ -105,6 +106,14 @@ namespace PhyGen.Application.Mapping
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
             CreateMap<UpdateAnswerCommand, Answer>()
+                .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+
+            // Mapping for Exam
+            CreateMap<CreateExamCommand, Exam>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
+            CreateMap<UpdateExamCommand, Exam>()
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
         }
