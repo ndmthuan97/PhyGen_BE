@@ -47,11 +47,6 @@ namespace PhyGen.Shared.Constants
         ChapterUnitNotFound = 2016,
         ChapterUnitSameName = 2017,
 
-        EmailNotFound = 2018,
-        AccountNotConfirmed = 2019,
-        AlreadyConfirmed = 2020,
-        ConfirmSuccess = 2021,
-
         // Book Series error
         BookSeriesNotFound = 2022,
         BookSeriesSameName = 2023,
@@ -68,5 +63,11 @@ namespace PhyGen.Shared.Constants
         ExamNotFound = 2028,
         ExamSameTitle = 2029,
 
+        // Matrix error
+        MatrixNotFound = 2030,
+        MatrixSameName = 2031,
+
+        // Matrix Detail error
+        MatrixDetailNotFound = 2032,
     }
 }

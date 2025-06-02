@@ -27,6 +27,8 @@ namespace PhyGen.Application.Exams.Handlers
             }
 
             exam.Title = request.Title;
+            exam.MatrixId = request.MatrixId;
+            exam.CategoryId = request.CategoryId;
             exam.UpdatedBy = request.UpdatedBy.ToString();
             exam.UpdatedAt = DateTime.UtcNow;
 
