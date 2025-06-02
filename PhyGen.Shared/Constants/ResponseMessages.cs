@@ -29,7 +29,7 @@ namespace PhyGen.Shared.Constants
             { StatusCode.EmailDoesNotExists, "Email Doesn't Exists" },
             { StatusCode.InvalidUser, "Invalid User." },
             { StatusCode.InvalidOtp, "Invalid Otp." },
-           
+
             { StatusCode.EmailNotFound, "Email not found" },
             { StatusCode.AccountNotConfirmed, "Account has not been accepted" },
             { StatusCode.AlreadyConfirmed, "Account already accepted" },
@@ -56,7 +56,7 @@ namespace PhyGen.Shared.Constants
             { StatusCode.BookSeriesSameName, "Book Series with the same name already exists." },
 
             // Book Detail messages
-            { StatusCode.BookDetailNotFound, "Book Detail with Id does not exist." }
+            { StatusCode.BookDetailNotFound, "Book Detail with Id does not exist." },
 
             // Question messages
             { StatusCode.QuestionNotFound, "Question with this Id does not exist." },
