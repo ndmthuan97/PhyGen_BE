@@ -21,5 +21,20 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
             return await _context.Chapters
                 .FirstOrDefaultAsync(c => c.Name.ToLower() == name.ToLower());
         }
+
+        public async Task<List<Chapter>> GetChaptersByBookIdAsync(Guid bookId)
+        {
+            return await _context.BookDetails
+                .Where(bd => bd.BookId == bookId)
+                .Select(bd => bd.Chapter)
+                .ToListAsync();
+        }
+
+        public async Task<List<Chapter>> GetChaptersByCurriculumIdAsync(Guid curriculumId)
+        {
+            return await _context.Chapters
+                .Where(c => c.CurriculumId == curriculumId)
+                .ToListAsync();
+        }
     }
 }

@@ -19,6 +19,8 @@ using PhyGen.Application.BookSeries.Commands;
 using PhyGen.Application.BookSeries.Responses;
 using PhyGen.Application.Books.Commands;
 using PhyGen.Application.Books.Responses;
+using PhyGen.Application.BookDetails.Commands;
+using PhyGen.Application.BookDetails.Responses;
 using PhyGen.Application.Exams.Commands;
 
 namespace PhyGen.Application.Mapping
@@ -82,6 +84,12 @@ namespace PhyGen.Application.Mapping
                 .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
             CreateMap<Book, BookResponse>();
+
+            // Mapping for BookDetail
+            CreateMap<CreateBookDetailCommand, BookDetail>();
+            CreateMap<UpdateBookDetailCommand, BookDetail>();
+            CreateMap<DeleteBookDetailCommand, BookDetail>();
+            CreateMap<BookDetail, BookDetailResponse>();
 
             // Mapping for Question
             CreateMap<CreateQuestionCommand, Question>()

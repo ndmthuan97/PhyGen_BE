@@ -41,7 +41,6 @@ namespace PhyGen.Application.Chapters.Handlers
 
             chapter.Name = request.Name;
             chapter.CurriculumId = request.CurriculumId;
-            chapter.BookId = request.BookId;
             chapter.OrderNo = request.OrderNo;
             chapter.UpdatedBy = request.UpdatedBy;
             chapter.UpdatedAt = DateTime.UtcNow;

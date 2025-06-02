@@ -18,6 +18,8 @@ using PhyGen.Application.BookSeries.Commands;
 using PhyGen.API.Models.BookSeries;
 using PhyGen.Application.Books.Commands;
 using PhyGen.API.Models.Books;
+using PhyGen.Application.BookDetails.Commands;
+using PhyGen.API.Models.BookDetails;
 
 namespace PhyGen.API.Mapping
 {
@@ -67,6 +69,10 @@ namespace PhyGen.API.Mapping
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy));
             CreateMap<UpdateBookRequest, UpdateBookCommand>()
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+
+            // Mapping for Book Detail
+            CreateMap<CreateBookDetailRequest, CreateBookDetailCommand>();
+            CreateMap<UpdateBookDetailRequest, UpdateBookDetailCommand>();
 
             // Mapping for Question
             CreateMap<CreateQuestionRequest, CreateQuestionCommand>()

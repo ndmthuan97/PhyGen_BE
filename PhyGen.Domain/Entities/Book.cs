@@ -35,6 +35,6 @@ namespace PhyGen.Domain.Entities
         [ForeignKey("SeriesId")]
         public virtual BookSeries Series { get; set; } = null!;
 
-        public virtual ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
+        public virtual ICollection<BookDetail> BookDetails { get; set; } = new List<BookDetail>();
     }
 }

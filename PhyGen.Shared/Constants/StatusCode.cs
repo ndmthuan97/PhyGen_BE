@@ -55,11 +55,14 @@ namespace PhyGen.Shared.Constants
         // Book Series error
         BookSeriesNotFound = 2022,
         BookSeriesSameName = 2023,
+
+        // Book Detail error
+        BookDetailNotFound = 2030,
         
         // Question error
         QuestionNotFound = 2024,
         QuestionSameContent = 2025,
-
+        
         // Answer error
         AnswerNotFound = 2026,
         AnswerSameContent = 2027,
@@ -67,6 +70,5 @@ namespace PhyGen.Shared.Constants
         // Exam error
         ExamNotFound = 2028,
         ExamSameTitle = 2029,
-
     }
 }

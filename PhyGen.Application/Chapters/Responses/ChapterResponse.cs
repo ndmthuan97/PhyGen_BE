@@ -14,8 +14,6 @@ namespace PhyGen.Application.Chapters.Responses
 
         public Guid? CurriculumId { get; set; }
 
-        public Guid? BookId { get; set; }
-
         public int? OrderNo { get; set; }
 
         public string? CreatedBy { get; set; }
