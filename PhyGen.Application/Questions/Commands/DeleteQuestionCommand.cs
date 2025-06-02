@@ -9,11 +9,13 @@ namespace PhyGen.Application.Questions.Commands
 {
     public class DeleteQuestionCommand : IRequest<Unit>
     {
-        public Guid Id { get; set; }
+        public Guid QuestionId { get; set; }
 
-        public DeleteQuestionCommand(Guid id)
-        {
-            Id = id;
-        }
+        public string? DeletedBy { get; set; } = null!;
+
+        //public DeleteQuestionCommand(Guid questionId)
+        //{
+        //    questionId = QuestionId;
+        //}
     }
 }

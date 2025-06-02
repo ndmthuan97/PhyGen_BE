@@ -9,7 +9,7 @@ namespace PhyGen.Application.Questions.Commands
 {
     public class UpdateQuestionCommand : IRequest<Unit>
     {
-        public Guid Id { get; set; }
+        public Guid QuestionId { get; set; }
 
         public string Content { get; set; } = string.Empty;
 
