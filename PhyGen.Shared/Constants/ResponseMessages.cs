@@ -55,6 +55,18 @@ namespace PhyGen.Shared.Constants
             { StatusCode.BookSeriesNotFound, "Book Series with Id does not exist." },
             { StatusCode.BookSeriesSameName, "Book Series with the same name already exists." }
 
+            // Question messages
+            { StatusCode.QuestionNotFound, "Question with this Id does not exist." },
+            { StatusCode.QuestionSameContent, "This question already exists." },
+
+            // Answer messages
+            { StatusCode.AnswerNotFound, "Answer with this Id does not exist." },
+            { StatusCode.AnswerSameContent, "This answer already exists." },
+
+            // Exam messages
+            { StatusCode.ExamNotFound, "Exam with this Id does not exist." },
+            { StatusCode.ExamSameTitle, "Exam with the same title already exists." },
+
         };
 
         public static string GetMessage(StatusCode code)

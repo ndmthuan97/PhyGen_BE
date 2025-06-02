@@ -47,8 +47,26 @@ namespace PhyGen.Shared.Constants
         ChapterUnitNotFound = 2016,
         ChapterUnitSameName = 2017,
 
+        EmailNotFound = 2018,
+        AccountNotConfirmed = 2019,
+        AlreadyConfirmed = 2020,
+        ConfirmSuccess = 2021,
+
         // Book Series error
         BookSeriesNotFound = 2022,
         BookSeriesSameName = 2023,
+        
+        // Question error
+        QuestionNotFound = 2024,
+        QuestionSameContent = 2025,
+
+        // Answer error
+        AnswerNotFound = 2026,
+        AnswerSameContent = 2027,
+
+        // Exam error
+        ExamNotFound = 2028,
+        ExamSameTitle = 2029,
+
     }
 }

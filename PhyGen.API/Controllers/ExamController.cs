@@ -7,6 +7,7 @@ using PhyGen.Application.Exams.Queries;
 using PhyGen.Application.Exams.Responses;
 using PhyGen.Application.Mapping;
 using PhyGen.Shared;
+using PhyGen.Shared.Constants;
 using System.Net;
 
 namespace PhyGen.API.Controllers
@@ -42,7 +43,9 @@ namespace PhyGen.API.Controllers
             {
                 return BadRequest(new ApiResponse<object>
                 {
-                    Errors = ["The request body does not contain required fields"]
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields."]
                 });
             }
 
@@ -58,7 +61,9 @@ namespace PhyGen.API.Controllers
             {
                 return BadRequest(new ApiResponse<object>
                 {
-                    Errors = ["The request body does not contain required fields"]
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields."]
                 });
             }
 

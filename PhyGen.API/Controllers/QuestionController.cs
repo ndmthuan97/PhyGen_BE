@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhyGen.API.Mapping;
 using PhyGen.API.Models.Questions;
@@ -15,31 +14,27 @@ namespace PhyGen.API.Controllers
 {
     [Route("api/questions")]
     [ApiController]
-    [Authorize]
     public class QuestionController : BaseController<QuestionController>
     {
         public QuestionController(IMediator mediator, ILogger<QuestionController> logger)
             : base(mediator, logger) { }
 
-        // GET: api/questions
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<List<QuestionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllQuestions()
         {
-            var request = new GetAllQuestionsQuery();
-            return await ExecuteAsync<GetAllQuestionsQuery, List<QuestionResponse>>(request);
+            var query = new GetAllQuestionsQuery();
+            return await ExecuteAsync<GetAllQuestionsQuery, List<QuestionResponse>>(query);
         }
 
-        // GET: api/questions/{id}
-        [HttpGet("{id}")]
+        [HttpGet("{questionId}")]
         [ProducesResponseType(typeof(ApiResponse<QuestionResponse>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetQuestionById(Guid id)
+        public async Task<IActionResult> GetQuestionById(Guid questionId)
         {
-            var request = new GetQuestionByIdQuery(id);
-            return await ExecuteAsync<GetQuestionByIdQuery, QuestionResponse>(request);
+            var query = new GetQuestionByIdQuery(questionId);
+            return await ExecuteAsync<GetQuestionByIdQuery, QuestionResponse>(query);
         }
 
-        // POST: api/questions
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<Guid>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateQuestion([FromBody] CreateQuestionRequest request)
@@ -50,7 +45,7 @@ namespace PhyGen.API.Controllers
                 {
                     StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
                     Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
-                    Errors = ["The request body does not contain required fields"]
+                    Errors = ["The request body does not contain required fields."]
                 });
             }
 
@@ -58,10 +53,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateQuestionCommand, Guid>(command);
         }
 
-        // PUT: api/questions/{id}
-        [HttpPut("{id}")]
+        [HttpPut("{questionId}")]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateQuestion(Guid id, [FromBody] UpdateQuestionRequest request)
+        public async Task<IActionResult> UpdateQuestion(Guid questionId, [FromBody] UpdateQuestionRequest request)
         {
             if (request == null)
             {
@@ -69,22 +63,12 @@ namespace PhyGen.API.Controllers
                 {
                     StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
                     Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
-                    Errors = ["The request body does not contain required fields"]
+                    Errors = ["The request body does not contain required fields."]
                 });
             }
 
-            request.Id = id;
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateQuestionCommand>(request);
             return await ExecuteAsync<UpdateQuestionCommand, Unit>(command);
-        }
-
-        // DELETE: api/questions/{id}
-        [HttpDelete("{id}")]
-        [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteQuestion(Guid id)
-        {
-            var command = new DeleteQuestionCommand(id);
-            return await ExecuteAsync<DeleteQuestionCommand, Unit>(command);
         }
     }
 }

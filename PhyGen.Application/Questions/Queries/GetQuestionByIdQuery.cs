@@ -9,7 +9,12 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Questions.Queries
 {
-    public record GetQuestionByIdQuery(Guid Id) : IRequest<QuestionResponse>
+    public record GetQuestionByIdQuery : IRequest<QuestionResponse>
     {
+        public Guid QuestionId { get; set; }
+        public GetQuestionByIdQuery(Guid questionId)
+        {
+            QuestionId = questionId;
+        }
     }
 }
