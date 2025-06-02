@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Insfrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250601151727_Initial")]
+    [Migration("20250602112732_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -121,6 +121,27 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.ToTable("Books");
                 });
 
+            modelBuilder.Entity("PhyGen.Domain.Entities.BookDetail", b =>
+                {
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChapterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("OrderNo")
+                        .HasColumnType("int");
+
+                    b.HasKey("BookId", "ChapterId");
+
+                    b.HasIndex("ChapterId");
+
+                    b.ToTable("BookDetails");
+                });
+
             modelBuilder.Entity("PhyGen.Domain.Entities.BookSeries", b =>
                 {
                     b.Property<Guid>("Id")
@@ -165,12 +186,6 @@ namespace PhyGen.Insfrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BookId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BookId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -208,10 +223,6 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("BookId1");
 
                     b.HasIndex("CurriculumId");
 
@@ -367,8 +378,9 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -392,13 +404,16 @@ namespace PhyGen.Insfrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("CreatedBy");
-
                     b.HasIndex("MatrixId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Exams");
                 });
@@ -645,8 +660,9 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -677,11 +693,14 @@ namespace PhyGen.Insfrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ChapterId");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Questions");
                 });
@@ -726,6 +745,9 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.Property<string>("Address")
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Coin")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -791,18 +813,27 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.Navigation("Series");
                 });
 
-            modelBuilder.Entity("PhyGen.Domain.Entities.Chapter", b =>
+            modelBuilder.Entity("PhyGen.Domain.Entities.BookDetail", b =>
                 {
                     b.HasOne("PhyGen.Domain.Entities.Book", "Book")
-                        .WithMany()
+                        .WithMany("BookDetails")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("PhyGen.Domain.Entities.Book", null)
-                        .WithMany("Chapters")
-                        .HasForeignKey("BookId1")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.HasOne("PhyGen.Domain.Entities.Chapter", "Chapter")
+                        .WithMany("BookDetails")
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
+                    b.Navigation("Book");
+
+                    b.Navigation("Chapter");
+                });
+
+            modelBuilder.Entity("PhyGen.Domain.Entities.Chapter", b =>
+                {
                     b.HasOne("PhyGen.Domain.Entities.Curriculum", "Curriculum")
                         .WithMany()
                         .HasForeignKey("CurriculumId")
@@ -812,8 +843,6 @@ namespace PhyGen.Insfrastructure.Migrations
                         .WithMany("Chapters")
                         .HasForeignKey("CurriculumId1")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Book");
 
                     b.Navigation("Curriculum");
                 });
@@ -845,21 +874,18 @@ namespace PhyGen.Insfrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PhyGen.Domain.Entities.User", "Creator")
-                        .WithMany("Exams")
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("PhyGen.Domain.Entities.Matrix", "Matrix")
                         .WithMany("Exams")
                         .HasForeignKey("MatrixId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.HasOne("PhyGen.Domain.Entities.User", null)
+                        .WithMany("Exams")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Creator");
+                    b.Navigation("Category");
 
                     b.Navigation("Matrix");
                 });
@@ -896,13 +922,11 @@ namespace PhyGen.Insfrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Matrix", b =>
                 {
-                    b.HasOne("PhyGen.Domain.Entities.User", "User")
+                    b.HasOne("PhyGen.Domain.Entities.User", null)
                         .WithMany("Matrices")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.MatrixDetail", b =>
@@ -943,15 +967,12 @@ namespace PhyGen.Insfrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PhyGen.Domain.Entities.User", "Creator")
+                    b.HasOne("PhyGen.Domain.Entities.User", null)
                         .WithMany("Questions")
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Chapter");
-
-                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Transaction", b =>
@@ -967,7 +988,7 @@ namespace PhyGen.Insfrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Book", b =>
                 {
-                    b.Navigation("Chapters");
+                    b.Navigation("BookDetails");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.BookSeries", b =>
@@ -977,6 +998,8 @@ namespace PhyGen.Insfrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Chapter", b =>
                 {
+                    b.Navigation("BookDetails");
+
                     b.Navigation("ChapterUnits");
 
                     b.Navigation("MatrixDetails");

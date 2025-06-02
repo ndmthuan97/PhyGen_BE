@@ -15,8 +15,6 @@ namespace PhyGen.Domain.Entities
 
         public Guid? CurriculumId { get; set; }
 
-        public Guid? BookId { get; set; }
-
         public int? OrderNo { get; set; }
 
         public string? CreatedBy { get; set; }
@@ -35,11 +33,9 @@ namespace PhyGen.Domain.Entities
         [ForeignKey("CurriculumId")]
         public virtual Curriculum? Curriculum { get; set; }
 
-        [ForeignKey("BookId")]
-        public virtual Book? Book { get; set; }
-
         public virtual ICollection<ChapterUnit> ChapterUnits { get; set; } = new List<ChapterUnit>();
         public virtual ICollection<MatrixDetail> MatrixDetails { get; set; } = new List<MatrixDetail>();
         public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
+        public virtual ICollection<BookDetail> BookDetails { get; set; } = new List<BookDetail>();
     }
 }

@@ -23,8 +23,7 @@ namespace PhyGen.Domain.Entities
         [Required]
         public Guid ChapterId { get; set; }
 
-        [Required]
-        public Guid CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -39,9 +38,6 @@ namespace PhyGen.Domain.Entities
         // Navigation Properties
         [ForeignKey("ChapterId")]
         public virtual Chapter Chapter { get; set; } = null!;
-
-        [ForeignKey("CreatedBy")]
-        public virtual User Creator { get; set; } = null!;
 
         public virtual ICollection<Answer> Answers { get; set; } = new List<Answer>();
         public virtual ICollection<ExamPaperQuestion> ExamPaperQuestions { get; set; } = new List<ExamPaperQuestion>();

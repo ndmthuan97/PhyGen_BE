@@ -30,6 +30,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<BookSeries> BookSeries { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<BookDetail> BookDetails { get; set; }
         public DbSet<EmailOtpManager> EmailOtpManager { get; set; }
 
         // Configure entities and table mappings, set constraints and properties for columns
@@ -59,6 +60,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.Address);
                 e.Property(p => p.Phone);
                 e.Property(p => p.isConfirm).IsRequired();
+                e.Property(p => p.Coin);
             });
 
             modelBuilder.Entity<EmailOtpManager>(e =>
@@ -80,19 +82,11 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.Description).HasColumnType("nvarchar(max)");
             });
 
-
             modelBuilder.Entity<Chapter>(e =>
             {
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
                 e.Property(p => p.CurriculumId);
-                e.Property(p => p.BookId);
                 e.Property(p => p.OrderNo);
-
-                e.HasOne(p => p.Book)
-                    .WithMany()
-                    .HasForeignKey(p => p.BookId)
-                    .IsRequired(false)
-                    .OnDelete(DeleteBehavior.SetNull);
 
                 e.HasOne(p => p.Curriculum)
                     .WithMany()
@@ -100,7 +94,6 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                     .IsRequired(false)
                     .OnDelete(DeleteBehavior.SetNull);
             });
-
 
             modelBuilder.Entity<ChapterUnit>(e => e.Property(p => p.Description).HasColumnType("nvarchar(max)"));
 
@@ -141,7 +134,6 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.Title).IsRequired();
                 e.Property(p => p.MatrixId).IsRequired();
                 e.Property(p => p.CategoryId).IsRequired();
-                e.Property(p => p.CreatedBy).IsRequired();
             });
 
             modelBuilder.Entity<ExamPaper>(e => e.Property(p => p.Version).HasMaxLength(50));
@@ -154,6 +146,23 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.Name).HasMaxLength(255);
                 e.Property(p => p.Author).HasMaxLength(255);
+            });
+
+            modelBuilder.Entity<BookDetail>(e =>
+            {
+                e.HasKey(e => new { e.BookId, e.ChapterId }); // Composite Key
+
+                e.Property(p => p.OrderNo);
+
+                e.HasOne(p => p.Book)
+                    .WithMany(b => b.BookDetails)
+                    .HasForeignKey(p => p.BookId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasOne(p => p.Chapter)
+                    .WithMany(c => c.BookDetails)
+                    .HasForeignKey(p => p.ChapterId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Notification>(e => e.Property(p => p.IsRead).HasDefaultValue(false));

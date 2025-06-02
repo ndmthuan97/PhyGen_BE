@@ -75,7 +75,6 @@ namespace PhyGen.API.Controllers
                 });
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateChapterUnitCommand>(request);
-            command.ChapterUnitId = chapterUnitId;
             return await ExecuteAsync<UpdateChapterUnitCommand, Unit>(command);
         }
     }

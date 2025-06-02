@@ -13,6 +13,7 @@ namespace PhyGen.API.Models.Exam
 
         public string Title { get; set; } = string.Empty;
 
-        public Guid UpdatedBy { get; set; }
+        [JsonRequired]
+        public string UpdatedBy { get; set; } = string.Empty;
     }
 }

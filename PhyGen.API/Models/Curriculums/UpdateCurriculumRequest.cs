@@ -16,6 +16,6 @@ namespace PhyGen.API.Models.Curriculums
 
         public string? Description { get; set; }
 
-        public string CreatedBy { get; set; } = string.Empty;
+        public string UpdatedBy { get; set; } = string.Empty;
     }
 }

@@ -1,10 +1,13 @@
-﻿namespace PhyGen.API.Models.Questions
+﻿using System.Text.Json.Serialization;
+
+namespace PhyGen.API.Models.Questions
 {
     public class CreateQuestionRequest
     {
         public string Content { get; set; } = string.Empty;
 
-        public Guid CreatedBy { get; set; }
+        [JsonRequired]
+        public string CreatedBy { get; set; } = string.Empty;
 
         //public string Answer { get; set; } = string.Empty;
     }

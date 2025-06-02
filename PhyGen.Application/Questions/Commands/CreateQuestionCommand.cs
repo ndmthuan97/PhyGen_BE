@@ -17,8 +17,8 @@ namespace PhyGen.Application.Questions.Commands
 
         //public string? Image { get; set; }
 
-        public Guid ChapterId { get; set; }
+        public string? CreatedBy { get; set; }
 
-        public Guid CreatedBy { get; set; }
+        public Guid ChapterId { get; set; }
     }
 }
