@@ -55,8 +55,9 @@ namespace PhyGen.Insfrastructure.Extensions
                         Email = "thuanndmqe170240@fpt.edu.vn",
                         FirstName = "Thuan",
                         LastName = "Nguyen Dao Minh Thuan",
-                        Phone = "0385908264",
-                        Password = "Admin11@",
+                        Phone = "0838683861",
+                        Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
+                        isConfirm = true,
                         Role = nameof(Role.Admin),
                     },
 
@@ -67,7 +68,8 @@ namespace PhyGen.Insfrastructure.Extensions
                         FirstName = "Tuyen",
                         LastName = "Huynh Thi Thanh",
                         Phone = "0838683868",
-                        Password = "Admin11@",
+                        Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
+                        isConfirm = true,
                         Role = nameof(Role.Admin),
                     },
 
@@ -78,7 +80,8 @@ namespace PhyGen.Insfrastructure.Extensions
                         FirstName = "Hung",
                         LastName = "Nguyen Tu Khanh",
                         Phone = "0838683866",
-                        Password = "Admin11@",
+                        Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
+                        isConfirm = true,
                         Role = nameof(Role.Admin),
                     },
 
@@ -89,7 +92,8 @@ namespace PhyGen.Insfrastructure.Extensions
                         FirstName = "Thinh",
                         LastName = "Nguyen Truong Gia",
                         Phone = "0838683866",
-                        Password = "Admin11@",
+                        Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
+                        isConfirm = true,
                         Role = nameof(Role.Admin),
                     },
 
@@ -100,7 +104,8 @@ namespace PhyGen.Insfrastructure.Extensions
                         FirstName = "Hoang",
                         LastName = "Ngo Gia",
                         Phone = "0838683865",
-                        Password = "Admin11@",
+                        Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
+                        isConfirm = true,
                         Role = nameof(Role.Admin),
                     }
                 };

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PhyGen.API.Models.Exam
 {
@@ -9,6 +10,7 @@ namespace PhyGen.API.Models.Exam
 
         public string Title { get; set; } = string.Empty;
 
-        public Guid CreatedBy { get; set; }
+        [JsonRequired]
+        public string CreatedBy { get; set; } = string.Empty;
     }
 }

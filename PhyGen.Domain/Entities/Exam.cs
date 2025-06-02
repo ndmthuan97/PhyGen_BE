@@ -19,8 +19,7 @@ namespace PhyGen.Domain.Entities
         [Required]
         public int CategoryId { get; set; }
 
-        [Required]
-        public Guid CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -38,9 +37,6 @@ namespace PhyGen.Domain.Entities
 
         [ForeignKey("CategoryId")]
         public virtual ExamCategory Category { get; set; } = null!;
-
-        [ForeignKey("CreatedBy")]
-        public virtual User Creator { get; set; } = null!;
 
         public virtual ICollection<ExamPaper> ExamPapers { get; set; } = new List<ExamPaper>();
     }

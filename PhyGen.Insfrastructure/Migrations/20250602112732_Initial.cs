@@ -72,7 +72,8 @@ namespace PhyGen.Insfrastructure.Migrations
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    isConfirm = table.Column<bool>(type: "bit", nullable: false)
+                    isConfirm = table.Column<bool>(type: "bit", nullable: false),
+                    Coin = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -247,12 +248,13 @@ namespace PhyGen.Insfrastructure.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MatrixId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -270,8 +272,8 @@ namespace PhyGen.Insfrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Exams_Users_CreatedBy",
-                        column: x => x.CreatedBy,
+                        name: "FK_Exams_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -368,12 +370,13 @@ namespace PhyGen.Insfrastructure.Migrations
                     Level = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Image = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     ChapterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -385,8 +388,8 @@ namespace PhyGen.Insfrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Questions_Users_CreatedBy",
-                        column: x => x.CreatedBy,
+                        name: "FK_Questions_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -532,14 +535,14 @@ namespace PhyGen.Insfrastructure.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exams_CreatedBy",
-                table: "Exams",
-                column: "CreatedBy");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Exams_MatrixId",
                 table: "Exams",
                 column: "MatrixId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Exams_UserId",
+                table: "Exams",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Matrices_UserId",
@@ -567,9 +570,9 @@ namespace PhyGen.Insfrastructure.Migrations
                 column: "ChapterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_CreatedBy",
+                name: "IX_Questions_UserId",
                 table: "Questions",
-                column: "CreatedBy");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_UserId",
