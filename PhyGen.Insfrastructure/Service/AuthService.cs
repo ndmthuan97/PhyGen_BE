@@ -40,16 +40,20 @@ public class AuthService : IAuthService
                 StatusCode = StatusCode.EmailAlreadyExists
             };
         }
-
+        if (dto.Password != dto.ConfirmPassword)
+        {
+            return new AuthenticationResponse
+            {
+                Email = dto.Email,
+                StatusCode = StatusCode.PasswordMismatch // bạn cần định nghĩa mã này
+            };
+        }
         // Hash password
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
         var user = new User
         {
             Id = Guid.NewGuid(),
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
-            Phone = dto.PhoneNumber,
             Email = email,
             Password = hashedPassword,
             Role = "User",
@@ -305,10 +309,10 @@ public class AuthService : IAuthService
     public async Task<AuthenticationResponse> UpdatePassword(string email, string Password, string Otptext)
     {
         bool otpvalidation = await ValidateOTP(email, Otptext);
-        if (otpvalidation)
+        var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);           
+        if (_user != null)
         {
-            var _user = await this._context.Users.FirstOrDefaultAsync(item => item.Email == email);           
-            if (_user != null)
+            if (otpvalidation)
             {
                 _user.Password = BCrypt.Net.BCrypt.HashPassword(Password);
                 await _context.SaveChangesAsync();
@@ -323,15 +327,18 @@ public class AuthService : IAuthService
                 return new AuthenticationResponse
                 {
                     Email = email,
-                    StatusCode = StatusCode.InvalidUser
+                    StatusCode = StatusCode.InvalidOtp
                 };
             }
         }
-        return new AuthenticationResponse
+        else
         {
-            Email = email,
-            StatusCode = StatusCode.InvalidOtp
-        };
+            return new AuthenticationResponse
+            {
+                Email = email,
+                StatusCode = StatusCode.InvalidUser
+            };
+        }             
     }
     private string Generaterandomnumber()
     {
