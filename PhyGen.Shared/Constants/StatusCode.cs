@@ -30,7 +30,7 @@ namespace PhyGen.Shared.Constants
         AccountNotConfirmed = 2019,
         AlreadyConfirmed = 2020,
         ConfirmSuccess = 2021,
-
+        PasswordMismatch = 2031,
         // Curriculum error
         CurriculumSameName = 2010,
         CurriculumNotFound = 2011,
@@ -67,10 +67,10 @@ namespace PhyGen.Shared.Constants
         ExamSameTitle = 2029,
         
         // Matrix error
-        MatrixNotFound = 2030,
-        MatrixSameName = 2031,
+        MatrixNotFound = 2130,
+        MatrixSameName = 2131,
 
         // Matrix Detail error
-        MatrixDetailNotFound = 2032,
+        MatrixDetailNotFound = 2132,
     }
 }

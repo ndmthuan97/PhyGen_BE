@@ -29,7 +29,7 @@ namespace PhyGen.Shared.Constants
             { StatusCode.EmailDoesNotExists, "Email Doesn't Exists" },
             { StatusCode.InvalidUser, "Invalid User." },
             { StatusCode.InvalidOtp, "Invalid Otp." },
-
+            { StatusCode.PasswordMismatch, "Password and confirm password do not match." },
             { StatusCode.EmailNotFound, "Email not found" },
             { StatusCode.AccountNotConfirmed, "Account has not been accepted" },
             { StatusCode.AlreadyConfirmed, "Account already accepted" },
