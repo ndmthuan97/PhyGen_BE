@@ -66,5 +66,11 @@ namespace PhyGen.Shared.Constants
         ExamNotFound = 2028,
         ExamSameTitle = 2029,
         
+        // Matrix error
+        MatrixNotFound = 2130,
+        MatrixSameName = 2131,
+
+        // Matrix Detail error
+        MatrixDetailNotFound = 2132,
     }
 }

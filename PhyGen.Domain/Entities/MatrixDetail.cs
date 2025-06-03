@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Entities
 {
-    public class MatrixDetail : EntityBase<int>
+    public class MatrixDetail : EntityBase<Guid>
     {
         [Required]
         public Guid MatrixId { get; set; }
@@ -19,6 +19,18 @@ namespace PhyGen.Domain.Entities
         public string? Level { get; set; }
 
         public int? Quantity { get; set; }
+
+        public string? CreatedBy { get; set; } = string.Empty;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public string? UpdatedBy { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
+
+        public string? DeletedBy { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
 
         // Navigation Properties
         [ForeignKey("MatrixId")]

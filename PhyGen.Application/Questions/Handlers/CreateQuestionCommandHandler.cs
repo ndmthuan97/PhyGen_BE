@@ -25,6 +25,9 @@ namespace PhyGen.Application.Questions.Handlers
             {
                 Id = Guid.NewGuid(),
                 Content = request.Content,
+                Type = request.Type,
+                Level = request.Level,
+                ChapterId = request.ChapterId,
                 CreatedBy = request.CreatedBy,
                 CreatedAt = DateTime.UtcNow
             };

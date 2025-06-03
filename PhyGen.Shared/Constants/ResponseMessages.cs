@@ -54,7 +54,7 @@ namespace PhyGen.Shared.Constants
             // Book Series messages
             { StatusCode.BookSeriesNotFound, "Book Series with Id does not exist." },
             { StatusCode.BookSeriesSameName, "Book Series with the same name already exists." },
-
+          
             // Book Detail messages
             { StatusCode.BookDetailNotFound, "Book Detail with Id does not exist." },
 
@@ -70,6 +70,12 @@ namespace PhyGen.Shared.Constants
             { StatusCode.ExamNotFound, "Exam with this Id does not exist." },
             { StatusCode.ExamSameTitle, "Exam with the same title already exists." },
 
+            // Matrix messages
+            { StatusCode.MatrixNotFound, "Matrix with this Id does not exist." },
+            { StatusCode.MatrixSameName, "Matrix with the same name already exists." },
+
+            // Matrix Detail messages
+            { StatusCode.MatrixDetailNotFound, "Matrix Detail with this Id does not exist." },
         };
 
         public static string GetMessage(StatusCode code)

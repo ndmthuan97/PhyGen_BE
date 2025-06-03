@@ -27,6 +27,9 @@ namespace PhyGen.Application.Questions.Handlers
             }
 
             question.Content = request.Content;
+            question.Type = request.Type;
+            question.Level = request.Level;
+            question.ChapterId = request.ChapterId;
             question.UpdatedBy = request.UpdatedBy.ToString();
             question.UpdatedAt = DateTime.UtcNow;
 

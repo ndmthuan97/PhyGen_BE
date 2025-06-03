@@ -13,8 +13,14 @@ namespace PhyGen.Application.Questions.Commands
 
         public string Content { get; set; } = string.Empty;
 
-        public string? UpdatedBy { get; set; }
+        public string? Type { get; set; }
 
-        //public string Answer { get; set; } = string.Empty;
+        public string? Level { get; set; }
+
+        //public string? Image { get; set; }
+
+        public Guid ChapterId { get; set; }
+
+        public string? UpdatedBy { get; set; }
     }
 }

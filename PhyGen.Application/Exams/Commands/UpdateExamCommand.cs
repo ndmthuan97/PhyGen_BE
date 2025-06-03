@@ -11,6 +11,8 @@ namespace PhyGen.Application.Exams.Commands
     {
         public Guid ExamId { get; set; }
         public string Title { get; set; } = string.Empty;
+        public Guid MatrixId { get; set; }
+        public int CategoryId { get; set; }
         public string? UpdatedBy { get; set; }
     }
 }
