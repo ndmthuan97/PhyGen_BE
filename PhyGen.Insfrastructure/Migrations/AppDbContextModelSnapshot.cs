@@ -377,7 +377,7 @@ namespace PhyGen.Insfrastructure.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
@@ -402,7 +402,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -575,14 +575,26 @@ namespace PhyGen.Insfrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.MatrixDetail", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ChapterId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
 
                     b.Property<string>("Level")
                         .IsUnicode(true)
@@ -593,6 +605,13 @@ namespace PhyGen.Insfrastructure.Migrations
 
                     b.Property<int?>("Quantity")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -659,7 +678,7 @@ namespace PhyGen.Insfrastructure.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
@@ -691,7 +710,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -744,7 +763,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("Coin")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .IsRequired()
