@@ -78,7 +78,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
                 e.Property(p => p.Grade).HasMaxLength(50);
-                e.Property(p => p.Description).HasColumnType("nvarchar(max)");
+                e.Property(p => p.Description).HasColumnType("text"); 
             });
 
             modelBuilder.Entity<Chapter>(e =>
@@ -94,11 +94,11 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                     .OnDelete(DeleteBehavior.SetNull);
             });
 
-            modelBuilder.Entity<ChapterUnit>(e => e.Property(p => p.Description).HasColumnType("nvarchar(max)"));
+            modelBuilder.Entity<ChapterUnit>(e => e.Property(p => p.Description).HasColumnType("text"));
 
             modelBuilder.Entity<Question>(e =>
             {
-                e.Property(p => p.Content).HasColumnType("nvarchar(max)").IsRequired();
+                e.Property(p => p.Content).HasColumnType("text").IsRequired();
                 e.Property(p => p.Type).HasMaxLength(50);
                 e.Property(p => p.Level).HasMaxLength(50);
                 e.Property(p => p.Image).HasMaxLength(500);
@@ -107,7 +107,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
 
             modelBuilder.Entity<Answer>(e =>
             {
-                e.Property(p => p.Content).HasColumnType("nvarchar(max)").IsRequired();
+                e.Property(p => p.Content).HasColumnType("text").IsRequired();
                 e.Property(p => p.QuestionId).IsRequired();
             });
 
@@ -115,7 +115,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
             modelBuilder.Entity<Matrix>(e =>
             {
                 e.Property(p => p.Name).IsRequired();
-                e.Property(p => p.Description).HasColumnType("nvarchar(max)");
+                e.Property(p => p.Description).HasColumnType("text");
                 e.Property(p => p.Grade);
                 e.Property(p => p.UserId).IsRequired();
             });

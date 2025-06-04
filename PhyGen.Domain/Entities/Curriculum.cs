@@ -15,7 +15,6 @@ namespace PhyGen.Domain.Entities
 
         public string? Grade { get; set; }
 
-        [Column(TypeName = "nvarchar(max)")]
         public string? Description { get; set; }
 
         public string? CreatedBy { get; set; }

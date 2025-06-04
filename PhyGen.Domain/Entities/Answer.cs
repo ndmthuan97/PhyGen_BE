@@ -13,7 +13,6 @@ namespace PhyGen.Domain.Entities
         [Required]
         public Guid QuestionId { get; set; }
 
-        [Column(TypeName = "nvarchar(max)")]
         [Required]
         public string Content { get; set; } = string.Empty;
 
