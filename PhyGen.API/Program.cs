@@ -80,7 +80,6 @@ var app = builder.Build();
 
 await app.MigrateDatabaseAsync<AppDbContext>();
 await app.SeedAuthDataAsync();
-await app.SeedCoreDataAsync();
 
 if (app.Environment.IsDevelopment())
 {

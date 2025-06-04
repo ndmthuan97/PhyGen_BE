@@ -10,7 +10,6 @@ namespace PhyGen.Domain.Entities
 {
     public class Question : EntityBase<Guid>
     {
-        [Column(TypeName = "nvarchar(max)")]
         [Required]
         public string Content { get; set; } = string.Empty;
 
