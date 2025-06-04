@@ -50,6 +50,7 @@ namespace PhyGen.Insfrastructure.Extensions
             services.AddScoped<IBookSeriesRepository, BookSeriesRepository>();
             services.AddScoped<IBookDetailRepository, BookDetailRepository>();
 
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IAnswerRepository, AnswerRepository>();
             services.AddScoped<IExamRepository, ExamRepository>();
 
