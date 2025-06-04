@@ -20,8 +20,7 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
         public async Task<Curriculum?> GetCurriculumByNameAsync(string curriculumName)
         {
             return await _context.Curriculums
-                .FirstOrDefaultAsync(c =>
-                    EF.Functions.Collate(c.Name, "Latin1_General_100_CI_AI_SC") == curriculumName);
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == curriculumName.ToLower());
         }
     }
 }
