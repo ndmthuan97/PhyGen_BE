@@ -8,75 +8,74 @@ namespace PhyGen.Shared.Constants
         private static readonly Dictionary<StatusCode, string> _messages = new()
         {
             // Success messages
-            { StatusCode.RequestProcessedSuccessfully, "Request processed successfully." },
+            { StatusCode.RequestProcessedSuccessfully, "Yêu cầu đã được xử lý thành công." },
+            { StatusCode.RegisterSuccess, "Đăng ký tài khoản thành công." },
+            { StatusCode.LoginSuccess, "Đăng nhập thành công." },
+            { StatusCode.ChangedPasswordSuccess, "Đổi mật khẩu thành công." },
+            { StatusCode.OtpSendSuccess, "Mã OTP đã được gửi thành công." },
 
-            { StatusCode.RegisterSuccess, "Register succeeded." },
-            { StatusCode.LoginSuccess, "Login succeeded." },
-            { StatusCode.ChangedPasswordSuccess, "Password changed successfully." },
-            { StatusCode.OtpSendSuccess, "Otp Send successfully." }, 
-          
             // Error messages
-            { StatusCode.ModelInvalid, "Model is invalid. Please check the request body." },
-
+            { StatusCode.ModelInvalid, "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại nội dung yêu cầu." },
 
             // Authentication error messages
-            { StatusCode.UserAuthenticationFailed, "User authentication failed" },
-            { StatusCode.EmailAlreadyExists, "Email already exists" },
-            { StatusCode.RegisterFailed, "Register failed" },
-            { StatusCode.LoginFailed, "Login failed" },
-            { StatusCode.UserNotFound, "User not found" },
-            { StatusCode.InvalidPassword, "Invalid password" },
-            { StatusCode.EmailDoesNotExists, "Email Doesn't Exists" },
-            { StatusCode.InvalidUser, "Invalid User." },
-            { StatusCode.InvalidOtp, "Invalid Otp." },
-            { StatusCode.PasswordMismatch, "Password and confirm password do not match." },
-            { StatusCode.EmailNotFound, "Email not found" },
-            { StatusCode.AccountNotConfirmed, "Account has not been accepted" },
-            { StatusCode.AlreadyConfirmed, "Account already accepted" },
-            { StatusCode.ConfirmSuccess, "Account confirmed successfully" },
+            { StatusCode.UserAuthenticationFailed, "Xác thực người dùng không thành công." },
+            { StatusCode.EmailAlreadyExists, "Email này đã được sử dụng." },
+            { StatusCode.RegisterFailed, "Đăng ký tài khoản thất bại." },
+            { StatusCode.LoginFailed, "Đăng nhập thất bại. Vui lòng kiểm tra thông tin đăng nhập." },
+            { StatusCode.UserNotFound, "Không tìm thấy người dùng." },
+            { StatusCode.InvalidPassword, "Mật khẩu không chính xác." },
+            { StatusCode.EmailDoesNotExists, "Email không tồn tại trong hệ thống." },
+            { StatusCode.InvalidUser, "Tài khoản không hợp lệ." },
+            { StatusCode.InvalidOtp, "Mã OTP không chính xác." },
+            { StatusCode.PasswordMismatch, "Mật khẩu và xác nhận mật khẩu không khớp." },
+            { StatusCode.EmailNotFound, "Không tìm thấy email." },
+            { StatusCode.AccountNotConfirmed, "Tài khoản chưa được xác nhận." },
+            { StatusCode.AlreadyConfirmed, "Tài khoản đã được xác nhận trước đó." },
+            { StatusCode.ConfirmSuccess, "Xác nhận tài khoản thành công." },
 
             // Curriculum messages
-            { StatusCode.CurriculumNotFound, "Curriculum with Id does not exist." },
-            { StatusCode.CurriculumSameName, "Curriculum with the same name already exists." },
+            { StatusCode.CurriculumNotFound, "Không tìm thấy chương trình học với mã được cung cấp." },
+            { StatusCode.CurriculumSameName, "Chương trình học với tên này đã tồn tại." },
 
             // Chapter messages
-            { StatusCode.ChapterNotFound, "Chapter with Id does not exist." },
-            { StatusCode.ChapterSameName, "Chapter with the same name already exists." },
+            { StatusCode.ChapterNotFound, "Không tìm thấy chương với mã được cung cấp." },
+            { StatusCode.ChapterSameName, "Chương với tên này đã tồn tại." },
 
             // Chapter Unit messages
-            { StatusCode.ChapterUnitNotFound, "Chapter Unit with Id does not exist." },
-            { StatusCode.ChapterUnitSameName, "Chapter Unit with the same name already exists." },
+            { StatusCode.ChapterUnitNotFound, "Không tìm thấy đơn vị chương với mã được cung cấp." },
+            { StatusCode.ChapterUnitSameName, "Đơn vị chương với tên này đã tồn tại." },
 
             // Book messages
-            { StatusCode.BookNotFound, "Book with Id does not exist." },
-            { StatusCode.BookSameName, "Book with the same name already exists." },
+            { StatusCode.BookNotFound, "Không tìm thấy sách với mã được cung cấp." },
+            { StatusCode.BookSameName, "Sách với tên này đã tồn tại." },
 
             // Book Series messages
-            { StatusCode.BookSeriesNotFound, "Book Series with Id does not exist." },
-            { StatusCode.BookSeriesSameName, "Book Series with the same name already exists." },
-          
+            { StatusCode.BookSeriesNotFound, "Không tìm thấy bộ sách với mã được cung cấp." },
+            { StatusCode.BookSeriesSameName, "Bộ sách với tên này đã tồn tại." },
+
             // Book Detail messages
-            { StatusCode.BookDetailNotFound, "Book Detail with Id does not exist." },
+            { StatusCode.BookDetailNotFound, "Không tìm thấy thông tin chi tiết sách với mã được cung cấp." },
 
             // Question messages
-            { StatusCode.QuestionNotFound, "Question with this Id does not exist." },
-            { StatusCode.QuestionSameContent, "This question already exists." },
+            { StatusCode.QuestionNotFound, "Không tìm thấy câu hỏi với mã được cung cấp." },
+            { StatusCode.QuestionSameContent, "Câu hỏi này đã tồn tại trong hệ thống." },
 
             // Answer messages
-            { StatusCode.AnswerNotFound, "Answer with this Id does not exist." },
-            { StatusCode.AnswerSameContent, "This answer already exists." },
+            { StatusCode.AnswerNotFound, "Không tìm thấy câu trả lời với mã được cung cấp." },
+            { StatusCode.AnswerSameContent, "Câu trả lời này đã tồn tại trong hệ thống." },
 
             // Exam messages
-            { StatusCode.ExamNotFound, "Exam with this Id does not exist." },
-            { StatusCode.ExamSameTitle, "Exam with the same title already exists." },
+            { StatusCode.ExamNotFound, "Không tìm thấy đề thi với mã được cung cấp." },
+            { StatusCode.ExamSameTitle, "Đề thi với tiêu đề này đã tồn tại." },
 
             // Matrix messages
-            { StatusCode.MatrixNotFound, "Matrix with this Id does not exist." },
-            { StatusCode.MatrixSameName, "Matrix with the same name already exists." },
+            { StatusCode.MatrixNotFound, "Không tìm thấy ma trận với mã được cung cấp." },
+            { StatusCode.MatrixSameName, "Ma trận với tên này đã tồn tại." },
 
             // Matrix Detail messages
-            { StatusCode.MatrixDetailNotFound, "Matrix Detail with this Id does not exist." },
+            { StatusCode.MatrixDetailNotFound, "Không tìm thấy chi tiết ma trận với mã được cung cấp." },
         };
+
 
         public static string GetMessage(StatusCode code)
         {
