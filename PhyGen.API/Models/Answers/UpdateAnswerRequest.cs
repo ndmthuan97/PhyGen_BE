@@ -14,6 +14,6 @@ namespace PhyGen.API.Models.Answers
         public bool IsCorrect { get; set; } = false;
 
         [JsonRequired]
-        public Guid UpdatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
     }
 }

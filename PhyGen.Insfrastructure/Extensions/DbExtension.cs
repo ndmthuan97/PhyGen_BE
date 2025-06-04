@@ -47,62 +47,72 @@ namespace PhyGen.Insfrastructure.Extensions
             await context.Database.MigrateAsync().ConfigureAwait(false);
 
             var usersToSeed = new List<User>
-        {
-            new User
-            {
-                Id = Guid.Parse("1a1a1a1a-1a1a-1a1a-1a1a-1a1a1a1a1a1a"),
-                Email = "thuanndmqe170240@fpt.edu.vn",
-                FirstName = "Thuan",
-                LastName = "Nguyen Dao Minh Thuan",
-                Phone = "0385908264",
-                Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
-                Role = nameof(Role.Admin),
-            },
-            new User
-            {
-                Id = Guid.Parse("2a2a2a2a-2a2a-2a2a-2a2a-2a2a2a2a2a2a"),
-                Email = "tuyenhttqe170226@fpt.edu.vn",
-                FirstName = "Tuyen",
-                LastName = "Huynh Thi Thanh",
-                Phone = "0838683868",
-                Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
-                Role = nameof(Role.Admin),
-            },
-            new User
-            {
-                Id = Guid.Parse("3a3a3a3a-3a3a-3a3a-3a3a-3a3a3a3a3a3a"),
-                Email = "hungntkqe170153@fpt.edu.vn",
-                FirstName = "Hung",
-                LastName = "Nguyen Tu Khanh",
-                Phone = "0838683866",
-                Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
-                Role = nameof(Role.Admin),
-            },
-            new User
-            {
-                Id = Guid.Parse("4a4a4a4a-4a4a-4a4a-4a4a-4a4a4a4a4a4a"),
-                Email = "thinhntgqe170209@fpt.edu.vn",
-                FirstName = "Thinh",
-                LastName = "Nguyen Truong Gia",
-                Phone = "0838683866",
-                Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
-                Role = nameof(Role.Admin),
-            },
-            new User
-            {
-                Id = Guid.Parse("5a5a5a5a-5a5a-5a5a-5a5a-5a5a5a5a5a5a"),
-                Email = "hoangngqe170225@fpt.edu.vn",
-                FirstName = "Hoang",
-                LastName = "Ngo Gia",
-                Phone = "0838683865",
-                Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
-                Role = nameof(Role.Admin),
-            }
-        };
+                {
+                    new User
+                    {
+                        Id = new Guid("1a1a1a1a-1a1a-1a1a-1a1a-1a1a1a1a1a1a"),
+                        Email = "thuanndmqe170240@fpt.edu.vn",
+                        FirstName = "Thuan",
+                        LastName = "Nguyen Dao Minh Thuan",
+                        Phone = "0838683861",
+                        Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
+                        isConfirm = true,
+                        Role = nameof(Role.Admin),
+                    },
+
+                    new User
+                    {
+                        Id = new Guid("2a2a2a2a-2a2a-2a2a-2a2a-2a2a2a2a2a2a"),
+                        Email = "tuyenhttqe170226@fpt.edu.vn",
+                        FirstName = "Tuyen",
+                        LastName = "Huynh Thi Thanh",
+                        Phone = "0838683868",
+                        Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
+                        isConfirm = true,
+                        Role = nameof(Role.Admin),
+                    },
+
+                    new User
+                    {
+                        Id = new Guid("3a3a3a3a-3a3a-3a3a-3a3a-3a3a3a3a3a3a"),
+                        Email = "hungntkqe170153@fpt.edu.vn",
+                        FirstName = "Hung",
+                        LastName = "Nguyen Tu Khanh",
+                        Phone = "0838683866",
+                        Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
+                        isConfirm = true,
+                        Role = nameof(Role.Admin),
+                    },
+
+                    new User
+                    {
+                        Id = new Guid("4a4a4a4a-4a4a-4a4a-4a4a-4a4a4a4a4a4a"),
+                        Email = "thinhntgqe170209@fpt.edu.vn",
+                        FirstName = "Thinh",
+                        LastName = "Nguyen Truong Gia",
+                        Phone = "0838683866",
+                        Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
+                        isConfirm = true,
+                        Role = nameof(Role.Admin),
+                    },
+
+                    new User
+                    {
+                        Id = new Guid("5a5a5a5a-5a5a-5a5a-5a5a-5a5a5a5a5a5a"),
+                        Email = "hoangngqe170225@fpt.edu.vn",
+                        FirstName = "Hoang",
+                        LastName = "Ngo Gia",
+                        Phone = "0838683865",
+                        Password = "$2a$11$nqgqbLHtqF6NRshEbN2VWeKvVz/M3FO2UwuMUYgEuSseyBLbZ8Nlm",
+                        isConfirm = true,
+                        Role = nameof(Role.Admin),
+                    }
+                };
 
             foreach (var user in usersToSeed)
             {
-                if (!await context.Users.AnyAsync(u => u.Email == user.Email).ConfigureAwait(false))
+                var exists = await context.Users.AnyAsync(u => u.Email == user.Email).ConfigureAwait(false);
+                if (!exists)
                 {
                     context.Users.Add(user);
                 }
@@ -111,6 +121,7 @@ namespace PhyGen.Insfrastructure.Extensions
             await context.SaveChangesAsync().ConfigureAwait(false);
 
             return app;
+
         }
     }
 }

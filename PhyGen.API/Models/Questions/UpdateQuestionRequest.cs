@@ -1,4 +1,6 @@
-﻿namespace PhyGen.API.Models.Questions
+﻿using System.Text.Json.Serialization;
+
+namespace PhyGen.API.Models.Questions
 {
     public class UpdateQuestionRequest
     {
@@ -6,7 +8,8 @@
 
         public string Content { get; set; } = string.Empty;
 
-        public Guid UpdatedBy { get; set; }
+        [JsonRequired]
+        public string UpdatedBy { get; set; } = string.Empty;
 
         //public string Answer { get; set; } = string.Empty;
     }

@@ -20,7 +20,7 @@ namespace PhyGen.Domain.Entities
         [Required]
         public Guid UserId { get; set; }
 
-        public string? CreatedBy { get; set; } = string.Empty;
+        public string? CreatedBy { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -32,9 +32,6 @@ namespace PhyGen.Domain.Entities
 
         public DateTime? DeletedAt { get; set; }
 
-        // Navigation Properties
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; } = null!;
         public virtual ICollection<MatrixDetail> MatrixDetails { get; set; } = new List<MatrixDetail>();
         public virtual ICollection<Exam> Exams { get; set; } = new List<Exam>();
     }

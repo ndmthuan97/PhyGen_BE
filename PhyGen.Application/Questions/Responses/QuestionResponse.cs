@@ -20,7 +20,7 @@ namespace PhyGen.Application.Questions.Responses
 
         public Guid ChapterId { get; set; }
 
-        public Guid CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

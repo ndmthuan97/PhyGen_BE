@@ -31,6 +31,8 @@ namespace PhyGen.Domain.Entities
 
         public bool isConfirm { get; set; }
 
+        public int Coin { get; set; }
+
         // Navigation Properties
         public virtual ICollection<Curriculum> Curriculums { get; set; } = new List<Curriculum>();
         public virtual ICollection<Matrix> Matrices { get; set; } = new List<Matrix>();

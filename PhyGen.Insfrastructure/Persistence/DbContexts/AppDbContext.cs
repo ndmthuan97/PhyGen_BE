@@ -60,6 +60,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.Address);
                 e.Property(p => p.Phone);
                 e.Property(p => p.isConfirm).IsRequired();
+                e.Property(p => p.Coin);
             });
 
             modelBuilder.Entity<EmailOtpManager>(e =>
@@ -133,7 +134,6 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.Title).IsRequired();
                 e.Property(p => p.MatrixId).IsRequired();
                 e.Property(p => p.CategoryId).IsRequired();
-                e.Property(p => p.CreatedBy).IsRequired();
             });
 
             modelBuilder.Entity<ExamPaper>(e => e.Property(p => p.Version).HasMaxLength(50));
