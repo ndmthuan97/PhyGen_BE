@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B0EE0F09-3D22-4467-80BB-BA5471F40776}|PhyGen.API\\PhyGen.API.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{B0EE0F09-3D22-4467-80BB-BA5471F40776}|PhyGen.API\\PhyGen.API.csproj|solutionrelative:phygen.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B0EE0F09-3D22-4467-80BB-BA5471F40776}|PhyGen.API\\PhyGen.API.csproj|d:\\private_space\\learn_space\\fpt qn\\se\\semester 9\\se_gra_ele\\\u0111\u1ED3 \u00E1n - phygen\\phygen_be\\phygen.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{B0EE0F09-3D22-4467-80BB-BA5471F40776}|PhyGen.API\\PhyGen.API.csproj|solutionrelative:phygen.api\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
@@ -67,6 +71,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.API\\appsettings.json",
+              "RelativeDocumentMoniker": "PhyGen.API\\appsettings.json",
+              "ToolTip": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.API\\appsettings.json",
+              "RelativeToolTip": "PhyGen.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-06-07T01:36:49.415Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "D:\\Private_Space\\Learn_Space\\FPT QN\\SE\\Semester 9\\SE_GRA_ELE\\\u0110\u1ED3 \u00E1n - PhyGen\\PhyGen_BE\\PhyGen.API\\appsettings.Development.json",
               "RelativeDocumentMoniker": "PhyGen.API\\appsettings.Development.json",
