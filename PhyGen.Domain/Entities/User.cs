@@ -29,6 +29,8 @@ namespace PhyGen.Domain.Entities
 
         public string? Phone { get; set; }
 
+        public DateTime DateOfBirth { get; set; }
+
         public bool isConfirm { get; set; }
 
         public bool IsActive { get; set; }

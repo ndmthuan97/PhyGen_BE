@@ -228,6 +228,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.Role);
                 e.Property(p => p.Address);
                 e.Property(p => p.Phone);
+                e.Property(p => p.DateOfBirth);
                 e.Property(p => p.isConfirm).IsRequired();
                 e.Property(p => p.IsActive);
                 e.Property(p => p.Coin);
