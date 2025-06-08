@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Insfrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250608030016_Initial")]
+    [Migration("20250608112850_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -91,6 +91,11 @@ namespace PhyGen.Insfrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("text");
 

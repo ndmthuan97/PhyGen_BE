@@ -91,6 +91,11 @@ namespace PhyGen.Insfrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)

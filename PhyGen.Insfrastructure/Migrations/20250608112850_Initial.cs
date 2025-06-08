@@ -379,6 +379,7 @@ namespace PhyGen.Insfrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ChapterId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
                     OrderNo = table.Column<int>(type: "integer", nullable: true),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),

@@ -70,6 +70,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.ChapterId).IsRequired();
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
+                e.Property(p => p.Description).HasColumnType("text");
                 e.Property(p => p.OrderNo);
                 e.Property(p => p.CreatedBy);
                 e.Property(p => p.CreatedAt).IsRequired();
