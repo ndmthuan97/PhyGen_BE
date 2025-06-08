@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhyGen.Application.Exceptions.Curriculums
+namespace PhyGen.Application.Curriculums.Exceptions
 {
     public class CurriculumNotFoundException : AppException
     {

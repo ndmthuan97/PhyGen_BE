@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using PhyGen.Application.Curriculums.Commands;
+using PhyGen.Application.Curriculums.Response;
+using PhyGen.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +15,11 @@ namespace PhyGen.Application.Mapping
         public CoreMappingProfile()
         {
             // Add your mapping configurations here
+
+            // Mapping for Curriculum
+            CreateMap<Curriculum, CurriculumResponse>();
+            CreateMap<CreateCurriculumCommand, Curriculum>();
+            CreateMap<UpdateCurriculumCommand, Curriculum>();
         }
     }
 }

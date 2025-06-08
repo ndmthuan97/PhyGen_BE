@@ -1,15 +1,14 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhyGen.Domain.Entities
+namespace PhyGen.Application.Curriculums.Commands
 {
-    public class Curriculum : EntityBase<Guid>
+    public class CreateCurriculumCommand : IRequest<Guid>
     {
-        [Required]
         public string Name { get; set; } = string.Empty;
 
         public string Grade { get; set; } = string.Empty;

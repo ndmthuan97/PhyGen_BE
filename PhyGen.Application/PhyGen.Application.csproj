@@ -20,4 +20,8 @@
     <ProjectReference Include="..\PhyGen.Domain\PhyGen.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+
 </Project>

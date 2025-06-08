@@ -103,6 +103,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
             modelBuilder.Entity<Curriculum>(e =>
             {
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
+                e.Property(p => p.Grade);
             });
 
             modelBuilder.Entity<EmailOtpManager>(e =>

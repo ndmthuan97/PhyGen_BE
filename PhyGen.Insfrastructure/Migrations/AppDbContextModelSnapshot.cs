@@ -210,6 +210,11 @@ namespace PhyGen.Insfrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Grade")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
