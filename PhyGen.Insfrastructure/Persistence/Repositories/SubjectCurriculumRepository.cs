@@ -1,4 +1,5 @@
-﻿using PhyGen.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 using System;
@@ -13,6 +14,12 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
     {
         public SubjectCurriculumRepository(AppDbContext context) : base(context)
         {
+        }
+
+        public async Task<SubjectCurriculum?> GetBySubjectIdAndCurriculumIdAsync(Guid subjectId, Guid curriculumId)
+        {
+            return await _context.Set<SubjectCurriculum>()
+                .FirstOrDefaultAsync(sc => sc.SubjectId == subjectId && sc.CurriculumId == curriculumId);
         }
     }
 }

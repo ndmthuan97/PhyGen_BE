@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Interfaces
 {
-    public interface ISubjectCurriculumRepository : IAsyncRepository<SubjectCurriculum, Guid>
+    public interface ISubjectRepository : IAsyncRepository<Subject, Guid>
     {
-        Task<SubjectCurriculum?> GetBySubjectIdAndCurriculumIdAsync(Guid subjectId, Guid curriculumId);
+        Task<Subject?> GetSubjectByNameAsync(string name);
     }
 }

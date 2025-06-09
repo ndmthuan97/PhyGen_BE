@@ -35,6 +35,7 @@ namespace PhyGen.Insfrastructure.Extensions
             services.AddScoped<IChapterRepository, ChapterRepository>();
             services.AddScoped<IChapterUnitRepository, ChapterUnitRepository>();
             services.AddScoped<ISubjectCurriculumRepository, SubjectCurriculumRepository>();
+            services.AddScoped<ISubjectRepository, SubjectRepository>();
         }
     }
 }
