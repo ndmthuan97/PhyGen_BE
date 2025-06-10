@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace PhyGen.Insfrastructure.Service;
 
@@ -25,7 +26,6 @@ public class AuthService : IAuthService
     private readonly AppDbContext _context;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IEmailService _emailService;
-    private static readonly Random random = new Random();
 
     public AuthService(AppDbContext context, IJwtTokenGenerator jwtTokenGenerator, IEmailService emailService)
     {
@@ -507,8 +507,8 @@ public class AuthService : IAuthService
 
     private static string Generaterandomnumber()
     {
-        string randomno = random.Next(100000, 1000000).ToString("D6");
-        return randomno;
+        int number = RandomNumberGenerator.GetInt32(100000, 1000000);
+        return number.ToString("D6");
     }
 
     private async Task SendOtpMail(string useremail, string OtpText, string Name, string type)
