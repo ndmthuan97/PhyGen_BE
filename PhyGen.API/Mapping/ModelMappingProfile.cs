@@ -3,6 +3,7 @@ using PhyGen.API.Models;
 using PhyGen.Application.Chapters.Commands;
 using PhyGen.Application.ChapterUnits.Commands;
 using PhyGen.Application.Curriculums.Commands;
+using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.SubjectCurriculums.Commands;
 using PhyGen.Application.Subjects.Commands;
 
@@ -33,6 +34,11 @@ namespace PhyGen.API.Mapping
             // Mapping for Subject
             CreateMap<CreateSubjectRequest, CreateSubjectCommand>();
             CreateMap<UpdateSubjectRequest, UpdateSubjectCommand>();
+
+            // Mapping for Exam
+            CreateMap<CreateExamRequest, CreateExamCommand>();
+            CreateMap<UpdateExamRequest, UpdateExamCommand>();
+            CreateMap<DeleteExamRequest, DeleteExamCommand>();
         }
     }
 }

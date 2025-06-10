@@ -5,6 +5,8 @@ using PhyGen.Application.ChapterUnits.Commands;
 using PhyGen.Application.ChapterUnits.Responses;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.Curriculums.Response;
+using PhyGen.Application.Exams.Commands;
+using PhyGen.Application.Exams.Responses;
 using PhyGen.Application.SubjectCurriculums.Commands;
 using PhyGen.Application.SubjectCurriculums.Responses;
 using PhyGen.Application.Subjects.Commands;
@@ -48,6 +50,12 @@ namespace PhyGen.Application.Mapping
             CreateMap<Subject, SubjectResponse>();
             CreateMap<CreateSubjectCommand, Subject>();
             CreateMap<UpdateSubjectCommand, Subject>();
+
+            //Mapping for Exam
+            CreateMap<Exam, ExamResponse>();
+            CreateMap<CreateExamCommand, Exam>();
+            CreateMap<UpdateExamCommand, Exam>();
+            CreateMap<DeleteExamCommand, Exam>();
         }
     }
 }

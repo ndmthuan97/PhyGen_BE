@@ -36,5 +36,8 @@ namespace PhyGen.Shared.Constants
         // Chapter Unit errors (2130–2149)
         ChapterUnitNotFound = 2130,
         ChapterUnitSameName = 2131,
+
+        // Exam errors (2150–2169)
+        ExamNotFound = 2150,
     }
 }
