@@ -1,9 +1,14 @@
 ﻿using AutoMapper;
 using PhyGen.API.Models;
+using PhyGen.Application.Authentication.DTOs.Dtos;
+using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Chapters.Commands;
 using PhyGen.Application.ChapterUnits.Commands;
+using PhyGen.Application.ContentFlows.Commands;
+using PhyGen.Application.ContentItems.Commands;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.ExamCategoryChapters.Commands;
+using PhyGen.Domain.Entities;
 using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.SubjectCurriculums.Commands;
 using PhyGen.Application.Subjects.Commands;
@@ -15,7 +20,14 @@ namespace PhyGen.API.Mapping
         public ModelMappingProfile()
         {
             // Add your mapping configurations here
+            CreateMap<RegisterDto, RegisterRequest>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Trim()))
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password.Trim()))
+                .ForMember(dest => dest.ConfirmPassword, opt => opt.MapFrom(src => src.ConfirmPassword.Trim()))
+                .ReverseMap();
 
+            CreateMap<LoginDto, LoginRequest>().ReverseMap();
+            CreateMap<User, UserDtos>();
             // Mapping for Curriculum
             CreateMap<CreateCurriculumRequest, CreateCurriculumCommand>();
             CreateMap<UpdateCurriculumRequest, UpdateCurriculumCommand>();
@@ -44,6 +56,15 @@ namespace PhyGen.API.Mapping
             // Mapping for ExamCategoryChapter
             CreateMap<CreateExamCategoryChapterRequest, CreateExamCategoryChapterCommand>();
             CreateMap<UpdateExamCategoryChapterRequest, UpdateExamCategoryChapterCommand>();
+
+            //Mapping for Content Flow
+            CreateMap<CreateContentFlowRequest, CreateContentFlowCommand>();
+            CreateMap<UpdateContentFlowRequest, UpdateContentFlowCommand>();
+
+            // Mapping for Content Item
+            CreateMap<CreateContentItemRequest, CreateContentItemCommand>();
+            CreateMap<UpdateContentItemRequest, UpdateContentItemCommand>();
+
         }
     }
 }
