@@ -42,7 +42,9 @@ public class UserService : IUserService
         }
 
         // Kiểm tra số điện thoại phải 10 chữ số và bắt đầu bằng số 0
-        var phoneRegex = new Regex(@"^0\d{9}$");
+        var phoneRegex = new Regex(@"^0\d{9}$",
+            RegexOptions.Compiled,
+            TimeSpan.FromSeconds(1));
         if (!phoneRegex.IsMatch(request.Phone))
         {
             throw new ArgumentException("Số điện thoại phải có 10 số và bắt đầu từ số 0");

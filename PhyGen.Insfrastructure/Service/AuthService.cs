@@ -25,6 +25,7 @@ public class AuthService : IAuthService
     private readonly AppDbContext _context;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IEmailService _emailService;
+    private static readonly Random random = new Random();
 
     public AuthService(AppDbContext context, IJwtTokenGenerator jwtTokenGenerator, IEmailService emailService)
     {
@@ -47,7 +48,7 @@ public class AuthService : IAuthService
 
         // Định dạng mật khẩu
         var password = dto.Password;
-        var passwordRegex = new Regex(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?""|<>]).{8,}$");
+        var passwordRegex = new Regex(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?""|<>]).{8,}$", RegexOptions.Compiled, TimeSpan.FromSeconds(1));
         if (!passwordRegex.IsMatch(password))
         {
             return new AuthenticationResponse
@@ -386,7 +387,9 @@ public class AuthService : IAuthService
         }
 
         // Kiểm tra định dạng mật khẩu mới
-        var passwordRegex = new Regex(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?""|<>]).{8,}$");
+        var passwordRegex = new Regex(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?""|<>]).{8,}$",
+            RegexOptions.Compiled,
+            TimeSpan.FromSeconds(1));
         if (!passwordRegex.IsMatch(dto.NewPassword))
         {
             return new AuthenticationResponse
@@ -479,7 +482,9 @@ public class AuthService : IAuthService
         }
 
         // Kiểm tra định dạng mật khẩu
-        var passwordRegex = new Regex(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?""|<>]).{8,}$");
+        var passwordRegex = new Regex(@"^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?""|<>]).{8,}$", 
+            RegexOptions.Compiled,
+            TimeSpan.FromSeconds(1));
         if (!passwordRegex.IsMatch(password))
         {
             return new AuthenticationResponse
@@ -500,9 +505,8 @@ public class AuthService : IAuthService
         };
     }
 
-    private string Generaterandomnumber()
+    private static string Generaterandomnumber()
     {
-        Random random = new Random();
         string randomno = random.Next(100000, 1000000).ToString("D6");
         return randomno;
     }
@@ -537,18 +541,17 @@ public class AuthService : IAuthService
     }
     private static string GenerateEmailBody(string name, string otptext)
     {
-
         string emailBody = "<div style='width: 100%; background-color: #f4f4f4; padding: 20px 0; font-family: Arial, sans-serif;'>";
         emailBody += "<div style='max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>";
-        emailBody += "<h2 style='color: #333;'>Hi " + name + ",</h2>";
-        emailBody += "<p style='font-size: 16px; color: #555;'>Thanks for registering at <strong>PhyGen System</strong>.</p>";
-        emailBody += "<p style='font-size: 16px; color: #555;'>Please enter the OTP code below to complete your registration:</p>";
+        emailBody += "<h2 style='color: #333;'>Xin chào " + name + ",</h2>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Cảm ơn bạn đã đăng ký tài khoản tại <strong>Hệ thống PhyGen</strong>.</p>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Vui lòng nhập mã OTP dưới đây để hoàn tất quá trình đăng ký:</p>";
         emailBody += "<div style='margin: 30px 0; text-align: center;'>";
         emailBody += "<span style='display: inline-block; background-color: #007BFF; color: #fff; padding: 12px 20px; font-size: 20px; border-radius: 5px; letter-spacing: 2px;'>" + otptext + "</span>";
         emailBody += "</div>";
-        emailBody += "<p style='font-size: 14px; color: #888;'>This code will expire in 5 minutes.</p>";
-        emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;'/>";
-        emailBody += "<p style='font-size: 12px; color: #aaa;'>Regards,<br/>PhyGen Team</p>";
+        emailBody += "<p style='font-size: 14px; color: #888;'>Mã OTP này sẽ hết hạn sau 5 phút.</p>";
+        emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;' />";
+        emailBody += "<p style='font-size: 12px; color: #aaa;'>Trân trọng,<br/>Đội ngũ PhyGen</p>";
         emailBody += "</div>";
         emailBody += "</div>";
 
@@ -559,37 +562,37 @@ public class AuthService : IAuthService
     {
         string emailBody = "<div style='width: 100%; background-color: #f4f4f4; padding: 20px 0; font-family: Arial, sans-serif;'>";
         emailBody += "<div style='max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>";
-        emailBody += "<h2 style='color: #333;'>Hi " + name + ",</h2>";
-        emailBody += "<p style='font-size: 16px; color: #555;'>We received a request to reset your password for your <strong>PhyGen System</strong> account.</p>";
-        emailBody += "<p style='font-size: 16px; color: #555;'>Please use the OTP code below to proceed with resetting your password:</p>";
+        emailBody += "<h2 style='color: #333;'>Xin chào " + name + ",</h2>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản <strong>Hệ thống PhyGen</strong> của bạn.</p>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Vui lòng sử dụng mã OTP dưới đây để tiếp tục quá trình đặt lại mật khẩu:</p>";
         emailBody += "<div style='margin: 30px 0; text-align: center;'>";
         emailBody += "<span style='display: inline-block; background-color: #28a745; color: #fff; padding: 12px 20px; font-size: 20px; border-radius: 5px; letter-spacing: 2px;'>" + otptext + "</span>";
         emailBody += "</div>";
-        emailBody += "<p style='font-size: 14px; color: #888;'>This code will expire in 5 minutes. If you didn't request a password reset, please ignore this email.</p>";
+        emailBody += "<p style='font-size: 14px; color: #888;'>Mã OTP này sẽ hết hạn sau 5 phút. Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>";
         emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;' />";
-        emailBody += "<p style='font-size: 12px; color: #aaa;'>Regards,<br/>PhyGen Team</p>";
+        emailBody += "<p style='font-size: 12px; color: #aaa;'>Trân trọng,<br/>Đội ngũ PhyGen</p>";
         emailBody += "</div>";
         emailBody += "</div>";
 
         return emailBody;
     }
+
     private static string GenerateLoginConfirmEmail(string name, string otptext)
     {
         string emailBody = "<div style='width: 100%; background-color: #f4f4f4; padding: 20px 0; font-family: Arial, sans-serif;'>";
         emailBody += "<div style='max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>";
-        emailBody += "<h2 style='color: #333;'>Welcome back, " + name + "!</h2>";
-        emailBody += "<p style='font-size: 16px; color: #555;'>We're glad to see you again at <strong>PhyGen System</strong>.</p>";
-        emailBody += "<p style='font-size: 16px; color: #555;'>Please verify the OTP code below to continue accessing the system:</p>";
+        emailBody += "<h2 style='color: #333;'>Chào mừng trở lại, " + name + "!</h2>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Rất vui được gặp lại bạn tại <strong>Hệ thống PhyGen</strong>.</p>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Vui lòng xác thực mã OTP dưới đây để tiếp tục đăng nhập:</p>";
         emailBody += "<div style='margin: 30px 0; text-align: center;'>";
         emailBody += "<span style='display: inline-block; background-color: #17a2b8; color: #fff; padding: 12px 20px; font-size: 20px; border-radius: 5px; letter-spacing: 2px;'>" + otptext + "</span>";
         emailBody += "</div>";
-        emailBody += "<p style='font-size: 14px; color: #888;'>This OTP code will expire in 5 minutes. If you did not request this, please ignore this email.</p>";
+        emailBody += "<p style='font-size: 14px; color: #888;'>Mã OTP này sẽ hết hạn sau 5 phút. Nếu bạn không yêu cầu đăng nhập, vui lòng bỏ qua email này.</p>";
         emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;' />";
-        emailBody += "<p style='font-size: 12px; color: #aaa;'>Best regards,<br/>The PhyGen Team</p>";
+        emailBody += "<p style='font-size: 12px; color: #aaa;'>Trân trọng,<br/>Đội ngũ PhyGen</p>";
         emailBody += "</div>";
         emailBody += "</div>";
 
         return emailBody;
     }
-
 }
