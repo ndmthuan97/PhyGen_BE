@@ -59,6 +59,9 @@ namespace PhyGen.Shared.Constants
             // Chapter Unit messages
             { StatusCode.ChapterUnitNotFound, "Không tìm thấy đơn vị chương với mã được cung cấp." },
             { StatusCode.ChapterUnitSameName, "Đơn vị chương với tên này đã tồn tại." },
+
+            // Exam messages
+            { StatusCode.ExamNotFound, "Không tìm thấy bài kiểm tra với mã được cung cấp." },
         };
 
         public static string GetMessage(StatusCode code)

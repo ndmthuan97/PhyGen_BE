@@ -59,5 +59,8 @@ namespace PhyGen.Shared.Constants
         InvalidToken = 2167,
         MustLoginWithEmailPassword = 2168,
         MustLoginWithGoogle = 2169,
+        
+        // Exam errors (2150–2169)
+        ExamNotFound = 2150,
     }
 }
