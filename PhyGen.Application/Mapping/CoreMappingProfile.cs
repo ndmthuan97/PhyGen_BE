@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using PhyGen.Application.Authentication.DTOs.Dtos;
+using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Chapters.Commands;
 using PhyGen.Application.Chapters.Response;
 using PhyGen.Application.ChapterUnits.Commands;
@@ -25,7 +27,9 @@ namespace PhyGen.Application.Mapping
         public CoreMappingProfile()
         {
             // Add your mapping configurations here
-
+            // Mapping for Auth
+            CreateMap<RegisterRequest, RegisterDto>();
+            CreateMap<LoginRequest, LoginDto>();
             // Mapping for Curriculum
             CreateMap<Curriculum, CurriculumResponse>();
             CreateMap<CreateCurriculumCommand, Curriculum>();
