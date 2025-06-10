@@ -41,6 +41,9 @@ namespace PhyGen.Shared.Constants
 
             // Exam messages
             { StatusCode.ExamNotFound, "Không tìm thấy bài kiểm tra với mã được cung cấp." },
+
+            // Exam Category Chapter messages
+            { StatusCode.ExamCategoryChapterNotFound, "Không tìm thấy chương của danh mục bài kiểm tra với mã được cung cấp." },
         };
 
         public static string GetMessage(StatusCode code)

@@ -20,7 +20,7 @@ namespace PhyGen.API.Controllers
         public ExamController(IMediator mediator, ILogger<ExamController> logger)
             : base(mediator, logger) { }
         
-         [HttpGet]
+        [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<List<ExamResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllExams()
         {

@@ -39,5 +39,8 @@ namespace PhyGen.Shared.Constants
 
         // Exam errors (2150–2169)
         ExamNotFound = 2150,
+
+        // Exam Category Chapter errors (2300–2319)
+        ExamCategoryChapterNotFound = 2300,
     }
 }
