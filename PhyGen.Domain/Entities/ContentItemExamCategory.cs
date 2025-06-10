@@ -13,7 +13,7 @@ namespace PhyGen.Domain.Entities
         public Guid ContentItemId { get; set; }
 
         [Required]
-        public Guid ExamCategoryId { get; set; }
+        public int ExamCategoryId { get; set; }
 
         public virtual ContentItem ContentItem { get; set; } = null!;
         public virtual ExamCategory ExamCategory { get; set; } = null!;

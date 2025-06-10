@@ -12,6 +12,8 @@ using PhyGen.Domain.Entities;
 using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.SubjectCurriculums.Commands;
 using PhyGen.Application.Subjects.Commands;
+using PhyGen.Application.ExamCategories.Commands;
+using PhyGen.Application.ContentItemExamCategories.Commands;
 
 namespace PhyGen.API.Mapping
 {
@@ -64,6 +66,14 @@ namespace PhyGen.API.Mapping
             // Mapping for Content Item
             CreateMap<CreateContentItemRequest, CreateContentItemCommand>();
             CreateMap<UpdateContentItemRequest, UpdateContentItemCommand>();
+
+            // Mapping for Exam Category
+            CreateMap<CreateExamCategoryRequest, CreateExamCategoryCommand>();
+            CreateMap<UpdateExamCategoryRequest, UpdateExamCategoryCommand>();
+
+            // Mapping for Content Item Exam Category
+            CreateMap<CreateContentItemExamCategoryRequest, CreateContentItemExamCategoryCommand>();
+            CreateMap<UpdateContentItemExamCategoryRequest, UpdateContentItemExamCategoryCommand>();
 
         }
     }

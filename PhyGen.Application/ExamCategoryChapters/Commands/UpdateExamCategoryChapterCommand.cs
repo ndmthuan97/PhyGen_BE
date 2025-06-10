@@ -13,6 +13,4 @@ namespace PhyGen.Application.ExamCategoryChapters.Commands
         public Guid ExamCategoryId { get; set; }
         public Guid ChapterId { get; set; }
     }
-    {
-    }
 }
