@@ -5,6 +5,10 @@ using PhyGen.Application.Chapters.Commands;
 using PhyGen.Application.Chapters.Response;
 using PhyGen.Application.ChapterUnits.Commands;
 using PhyGen.Application.ChapterUnits.Responses;
+using PhyGen.Application.ContentFlows.Commands;
+using PhyGen.Application.ContentFlows.Responses;
+using PhyGen.Application.ContentItems.Commands;
+using PhyGen.Application.ContentItems.Responses;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.Curriculums.Response;
 using PhyGen.Application.Exams.Commands;
@@ -60,6 +64,16 @@ namespace PhyGen.Application.Mapping
             CreateMap<CreateExamCommand, Exam>();
             CreateMap<UpdateExamCommand, Exam>();
             CreateMap<DeleteExamCommand, Exam>();
+
+            // Mapping for Content Flow
+            CreateMap<ContentFlow, ContentFlowResponse>();
+            CreateMap<CreateContentFlowCommand, ContentFlow>();
+            CreateMap<UpdateContentFlowCommand, ContentFlow>();
+
+            // Mapping for Content Item
+            CreateMap<ContentItem, ContentItemResponse>();
+            CreateMap<CreateContentItemCommand, ContentItem>();
+            CreateMap<UpdateContentItemCommand, ContentItem>();
         }
     }
 }

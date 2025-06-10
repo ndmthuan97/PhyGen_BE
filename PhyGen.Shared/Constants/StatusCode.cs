@@ -41,6 +41,7 @@ namespace PhyGen.Shared.Constants
         ChapterUnitNotFound = 2130,
         ChapterUnitSameName = 2131,
 
+
         // Authentication errors (2150–2200)
         RegisterFailed = 2151,
         LoginFailed = 2152,
@@ -61,6 +62,14 @@ namespace PhyGen.Shared.Constants
         MustLoginWithGoogle = 2169,
         
         // Exam errors (2150–2169)
-        ExamNotFound = 2150,
+        ExamNotFound = 2250,
+
+        // Content Flow errors (2150–2169)
+        ContentFlowNotFound = 2350,
+        ContentFlowSameName = 2351,
+
+        // Content Item errors (2170–2189)
+        ContentItemNotFound = 2370,
+        ContentItemSameName = 2371,
     }
 }

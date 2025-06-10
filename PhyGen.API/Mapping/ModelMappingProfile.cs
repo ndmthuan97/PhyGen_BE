@@ -4,6 +4,8 @@ using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Chapters.Commands;
 using PhyGen.Application.ChapterUnits.Commands;
+using PhyGen.Application.ContentFlows.Commands;
+using PhyGen.Application.ContentItems.Commands;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Domain.Entities;
 using PhyGen.Application.Exams.Commands;
@@ -49,6 +51,13 @@ namespace PhyGen.API.Mapping
             CreateMap<CreateExamRequest, CreateExamCommand>();
             CreateMap<UpdateExamRequest, UpdateExamCommand>();
             CreateMap<DeleteExamRequest, DeleteExamCommand>();
+            //Mapping for Content Flow
+            CreateMap<CreateContentFlowRequest, CreateContentFlowCommand>();
+            CreateMap<UpdateContentFlowRequest, UpdateContentFlowCommand>();
+
+            // Mapping for Content Item
+            CreateMap<CreateContentItemRequest, CreateContentItemCommand>();
+            CreateMap<UpdateContentItemRequest, UpdateContentItemCommand>();
         }
     }
 }
