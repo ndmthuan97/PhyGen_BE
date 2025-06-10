@@ -26,11 +26,4 @@
     <ProjectReference Include="..\PhyGen.Domain\PhyGen.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ExamCategoryChapters\Exceptions\" />
-    <Folder Include="ExamCategoryChapters\Handlers\" />
-    <Folder Include="ExamCategoryChapters\Responses\" />
-    <Folder Include="ExamCategoryChapters\Queries\" />
-  </ItemGroup>
-
 </Project>

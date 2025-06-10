@@ -7,6 +7,7 @@ using PhyGen.Application.ChapterUnits.Commands;
 using PhyGen.Application.ContentFlows.Commands;
 using PhyGen.Application.ContentItems.Commands;
 using PhyGen.Application.Curriculums.Commands;
+using PhyGen.Application.ExamCategoryChapters.Commands;
 using PhyGen.Domain.Entities;
 using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.SubjectCurriculums.Commands;
@@ -51,6 +52,11 @@ namespace PhyGen.API.Mapping
             CreateMap<CreateExamRequest, CreateExamCommand>();
             CreateMap<UpdateExamRequest, UpdateExamCommand>();
             CreateMap<DeleteExamRequest, DeleteExamCommand>();
+
+            // Mapping for ExamCategoryChapter
+            CreateMap<CreateExamCategoryChapterRequest, CreateExamCategoryChapterCommand>();
+            CreateMap<UpdateExamCategoryChapterRequest, UpdateExamCategoryChapterCommand>();
+
             //Mapping for Content Flow
             CreateMap<CreateContentFlowRequest, CreateContentFlowCommand>();
             CreateMap<UpdateContentFlowRequest, UpdateContentFlowCommand>();
@@ -58,6 +64,7 @@ namespace PhyGen.API.Mapping
             // Mapping for Content Item
             CreateMap<CreateContentItemRequest, CreateContentItemCommand>();
             CreateMap<UpdateContentItemRequest, UpdateContentItemCommand>();
+
         }
     }
 }

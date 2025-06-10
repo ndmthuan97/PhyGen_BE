@@ -71,5 +71,8 @@ namespace PhyGen.Shared.Constants
         // Content Item errors (2170–2189)
         ContentItemNotFound = 2370,
         ContentItemSameName = 2371,
+        
+        // Exam Category Chapter errors (2400–2419)
+        ExamCategoryChapterNotFound = 2400,
     }
 }

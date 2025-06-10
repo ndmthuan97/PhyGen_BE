@@ -60,9 +60,11 @@ namespace PhyGen.Shared.Constants
             { StatusCode.ChapterUnitNotFound, "Không tìm thấy đơn vị chương với mã được cung cấp." },
             { StatusCode.ChapterUnitSameName, "Đơn vị chương với tên này đã tồn tại." },
 
-
             // Exam messages
             { StatusCode.ExamNotFound, "Không tìm thấy bài kiểm tra với mã được cung cấp." },
+
+            // Exam Category Chapter messages
+            { StatusCode.ExamCategoryChapterNotFound, "Không tìm thấy chương của danh mục bài kiểm tra với mã được cung cấp." },
 
             // Content Flow messages
             { StatusCode.ContentFlowNotFound, "Không tìm thấy luồng nội dung với mã được cung cấp." },
@@ -71,7 +73,6 @@ namespace PhyGen.Shared.Constants
             // Content Item messages
             { StatusCode.ContentItemNotFound, "Không tìm thấy mục nội dung với mã được cung cấp." },
             { StatusCode.ContentItemSameName, "Mục nội dung với tên này đã tồn tại." },
-
         };
 
         public static string GetMessage(StatusCode code)

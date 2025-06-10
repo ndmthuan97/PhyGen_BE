@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Entities
 {
-    public class ExamCategoryChapter : EntityBase<int>
+    public class ExamCategoryChapter : EntityBase<Guid>
     {
         [Required]
         public Guid ExamCategoryId { get; set; }
