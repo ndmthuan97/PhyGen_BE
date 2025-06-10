@@ -194,17 +194,14 @@ namespace PhyGen.Insfrastructure.Migrations
                     b.Property<Guid>("ContentItemId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ExamCategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("ExamCategoryId1")
+                    b.Property<int>("ExamCategoryId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ContentItemId");
 
-                    b.HasIndex("ExamCategoryId1");
+                    b.HasIndex("ExamCategoryId");
 
                     b.ToTable("ContentItemExamCategories");
                 });
@@ -344,11 +341,9 @@ namespace PhyGen.Insfrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.ExamCategoryChapter", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ChapterId")
                         .HasColumnType("uuid");
@@ -822,7 +817,7 @@ namespace PhyGen.Insfrastructure.Migrations
 
                     b.HasOne("PhyGen.Domain.Entities.ExamCategory", "ExamCategory")
                         .WithMany()
-                        .HasForeignKey("ExamCategoryId1")
+                        .HasForeignKey("ExamCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

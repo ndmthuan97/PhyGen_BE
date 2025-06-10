@@ -326,8 +326,7 @@ namespace PhyGen.Insfrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ContentItemId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExamCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExamCategoryId1 = table.Column<int>(type: "integer", nullable: false)
+                    ExamCategoryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -339,8 +338,8 @@ namespace PhyGen.Insfrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ContentItemExamCategories_ExamCategories_ExamCategoryId1",
-                        column: x => x.ExamCategoryId1,
+                        name: "FK_ContentItemExamCategories_ExamCategories_ExamCategoryId",
+                        column: x => x.ExamCategoryId,
                         principalTable: "ExamCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -403,8 +402,7 @@ namespace PhyGen.Insfrastructure.Migrations
                 name: "ExamCategoryChapters",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ExamCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     ChapterId = table.Column<Guid>(type: "uuid", nullable: false),
                     ExamCategoryId1 = table.Column<int>(type: "integer", nullable: false)
@@ -534,9 +532,9 @@ namespace PhyGen.Insfrastructure.Migrations
                 column: "ContentItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContentItemExamCategories_ExamCategoryId1",
+                name: "IX_ContentItemExamCategories_ExamCategoryId",
                 table: "ContentItemExamCategories",
-                column: "ExamCategoryId1");
+                column: "ExamCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ContentItems_ContentFlowId1",
