@@ -42,6 +42,9 @@ namespace PhyGen.Insfrastructure.Extensions
             services.AddScoped<IContentItemRepository, ContentItemRepository>();
             services.AddScoped<IExamCategoryRepository, ExamCategoryRepository>();
             services.AddScoped<IContentItemExamCategoryRepository, ContentItemExamCategoryRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IExamQuestionRepository, ExamQuestionRepository>();
+            services.AddScoped<IQuestionMediaRepository, QuestionMediaRepository>();
         }
     }
 }
