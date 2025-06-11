@@ -14,6 +14,9 @@ using PhyGen.Application.SubjectCurriculums.Commands;
 using PhyGen.Application.Subjects.Commands;
 using PhyGen.Application.ExamCategories.Commands;
 using PhyGen.Application.ContentItemExamCategories.Commands;
+using PhyGen.Application.Questions.Commands;
+using PhyGen.Application.ExamQuestions.Commands;
+using PhyGen.Application.QuestionMedias.Commands;
 
 namespace PhyGen.API.Mapping
 {
@@ -75,6 +78,17 @@ namespace PhyGen.API.Mapping
             CreateMap<CreateContentItemExamCategoryRequest, CreateContentItemExamCategoryCommand>();
             CreateMap<UpdateContentItemExamCategoryRequest, UpdateContentItemExamCategoryCommand>();
 
+            // Mapping for Question
+            CreateMap<CreateQuestionRequest, CreateQuestionCommand>();
+            CreateMap<UpdateQuestionRequest, UpdateQuestionCommand>();
+
+            // Mapping for Exam Question
+            CreateMap<CreateExamQuestionRequest, CreateExamQuestionCommand>();
+            CreateMap<UpdateExamQuestionRequest, UpdateExamQuestionCommand>();
+
+            // Mapping for Question Media
+            CreateMap<CreateQuestionMediaRequest, CreateQuestionMediaCommand>();
+            CreateMap<UpdateQuestionMediaRequest, UpdateQuestionMediaCommand>();
         }
     }
 }

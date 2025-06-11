@@ -61,14 +61,14 @@ namespace PhyGen.Shared.Constants
         MustLoginWithEmailPassword = 2168,
         MustLoginWithGoogle = 2169,
         
-        // Exam errors (2150–2169)
+        // Exam errors (2250–2269)
         ExamNotFound = 2250,
 
-        // Content Flow errors (2150–2169)
+        // Content Flow errors (2350–2369)
         ContentFlowNotFound = 2350,
         ContentFlowSameName = 2351,
 
-        // Content Item errors (2170–2189)
+        // Content Item errors (2370–2389)
         ContentItemNotFound = 2370,
         ContentItemSameName = 2371,
         
@@ -82,5 +82,14 @@ namespace PhyGen.Shared.Constants
         // Content Item Exam Category errors (2440–2459)
         ContentItemExamCategoryNotFound = 2440,
         ContentItemExamCategoryAlreadyExist = 2441,
+
+        // Question errors (2460–2479)
+        QuestionNotFound = 2460,
+
+        // Question Media errors (2480–2499)
+        QuestionMediaNotFound = 2480,
+
+        // Exam Question errors (2500–2519)
+        ExamQuestionNotFound = 2500,
     }
 }

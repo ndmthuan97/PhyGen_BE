@@ -17,8 +17,14 @@ using PhyGen.Application.ExamCategories.Commands;
 using PhyGen.Application.ExamCategories.Responses;
 using PhyGen.Application.ExamCategoryChapters.Commands;
 using PhyGen.Application.ExamCategoryChapters.Responses;
+using PhyGen.Application.ExamQuestions.Commands;
+using PhyGen.Application.ExamQuestions.Responses;
 using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Exams.Responses;
+using PhyGen.Application.QuestionMedias.Commands;
+using PhyGen.Application.QuestionMedias.Responses;
+using PhyGen.Application.Questions.Commands;
+using PhyGen.Application.Questions.Responses;
 using PhyGen.Application.SubjectCurriculums.Commands;
 using PhyGen.Application.SubjectCurriculums.Responses;
 using PhyGen.Application.Subjects.Commands;
@@ -95,6 +101,22 @@ namespace PhyGen.Application.Mapping
             CreateMap<ContentItemExamCategory, ContentItemExamCategoryResponse>();
             CreateMap<CreateContentItemExamCategoryCommand, ContentItemExamCategory>();
             CreateMap<UpdateContentItemExamCategoryCommand, ContentItemExamCategory>();
+
+            // Mapping for Question
+            CreateMap<Question, QuestionResponse>();
+            CreateMap<CreateQuestionCommand, Question>();
+            CreateMap<UpdateQuestionCommand, Question>();
+            CreateMap<DeleteQuestionCommand, Question>();
+
+            // Mapping for Exam Question
+            CreateMap<ExamQuestion, ExamQuestionResponse>();
+            CreateMap<CreateExamQuestionCommand, ExamQuestion>();
+            CreateMap<UpdateExamQuestionCommand, ExamQuestion>();
+
+            // Mapping for Question Media
+            CreateMap<QuestionMedia, QuestionMediaResponse>();
+            CreateMap<CreateQuestionMediaCommand, QuestionMedia>();
+            CreateMap<UpdateQuestionMediaCommand, QuestionMedia>();
         }
     }
 }

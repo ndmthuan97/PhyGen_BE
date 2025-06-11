@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using PhyGen.Application.Chapters.Exceptions;
+using PhyGen.Application.ExamCategories.Exceptions;
 using PhyGen.Application.ExamCategoryChapters.Commands;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
@@ -12,16 +13,16 @@ namespace PhyGen.Application.ExamCategoryChapters.Handlers
     public class CreateExamCategoryChapterCommandHandler : IRequestHandler<CreateExamCategoryChapterCommand, Guid>
     {
         private readonly IExamCategoryChapterRepository _examCategoryChapterRepository;
-        //private readonly IExamCategoryRepository _examCategoryRepository;
+        private readonly IExamCategoryRepository _examCategoryRepository;
         private readonly IChapterRepository _chapterRepository;
 
         public CreateExamCategoryChapterCommandHandler(
             IExamCategoryChapterRepository examCategoryChapterRepository,
-            //IExamCategoryRepository examCategoryRepository,
+            IExamCategoryRepository examCategoryRepository,
             IChapterRepository chapterRepository)
         {
             _examCategoryChapterRepository = examCategoryChapterRepository;
-            //_examCategoryRepository = examCategoryRepository;
+            _examCategoryRepository = examCategoryRepository;
             _chapterRepository = chapterRepository;
         }
 
@@ -32,7 +33,7 @@ namespace PhyGen.Application.ExamCategoryChapters.Handlers
       
             //if (await _examCategoryRepository.GetByIdAsync(request.ExamCategoryId) == null)
             //    throw new ExamCategoryNotFoundException();
- 
+
             var examCategoryChapter = new ExamCategoryChapter
             {
                 ExamCategoryId = request.ExamCategoryId,
@@ -42,6 +43,42 @@ namespace PhyGen.Application.ExamCategoryChapters.Handlers
             await _examCategoryChapterRepository.AddAsync(examCategoryChapter);
 
             return examCategoryChapter.Id;
+        }
+    }
+
+    public class UpdateExamCategoryChapterCommandHandler : IRequestHandler<UpdateExamCategoryChapterCommand, Unit>
+    {
+        private readonly IExamCategoryChapterRepository _examCategoryChapterRepository;
+        private readonly IExamCategoryRepository _examCategoryRepository;
+        private readonly IChapterRepository _chapterRepository;
+
+        public UpdateExamCategoryChapterCommandHandler(
+            IExamCategoryChapterRepository examCategoryChapterRepository,
+            IExamCategoryRepository examCategoryRepository,
+            IChapterRepository chapterRepository)
+        {
+            _examCategoryChapterRepository = examCategoryChapterRepository;
+            _examCategoryRepository = examCategoryRepository;
+            _chapterRepository = chapterRepository;
+        }
+
+        public async Task<Unit> Handle(UpdateExamCategoryChapterCommand request, CancellationToken cancellationToken)
+        {
+            if (await _chapterRepository.GetByIdAsync(request.ChapterId) == null)
+                throw new ChapterNotFoundException();
+
+            //if (await _examCategoryRepository.GetByIdAsync(request.ExamCategoryId) == null)
+            //    throw new ExamCategoryNotFoundException();
+
+            var examCategoryChapter = new ExamCategoryChapter
+            {
+                ExamCategoryId = request.ExamCategoryId,
+                ChapterId = request.ChapterId
+            };
+
+            await _examCategoryChapterRepository.UpdateAsync(examCategoryChapter);
+
+            return Unit.Value;
         }
     }
 }
