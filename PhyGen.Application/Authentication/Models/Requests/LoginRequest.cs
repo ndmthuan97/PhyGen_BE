@@ -11,7 +11,5 @@ namespace PhyGen.Application.Authentication.Models.Requests
     {
         public string Email { get; set; }
         public string? Password { get; set; }  // ← nullable
-        public bool IsGoogleLogin { get; set; }
-        public string? GoogleToken { get; set; }
     }
 }
