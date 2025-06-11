@@ -213,8 +213,8 @@ public class AuthService : IAuthService
                 else
                 {
                     var userMetadata = JsonSerializer.Deserialize<UserMetadata>(userMetadataJson);
-                    fullName = userMetadata?.fullName;
-                    avatarUrl = userMetadata?.avatarUrl;
+                    fullName = userMetadata?.full_name;
+                    avatarUrl = userMetadata?.avatar_url;
                     // Email chưa tồn tại -> tạo mới user và đăng nhập Google bình thường
                     var tokenEntity = new User
                     {
@@ -536,8 +536,8 @@ public class AuthService : IAuthService
     }
     public class UserMetadata
     {
-        public string avatarUrl { get; set; }
-        public string fullName { get; set; }
+        public string avatar_url { get; set; }
+        public string full_name { get; set; }
     }
     private static string GenerateEmailBody(string name, string otptext)
     {
