@@ -8,7 +8,7 @@ namespace PhyGen.Application.ContentFlows.Responses
 {
     public class ContentFlowResponse
     {
-        public int ContentFlowId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public Guid SubjectId { get; set; }

@@ -9,7 +9,7 @@ namespace PhyGen.Application.Curriculums.Commands
 {
     public class UpdateCurriculumCommand : IRequest<Unit>
     {
-        public Guid CurriculumId { get; set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; } = string.Empty;
 

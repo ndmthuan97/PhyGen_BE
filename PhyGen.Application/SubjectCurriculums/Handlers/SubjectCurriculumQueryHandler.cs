@@ -30,11 +30,11 @@ namespace PhyGen.Application.SubjectCurriculums.Handlers
         }
     }
 
-    public class SubjectCurriculumQueryHandler : IRequestHandler<GetSubjectCurriculumBySubjectIdAndCurriculumIdQuery, SubjectCurriculumResponse>
+    public class GetSubjectCurriculumBySubjectIdAndCurriculumIdQueryHandler : IRequestHandler<GetSubjectCurriculumBySubjectIdAndCurriculumIdQuery, SubjectCurriculumResponse>
     {
         private readonly ISubjectCurriculumRepository _subjectCurriculumRepository;
 
-        public SubjectCurriculumQueryHandler(ISubjectCurriculumRepository subjectCurriculumRepository)
+        public GetSubjectCurriculumBySubjectIdAndCurriculumIdQueryHandler(ISubjectCurriculumRepository subjectCurriculumRepository)
         {
             _subjectCurriculumRepository = subjectCurriculumRepository;
         }

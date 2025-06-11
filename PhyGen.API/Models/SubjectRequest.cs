@@ -10,7 +10,7 @@ namespace PhyGen.API.Models
     public class UpdateSubjectRequest
     {
         [JsonRequired]
-        public Guid SubjectId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 }

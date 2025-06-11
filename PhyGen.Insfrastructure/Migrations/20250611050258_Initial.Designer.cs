@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Insfrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250610161255_Initial")]
+    [Migration("20250611050258_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -158,10 +158,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ContentFlowId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("ContentFlowId1")
+                    b.Property<int>("ContentFlowId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
@@ -181,7 +178,7 @@ namespace PhyGen.Insfrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContentFlowId1");
+                    b.HasIndex("ContentFlowId");
 
                     b.ToTable("ContentItems");
                 });
@@ -803,7 +800,7 @@ namespace PhyGen.Insfrastructure.Migrations
                 {
                     b.HasOne("PhyGen.Domain.Entities.ContentFlow", "ContentFlow")
                         .WithMany("ContentItems")
-                        .HasForeignKey("ContentFlowId1")
+                        .HasForeignKey("ContentFlowId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

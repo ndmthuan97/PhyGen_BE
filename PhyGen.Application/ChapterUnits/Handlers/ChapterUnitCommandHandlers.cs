@@ -40,6 +40,7 @@ namespace PhyGen.Application.ChapterUnits.Handlers
             var chapterUnit = new ChapterUnit
             {
                 Name = request.Name,
+                Description = request.Description,
                 ChapterId = request.ChapterId,
                 OrderNo = request.OrderNo,
                 CreatedBy = request.CreatedBy,
@@ -66,7 +67,7 @@ namespace PhyGen.Application.ChapterUnits.Handlers
 
         public async Task<Unit> Handle(UpdateChapterUnitCommand request, CancellationToken cancellationToken)
         {
-            var chapterUnit = await _chapterUnitRepository.GetByIdAsync(request.ChapterUnitId) ?? throw new ChapterUnitNotFoundException();
+            var chapterUnit = await _chapterUnitRepository.GetByIdAsync(request.Id) ?? throw new ChapterUnitNotFoundException();
 
             if (!Guid.TryParse(request.UpdatedBy, out Guid updatedByGuid))
                 throw new InvalidOperationException("Invalid GUID format for UpdatedBy.");
@@ -78,6 +79,7 @@ namespace PhyGen.Application.ChapterUnits.Handlers
                 throw new ChapterNotFoundException();
 
             chapterUnit.Name = request.Name;
+            chapterUnit.Description = request.Description;
             chapterUnit.ChapterId = request.ChapterId;
             chapterUnit.OrderNo = request.OrderNo;
             chapterUnit.UpdatedBy = request.UpdatedBy;

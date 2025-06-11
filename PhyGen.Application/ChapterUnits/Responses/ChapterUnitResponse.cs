@@ -8,7 +8,7 @@ namespace PhyGen.Application.ChapterUnits.Responses
 {
     public class ChapterUnitResponse
     {
-        public Guid ChapterUnitId { get; set; }
+        public Guid Id { get; set; }
 
         public Guid ChapterId { get; set; }
 

@@ -20,7 +20,7 @@ namespace PhyGen.API.Models
     public class UpdateChapterRequest
     {
         [JsonRequired]
-        public Guid ChapterId { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(255, MinimumLength = 1, ErrorMessage = "Name must be between 1 and 255 characters.")]

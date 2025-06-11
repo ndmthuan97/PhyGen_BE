@@ -19,7 +19,7 @@ namespace PhyGen.API.Models
     public class UpdateChapterUnitRequest
     {
         [JsonRequired]
-        public Guid ChapterUnitId { get; set; }
+        public Guid Id { get; set; }
 
         [JsonRequired]
         public Guid ChapterId { get; set; }

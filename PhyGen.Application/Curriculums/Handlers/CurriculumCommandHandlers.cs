@@ -47,7 +47,7 @@ namespace PhyGen.Application.Curriculums.Handlers
 
         public async Task<Unit> Handle(UpdateCurriculumCommand request, CancellationToken cancellationToken)
         {
-            var curriculum = await _curriculumRepository.GetByIdAsync(request.CurriculumId);
+            var curriculum = await _curriculumRepository.GetByIdAsync(request.Id);
 
             if (curriculum == null)
                 throw new CurriculumNotFoundException();

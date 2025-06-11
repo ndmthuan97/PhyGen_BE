@@ -48,7 +48,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
 
         public async Task<Unit> Handle(UpdateContentFlowCommand request, CancellationToken cancellationToken)
         {
-            var contentFlow = await _contentFlowRepository.GetByIdAsync(request.ContentFlowId) ?? throw new ContentFlowNotFoundException();
+            var contentFlow = await _contentFlowRepository.GetByIdAsync(request.Id) ?? throw new ContentFlowNotFoundException();
             
             if (await _contentFlowRepository.GetContentFlowByNameAsync(request.Name) != null &&
                 contentFlow.Name != request.Name)

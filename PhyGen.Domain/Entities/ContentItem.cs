@@ -8,7 +8,7 @@ namespace PhyGen.Domain.Entities
 {
     public class ContentItem : EntityBase<Guid>
     {
-        public Guid ContentFlowId { get; set; }
+        public int ContentFlowId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string LearningOutcome { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }

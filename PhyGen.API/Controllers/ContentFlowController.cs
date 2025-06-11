@@ -55,7 +55,7 @@ namespace PhyGen.API.Controllers
 
         [HttpPut("{contentFlowId}")]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateContentFlow(Guid contentFlowId, [FromBody] UpdateContentFlowRequest request)
+        public async Task<IActionResult> UpdateContentFlow(int contentFlowId, [FromBody] UpdateContentFlowRequest request)
         {
             if (request == null)
             {

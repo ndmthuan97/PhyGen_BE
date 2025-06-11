@@ -230,18 +230,17 @@ namespace PhyGen.Insfrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ContentFlowId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ContentFlowId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     LearningOutcome = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ContentFlowId1 = table.Column<int>(type: "integer", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ContentItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ContentItems_ContentFlows_ContentFlowId1",
-                        column: x => x.ContentFlowId1,
+                        name: "FK_ContentItems_ContentFlows_ContentFlowId",
+                        column: x => x.ContentFlowId,
                         principalTable: "ContentFlows",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -537,9 +536,9 @@ namespace PhyGen.Insfrastructure.Migrations
                 column: "ExamCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContentItems_ContentFlowId1",
+                name: "IX_ContentItems_ContentFlowId",
                 table: "ContentItems",
-                column: "ContentFlowId1");
+                column: "ContentFlowId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExamCategoryChapters_ChapterId",

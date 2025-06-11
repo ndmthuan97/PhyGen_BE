@@ -8,7 +8,7 @@ namespace PhyGen.Application.Subjects.Responses
 {
     public class SubjectResponse
     {
-        public Guid SubjectId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 }

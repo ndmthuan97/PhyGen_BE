@@ -9,6 +9,7 @@ namespace PhyGen.Application.ContentItems.Commands
 {
     public class CreateContentItemCommand : IRequest<Guid>
     {
+        public int ContentFlowId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string LearningOutcome { get; set; } = string.Empty;
     }

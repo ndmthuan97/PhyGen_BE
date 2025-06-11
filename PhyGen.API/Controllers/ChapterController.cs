@@ -30,9 +30,9 @@ namespace PhyGen.API.Controllers
 
         [HttpGet("{chapterId}")]
         [ProducesResponseType(typeof(ApiResponse<ChapterResponse>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetChapterById(Guid ChapterId)
+        public async Task<IActionResult> GetChapterById(Guid chapterId)
         {
-            var request = new GetChapterByIdQuery(ChapterId);
+            var request = new GetChapterByIdQuery(chapterId);
             return await ExecuteAsync<GetChapterByIdQuery, ChapterResponse>(request);
         }
 
@@ -55,7 +55,7 @@ namespace PhyGen.API.Controllers
 
         [HttpPut("{chapterId}")]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateChapter(Guid ChapterId, [FromBody] UpdateChapterRequest request)
+        public async Task<IActionResult> UpdateChapter(Guid chapterId, [FromBody] UpdateChapterRequest request)
         {
             if (request == null)
             {

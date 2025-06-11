@@ -9,7 +9,7 @@ namespace PhyGen.Application.ChapterUnits.Commands
 {
     public class UpdateChapterUnitCommand : IRequest<Unit>
     {
-        public Guid ChapterUnitId { get; set; }
+        public Guid Id { get; set; }
 
         public Guid ChapterId { get; set; }
 

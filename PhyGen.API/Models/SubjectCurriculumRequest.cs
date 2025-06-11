@@ -13,7 +13,7 @@ namespace PhyGen.API.Models
     public class UpdateSubjectCurriculumRequest
     {
         [JsonRequired]
-        public Guid SubjectCurriculumId { get; set; }
+        public Guid Id { get; set; }
         [JsonRequired]
         public Guid SubjectId { get; set; }
         [JsonRequired]

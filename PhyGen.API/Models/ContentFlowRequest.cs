@@ -13,7 +13,7 @@ namespace PhyGen.API.Models
     public class UpdateContentFlowRequest
     {
         [JsonRequired]
-        public int ContentFlowId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         [JsonRequired]

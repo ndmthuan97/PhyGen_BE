@@ -8,7 +8,7 @@ namespace PhyGen.Application.SubjectCurriculums.Responses
 {
     public class SubjectCurriculumResponse
     {
-        public Guid SubjectCurriculumId { get; set; }
+        public Guid Id { get; set; }
         public Guid SubjectId { get; set; }
         public Guid CurriculumId { get; set; }
     }
