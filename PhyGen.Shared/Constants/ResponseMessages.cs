@@ -90,6 +90,13 @@ namespace PhyGen.Shared.Constants
 
             // Exam Question messages
             { StatusCode.ExamQuestionNotFound, "Không tìm thấy câu hỏi bài kiểm tra với mã được cung cấp." },
+
+            // Matrix messages
+            { StatusCode.MatrixNotFound, "Không tìm thấy ma trận với mã được cung cấp." },
+            { StatusCode.MatrixSameName, "Ma trận với tên này đã tồn tại." },   
+
+            // Matrix Content Item messages
+            { StatusCode.MatrixContentItemNotFound, "Không tìm thấy mục nội dung ma trận với mã được cung cấp." },
         };
 
         public static string GetMessage(StatusCode code)

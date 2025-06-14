@@ -91,5 +91,12 @@ namespace PhyGen.Shared.Constants
 
         // Exam Question errors (2500–2519)
         ExamQuestionNotFound = 2500,
+
+        // Matrix errors (2520–2539)
+        MatrixNotFound = 2520,
+        MatrixSameName = 2521,
+
+        // Matrix Content Item errors (2540–2559)
+        MatrixContentItemNotFound = 2540,
     }
 }

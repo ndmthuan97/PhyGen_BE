@@ -2,6 +2,7 @@
 using PhyGen.Application.ExamCategories.Exceptions;
 using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Exams.Exceptions;
+using PhyGen.Application.Matrices.Exceptions;
 using PhyGen.Application.SubjectCurriculums.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
@@ -16,26 +17,26 @@ namespace PhyGen.Application.Exams.Handlers
     public class CreateExamCommandHandler : IRequestHandler<CreateExamCommand, Guid>
     {
         private readonly IExamRepository _examRepository;
-        //private readonly IMatrixRepository _matrixRepository;
+        private readonly IMatrixRepository _matrixRepository;
         private readonly IExamCategoryRepository _examCategoryRepository;
         private readonly ISubjectCurriculumRepository _subjectCurriculumRepository;
 
         public CreateExamCommandHandler(
             IExamRepository examRepository, 
-            //IMatrixRepository matrixRepository, 
+            IMatrixRepository matrixRepository,
             IExamCategoryRepository examCategoryRepository,
             ISubjectCurriculumRepository subjectCurriculumRepository)
         {
             _examRepository = examRepository;
-            //_matrixRepository = matrixRepository;
+            _matrixRepository = matrixRepository;
             _examCategoryRepository = examCategoryRepository;
             _subjectCurriculumRepository = subjectCurriculumRepository;
         }
 
         public async Task<Guid> Handle(CreateExamCommand request, CancellationToken cancellationToken)
         {
-            //if (await _matrixRepository.GetByIdAsync(request.MatrixId) == null)
-            //    throw new MatrixNotFoundException();
+            if (await _matrixRepository.GetByIdAsync(request.MatrixId) == null)
+                throw new MatrixNotFoundException();
 
             if (await _examCategoryRepository.GetByIdAsync(request.CategoryId) == null)
                 throw new ExamCategoryNotFoundException();
@@ -62,18 +63,18 @@ namespace PhyGen.Application.Exams.Handlers
     public class UpdateExamCommandHandler : IRequestHandler<UpdateExamCommand, Unit>
     {
         private readonly IExamRepository _examRepository;
-        //private readonly IMatrixRepository _matrixRepository;
+        private readonly IMatrixRepository _matrixRepository;
         private readonly IExamCategoryRepository _examCategoryRepository;
         private readonly ISubjectCurriculumRepository _subjectCurriculumRepository;
 
         public UpdateExamCommandHandler(
             IExamRepository examRepository,
-            //IMatrixRepository matrixRepository, 
+            IMatrixRepository matrixRepository,
             IExamCategoryRepository examCategoryRepository,
             ISubjectCurriculumRepository subjectCurriculumRepository)
         {
             _examRepository = examRepository;
-            //_matrixRepository = matrixRepository;
+            _matrixRepository = matrixRepository;
             _examCategoryRepository = examCategoryRepository;
             _subjectCurriculumRepository = subjectCurriculumRepository;
         }
@@ -83,8 +84,8 @@ namespace PhyGen.Application.Exams.Handlers
             if (exam == null)
                 throw new ExamNotFoundException();
 
-            //if (await _matrixRepository.GetByIdAsync(request.MatrixId) == null)
-            //    throw new MatrixNotFoundException();
+            if (await _matrixRepository.GetByIdAsync(request.MatrixId) == null)
+                throw new MatrixNotFoundException();
 
             if (await _examCategoryRepository.GetByIdAsync(request.CategoryId) == null)
                 throw new ExamCategoryNotFoundException();

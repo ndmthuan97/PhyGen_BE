@@ -17,6 +17,8 @@ using PhyGen.Application.ContentItemExamCategories.Commands;
 using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.ExamQuestions.Commands;
 using PhyGen.Application.QuestionMedias.Commands;
+using PhyGen.Application.Matrices.Commands;
+using PhyGen.Application.MatrixContentItems.Commands;
 
 namespace PhyGen.API.Mapping
 {
@@ -89,6 +91,15 @@ namespace PhyGen.API.Mapping
             // Mapping for Question Media
             CreateMap<CreateQuestionMediaRequest, CreateQuestionMediaCommand>();
             CreateMap<UpdateQuestionMediaRequest, UpdateQuestionMediaCommand>();
+
+            // Mapping for Matrix
+            CreateMap<CreateMatrixRequest, CreateMatrixCommand>();
+            CreateMap<UpdateMatrixRequest, UpdateMatrixCommand>();
+            CreateMap<DeleteMatrixRequest, DeleteMatrixCommand>();
+
+            // Mapping for Matrix Content Item
+            CreateMap<CreateMatrixContentItemRequest, CreateMatrixContentItemCommand>();
+            CreateMap<UpdateMatrixContentItemRequest, UpdateMatrixContentItemCommand>();
         }
     }
 }
