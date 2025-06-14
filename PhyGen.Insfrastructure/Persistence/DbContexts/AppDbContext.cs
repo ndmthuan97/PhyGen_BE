@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Net.payOS.Types;
 using PhyGen.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -32,9 +33,8 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
         public DbSet<QuestionMedia> QuestionMedias { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<SubjectCurriculum> SubjectCurriculums { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Payments> Payments { get; set; }
         public DbSet<User> Users { get; set; }
-
 
 
         // Configure entities and table mappings, set constraints and properties for columns
@@ -210,14 +210,6 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.CurriculumId).IsRequired();
             });
 
-            modelBuilder.Entity<Transaction>(e =>
-            {
-                e.Property(p => p.UserId).IsRequired();
-                e.Property(p => p.Amount).HasColumnType("decimal(18,2)");
-                e.Property(p => p.Description);
-                e.Property(p => p.Status);
-                e.Property(p => p.CreatedAt).IsRequired();
-            });
 
             modelBuilder.Entity<User>(e =>
             {

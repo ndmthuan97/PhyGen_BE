@@ -4,6 +4,7 @@ using PhyGen.API.Mapping;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
+using PhyGen.Application.PayOs.Interfaces;
 using PhyGen.Insfrastructure.Extensions;
 using PhyGen.Insfrastructure.Identity;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
@@ -36,6 +37,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.Configure<PhyGen.Application.PayOs.Config.PayOSConfig>(builder.Configuration.GetSection("PayOS"));
 
 // 🔐 JWT Authentication Configuration
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
