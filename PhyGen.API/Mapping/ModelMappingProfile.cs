@@ -5,20 +5,21 @@ using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Chapters.Commands;
 using PhyGen.Application.ChapterUnits.Commands;
 using PhyGen.Application.ContentFlows.Commands;
+using PhyGen.Application.ContentItemExamCategories.Commands;
 using PhyGen.Application.ContentItems.Commands;
 using PhyGen.Application.Curriculums.Commands;
-using PhyGen.Application.ExamCategoryChapters.Commands;
-using PhyGen.Domain.Entities;
-using PhyGen.Application.Exams.Commands;
-using PhyGen.Application.SubjectCurriculums.Commands;
-using PhyGen.Application.Subjects.Commands;
 using PhyGen.Application.ExamCategories.Commands;
-using PhyGen.Application.ContentItemExamCategories.Commands;
-using PhyGen.Application.Questions.Commands;
+using PhyGen.Application.ExamCategoryChapters.Commands;
 using PhyGen.Application.ExamQuestions.Commands;
-using PhyGen.Application.QuestionMedias.Commands;
+using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Matrices.Commands;
 using PhyGen.Application.MatrixContentItems.Commands;
+using PhyGen.Application.PayOs.Response;
+using PhyGen.Application.QuestionMedias.Commands;
+using PhyGen.Application.Questions.Commands;
+using PhyGen.Application.SubjectCurriculums.Commands;
+using PhyGen.Application.Subjects.Commands;
+using PhyGen.Domain.Entities;
 
 namespace PhyGen.API.Mapping
 {
@@ -35,6 +36,7 @@ namespace PhyGen.API.Mapping
 
             CreateMap<LoginDto, LoginRequest>().ReverseMap();
             CreateMap<User, UserDtos>();
+            CreateMap<Payments, SearchPaymentResponse>();
             // Mapping for Curriculum
             CreateMap<CreateCurriculumRequest, CreateCurriculumCommand>();
             CreateMap<UpdateCurriculumRequest, UpdateCurriculumCommand>();
