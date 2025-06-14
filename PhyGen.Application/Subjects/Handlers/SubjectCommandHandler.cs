@@ -47,7 +47,7 @@ namespace PhyGen.Application.Subjects.Handlers
 
         public async Task<Unit> Handle(UpdateSubjectCommand request, CancellationToken cancellationToken)
         {
-            var subject = await _subjectRepository.GetByIdAsync(request.SubjectId) ?? throw new SubjectNotFoundException();
+            var subject = await _subjectRepository.GetByIdAsync(request.Id) ?? throw new SubjectNotFoundException();
 
             if (await _subjectRepository.GetSubjectByNameAsync(request.Name) != null)
                 throw new SubjectSameNameException();

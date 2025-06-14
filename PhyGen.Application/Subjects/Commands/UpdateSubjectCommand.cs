@@ -9,7 +9,7 @@ namespace PhyGen.Application.Subjects.Commands
 {
     public class UpdateSubjectCommand : IRequest<Unit>
     {
-        public Guid SubjectId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 }
