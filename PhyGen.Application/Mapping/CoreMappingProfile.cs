@@ -21,6 +21,10 @@ using PhyGen.Application.ExamQuestions.Commands;
 using PhyGen.Application.ExamQuestions.Responses;
 using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Exams.Responses;
+using PhyGen.Application.Matrices.Commands;
+using PhyGen.Application.Matrices.Responses;
+using PhyGen.Application.MatrixContentItems.Commands;
+using PhyGen.Application.MatrixContentItems.Responses;
 using PhyGen.Application.QuestionMedias.Commands;
 using PhyGen.Application.QuestionMedias.Responses;
 using PhyGen.Application.Questions.Commands;
@@ -117,6 +121,17 @@ namespace PhyGen.Application.Mapping
             CreateMap<QuestionMedia, QuestionMediaResponse>();
             CreateMap<CreateQuestionMediaCommand, QuestionMedia>();
             CreateMap<UpdateQuestionMediaCommand, QuestionMedia>();
+
+            // Mapping for Matrix
+            CreateMap<Matrix, MatrixResponse>();
+            CreateMap<CreateMatrixCommand, Matrix>();
+            CreateMap<UpdateMatrixCommand, Matrix>();
+            CreateMap<DeleteMatrixCommand, Matrix>();
+
+            // Mapping for Matrix Content Item
+            CreateMap<MatrixContentItem, MatrixContentItemResponse>();
+            CreateMap<CreateMatrixContentItemCommand, MatrixContentItem>();
+            CreateMap<UpdateMatrixContentItemCommand, MatrixContentItem>();
         }
     }
 }
