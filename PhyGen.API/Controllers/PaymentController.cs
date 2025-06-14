@@ -63,5 +63,11 @@ namespace PhyGen.API.Controllers
             return BadRequest(result.Message);
         }
 
+        [HttpPost("search")]
+        public async Task<IActionResult> Search([FromBody] PaymentSearchRequest request)
+        {
+            var result = await _paymentService.SearchPaymentsAsync(request);
+            return Ok(result);
+        }
     }
 }

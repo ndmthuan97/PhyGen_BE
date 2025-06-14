@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Net.payOS;
 using Net.payOS.Types;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static StackExchange.Redis.Role;
 
 namespace PhyGen.Insfrastructure.Service
 {
@@ -23,12 +25,15 @@ namespace PhyGen.Insfrastructure.Service
         private readonly PayOS _payOS;
         private readonly AppDbContext _context;
         private readonly PayOSConfig _config;
+        private readonly IMapper _mapper;
 
-        public PaymentService(IOptions<PayOSConfig> config, AppDbContext context)
+        public PaymentService(IOptions<PayOSConfig> config, AppDbContext context, IMapper mapper)
         {
             _config = config.Value;
             _payOS = new PayOS(_config.ClientId, _config.ApiKey, _config.ChecksumKey);
             _context = context;
+            _mapper = mapper;
+
         }
 
         public async Task<PaymentResponse> CreatePaymentLinkAsync(PaymentRequest request)
@@ -169,6 +174,41 @@ namespace PhyGen.Insfrastructure.Service
                     Message = err
                 };
             }
+        }
+        public async Task<List<SearchPaymentResponse>> SearchPaymentsAsync(PaymentSearchRequest request)
+        {
+            var query = _context.Payments.AsQueryable();
+
+            Console.WriteLine("Filter by UserId: " + request.UserId);
+            query = query.Where(p => p.UserId == request.UserId);
+
+            if (request.FromDate.HasValue)
+            {
+                Console.WriteLine("Filter by FromDate: " + request.FromDate.Value);
+                query = query.Where(p => p.CreatedAt >= request.FromDate.Value);
+            }
+
+            if (request.ToDate.HasValue)
+            {
+                Console.WriteLine("Filter by ToDate: " + request.ToDate.Value);
+                query = query.Where(p => p.CreatedAt <= request.ToDate.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Status))
+            {
+                var statusNormalized = request.Status.Trim().ToUpperInvariant();
+                Console.WriteLine("Filter by Status: " + statusNormalized);
+                query = query.Where(p => p.Status.ToUpper() == statusNormalized);
+            }
+
+            // 👉 THÊM ORDERBYDESCENDING Ở ĐÂY
+            query = query.OrderByDescending(p => p.CreatedAt);
+
+            var result = await query.ToListAsync();
+
+            Console.WriteLine("Found: " + result.Count);
+
+            return _mapper.Map<List<SearchPaymentResponse>>(result);
         }
 
     }
