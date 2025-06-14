@@ -14,8 +14,8 @@ namespace PhyGen.Application.Authentication.DTOs.Dtos
         public string Email { get; set; } = string.Empty;
         public string PhotoURL { get; set; } = string.Empty;
         public string? Role { get; set; }
-        public string? Address { get; set; }
         public string? Phone { get; set; }
         public bool IsConfirm { get; set; }
+        public DateTime DateOfBirth { get; set; }
     }
 }

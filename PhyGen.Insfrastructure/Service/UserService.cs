@@ -71,7 +71,6 @@ public class UserService : IUserService
         // Cập nhật thông tin
         user.FirstName = request.FirstName;
         user.LastName = request.LastName;
-        user.Address = request.Address;
         user.Phone = request.Phone;
         user.photoURL = request.PhotoURL;
         user.Gender = request.Gender;
