@@ -17,5 +17,6 @@ namespace PhyGen.Application.Authentication.DTOs.Dtos
         public string? Phone { get; set; }
         public bool IsConfirm { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public string Gender { get; set; } = string.Empty;
     }
 }

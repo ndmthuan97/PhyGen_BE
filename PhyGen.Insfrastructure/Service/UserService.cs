@@ -50,10 +50,12 @@ public class UserService : IUserService
             throw new ArgumentException("Số điện thoại phải có 10 số và bắt đầu từ số 0");
         }
 
+        DateTime dateOfBirth = request.DateOfBirth;
+
         // Kiểm tra DateOfBirth phải >= 18 tuổi
-        if (!DateTime.TryParse(request.DayOfBirth, out DateTime dateOfBirth))
+        if ((DateTime.UtcNow - dateOfBirth).TotalDays < 18 * 365.25)
         {
-            throw new ArgumentException("Vui lòng nhập chính xác ngày tháng năm sinh");
+            throw new ArgumentException("Người dùng phải >= 18 tuổi");
         }
 
         // Chuyển DateTime sang UTC nếu cần (nếu client gửi dạng local)
