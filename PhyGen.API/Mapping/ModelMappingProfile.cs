@@ -14,6 +14,8 @@ using PhyGen.Application.ExamQuestions.Commands;
 using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Matrices.Commands;
 using PhyGen.Application.MatrixContentItems.Commands;
+using PhyGen.Application.Notification.Commands;
+using PhyGen.Application.Notification.Responses;
 using PhyGen.Application.PayOs.Response;
 using PhyGen.Application.QuestionMedias.Commands;
 using PhyGen.Application.Questions.Commands;
@@ -33,10 +35,23 @@ namespace PhyGen.API.Mapping
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password.Trim()))
                 .ForMember(dest => dest.ConfirmPassword, opt => opt.MapFrom(src => src.ConfirmPassword.Trim()))
                 .ReverseMap();
-
             CreateMap<LoginDto, LoginRequest>().ReverseMap();
+
+            //Mapping fot User
             CreateMap<User, UserDtos>();
+
+            //Mapping for Payments
             CreateMap<Payments, SearchPaymentResponse>();
+
+            // Mapping for Notification
+            CreateMap<Notification, NotificationResponse>()
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+            .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Message))
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
+
+            CreateMap<UpdateNotificationRequest, UpdateNotificationCommand>();
+            CreateMap<CreateNotificationRequest, CreateNotificationCommand>();
+
             // Mapping for Curriculum
             CreateMap<CreateCurriculumRequest, CreateCurriculumCommand>();
             CreateMap<UpdateCurriculumRequest, UpdateCurriculumCommand>();

@@ -98,5 +98,8 @@ namespace PhyGen.Shared.Constants
 
         // Matrix Content Item errors (2540–2559)
         MatrixContentItemNotFound = 2540,
+
+        // Notification errors (2540–2559)
+        NotifcationNotFound = 2541,
     }
 }
