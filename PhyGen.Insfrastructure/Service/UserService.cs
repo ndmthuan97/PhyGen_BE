@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
+using PhyGen.Application.Users.Dtos;
 using PhyGen.Application.Users.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
@@ -81,5 +82,33 @@ public class UserService : IUserService
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
         return _mapper.Map<UserDtos>(user);
+    }
+    public async Task<List<UserDtos>> GetAllProfilesAsync(ProfileFilter filter)
+    {
+        var query = _context.Users.AsQueryable();
+
+        if (filter.IsConfirm.HasValue)
+        {
+            query = query.Where(u => u.isConfirm == filter.IsConfirm.Value);
+        }
+
+        if (filter.IsActive.HasValue)
+        {
+            query = query.Where(u => u.IsActive == filter.IsActive.Value);
+        }
+
+        if (filter.FromDate.HasValue)
+        {
+            var fromUtc = DateTime.SpecifyKind(filter.FromDate.Value, DateTimeKind.Utc);
+            query = query.Where(u => u.CreatedAt >= fromUtc);
+        }
+
+        if (filter.ToDate.HasValue)
+        {
+            var toUtc = DateTime.SpecifyKind(filter.ToDate.Value, DateTimeKind.Utc);
+            query = query.Where(u => u.CreatedAt <= toUtc);
+        }
+        var users = await query.ToListAsync();
+        return _mapper.Map<List<UserDtos>>(users);
     }
 }
