@@ -97,6 +97,9 @@ namespace PhyGen.Shared.Constants
 
             // Matrix Content Item messages
             { StatusCode.MatrixContentItemNotFound, "Không tìm thấy mục nội dung ma trận với mã được cung cấp." },
+
+            // Notification messages
+            { StatusCode.NotifcationNotFound, "Không tìm thấy thông báo với mã được cung cấp." },
         };
 
         public static string GetMessage(StatusCode code)

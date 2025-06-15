@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
+using PhyGen.Application.Users.Dtos;
 using PhyGen.Application.Users.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
@@ -50,10 +51,12 @@ public class UserService : IUserService
             throw new ArgumentException("Số điện thoại phải có 10 số và bắt đầu từ số 0");
         }
 
+        DateTime dateOfBirth = request.DateOfBirth;
+
         // Kiểm tra DateOfBirth phải >= 18 tuổi
-        if (!DateTime.TryParse(request.DayOfBirth, out DateTime dateOfBirth))
+        if ((DateTime.UtcNow - dateOfBirth).TotalDays < 18 * 365.25)
         {
-            throw new ArgumentException("Vui lòng nhập chính xác ngày tháng năm sinh");
+            throw new ArgumentException("Người dùng phải >= 18 tuổi");
         }
 
         // Chuyển DateTime sang UTC nếu cần (nếu client gửi dạng local)
@@ -79,5 +82,33 @@ public class UserService : IUserService
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
         return _mapper.Map<UserDtos>(user);
+    }
+    public async Task<List<UserDtos>> GetAllProfilesAsync(ProfileFilter filter)
+    {
+        var query = _context.Users.AsQueryable();
+
+        if (filter.IsConfirm.HasValue)
+        {
+            query = query.Where(u => u.isConfirm == filter.IsConfirm.Value);
+        }
+
+        if (filter.IsActive.HasValue)
+        {
+            query = query.Where(u => u.IsActive == filter.IsActive.Value);
+        }
+
+        if (filter.FromDate.HasValue)
+        {
+            var fromUtc = DateTime.SpecifyKind(filter.FromDate.Value, DateTimeKind.Utc);
+            query = query.Where(u => u.CreatedAt >= fromUtc);
+        }
+
+        if (filter.ToDate.HasValue)
+        {
+            var toUtc = DateTime.SpecifyKind(filter.ToDate.Value, DateTimeKind.Utc);
+            query = query.Where(u => u.CreatedAt <= toUtc);
+        }
+        var users = await query.ToListAsync();
+        return _mapper.Map<List<UserDtos>>(users);
     }
 }

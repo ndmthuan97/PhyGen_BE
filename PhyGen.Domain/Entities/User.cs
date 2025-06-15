@@ -32,7 +32,6 @@ namespace PhyGen.Domain.Entities
         public DateTime DateOfBirth { get; set; }
 
         public bool isConfirm { get; set; }
-
         public bool IsActive { get; set; }
 
         public int Coin { get; set; }

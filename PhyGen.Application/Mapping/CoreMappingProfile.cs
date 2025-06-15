@@ -25,6 +25,7 @@ using PhyGen.Application.Matrices.Commands;
 using PhyGen.Application.Matrices.Responses;
 using PhyGen.Application.MatrixContentItems.Commands;
 using PhyGen.Application.MatrixContentItems.Responses;
+using PhyGen.Application.Notification.Responses;
 using PhyGen.Application.QuestionMedias.Commands;
 using PhyGen.Application.QuestionMedias.Responses;
 using PhyGen.Application.Questions.Commands;
@@ -50,6 +51,13 @@ namespace PhyGen.Application.Mapping
             // Mapping for Auth
             CreateMap<RegisterRequest, RegisterDto>();
             CreateMap<LoginRequest, LoginDto>();
+
+            //Mapping for Notification
+            CreateMap<PhyGen.Domain.Entities.Notification, NotificationResponse>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+                .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Message))
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
+
             // Mapping for Curriculum
             CreateMap<Curriculum, CurriculumResponse>();
             CreateMap<CreateCurriculumCommand, Curriculum>();

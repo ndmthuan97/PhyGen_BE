@@ -76,7 +76,8 @@ public class AuthService : IAuthService
             Email = email,
             Password = hashedPassword,
             Role = "User",
-            isConfirm = false
+            isConfirm = false,
+            CreatedAt = DateTime.UtcNow
         };
 
         _context.Users.Add(user);
