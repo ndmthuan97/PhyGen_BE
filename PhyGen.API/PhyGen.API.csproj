@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PhyGen.Application\PhyGen.Application.csproj" />
-    <ProjectReference Include="..\PhyGen.Insfrastructure\PhyGen.Insfrastructure.csproj" />
+    <ProjectReference Include="..\PhyGen.Insfrastructure\PhyGen.Infrastructure.csproj" />
     <ProjectReference Include="..\PhyGen.Shared\PhyGen.Shared.csproj" />
   </ItemGroup>
 

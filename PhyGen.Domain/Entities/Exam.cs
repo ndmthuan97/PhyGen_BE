@@ -10,36 +10,17 @@ namespace PhyGen.Domain.Entities
     public class Exam : EntityBase<Guid>
     {
         [Required]
-        public string Title { get; set; } = string.Empty;
+        public Guid UserId { get; set; }
 
         [Required]
-        public Guid MatrixId { get; set; }
-
+        public Guid CategoryId { get; set; }
         [Required]
-        public int CategoryId { get; set; }
-
-        [Required]
-        public Guid SubjectCurriculumId { get; set; }
-
-        public string? CreatedBy { get; set; }
-
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        public string? UpdatedBy { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public string? DeletedBy { get; set; }
-
-        public DateTime? DeletedAt { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         // Navigation Properties
-        public virtual Matrix Matrix { get; set; } = null!;
-
+        public virtual User User { get; set; } = null!;
         public virtual ExamCategory Category { get; set; } = null!;
-
-        public virtual SubjectCurriculum SubjectCurriculum { get; set; } = null!;
-
-        public virtual ICollection<ExamQuestion> ExamQuestions { get; set; } = new List<ExamQuestion>();
+        public virtual ICollection<Section> Sections { get; set; } = new List<Section>();
+        public virtual ICollection<ExamVersion> ExamVersions { get; set; } = new List<ExamVersion>();
     }
 }

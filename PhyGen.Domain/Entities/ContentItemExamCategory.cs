@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Entities
 {
-    public class ContentItemExamCategory : EntityBase<int>
+    public class ContentItemExamCategory : EntityBase<Guid>
     {
         [Required]
         public Guid ContentItemId { get; set; }
 
         [Required]
-        public int ExamCategoryId { get; set; }
+        public Guid ExamCategoryId { get; set; }
 
         public virtual ContentItem ContentItem { get; set; } = null!;
         public virtual ExamCategory ExamCategory { get; set; } = null!;

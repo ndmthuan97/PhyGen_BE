@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Entities
 {
-    public class MatrixContentItem : EntityBase<int>
+    public class MatrixContentItem : EntityBase<Guid>
     {
         [Required]
         public Guid MatrixId { get; set; }

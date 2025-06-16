@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhyGen.Domain", "PhyGen.Domain\PhyGen.Domain.csproj", "{1D35035E-6799-40AF-947E-62D5105B5FBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhyGen.Insfrastructure", "PhyGen.Insfrastructure\PhyGen.Insfrastructure.csproj", "{527D8ED2-89CA-4197-841A-FBF9648F4CA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhyGen.Infrastructure", "PhyGen.Insfrastructure\PhyGen.Infrastructure.csproj", "{527D8ED2-89CA-4197-841A-FBF9648F4CA0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhyGen.Shared", "PhyGen.Shared\PhyGen.Shared.csproj", "{468C6F3C-A0E1-4423-B3BE-EA1D72A23512}"
 EndProject

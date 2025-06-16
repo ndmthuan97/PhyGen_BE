@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -8,21 +7,20 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Entities
 {
-    public class Notification : EntityBase<Guid>
+    public class Payment : EntityBase<Guid>
     {
         [Required]
         public Guid UserId { get; set; }
 
-        public string Title { get; set; } = string.Empty;
+        public decimal Amount { get; set; }
 
-        [Column(TypeName = "text")]
-        public string Message { get; set; } = string.Empty;
+        public string? Description { get; set; }
 
-        public bool IsRead { get; set; }
+        public string? Status { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation Property
+        // Navigation Properties
         public virtual User User { get; set; } = null!;
     }
 }

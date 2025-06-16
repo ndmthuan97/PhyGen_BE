@@ -16,7 +16,6 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
 
         // Declare DbSets corresponding to tables in the database
         public DbSet<Chapter> Chapters { get; set; }
-        public DbSet<ChapterUnit> ChapterUnits { get; set; }
         public DbSet<ContentFlow> ContentFlows { get; set; }
         public DbSet<ContentItem> ContentItems { get; set; }
         public DbSet<ContentItemExamCategory> ContentItemExamCategories { get; set; }
@@ -25,15 +24,20 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
         public DbSet<Exam> Exams { get; set; }
         public DbSet<ExamCategory> ExamCategories { get; set; }
         public DbSet<ExamCategoryChapter> ExamCategoryChapters { get; set; }
-        public DbSet<ExamQuestion> ExamQuestions { get; set; }
+        public DbSet<ExamVersion> ExamVersions { get; set; }
         public DbSet<Matrix> Matrices { get; set; }
         public DbSet<MatrixContentItem> MatrixContentItems { get; set; }
+        public DbSet<MatrixSection> MatrixSections { get; set; }
+        public DbSet<MatrixSectionDetail> MatrixSectionDetails { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionMedia> QuestionMedias { get; set; }
+        public DbSet<QuestionSection> QuestionSections { get; set; }
+        public DbSet<Section> Sections { get; set; }
         public DbSet<Subject> Subjects { get; set; }
-        public DbSet<SubjectCurriculum> SubjectCurriculums { get; set; }
-        public DbSet<Payments> Payments { get; set; }
+        public DbSet<SubjectBook> SubjectBooks { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<User> Users { get; set; }
 
 
@@ -56,43 +60,22 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
             modelBuilder.Entity<Chapter>(e =>
             {
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
-                e.Property(p => p.SubjectCurriculumId).IsRequired();
+                e.Property(p => p.SubjectBookId).IsRequired();
                 e.Property(p => p.OrderNo);
-                e.Property(p => p.CreatedBy);
-                e.Property(p => p.CreatedAt).IsRequired();
-                e.Property(p => p.UpdatedBy);
-                e.Property(p => p.UpdatedAt);
-                e.Property(p => p.DeletedBy);
-                e.Property(p => p.DeletedAt);
             });
-
-            modelBuilder.Entity<ChapterUnit>(e =>
-            {
-                e.Property(p => p.ChapterId).IsRequired();
-                e.Property(p => p.Name).HasMaxLength(255).IsRequired();
-                e.Property(p => p.Description).HasColumnType("text");
-                e.Property(p => p.OrderNo);
-                e.Property(p => p.CreatedBy);
-                e.Property(p => p.CreatedAt).IsRequired();
-                e.Property(p => p.UpdatedBy);
-                e.Property(p => p.UpdatedAt);
-                e.Property(p => p.DeletedBy);
-                e.Property(p => p.DeletedAt);
-            });
-
             modelBuilder.Entity<ContentFlow>(e =>
             {
-                e.Property(p => p.Name).HasMaxLength(255).IsRequired();
-                e.Property(p => p.Description).HasMaxLength(500).IsRequired();
+                e.Property(p => p.CurriculumId).IsRequired();
                 e.Property(p => p.SubjectId).IsRequired();
+                e.Property(p => p.Name).IsRequired();
+                e.Property(p => p.Description);
             });
 
             modelBuilder.Entity<ContentItem>(e =>
             {
                 e.Property(p => p.ContentFlowId).IsRequired();
-                e.Property(p => p.Title).HasMaxLength(255).IsRequired();
-                e.Property(p => p.LearningOutcome).HasMaxLength(500).IsRequired();
-                e.Property(p => p.CreatedAt).IsRequired();
+                e.Property(p => p.Name).IsRequired();
+                e.Property(p => p.LearningOutcome);
             });
 
             modelBuilder.Entity<ContentItemExamCategory>(e =>
@@ -115,24 +98,16 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.Expiration).IsRequired();
                 e.Property(p => p.Createddate);
             });
-
             modelBuilder.Entity<Exam>(e =>
             {
-                e.Property(p => p.Title).HasMaxLength(255).IsRequired();
-                e.Property(p => p.MatrixId).IsRequired();
+                e.Property(p => p.UserId).IsRequired();
                 e.Property(p => p.CategoryId).IsRequired();
-                e.Property(p => p.SubjectCurriculumId).IsRequired();
-                e.Property(p => p.CreatedBy);
-                e.Property(p => p.CreatedAt).IsRequired();
-                e.Property(p => p.UpdatedBy);
-                e.Property(p => p.UpdatedAt);
-                e.Property(p => p.DeletedBy);
-                e.Property(p => p.DeletedAt);
+                e.Property(p => p.Name).IsRequired();
             });
 
             modelBuilder.Entity<ExamCategory>(e =>
             {
-                e.Property(p => p.Name).HasMaxLength(255).IsRequired();
+                e.Property(p => p.Name).IsRequired();
             });
 
             modelBuilder.Entity<ExamCategoryChapter>(e =>
@@ -141,25 +116,18 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.ChapterId).IsRequired();
             });
 
-            modelBuilder.Entity<ExamQuestion>(e =>
+            modelBuilder.Entity<ExamVersion>(e =>
             {
-                e.Property(p => p.ExamId).IsRequired();
-                e.Property(p => p.QuestionId).IsRequired();
+                e.Property(p => p.ExamId);
             });
 
             modelBuilder.Entity<Matrix>(e =>
             {
-                e.Property(p => p.Name).HasMaxLength(255).IsRequired();
-                e.Property(p => p.Description).HasMaxLength(500).IsRequired();
-                e.Property(p => p.Grade).HasMaxLength(50).IsRequired();
                 e.Property(p => p.SubjectId).IsRequired();
                 e.Property(p => p.ExamCategoryId).IsRequired();
-                e.Property(p => p.CreatedBy);
-                e.Property(p => p.CreatedAt).IsRequired();
-                e.Property(p => p.UpdatedBy);
-                e.Property(p => p.UpdatedAt);
-                e.Property(p => p.DeletedBy);
-                e.Property(p => p.DeletedAt);
+                e.Property(p => p.Name);
+                e.Property(p => p.Description);
+                e.Property(p => p.Grade);
             });
 
             modelBuilder.Entity<MatrixContentItem>(e =>
@@ -168,15 +136,34 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.ContentItemId).IsRequired();
             });
 
+            modelBuilder.Entity<MatrixSection>(e =>
+            {
+                // Không có thuộc tính nào cần cấu hình ở đây
+            });
+
+            modelBuilder.Entity<MatrixSectionDetail>(e =>
+            {
+                e.Property(p => p.MatrixSectionId).IsRequired();
+                e.Property(p => p.SectionId).IsRequired();
+            });
+
             modelBuilder.Entity<Notification>(e => e.Property(p => p.IsRead).HasDefaultValue(false));
+            modelBuilder.Entity<Payment>(e =>
+            {
+                e.Property(p => p.UserId).IsRequired();
+                e.Property(p => p.Amount);
+                e.Property(p => p.Description);
+                e.Property(p => p.Status);
+                e.Property(p => p.CreatedAt); // Không cần IsRequired() nếu không yêu cầu
+            });
 
             modelBuilder.Entity<Question>(e =>
             {
+                e.Property(p => p.TopicId).IsRequired();
                 e.Property(p => p.Content).IsRequired();
                 e.Property(p => p.Type);
                 e.Property(p => p.Level);
                 e.Property(p => p.Image);
-                e.Property(p => p.ChapterUnitId).IsRequired();
                 e.Property(p => p.Answer1);
                 e.Property(p => p.Answer2);
                 e.Property(p => p.Answer3);
@@ -184,19 +171,24 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.Answer5);
                 e.Property(p => p.Answer6);
                 e.Property(p => p.CorrectAnswer);
-                e.Property(p => p.CreatedBy);
-                e.Property(p => p.CreatedAt).IsRequired();
-                e.Property(p => p.UpdatedBy);
-                e.Property(p => p.UpdatedAt);
-                e.Property(p => p.DeletedBy);
-                e.Property(p => p.DeletedAt);
             });
 
             modelBuilder.Entity<QuestionMedia>(e =>
             {
                 e.Property(p => p.QuestionId).IsRequired();
-                e.Property(p => p.MediaType);
+                e.Property(p => p.MediaType).IsRequired();
                 e.Property(p => p.Url).IsRequired();
+            });
+
+            modelBuilder.Entity<QuestionSection>(e =>
+            {
+                e.Property(p => p.QuestionId).IsRequired();
+                e.Property(p => p.SectionId).IsRequired();
+            });
+
+            modelBuilder.Entity<Section>(e =>
+            {
+                e.Property(p => p.ExamId).IsRequired();
             });
 
             modelBuilder.Entity<Subject>(e =>
@@ -204,12 +196,19 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.Name).IsRequired();
             });
 
-            modelBuilder.Entity<SubjectCurriculum>(e =>
+            modelBuilder.Entity<SubjectBook>(e =>
             {
                 e.Property(p => p.SubjectId).IsRequired();
-                e.Property(p => p.CurriculumId).IsRequired();
+                e.Property(p => p.Name).IsRequired();
+                e.Property(p => p.Grade).IsRequired();
             });
 
+            modelBuilder.Entity<Topic>(e =>
+            {
+                e.Property(p => p.ChapterId).IsRequired();
+                e.Property(p => p.Name).IsRequired();
+                e.Property(p => p.OrderNo);
+            });
 
             modelBuilder.Entity<User>(e =>
             {
@@ -220,7 +219,6 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.Gender);
                 e.Property(p => p.photoURL);
                 e.Property(p => p.Role);
-                e.Property(p => p.Address);
                 e.Property(p => p.Phone);
                 e.Property(p => p.DateOfBirth);
                 e.Property(p => p.isConfirm).IsRequired();

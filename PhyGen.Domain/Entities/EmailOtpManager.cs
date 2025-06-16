@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Entities
 {
-    public class EmailOtpManager
+    public class EmailOtpManager : EntityBase<int>
     {
-        public int Id { get; set; }
         public string? Email { get; set; }
         public string Otptext { get; set; } = null!;
         public string? Otptype { get; set; }

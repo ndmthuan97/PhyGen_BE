@@ -25,8 +25,6 @@ namespace PhyGen.Domain.Entities
 
         public string? Role { get; set; }
 
-        public string? Address { get; set; }
-
         public string? Phone { get; set; }
 
         public DateTime DateOfBirth { get; set; }
@@ -39,10 +37,9 @@ namespace PhyGen.Domain.Entities
         public DateTime CreatedAt { get; set; }
 
         // Navigation Properties
-        public virtual ICollection<Matrix> Matrices { get; set; } = new List<Matrix>();
-        public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
         public virtual ICollection<Exam> Exams { get; set; } = new List<Exam>();
+        public virtual ICollection<EmailOtpManager> EmailOtpManagers { get; set; } = new List<EmailOtpManager>();
         public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-        public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public virtual ICollection<Payment> Transactions { get; set; } = new List<Payment>();
     }
 }

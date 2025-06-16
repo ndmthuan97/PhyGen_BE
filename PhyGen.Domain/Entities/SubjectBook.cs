@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Entities
 {
-    public class ContentFlow : EntityBase<Guid>
+    public class SubjectBook : EntityBase<Guid>
     {
-        public Guid CurriculumId { get; set; }
         public Guid SubjectId { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public int Grade { get; set; }
 
+        // Navigation Properties
         public virtual Subject Subject { get; set; } = null!;
-        public virtual ICollection<ContentItem> ContentItems { get; set; } = new List<ContentItem>();
+        public virtual ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
     }
 }

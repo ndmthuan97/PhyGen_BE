@@ -11,6 +11,6 @@ namespace PhyGen.Domain.Entities
         public string Name { get; set; } = string.Empty;
 
         public virtual ICollection<Matrix> Matrices { get; set; } = new List<Matrix>();
-        public virtual ICollection<SubjectCurriculum> SubjectCurriculums { get; set; } = new List<SubjectCurriculum>();
+        public virtual ICollection<SubjectBook> SubjectBooks { get; set; } = new List<SubjectBook>();
     }
 }
