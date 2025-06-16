@@ -1,0 +1,52 @@
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using PhyGen.Application.Mapping;
+using PhyGen.Domain.Interfaces;
+using PhyGen.Insfrastructure.Persistence.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PhyGen.Insfrastructure.Extensions
+{
+    public static class InfrastructureExtension
+    {
+        public static IServiceCollection AddCoreInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        {
+            var applicationAssemblies = new[] {
+                typeof(CoreMappingProfile).Assembly,
+            };
+
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(applicationAssemblies));
+            services.AddAutoMapper(applicationAssemblies);
+
+
+            CommonInfrastrucutre(services, configuration);
+            return services;
+        }
+
+        private static void CommonInfrastrucutre(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped(typeof(IAsyncRepository<,>), typeof(RepositoryBase<,>));
+            services.AddScoped<ICurriculumRepository, CurriculumRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IChapterRepository, ChapterRepository>();
+            services.AddScoped<IChapterUnitRepository, ChapterUnitRepository>();
+            services.AddScoped<ISubjectCurriculumRepository, SubjectCurriculumRepository>();
+            services.AddScoped<ISubjectRepository, SubjectRepository>();
+            services.AddScoped<IExamRepository, ExamRepository>();
+            services.AddScoped<IExamCategoryChapterRepository, ExamCategoryChapterRepository>();
+            services.AddScoped<IContentFlowRepository, ContentFlowRepository>();
+            services.AddScoped<IContentItemRepository, ContentItemRepository>();
+            services.AddScoped<IExamCategoryRepository, ExamCategoryRepository>();
+            services.AddScoped<IContentItemExamCategoryRepository, ContentItemExamCategoryRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IExamQuestionRepository, ExamQuestionRepository>();
+            services.AddScoped<IQuestionMediaRepository, QuestionMediaRepository>();
+            services.AddScoped<IMatrixRepository, MatrixRepository>();
+            services.AddScoped<IMatrixContentItemRepository, MatrixContentItemRepository>();
+        }
+    }
+}
