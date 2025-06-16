@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Users.Exceptions;
+using PhyGen.Application.Users.Dtos;
 
 namespace PhyGen.API.Controllers
 {
@@ -23,10 +24,10 @@ namespace PhyGen.API.Controllers
             _userService = userService;
         }
 
+        [Authorize]
         [HttpGet("profile")]
         public async Task<IActionResult> ViewProfile()
         {
-            // Lấy email từ claims trong JWT
             var email = User.FindFirstValue(ClaimTypes.Email);
 
             if (string.IsNullOrEmpty(email))
@@ -52,6 +53,24 @@ namespace PhyGen.API.Controllers
             return Ok(updatedUser);
         }
 
+        [AllowAnonymous]
+        [HttpGet("getAllProfiles")]
+        public async Task<IActionResult> GetAllProfiles(
+            [FromQuery] bool? isConfirm,
+            [FromQuery] bool? isActive,
+            [FromQuery] DateTime? fromDate,
+            [FromQuery] DateTime? toDate)
+        {
+            var filter = new ProfileFilter
+            {
+                IsConfirm = isConfirm,
+                IsActive = isActive,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
 
+            var profiles = await _userService.GetAllProfilesAsync(filter);
+            return Ok(profiles);
+        }
     }
 }
