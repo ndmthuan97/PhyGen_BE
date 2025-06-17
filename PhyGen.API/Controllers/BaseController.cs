@@ -11,7 +11,7 @@ namespace PhyGen.API.Controllers
     [ApiController]
     public class BaseController<TController> : ControllerBase
     {
-        private readonly IMediator _mediator;
+        protected readonly IMediator _mediator;
         private readonly ILogger<BaseController<TController>> _logger;
 
         protected BaseController(IMediator mediator, ILogger<BaseController<TController>> logger)

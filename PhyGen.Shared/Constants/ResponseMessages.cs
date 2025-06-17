@@ -100,6 +100,7 @@ namespace PhyGen.Shared.Constants
 
             // Notification messages
             { StatusCode.NotifcationNotFound, "Không tìm thấy thông báo với mã được cung cấp." },
+            { StatusCode.NotifcationSend, "Thông báo này đã được gửi." },
         };
 
         public static string GetMessage(StatusCode code)

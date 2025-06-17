@@ -10,5 +10,6 @@ namespace PhyGen.Application.Notification.Queries
 {
     public class GetAllNotificationQuery : IRequest<List<NotificationResponse>>
     {
+        public Guid Id { get; set; }
     }
 }

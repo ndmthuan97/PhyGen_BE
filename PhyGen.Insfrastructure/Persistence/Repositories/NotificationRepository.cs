@@ -11,8 +11,21 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
 {
     public class NotificationRepository : RepositoryBase<Notification, int>, INotificationRepository
     {
+        private readonly AppDbContext _context;
+
         public NotificationRepository(AppDbContext context) : base(context)
         {
+            _context = context;
+        }
+        public async Task<List<Notification>> GetByUserIdAsync(Guid id)
+        {
+            if (id == null)
+                return new List<Notification>();
+
+            return await _context.Notifications
+                .Where(n => n.UserId == id)
+                .OrderByDescending(n => n.CreatedAt)
+                .ToListAsync();
         }
     }
 }

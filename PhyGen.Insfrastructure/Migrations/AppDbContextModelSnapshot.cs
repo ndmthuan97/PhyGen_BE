@@ -498,7 +498,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -977,13 +977,10 @@ namespace PhyGen.Insfrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Notification", b =>
                 {
-                    b.HasOne("PhyGen.Domain.Entities.User", "User")
+                    b.HasOne("PhyGen.Domain.Entities.User", null)
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Question", b =>

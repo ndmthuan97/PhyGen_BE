@@ -6,8 +6,10 @@ using PhyGen.API.Models;
 using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.Notification.Commands;
+using PhyGen.Application.Notification.Exceptions;
 using PhyGen.Application.Notification.Queries;
 using PhyGen.Application.Notification.Responses;
+using PhyGen.Application.Users.Dtos;
 using PhyGen.Domain.Entities;
 using PhyGen.Shared;
 using PhyGen.Shared.Constants;
@@ -24,9 +26,9 @@ namespace PhyGen.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<List<NotificationResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAllNotification()
+        public async Task<IActionResult> GetAllNotification([FromQuery] Guid userId)
         {
-            var request = new GetAllNotificationQuery();
+            var request = new GetAllNotificationQuery { Id = userId };
             return await ExecuteAsync<GetAllNotificationQuery, List<NotificationResponse>>(request);
         }
 
@@ -38,19 +40,19 @@ namespace PhyGen.API.Controllers
                 return HandleNullRequest();
 
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateNotificationCommand>(request);
-            return await ExecuteAsync<CreateNotificationCommand, Guid>(command);
+            return await ExecuteAsync<CreateNotificationCommand, NotificationResponse>(command);
         }
 
         [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateNotification([FromBody] UpdateNotificationRequest request)
-        {
+            {
             if (request == null)
                 return HandleNullRequest();
 
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateNotificationCommand>(request);
             return await ExecuteAsync<UpdateNotificationCommand, Unit>(command);
-        }
+            }
 
         [HttpDelete("{notificationId}")]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
@@ -61,6 +63,20 @@ namespace PhyGen.API.Controllers
                 Id = notificationId
             }; 
             return await ExecuteAsync<DeleteNotificationCommand, Unit>(command);
+        }
+
+        [HttpPost("send")]
+        public async Task<IActionResult> SendNotification(
+            [FromQuery] int Id,
+            [FromQuery] Guid? UserId)
+        {
+            var filter = new SendNotificationCommand
+            {
+                Id = Id,    
+                UserId = UserId
+            };
+            var result = await _mediator.Send(filter);
+            return Ok(new NotificationSend {});
         }
 
         private IActionResult HandleNullRequest()

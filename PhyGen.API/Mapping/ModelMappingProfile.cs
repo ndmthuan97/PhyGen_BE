@@ -44,10 +44,7 @@ namespace PhyGen.API.Mapping
             CreateMap<Payments, SearchPaymentResponse>();
 
             // Mapping for Notification
-            CreateMap<Notification, NotificationResponse>()
-            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
-            .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Message))
-            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
+            CreateMap<Notification, NotificationResponse>();
 
             CreateMap<UpdateNotificationRequest, UpdateNotificationCommand>();
             CreateMap<CreateNotificationRequest, CreateNotificationCommand>();

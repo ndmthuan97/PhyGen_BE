@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Insfrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250614095338_InitialCreate")]
+    [Migration("20250617043132_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -501,7 +501,7 @@ namespace PhyGen.Insfrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -980,13 +980,10 @@ namespace PhyGen.Insfrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Notification", b =>
                 {
-                    b.HasOne("PhyGen.Domain.Entities.User", "User")
+                    b.HasOne("PhyGen.Domain.Entities.User", null)
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Question", b =>

@@ -86,6 +86,10 @@ public class UserService : IUserService
     public async Task<List<UserDtos>> GetAllProfilesAsync(ProfileFilter filter)
     {
         var query = _context.Users.AsQueryable();
+        if (filter.Id.HasValue)
+        {
+            query = query.Where(u => u.Id == filter.Id);
+        }
 
         if (filter.IsConfirm.HasValue)
         {
@@ -108,6 +112,7 @@ public class UserService : IUserService
             var toUtc = DateTime.SpecifyKind(filter.ToDate.Value, DateTimeKind.Utc);
             query = query.Where(u => u.CreatedAt <= toUtc);
         }
+        query = query.OrderByDescending(u => u.CreatedAt);
         var users = await query.ToListAsync();
         return _mapper.Map<List<UserDtos>>(users);
     }

@@ -101,5 +101,6 @@ namespace PhyGen.Shared.Constants
 
         // Notification errors (2540–2559)
         NotifcationNotFound = 2541,
+        NotifcationSend = 2542,
     }
 }

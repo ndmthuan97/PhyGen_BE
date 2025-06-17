@@ -8,6 +8,7 @@ namespace PhyGen.Application.Users.Dtos
 {
     public class ProfileFilter
     {
+        public Guid? Id { get; set; }
         public bool? IsConfirm { get; set; }
         public bool? IsActive { get; set; }
         public DateTime? FromDate { get; set; }

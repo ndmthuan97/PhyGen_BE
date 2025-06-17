@@ -133,6 +133,7 @@ public class AuthService : IAuthService
 
         // Bước 4: Cập nhật trạng thái isConfirm
         user.isConfirm = true;
+        user.IsActive = true;
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
 
@@ -224,6 +225,7 @@ public class AuthService : IAuthService
                         photoURL = avatarUrl,
                         CreatedAt = DateTime.UtcNow,
                         isConfirm = true, // Đăng nhập Google có thể auto xác nhận email
+                        IsActive = true,
                         Role = "User"
                     };
 
@@ -349,6 +351,7 @@ public class AuthService : IAuthService
             };
         }
         user.isConfirm = true;
+        user.IsActive = true;
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
 

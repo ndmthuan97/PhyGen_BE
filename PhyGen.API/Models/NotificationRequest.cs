@@ -12,8 +12,6 @@ namespace PhyGen.API.Models
         [Required(ErrorMessage = "Message is required.")]
         public string Message { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "UserId is required.")]
-        public Guid UserId { get; set; }
     }
 
     public class UpdateNotificationRequest
