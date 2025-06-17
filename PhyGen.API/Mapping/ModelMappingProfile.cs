@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using PhyGen.API.Models;
+using PhyGen.Application.Chapters.Commands;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.SubjectBooks.Commands;
 using PhyGen.Application.Subjects.Commands;
+using PhyGen.Application.Topics.Commands;
 using PhyGen.Domain.Entities;
 
 namespace PhyGen.API.Mapping
@@ -24,6 +26,14 @@ namespace PhyGen.API.Mapping
             // Mapping for SubjectBook
             CreateMap<CreateSubjectBookRequest, CreateSubjectBookCommand>();
             CreateMap<UpdateSubjectBookRequest, UpdateSubjectBookCommand>();
+
+            // Mapping for Chapter
+            CreateMap<CreateChapterRequest, CreateChapterCommand>();
+            CreateMap<UpdateChapterRequest, UpdateChapterCommand>();
+
+            // Mapping for Topic
+            CreateMap<CreateTopicRequest, CreateTopicCommand>();
+            CreateMap<UpdateTopicRequest, UpdateTopicCommand>();
         }
     }
 }

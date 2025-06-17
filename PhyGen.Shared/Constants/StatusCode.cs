@@ -33,5 +33,13 @@ namespace PhyGen.Shared.Constants
         // SubjectBook errors (2090–2109)
         SubjectBookSameName = 2090,
         SubjectBookNotFound = 2091,
+
+        // Chapter errors (2110–2129)
+        ChapterSameName = 2110,
+        ChapterNotFound = 2111,
+
+        // Topic errors (2130–2149)
+        TopicSameName = 2130,
+        TopicNotFound = 2131,
     }
 }
