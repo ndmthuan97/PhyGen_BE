@@ -41,5 +41,26 @@ namespace PhyGen.Shared.Constants
         // Topic errors (2130–2149)
         TopicSameName = 2130,
         TopicNotFound = 2131,
+
+        // ContentFlow errors (2150–2169)
+        ContentFlowSameName = 2150,
+        ContentFlowNotFound = 2151,
+
+        // ContentItem errors (2170–2189)
+        ContentItemSameName = 2170,
+        ContentItemNotFound = 2171,
+
+        // ExamCategory errors (2190–2209)
+        ExamCategorySameName = 2190,
+        ExamCategoryNotFound = 2191,
+
+        // ExamCategoryChapter errors (2210–2229)
+        ExamCategoryChapterNotFound = 2211,
+
+        // ContentItemExamCategory errors (2230–2249)
+        ContentItemExamCategoryNotFound = 2231,
+        ContentItemExamCategoryAlreadyExist = 2231,
+
+
     }
 }

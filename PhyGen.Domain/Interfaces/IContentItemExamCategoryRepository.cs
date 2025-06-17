@@ -9,5 +9,6 @@ namespace PhyGen.Domain.Interfaces
 {
     public interface IContentItemExamCategoryRepository : IAsyncRepository<ContentItemExamCategory, Guid>
     {
+        Task<ContentItemExamCategory?> GetContentItemExamCategoryByContentItemIdAndExamCategoryIDAsync(Guid contentItemId, Guid examCategoryId);
     }
 }

@@ -39,6 +39,26 @@ namespace PhyGen.Shared.Constants
             // Topic messages
             { StatusCode.TopicNotFound, "Không tìm thấy chủ đề với mã được cung cấp." },
             { StatusCode.TopicSameName, "Chủ đề với tên này đã tồn tại." },
+
+            // ContentFlow messages
+            { StatusCode.ContentFlowNotFound, "Không tìm thấy luồng nội dung với mã được cung cấp." },
+            { StatusCode.ContentFlowSameName, "Luồng nội dung với tên này đã tồn tại." },
+
+            // ContentItem messages
+            { StatusCode.ContentItemNotFound, "Không tìm thấy mục nội dung với mã được cung cấp." },
+            { StatusCode.ContentItemSameName, "Mục nội dung với tên này đã tồn tại." },
+
+            // ExamCategory messages
+            { StatusCode.ExamCategoryNotFound, "Không tìm thấy danh mục bài kiểm tra với mã được cung cấp." },
+            { StatusCode.ExamCategorySameName, "Danh mục bài kiểm tra với tên này đã tồn tại." },
+
+            // ExamCategoryChapter messages
+            { StatusCode.ExamCategoryChapterNotFound, "Không tìm thấy danh mục chương bài kiểm tra với mã được cung cấp." },
+            
+            // ContentItemExamCategory messages
+            { StatusCode.ContentItemExamCategoryNotFound, "Không tìm thấy danh mục bài kiểm tra của mục nội dung với mã được cung cấp." },
+            { StatusCode.ContentItemExamCategoryAlreadyExist, "Danh mục bài kiểm tra của mục nội dung đã tồn tại." },
+
         };
 
         public static string GetMessage(StatusCode code)

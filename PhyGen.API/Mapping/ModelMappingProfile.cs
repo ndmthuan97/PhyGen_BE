@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
 using PhyGen.API.Models;
 using PhyGen.Application.Chapters.Commands;
+using PhyGen.Application.ContentFlows.Commands;
+using PhyGen.Application.ContentItemExamCategories.Commands;
+using PhyGen.Application.ContentItems.Commands;
 using PhyGen.Application.Curriculums.Commands;
+using PhyGen.Application.ExamCategories.Commands;
 using PhyGen.Application.SubjectBooks.Commands;
 using PhyGen.Application.Subjects.Commands;
 using PhyGen.Application.Topics.Commands;
@@ -34,6 +38,22 @@ namespace PhyGen.API.Mapping
             // Mapping for Topic
             CreateMap<CreateTopicRequest, CreateTopicCommand>();
             CreateMap<UpdateTopicRequest, UpdateTopicCommand>();
+
+            // Mapping for ContentFlow
+            CreateMap<CreateContentFlowRequest, CreateContentFlowCommand>();
+            CreateMap<UpdateContentFlowRequest, UpdateContentFlowCommand>();
+
+            // Mapping for ContentItem
+            CreateMap<CreateContentItemRequest, CreateContentItemCommand>();
+            CreateMap<UpdateContentItemRequest, UpdateContentItemCommand>();
+
+            // Mapping for ExamCategory
+            CreateMap<CreateExamCategoryRequest, CreateExamCategoryCommand>();
+            CreateMap<UpdateExamCategoryRequest, UpdateExamCategoryCommand>();
+
+            // Mapping for ContentItemExamCaterory
+            CreateMap<CreateContentItemExamCategoryRequest, CreateContentItemExamCategoryCommand>();
+            CreateMap<UpdateContentItemExamCategoryRequest, UpdateContentItemExamCategoryCommand>();
         }
     }
 }
