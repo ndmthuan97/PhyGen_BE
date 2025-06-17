@@ -11,6 +11,8 @@ using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.Curriculums.Response;
 using PhyGen.Application.ExamCategories.Commands;
 using PhyGen.Application.ExamCategories.Responses;
+using PhyGen.Application.ExamCategoryChapters.Commands;
+using PhyGen.Application.ExamCategoryChapters.Responses;
 using PhyGen.Application.SubjectBooks.Commands;
 using PhyGen.Application.SubjectBooks.Responses;
 using PhyGen.Application.Subjects.Commands;
@@ -77,6 +79,11 @@ namespace PhyGen.Application.Mapping
             CreateMap<ContentItemExamCategory, ContentItemExamCategoryResponse>();
             CreateMap<CreateContentItemExamCategoryCommand, ContentItemExamCategory>();
             CreateMap<UpdateContentItemExamCategoryCommand, ContentItemExamCategory>();
+
+            // Mapping for ExamCategoryChapter
+            CreateMap<ExamCategoryChapter, ExamCategoryChapterResponse>();
+            CreateMap<CreateExamCategoryChapterCommand, ExamCategoryChapter>();
+            CreateMap<UpdateExamCategoryChapterCommand, ExamCategoryChapter>();
         }
     }
 }

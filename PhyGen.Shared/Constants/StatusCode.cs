@@ -56,6 +56,7 @@ namespace PhyGen.Shared.Constants
 
         // ExamCategoryChapter errors (2210–2229)
         ExamCategoryChapterNotFound = 2211,
+        ExamCategoryChapterAlreadyExist = 2211,
 
         // ContentItemExamCategory errors (2230–2249)
         ContentItemExamCategoryNotFound = 2231,

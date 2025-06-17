@@ -54,6 +54,7 @@ namespace PhyGen.Shared.Constants
 
             // ExamCategoryChapter messages
             { StatusCode.ExamCategoryChapterNotFound, "Không tìm thấy danh mục chương bài kiểm tra với mã được cung cấp." },
+            { StatusCode.ExamCategoryChapterAlreadyExist, "Danh mục chương bài kiểm tra đã tồn tại." },
             
             // ContentItemExamCategory messages
             { StatusCode.ContentItemExamCategoryNotFound, "Không tìm thấy danh mục bài kiểm tra của mục nội dung với mã được cung cấp." },
