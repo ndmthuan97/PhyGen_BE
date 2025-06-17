@@ -57,6 +57,7 @@ namespace PhyGen.API.Controllers
         [HttpGet("getAllProfiles")]
         public async Task<IActionResult> GetAllProfiles(
             [FromQuery] Guid? id,
+            [FromQuery] string? Role,
             [FromQuery] bool? isConfirm,
             [FromQuery] bool? isActive,
             [FromQuery] DateTime? fromDate,
@@ -65,6 +66,7 @@ namespace PhyGen.API.Controllers
             var filter = new ProfileFilter
             {
                 Id = id,
+                Role = Role,
                 IsConfirm = isConfirm,
                 IsActive = isActive,
                 FromDate = fromDate,

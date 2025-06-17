@@ -38,7 +38,6 @@ namespace PhyGen.Insfrastructure.Service
 
         public async Task<PaymentResponse> CreatePaymentLinkAsync(PaymentRequest request)
         {
-
             // Kiểm tra người dùng tồn tại
             var user = await _context.Users.FindAsync(request.UserId);
             if (user == null)

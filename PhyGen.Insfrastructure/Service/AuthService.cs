@@ -75,6 +75,9 @@ public class AuthService : IAuthService
             Id = Guid.NewGuid(),
             Email = email,
             Password = hashedPassword,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            Gender = dto.Gender,
             Role = "User",
             isConfirm = false,
             CreatedAt = DateTime.UtcNow
@@ -182,24 +185,32 @@ public class AuthService : IAuthService
                 var userMetadataJson = token.Claims.FirstOrDefault(c => c.Type == "user_metadata")?.Value;
 
                 string fullName = null;
-                string avatarUrl = null; var allUsers = await _context.Users.ToListAsync();
+                string avatarUrl = null;
 
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email.Trim().ToLower() == emailFromToken.Trim().ToLower());
 
                 if (existingUser != null)
                 {
-                    if (!string.IsNullOrEmpty(existingUser.Password))
+                    // ✅ Kiểm tra tài khoản bị khóa
+                    if (!existingUser.IsActive)
                     {
-                        // Email đã tồn tại với mật khẩu -> bắt buộc phải đăng nhập bằng email/mật khẩu
                         return new AuthenticationResponse
                         {
                             Email = emailFromToken,
-                            StatusCode = StatusCode.MustLoginWithEmailPassword,
+                            StatusCode = StatusCode.AccountLocked
+                        };
+                    }
+
+                    if (!string.IsNullOrEmpty(existingUser.Password))
+                    {
+                        return new AuthenticationResponse
+                        {
+                            Email = emailFromToken,
+                            StatusCode = StatusCode.MustLoginWithEmailPassword
                         };
                     }
                     else
                     {
-                        // Email đã tồn tại, không có password -> cho phép đăng nhập Google bình thường
                         return new LoginResponse
                         {
                             Response = new AuthenticationResponse
@@ -210,28 +221,44 @@ public class AuthService : IAuthService
                             Role = existingUser.Role
                         };
                     }
-
                 }
                 else
                 {
                     var userMetadata = JsonSerializer.Deserialize<UserMetadata>(userMetadataJson);
-                    fullName = userMetadata?.full_name;
+                    fullName = userMetadata?.full_name?.Trim() ?? "";
                     avatarUrl = userMetadata?.avatar_url;
-                    // Email chưa tồn tại -> tạo mới user và đăng nhập Google bình thường
+                    string firstName = "";
+                    string lastName = "";
+
+                    if (!string.IsNullOrWhiteSpace(fullName))
+                    {
+                        var nameParts = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                        if (nameParts.Length > 1)
+                        {
+                            firstName = nameParts[0];
+                            lastName = string.Join(" ", nameParts.Skip(1));
+                        }
+                        else
+                        {
+                            firstName = fullName;
+                        }
+                    }
+
                     var tokenEntity = new User
                     {
                         Email = emailFromToken,
-                        LastName = fullName,
+                        FirstName = firstName,
+                        LastName = lastName,
                         photoURL = avatarUrl,
                         CreatedAt = DateTime.UtcNow,
-                        isConfirm = true, // Đăng nhập Google có thể auto xác nhận email
+                        isConfirm = true,
                         IsActive = true,
                         Role = "User"
                     };
 
                     _context.Users.Add(tokenEntity);
                     await _context.SaveChangesAsync();
-
 
                     return new LoginResponse
                     {
@@ -257,7 +284,6 @@ public class AuthService : IAuthService
         }
         else
         {
-            // Đăng nhập bình thường bằng email/password
             var email = dto.Email.Trim().ToLower();
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
 
@@ -270,13 +296,22 @@ public class AuthService : IAuthService
                 };
             }
 
-            if (string.IsNullOrEmpty(user.Password))
+            // ✅ Kiểm tra tài khoản bị khóa
+            if (!user.IsActive)
             {
-                // User có email nhưng không có password -> phải đăng nhập bằng Google
                 return new AuthenticationResponse
                 {
                     Email = email,
-                    StatusCode = StatusCode.MustLoginWithGoogle,
+                    StatusCode = StatusCode.AccountLocked
+                };
+            }
+
+            if (string.IsNullOrEmpty(user.Password))
+            {
+                return new AuthenticationResponse
+                {
+                    Email = email,
+                    StatusCode = StatusCode.MustLoginWithGoogle
                 };
             }
 
@@ -316,7 +351,6 @@ public class AuthService : IAuthService
             };
         }
     }
-
 
     public async Task<object> ConfirmLogin(string email, string otpText)
     {

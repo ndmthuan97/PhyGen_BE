@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Net.payOS.Types;
 using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
+using PhyGen.Application.Notification.Commands;
 using PhyGen.Application.PayOs.Interfaces;
 using PhyGen.Application.PayOs.Request;
 using PhyGen.Application.Users.Exceptions;
@@ -64,8 +65,19 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPost("search")]
-        public async Task<IActionResult> Search([FromBody] PaymentSearchRequest request)
+        public async Task<IActionResult> Search(
+        [FromQuery] Guid UserId,
+        [FromQuery] DateTime? FromDate,
+        [FromQuery] DateTime? ToDate,
+        [FromQuery] string? Status)
         {
+            var request = new PaymentSearchRequest
+            {
+                UserId = UserId,
+                FromDate = FromDate,
+                ToDate = ToDate,
+                Status = Status
+            };
             var result = await _paymentService.SearchPaymentsAsync(request);
             return Ok(result);
         }

@@ -32,6 +32,9 @@ namespace PhyGen.API.Mapping
             // Add your mapping configurations here
             CreateMap<RegisterDto, RegisterRequest>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Trim()))
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.Trim()))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName.Trim()))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName.Trim()))
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.Password.Trim()))
                 .ForMember(dest => dest.ConfirmPassword, opt => opt.MapFrom(src => src.ConfirmPassword.Trim()))
                 .ReverseMap();

@@ -60,7 +60,8 @@ namespace PhyGen.Shared.Constants
         InvalidToken = 2167,
         MustLoginWithEmailPassword = 2168,
         MustLoginWithGoogle = 2169,
-        
+        AccountLocked = 2170,
+
         // Exam errors (2250–2269)
         ExamNotFound = 2250,
 

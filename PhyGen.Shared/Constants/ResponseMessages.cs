@@ -40,6 +40,7 @@ namespace PhyGen.Shared.Constants
             { StatusCode.InvalidToken, "Mã thông báo không hợp lệ." },
             { StatusCode.MustLoginWithEmailPassword, "Bạn phải đăng nhập bằng email và mật khẩu." },
             { StatusCode.MustLoginWithGoogle, "Bạn phải đăng nhập bằng google." },
+            { StatusCode.AccountLocked, "Tài khoản đã bị khóa." },
 
             // Curriculum messages
             { StatusCode.CurriculumNotFound, "Không tìm thấy chương trình học với mã được cung cấp." },

@@ -11,6 +11,7 @@ namespace PhyGen.Application.Users.Dtos
         public Guid? Id { get; set; }
         public bool? IsConfirm { get; set; }
         public bool? IsActive { get; set; }
+        public string Role { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
     }

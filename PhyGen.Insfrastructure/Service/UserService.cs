@@ -91,6 +91,11 @@ public class UserService : IUserService
             query = query.Where(u => u.Id == filter.Id);
         }
 
+        if (!string.IsNullOrEmpty(filter.Role))
+        {
+            query = query.Where(u => u.Role == filter.Role);
+        }
+
         if (filter.IsConfirm.HasValue)
         {
             query = query.Where(u => u.isConfirm == filter.IsConfirm.Value);
