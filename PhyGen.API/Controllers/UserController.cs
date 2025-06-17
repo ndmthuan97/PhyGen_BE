@@ -76,5 +76,21 @@ namespace PhyGen.API.Controllers
             var profiles = await _userService.GetAllProfilesAsync(filter);
             return Ok(profiles);
         }
+
+        [HttpPut("lock")]
+        public async Task<IActionResult> LockUser([FromQuery] Guid UserId)
+        {
+            var request = new LockAndUnlockUserRequest { UserId = UserId };
+            var updatedUser = await _userService.LockUserAsync(UserId, request);
+            return Ok(updatedUser);
+        }
+
+        [HttpPut("unlock")]
+        public async Task<IActionResult> UnLockUser([FromQuery] Guid UserId)
+        {
+            var request = new LockAndUnlockUserRequest { UserId = UserId };
+            var updatedUser = await _userService.UnLockUserAsync(UserId, request);
+            return Ok(updatedUser);
+        }
     }
 }

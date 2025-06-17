@@ -13,5 +13,6 @@ namespace PhyGen.Application.Notification.Responses
         public string Message { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public Guid UserId { get; set; }
+        public bool IsRead { get; set; }
     }
 }

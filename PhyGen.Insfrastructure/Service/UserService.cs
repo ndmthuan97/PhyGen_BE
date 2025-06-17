@@ -121,4 +121,46 @@ public class UserService : IUserService
         var users = await query.ToListAsync();
         return _mapper.Map<List<UserDtos>>(users);
     }
+    public async Task<object> LockUserAsync(Guid userId, LockAndUnlockUserRequest request)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        user.IsActive = false;
+
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+
+        return new
+        {
+            Id = user.Id,
+            Email = user.Email,
+            IsActive = user.IsActive
+        };
+    }
+
+    public async Task<object> UnLockUserAsync(Guid userId, LockAndUnlockUserRequest request)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        user.IsActive = true;
+
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+
+        return new
+        {
+            Id = user.Id,
+            Email = user.Email,
+            IsActive = user.IsActive
+        };
+    }
 }
+

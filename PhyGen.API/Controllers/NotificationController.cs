@@ -7,6 +7,7 @@ using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.Notification.Commands;
 using PhyGen.Application.Notification.Exceptions;
+using PhyGen.Application.Notification.Handlers;
 using PhyGen.Application.Notification.Queries;
 using PhyGen.Application.Notification.Responses;
 using PhyGen.Application.Users.Dtos;
@@ -77,6 +78,17 @@ namespace PhyGen.API.Controllers
             };
             var result = await _mediator.Send(filter);
             return Ok(new NotificationSend {});
+        }
+        [HttpPut("maskasread")]
+        [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdateReadNotification([FromQuery] Guid UserId)
+        {
+            var request = new UpdateNotificationRequest
+            {
+                UserId = UserId
+            };           
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateNotificationReadCommand>(request);
+            return await ExecuteAsync<UpdateNotificationReadCommand, Unit>(command);
         }
 
         private IActionResult HandleNullRequest()

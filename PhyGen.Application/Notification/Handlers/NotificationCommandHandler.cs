@@ -62,6 +62,29 @@ namespace PhyGen.Application.Notification.Handlers
             return Unit.Value;
         }
     }
+    public class UpdateNotificationIsReadCommandHandler : IRequestHandler<UpdateNotificationReadCommand, Unit>
+    {
+        private readonly INotificationRepository _notificationRepository;
+
+        public UpdateNotificationIsReadCommandHandler(
+            INotificationRepository notificationRepository)
+        {
+            _notificationRepository = notificationRepository;
+        }
+        public async Task<Unit> Handle(UpdateNotificationReadCommand request, CancellationToken cancellationToken)
+        {
+            var notification = await _notificationRepository.GetByUserIdAsync(request.UserId);
+            if (notification == null)
+                throw new NotificationNotFoundException();
+
+            foreach (var notifications in notification)
+            {
+                notifications.IsRead = true;
+                await _notificationRepository.UpdateAsync(notifications);
+            }
+            return Unit.Value;
+        }
+    }
 
     public class DeleteNotificationCommandHandler : IRequestHandler<DeleteNotificationCommand, Unit>
     {

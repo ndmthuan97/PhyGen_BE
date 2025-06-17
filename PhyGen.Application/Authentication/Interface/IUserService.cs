@@ -10,6 +10,8 @@ namespace PhyGen.Application.Authentication.Interface
         Task<UserDtos?> ViewProfileAsync(string email);
         Task<UserDtos> EditProfileAsync(string email, EditProfileRequest request);
         Task<List<UserDtos>> GetAllProfilesAsync(ProfileFilter filter);
+        Task<object> LockUserAsync(Guid userId, LockAndUnlockUserRequest request);
+        Task<object> UnLockUserAsync(Guid userId, LockAndUnlockUserRequest request);
     }
 }
 

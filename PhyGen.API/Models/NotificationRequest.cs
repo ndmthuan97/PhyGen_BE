@@ -24,6 +24,7 @@ namespace PhyGen.API.Models
         public int Id { get; set; }
         [JsonRequired]
         public string Message { get; set; }
+        public Guid UserId { get; set; }
     }
 
     public class DeleteNotificationRequest

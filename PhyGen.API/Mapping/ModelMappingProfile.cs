@@ -48,7 +48,7 @@ namespace PhyGen.API.Mapping
 
             // Mapping for Notification
             CreateMap<Notification, NotificationResponse>();
-
+            CreateMap<UpdateNotificationRequest, UpdateNotificationReadCommand>();
             CreateMap<UpdateNotificationRequest, UpdateNotificationCommand>();
             CreateMap<CreateNotificationRequest, CreateNotificationCommand>();
 
