@@ -25,5 +25,13 @@ namespace PhyGen.Shared.Constants
         // Curriculum errors (2050–2069)
         CurriculumSameName = 2050,
         CurriculumNotFound = 2051,
+
+        // Subject errors (2070–2089)
+        SubjectSameName = 2070,
+        SubjectNotFound = 2071,
+
+        // SubjectBook errors (2090–2109)
+        SubjectBookSameName = 2090,
+        SubjectBookNotFound = 2091,
     }
 }

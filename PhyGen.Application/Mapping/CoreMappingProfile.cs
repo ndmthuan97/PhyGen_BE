@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.Curriculums.Response;
+using PhyGen.Application.SubjectBooks.Commands;
+using PhyGen.Application.SubjectBooks.Responses;
+using PhyGen.Application.Subjects.Commands;
+using PhyGen.Application.Subjects.Responses;
 using PhyGen.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -21,6 +25,16 @@ namespace PhyGen.Application.Mapping
             CreateMap<Curriculum, CurriculumResponse>();
             CreateMap<CreateCurriculumCommand, Curriculum>();
             CreateMap<UpdateCurriculumCommand, Curriculum>();
+
+            // Mapping for Subject
+            CreateMap<Subject, SubjectResponse>();
+            CreateMap<CreateSubjectCommand, Subject>();
+            CreateMap<UpdateSubjectCommand, Subject>();
+
+            // Mapping for SubjectBook
+            CreateMap<SubjectBook, SubjectBookResponse>();
+            CreateMap<CreateSubjectBookCommand, SubjectBook>();
+            CreateMap<UpdateSubjectBookCommand, SubjectBook>();
         }
     }
 }

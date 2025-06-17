@@ -10,7 +10,7 @@ namespace PhyGen.API.Models
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Grade is required.")]
-        public string Grade { get; set; } = string.Empty;
+        public int Grade { get; set; }
     }
 
     public class UpdateCurriculumRequest
@@ -23,6 +23,6 @@ namespace PhyGen.API.Models
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Grade is required.")]
-        public string Grade { get; set; } = string.Empty;
+        public int Grade { get; set; }
     }
 }

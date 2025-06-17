@@ -25,7 +25,7 @@ namespace PhyGen.Application.Curriculums.Handlers
         {
             var curriculums = await _curriculumRepository.GetAllAsync();
 
-            return AppMapper<CoreMappingProfile>.Mapper.Map<List<CurriculumResponse>>(curriculums);
+            return AppMapper<CoreMappingProfile>.Mapper.Map<List<CurriculumResponse>>(curriculums.OrderBy(c => c.Name));
         }
     }
 
