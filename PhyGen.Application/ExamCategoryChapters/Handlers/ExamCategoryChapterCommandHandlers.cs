@@ -80,6 +80,9 @@ namespace PhyGen.Application.ExamCategoryChapters.Handlers
             if (await _chapterRepository.GetByIdAsync(request.ChapterId) == null)
                 throw new ChapterNotFoundException();
 
+            if (await _examCategoryChapterRepository.GetByExamCategoryIdAndChapterIdAsync(request.ExamCategoryId, request.ChapterId) != null)
+                throw new ExamCategoryChapterAlreadyExistException();
+
             examCategoryChapter.ExamCategoryId = request.ExamCategoryId;
             examCategoryChapter.ChapterId = request.ChapterId;
 

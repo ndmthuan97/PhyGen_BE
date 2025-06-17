@@ -48,7 +48,7 @@ namespace PhyGen.Application.ContentItems.Handlers
 
             var contentItems = await _contentItemRepository.GetContentItemsByContentFlowIdAsync(request.ContentFlowId);
             if (contentItems == null || !contentItems.Any())
-                return new List<ContentItemResponse>();
+                throw new ContentItemNotFoundException();
 
             return AppMapper<CoreMappingProfile>.Mapper.Map<List<ContentItemResponse>>(contentItems.OrderBy(ci => ci.Name));
         }

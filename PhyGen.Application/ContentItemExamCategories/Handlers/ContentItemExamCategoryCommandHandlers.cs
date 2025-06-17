@@ -75,6 +75,9 @@ namespace PhyGen.Application.ContentItemExamCategories.Handlers
             if (contentItemExamCategory == null)
                 throw new ContentItemExamCategoryNotFoundException();
 
+            if (await _contentItemExamCategoryRepository.GetContentItemExamCategoryByContentItemIdAndExamCategoryIDAsync(request.ContentItemId, request.ExamCategoryId) != null)
+                throw new ContentItemExamCategoryAlreadyExistException();
+
             contentItemExamCategory.ContentItemId = request.ContentItemId;
             contentItemExamCategory.ExamCategoryId = request.ExamCategoryId;
 

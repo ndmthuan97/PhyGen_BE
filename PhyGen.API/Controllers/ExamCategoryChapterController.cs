@@ -33,7 +33,7 @@ namespace PhyGen.API.Controllers
         public async Task<IActionResult> GetExamCategoryChapterByExamCategoryIdAndChapterId([FromQuery] Guid examCategoryId, [FromQuery] Guid chapterId)
         {
             var request = new GetExamCategoryChaptersByExamCategoryIdAndChapterIdQuery(examCategoryId, chapterId);
-            return await ExecuteAsync<GetExamCategoryChaptersByExamCategoryIdAndChapterIdQuery, List<ExamCategoryChapterResponse>>(request);
+            return await ExecuteAsync<GetExamCategoryChaptersByExamCategoryIdAndChapterIdQuery, ExamCategoryChapterResponse>(request);
         }
 
         [HttpPost]

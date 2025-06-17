@@ -29,7 +29,7 @@ namespace PhyGen.Application.ContentItemExamCategories.Handlers
         }
     }
 
-    public class GetContentItemExamCategoryByContentItemIdAndExamCategoryIdQueryHandler : IRequestHandler<GetContentItemExamCategoryByContentItemIdAndExamCategoryIdQuery, List<ContentItemExamCategoryResponse>>
+    public class GetContentItemExamCategoryByContentItemIdAndExamCategoryIdQueryHandler : IRequestHandler<GetContentItemExamCategoryByContentItemIdAndExamCategoryIdQuery, ContentItemExamCategoryResponse>
     {
         private readonly IContentItemExamCategoryRepository _contentItemExamCategoryRepository;
         private readonly IContentItemRepository _contentItemRepository;
@@ -45,7 +45,7 @@ namespace PhyGen.Application.ContentItemExamCategories.Handlers
             _examCategoryRepository = examCategoryRepository;
         }
 
-        public async Task<List<ContentItemExamCategoryResponse>> Handle(GetContentItemExamCategoryByContentItemIdAndExamCategoryIdQuery request, CancellationToken cancellationToken)
+        public async Task<ContentItemExamCategoryResponse> Handle(GetContentItemExamCategoryByContentItemIdAndExamCategoryIdQuery request, CancellationToken cancellationToken)
         {
             if (await _contentItemRepository.GetByIdAsync(request.ContentItemId) == null)
                 throw new ContentItemNotFoundException();
@@ -55,7 +55,7 @@ namespace PhyGen.Application.ContentItemExamCategories.Handlers
 
             var contentItemExamCategories = await _contentItemExamCategoryRepository.GetContentItemExamCategoryByContentItemIdAndExamCategoryIDAsync(request.ContentItemId, request.ExamCategoryId) ?? throw new ContentItemExamCategoryNotFoundException();
 
-            return AppMapper<CoreMappingProfile>.Mapper.Map<List<ContentItemExamCategoryResponse>>(contentItemExamCategories);
+            return AppMapper<CoreMappingProfile>.Mapper.Map<ContentItemExamCategoryResponse>(contentItemExamCategories);
         }
     }
 }

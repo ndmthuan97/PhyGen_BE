@@ -59,7 +59,6 @@ namespace PhyGen.Shared.Constants
             // ContentItemExamCategory messages
             { StatusCode.ContentItemExamCategoryNotFound, "Không tìm thấy danh mục bài kiểm tra của mục nội dung với mã được cung cấp." },
             { StatusCode.ContentItemExamCategoryAlreadyExist, "Danh mục bài kiểm tra của mục nội dung đã tồn tại." },
-
         };
 
         public static string GetMessage(StatusCode code)

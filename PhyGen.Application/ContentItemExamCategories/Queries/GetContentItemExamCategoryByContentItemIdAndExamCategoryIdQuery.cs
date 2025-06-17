@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.ContentItemExamCategories.Queries
 {
-    public class GetContentItemExamCategoryByContentItemIdAndExamCategoryIdQuery : IRequest<List<ContentItemExamCategoryResponse>>
+    public class GetContentItemExamCategoryByContentItemIdAndExamCategoryIdQuery : IRequest<ContentItemExamCategoryResponse>
     {
         public Guid ContentItemId { get; set; }
         public Guid ExamCategoryId { get; set; }
