@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PhyGen.Application.ContentFlows.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.ContentFlows.Commands
 {
-    public class CreateContentFlowCommand : IRequest<Guid>
+    public class CreateContentFlowCommand : IRequest<ContentFlowResponse>
     {
         public Guid CurriculumId { get; set; }
         public Guid SubjectId { get; set; }

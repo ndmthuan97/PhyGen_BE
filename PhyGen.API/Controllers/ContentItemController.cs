@@ -50,7 +50,7 @@ namespace PhyGen.API.Controllers
                 });
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateContentItemCommand>(request);
-            return await ExecuteAsync<CreateContentItemCommand, Guid>(command);
+            return await ExecuteAsync<CreateContentItemCommand, ContentItemResponse>(command);
         }
 
         [HttpPut("{contentItemId}")]

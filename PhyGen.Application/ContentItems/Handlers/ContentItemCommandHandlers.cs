@@ -2,6 +2,8 @@
 using PhyGen.Application.ContentFlows.Exceptions;
 using PhyGen.Application.ContentItems.Commands;
 using PhyGen.Application.ContentItems.Exceptions;
+using PhyGen.Application.ContentItems.Responses;
+using PhyGen.Application.Mapping;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.ContentItems.Handlers
 {
-    public class CreateContentItemCommandHandler : IRequestHandler<CreateContentItemCommand, Guid>
+    public class CreateContentItemCommandHandler : IRequestHandler<CreateContentItemCommand, ContentItemResponse>
     {
         private readonly IContentItemRepository _contentItemRepository;
         private readonly IContentFlowRepository _contentFlowRepository;
@@ -23,7 +25,7 @@ namespace PhyGen.Application.ContentItems.Handlers
             _contentFlowRepository = contentFlowRepository;
         }
 
-        public async Task<Guid> Handle(CreateContentItemCommand request, CancellationToken cancellationToken)
+        public async Task<ContentItemResponse> Handle(CreateContentItemCommand request, CancellationToken cancellationToken)
         {
             if (await _contentFlowRepository.GetByIdAsync(request.ContentFlowId) == null)
                 throw new ContentFlowNotFoundException();
@@ -37,7 +39,7 @@ namespace PhyGen.Application.ContentItems.Handlers
                 LearningOutcome = request.LearningOutcome,
             };
             await _contentItemRepository.AddAsync(contentItem);
-            return contentItem.Id;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<ContentItemResponse>(contentItem);
         }
     }
 

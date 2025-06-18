@@ -61,13 +61,9 @@ namespace PhyGen.Application.Mapping
 
             // Mapping for ContentFlow
             CreateMap<ContentFlow, ContentFlowResponse>();
-            CreateMap<CreateContentFlowCommand, ContentFlow>();
-            CreateMap<UpdateContentFlowCommand, ContentFlow>();
 
             // Mapping for ContentItem
             CreateMap<ContentItem, ContentItemResponse>();
-            CreateMap<CreateContentItemCommand, ContentItem>();
-            CreateMap<UpdateContentItemCommand, ContentItem>();
 
             // Mapping for ExamCategory
             CreateMap<ExamCategory, ExamCategoryResponse>();

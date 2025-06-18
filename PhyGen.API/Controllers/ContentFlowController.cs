@@ -50,7 +50,7 @@ namespace PhyGen.API.Controllers
                 });
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateContentFlowCommand>(request);
-            return await ExecuteAsync<CreateContentFlowCommand, Guid>(command);
+            return await ExecuteAsync<CreateContentFlowCommand, ContentFlowResponse>(command);
         }
 
         [HttpPut("{contentFlowId}")]

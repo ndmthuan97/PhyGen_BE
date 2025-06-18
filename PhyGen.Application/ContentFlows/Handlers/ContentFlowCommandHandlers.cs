@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using PhyGen.Application.ContentFlows.Commands;
 using PhyGen.Application.ContentFlows.Exceptions;
+using PhyGen.Application.ContentFlows.Responses;
 using PhyGen.Application.Curriculums.Exceptions;
+using PhyGen.Application.Mapping;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.ContentFlows.Handlers
 {
-    public class CreateContentFlowCommandHandler : IRequestHandler<CreateContentFlowCommand, Guid>
+    public class CreateContentFlowCommandHandler : IRequestHandler<CreateContentFlowCommand, ContentFlowResponse>
     {
         private readonly IContentFlowRepository _repository;
         private readonly ICurriculumRepository _curriculumRepository;
@@ -23,7 +25,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
             _curriculumRepository = curriculumRepository;
         }
 
-        public async Task<Guid> Handle(CreateContentFlowCommand request, CancellationToken cancellationToken)
+        public async Task<ContentFlowResponse> Handle(CreateContentFlowCommand request, CancellationToken cancellationToken)
         {
             if (await _curriculumRepository.GetByIdAsync(request.CurriculumId) == null)
                 throw new CurriculumNotFoundException();
@@ -40,7 +42,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
             };
 
             await _repository.AddAsync(contentFlow);
-            return contentFlow.Id;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<ContentFlowResponse>(contentFlow);
         }
     }
 
