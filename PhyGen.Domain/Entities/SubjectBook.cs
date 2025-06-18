@@ -11,6 +11,7 @@ namespace PhyGen.Domain.Entities
         public Guid SubjectId { get; set; }
         public string Name { get; set; } = string.Empty;
         public int Grade { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
         // Navigation Properties
         public virtual Subject Subject { get; set; } = null!;

@@ -9,6 +9,5 @@ namespace PhyGen.Domain.Interfaces
 {
     public interface IExamCategoryRepository : IAsyncRepository<ExamCategory, Guid>
     {
-        Task<ExamCategory?> GetByNameAsync(string name);
     }
 }

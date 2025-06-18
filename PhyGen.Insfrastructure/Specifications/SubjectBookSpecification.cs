@@ -21,8 +21,9 @@ namespace PhyGen.Infrastructure.Specifications
         public SubjectBookSpecification(SubjectBookSpecParam param)
         {
             Criteria = subjectBook =>
-                (param.SubjectId == Guid.Empty || subjectBook.SubjectId == param.SubjectId) &&
-                (string.IsNullOrEmpty(param.Search) || subjectBook.Name.ToLower().Contains(param.Search.ToLower()));
+                subjectBook.SubjectId == param.SubjectId &&
+                (string.IsNullOrEmpty(param.Search) || subjectBook.Name.ToLower().Contains(param.Search.ToLower())) &&
+                !subjectBook.DeletedAt.HasValue;
 
             if(!string.IsNullOrEmpty(param.Search))
             {
@@ -48,27 +49,6 @@ namespace PhyGen.Infrastructure.Specifications
             {
                 OrderBy = query => query.OrderBy(sb => sb.Name);
             }
-
-            Skip = (param.PageIndex - 1) * param.PageSize;
-            Take = param.PageSize;
-        }
-    }
-
-    public class SubjectBookBySubjectSpecification : ISpecification<SubjectBook>
-    {
-        public Expression<Func<SubjectBook, bool>> Criteria { get; private set; }
-        public Func<IQueryable<SubjectBook>, IOrderedQueryable<SubjectBook>>? OrderBy { get; private set; }
-        public Func<IQueryable<SubjectBook>, IOrderedQueryable<SubjectBook>>? OrderByDescending { get; private set; }
-        public List<Expression<Func<SubjectBook, object>>> Includes { get; private set; } = [];
-        public Func<IQueryable<SubjectBook>, IQueryable<SubjectBook>>? Selector { get; private set; }
-        public int Skip { get; private set; }
-        public int Take { get; private set; }
-
-        public SubjectBookBySubjectSpecification(SubjectBookBySubjectSpecParam param)
-        {
-            Criteria = x => x.SubjectId == param.SubjectId;
-
-            OrderBy = query => query.OrderBy(sb => sb.Name);
 
             Skip = (param.PageIndex - 1) * param.PageSize;
             Take = param.PageSize;

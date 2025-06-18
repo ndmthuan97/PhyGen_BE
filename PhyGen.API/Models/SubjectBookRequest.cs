@@ -18,4 +18,9 @@ namespace PhyGen.API.Models
         public string Name { get; set; } = string.Empty;
         public int Grade { get; set; }
     }
+    public class DeleteSubjectBookRequest
+    {
+        [JsonRequired]
+        public Guid Id { get; set; }
+    }
 }

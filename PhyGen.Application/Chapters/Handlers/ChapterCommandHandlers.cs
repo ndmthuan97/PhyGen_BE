@@ -27,11 +27,15 @@ namespace PhyGen.Application.Chapters.Handlers
 
         public async Task<ChapterResponse> Handle(CreateChapterCommand request, CancellationToken cancellationToken)
         {
-            if (await _subjectBookRepository.GetByIdAsync(request.SubjectBookId) == null)
+            var subjectBook = await _subjectBookRepository.GetByIdAsync(request.SubjectBookId);
+            if (subjectBook == null || subjectBook.DeletedAt.HasValue)
                 throw new SubjectBookNotFoundException();
 
-            if (await _chapterRepository.GetChapterBySubjectBookIdAndNameAsync(request.SubjectBookId, request.Name) != null)
-                throw new ChapterSameNameException();
+            if (await _chapterRepository.AlreadyExistAsync(c => 
+            c.SubjectBookId == request.SubjectBookId &&
+            c.Name.ToLower() == request.Name.ToLower() &&
+            c.OrderNo == request.OrderNo))
+                throw new ChapterAlreadyExistException();
 
             var chapter = new Chapter
             {
@@ -58,16 +62,36 @@ namespace PhyGen.Application.Chapters.Handlers
         {
             var chapter = await _chapterRepository.GetByIdAsync(request.Id) ?? throw new ChapterNotFoundException();
 
-            if (await _subjectBookRepository.GetByIdAsync(request.SubjectBookId) == null)
+            var subjectBook = await _subjectBookRepository.GetByIdAsync(request.SubjectBookId);
+            if (subjectBook == null || subjectBook.DeletedAt.HasValue)
                 throw new SubjectBookNotFoundException();
 
-            if (await _chapterRepository.GetChapterBySubjectBookIdAndNameAsync(request.SubjectBookId, request.Name) != null &&
-                chapter.Name != request.Name)
-                throw new ChapterSameNameException();
+            if (await _chapterRepository.AlreadyExistAsync(c =>
+            c.SubjectBookId == request.SubjectBookId &&
+            c.Name.ToLower() == request.Name.ToLower() &&
+            c.OrderNo == request.OrderNo))
+                throw new ChapterAlreadyExistException();
 
             chapter.SubjectBookId = request.SubjectBookId;
             chapter.Name = request.Name;
             chapter.OrderNo = request.OrderNo;
+
+            await _chapterRepository.UpdateAsync(chapter);
+            return Unit.Value;
+        }
+    }
+    public class DeleteChapterCommandHandlers : IRequestHandler<DeleteChapterCommand, Unit>
+    {
+        private readonly IChapterRepository _chapterRepository;
+        public DeleteChapterCommandHandlers(IChapterRepository chapterRepository)
+        {
+            _chapterRepository = chapterRepository;
+        }
+        public async Task<Unit> Handle(DeleteChapterCommand request, CancellationToken cancellationToken)
+        {
+            var chapter = await _chapterRepository.GetByIdAsync(request.Id) ?? throw new ChapterNotFoundException();
+
+            chapter.DeletedAt = DateTime.UtcNow;
 
             await _chapterRepository.UpdateAsync(chapter);
             return Unit.Value;

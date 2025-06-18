@@ -18,4 +18,9 @@ namespace PhyGen.API.Models
         public string Name { get; set; } = string.Empty;
         public int OrderNo { get; set; }
     }
+    public class DeleteTopicRequest
+    {
+        [JsonRequired]
+        public Guid Id { get; set; }
+    }
 }

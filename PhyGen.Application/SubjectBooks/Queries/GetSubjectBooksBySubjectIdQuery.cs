@@ -9,6 +9,6 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.SubjectBooks.Queries
 {
-    public record GetSubjectBooksBySubjectIdQuery(SubjectBookBySubjectSpecParam SubjectBookBySubjectSpecParam) 
+    public record GetSubjectBooksBySubjectIdQuery(SubjectBookSpecParam SubjectBookSpecParam) 
         : IRequest<Pagination<SubjectBookResponse>>;
 }

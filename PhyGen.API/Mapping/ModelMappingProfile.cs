@@ -32,14 +32,17 @@ namespace PhyGen.API.Mapping
             // Mapping for SubjectBook
             CreateMap<CreateSubjectBookRequest, CreateSubjectBookCommand>();
             CreateMap<UpdateSubjectBookRequest, UpdateSubjectBookCommand>();
+            CreateMap<DeleteSubjectBookRequest, DeleteSubjectBookCommand>();
 
             // Mapping for Chapter
             CreateMap<CreateChapterRequest, CreateChapterCommand>();
             CreateMap<UpdateChapterRequest, UpdateChapterCommand>();
+            CreateMap<DeleteChapterRequest, DeleteChapterCommand>();
 
             // Mapping for Topic
             CreateMap<CreateTopicRequest, CreateTopicCommand>();
             CreateMap<UpdateTopicRequest, UpdateTopicCommand>();
+            CreateMap<DeleteTopicRequest, DeleteTopicCommand>();
 
             // Mapping for ContentFlow
             CreateMap<CreateContentFlowRequest, CreateContentFlowCommand>();

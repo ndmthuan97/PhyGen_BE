@@ -30,8 +30,8 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("subject")]
-        [ProducesResponseType(typeof(ApiResponse<Pagination<SubjectBookResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetSubjectBooksBySubjectId([FromQuery] SubjectBookBySubjectSpecParam param)
+        [ProducesResponseType(typeof(ApiResponse<List<SubjectBookResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetSubjectBooksBySubjectId([FromQuery] SubjectBookSpecParam param)
         {
             var request = new GetSubjectBooksBySubjectIdQuery(param);
             return await ExecuteAsync<GetSubjectBooksBySubjectIdQuery, Pagination<SubjectBookResponse>>(request);
@@ -69,6 +69,23 @@ namespace PhyGen.API.Controllers
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateSubjectBookCommand>(request);
             return await ExecuteAsync<UpdateSubjectBookCommand, Unit>(command);
+        }
+        
+        [HttpDelete("{subjectBookId}")]
+        [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteSubjectBook(Guid subjectBookId, [FromBody] DeleteSubjectBookRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<DeleteSubjectBookCommand>(request);
+            return await ExecuteAsync<DeleteSubjectBookCommand, Unit>(command);
         }
     }
 }

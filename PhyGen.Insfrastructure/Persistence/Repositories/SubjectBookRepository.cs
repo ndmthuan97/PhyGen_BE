@@ -19,28 +19,9 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         {
         }
 
-        public async Task<SubjectBook?> GetSubjectBookByNameAsync(string name)
-        {
-            return await _context.SubjectBooks
-                .FirstOrDefaultAsync(sb => sb.Name.ToLower() == name.ToLower());
-        }
-
-        public async Task<Pagination<SubjectBook>?> GetSubjectBooksAsync(SubjectBookSpecParam subjectBookSpecParam)
+        public async Task<Pagination<SubjectBook>?> GetSubjectBooksBySubjectWithSpecAsync(SubjectBookSpecParam subjectBookSpecParam)
         {
             var spec = new SubjectBookSpecification(subjectBookSpecParam);
-            return await GetWithSpecAsync(spec);
-        }
-
-        public async Task<List<SubjectBook>> GetSubjectBooksBySubjectIdAsync(Guid subjectId)
-        {
-            return await _context.SubjectBooks
-                .Where(sb => sb.SubjectId == subjectId)
-                .ToListAsync();
-        }
-
-        public async Task<Pagination<SubjectBook>?> GetSubjectBooksBySubjectIdWithSpecAsync(SubjectBookBySubjectSpecParam subjectBookBySubjectSpecParam)
-        {
-            var spec = new SubjectBookBySubjectSpecification(subjectBookBySubjectSpecParam);
             return await GetWithSpecAsync(spec);
         }
     }

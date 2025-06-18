@@ -5,6 +5,7 @@ using PhyGen.Application.Chapters.Responses;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.SubjectBooks.Exceptions;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Domain.Specs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace PhyGen.Application.Chapters.Handlers
         }
     }
 
-    public class GetChaptersBySubjectBookIdQueryHandler : IRequestHandler<GetChaptersBySubjectBookIdQuery, List<ChapterResponse>>
+    public class GetChaptersBySubjectBookIdQueryHandler : IRequestHandler<GetChaptersBySubjectBookIdQuery, Pagination<ChapterResponse>>
     {
         private readonly IChapterRepository _chapterRepository;
         private readonly ISubjectBookRepository _subjectBookRepository;
@@ -41,17 +42,11 @@ namespace PhyGen.Application.Chapters.Handlers
             _subjectBookRepository = subjectBookRepository;
         }
 
-        public async Task<List<ChapterResponse>> Handle(GetChaptersBySubjectBookIdQuery request, CancellationToken cancellationToken)
+        public async Task<Pagination<ChapterResponse>> Handle(GetChaptersBySubjectBookIdQuery request, CancellationToken cancellationToken)
         {
-            if (await _subjectBookRepository.GetByIdAsync(request.SubjectBookId) == null)
-                throw new SubjectBookNotFoundException();
+            var chapters = await _chapterRepository.GetChaptersBySubjectBookAsync(request.ChapterSpecParam);
 
-            var chapters = await _chapterRepository.GetChaptersBySubjectBookIdAsync(request.SubjectBookId);
-
-            if (chapters == null || !chapters.Any())
-                throw new ChapterNotFoundException();
-
-            return AppMapper<CoreMappingProfile>.Mapper.Map<List<ChapterResponse>>(chapters.OrderBy(c => c.OrderNo));
+            return AppMapper<CoreMappingProfile>.Mapper.Map<Pagination<ChapterResponse>>(chapters);
         }
     }
 }

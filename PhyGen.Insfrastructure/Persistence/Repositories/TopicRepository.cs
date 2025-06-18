@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Domain.Specs;
+using PhyGen.Infrastructure.Specifications;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 using PhyGen.Insfrastructure.Persistence.Repositories;
 using System;
@@ -17,17 +19,10 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         {
         }
 
-        public Task<Topic?> GetTopicByChapterIdAndNameAsync(Guid chapterId, string name)
+        public async Task<Pagination<Topic>?> GetTopicsByChapterAsync(TopicSpecParam topicSpecParam)
         {
-            return _context.Topics
-                .FirstOrDefaultAsync(t => t.ChapterId == chapterId && t.Name.ToLower() == name.ToLower());
-        }
-
-        public async Task<List<Topic>> GetTopicsByChapterIdAsync(Guid chapterId)
-        {
-            return await _context.Topics
-                .Where(t => t.ChapterId == chapterId)
-                .ToListAsync();
+            var spec = new TopicSpecification(topicSpecParam);
+            return await GetWithSpecAsync(spec);
         }
     }
 }

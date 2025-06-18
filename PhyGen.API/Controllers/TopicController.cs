@@ -10,6 +10,7 @@ using PhyGen.Application.Mapping;
 using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
+using PhyGen.Domain.Specs;
 
 namespace PhyGen.API.Controllers
 {
@@ -28,12 +29,12 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetTopicByIdQuery, TopicResponse>(request);
         }
 
-        [HttpGet("chapter/{chapterId}")]
+        [HttpGet("chapter")]
         [ProducesResponseType(typeof(ApiResponse<List<TopicResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetTopicsBySubjectBookId(Guid chapterId)
+        public async Task<IActionResult> GetTopicsByChapterId([FromQuery] TopicSpecParam param)
         {
-            var request = new GetTopicsByChapterIdQuery(chapterId);
-            return await ExecuteAsync<GetTopicsByChapterIdQuery, List<TopicResponse>>(request);
+            var request = new GetTopicsByChapterIdQuery(param);
+            return await ExecuteAsync<GetTopicsByChapterIdQuery, Pagination<TopicResponse>>(request);
         }
 
         [HttpPost]
@@ -68,6 +69,23 @@ namespace PhyGen.API.Controllers
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateTopicCommand>(request);
             return await ExecuteAsync<UpdateTopicCommand, Unit>(command);
+        }
+
+        [HttpDelete("{topicId}")]
+        [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteTopic(Guid topicId, [FromBody] DeleteTopicRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<DeleteTopicCommand>(request);
+            return await ExecuteAsync<DeleteTopicCommand, Unit>(command);
         }
     }
 }

@@ -25,11 +25,15 @@ namespace PhyGen.Application.Topics.Handlers
 
         public async Task<Guid> Handle(CreateTopicCommand request, CancellationToken cancellationToken)
         {
-            if (await _chapterRepository.GetByIdAsync(request.ChapterId) == null)
+            var chapter = await _chapterRepository.GetByIdAsync(request.ChapterId);
+            if (chapter == null || chapter.DeletedAt.HasValue)
                 throw new ChapterNotFoundException();
 
-            if (await _topicRepository.GetTopicByChapterIdAndNameAsync(request.ChapterId, request.Name) != null)
-                throw new TopicSameNameException();
+            if (await _topicRepository.AlreadyExistAsync(t =>
+                t.ChapterId == request.ChapterId &&
+                t.Name.ToLower() == request.Name.ToLower() &&
+                t.OrderNo == request.OrderNo))
+                throw new TopicAlreadyExistException();
 
             var topic = new Topic
             {
@@ -54,18 +58,40 @@ namespace PhyGen.Application.Topics.Handlers
         }
         public async Task<Unit> Handle(UpdateTopicCommand request, CancellationToken cancellationToken)
         {
-            if (await _chapterRepository.GetByIdAsync(request.ChapterId) == null)
-                throw new ChapterNotFoundException();
 
             var topic = await _topicRepository.GetByIdAsync(request.Id) ?? throw new TopicNotFoundException();
 
-            if (await _topicRepository.GetTopicByChapterIdAndNameAsync(request.ChapterId, request.Name) != null &&
-                topic.Name != request.Name)
-                throw new TopicSameNameException();
+            var chapter = await _chapterRepository.GetByIdAsync(request.ChapterId);
+            if (chapter == null || chapter.DeletedAt.HasValue)
+                throw new ChapterNotFoundException();
+
+            if (await _topicRepository.AlreadyExistAsync(t =>
+                t.ChapterId == request.ChapterId &&
+                t.Name.ToLower() == request.Name.ToLower() &&
+                t.OrderNo == request.OrderNo))
+                throw new TopicAlreadyExistException();
 
             topic.ChapterId = request.ChapterId;
             topic.Name = request.Name;
             topic.OrderNo = request.OrderNo;
+
+            await _topicRepository.UpdateAsync(topic);
+            return Unit.Value;
+        }
+    }
+
+    public class DeleteTopicCommandHandler : IRequestHandler<DeleteTopicCommand, Unit>
+    {
+        private readonly ITopicRepository _topicRepository;
+        public DeleteTopicCommandHandler(ITopicRepository topicRepository)
+        {
+            _topicRepository = topicRepository;
+        }
+        public async Task<Unit> Handle(DeleteTopicCommand request, CancellationToken cancellationToken)
+        {
+            var topic = await _topicRepository.GetByIdAsync(request.Id) ?? throw new TopicNotFoundException();
+
+            topic.DeletedAt = DateTime.UtcNow;
 
             await _topicRepository.UpdateAsync(topic);
             return Unit.Value;

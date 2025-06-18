@@ -6,6 +6,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -83,6 +84,11 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
         {
             _context.Entry(entity).State = EntityState.Modified;
             return _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> AlreadyExistAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _context.Set<TEntity>().AnyAsync(predicate);
         }
     }
 

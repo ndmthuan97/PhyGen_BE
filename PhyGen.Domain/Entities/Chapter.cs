@@ -16,6 +16,8 @@ namespace PhyGen.Domain.Entities
 
         public int OrderNo { get; set; }
 
+        public DateTime? DeletedAt { get; set; }
+
         // Navigation Properties
         public virtual SubjectBook SubjectBook { get; set; } = null!;
         public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();

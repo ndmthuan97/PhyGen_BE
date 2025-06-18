@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Specs
 {
-    public class SubjectBookSpecParam : BaseSpecParam
+    public class ChapterSpecParam : BaseSpecParam
     {
-        public Guid SubjectId { get; set; }
+        public Guid SubjectBookId { get; set; }
         public string? Search { get; set; }
         public string? Sort { get; set; }
     }

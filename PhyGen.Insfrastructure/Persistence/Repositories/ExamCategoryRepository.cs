@@ -16,11 +16,5 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         public ExamCategoryRepository(AppDbContext context) : base(context)
         {
         }
-
-        public Task<ExamCategory?> GetByNameAsync(string name)
-        {
-            return _context.ExamCategories
-                .FirstOrDefaultAsync(ec => ec.Name.ToLower() == name.ToLower());
-        }
     }
 }

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.SubjectBooks.Exceptions
 {
-    public class SubjectBookSameNameException : AppException
+    public class SubjectBookAlreadyExistException : AppException
     {
-        public SubjectBookSameNameException() : base(StatusCode.SubjectBookSameName)
+        public SubjectBookAlreadyExistException() : base(StatusCode.SubjectBookAlreadyExist)
         {
         }
     }

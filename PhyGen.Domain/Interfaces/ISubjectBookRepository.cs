@@ -10,9 +10,6 @@ namespace PhyGen.Domain.Interfaces
 {
     public interface ISubjectBookRepository : IAsyncRepository<SubjectBook, Guid>
     {
-        Task<SubjectBook?> GetSubjectBookByNameAsync(string name);
-        Task<List<SubjectBook>> GetSubjectBooksBySubjectIdAsync(Guid subjectId);
-        Task<Pagination<SubjectBook>?> GetSubjectBooksAsync(SubjectBookSpecParam subjectBookSpecParam);
-        Task<Pagination<SubjectBook>?> GetSubjectBooksBySubjectIdWithSpecAsync(SubjectBookBySubjectSpecParam subjectBookBySubjectIdSpecParam);
+        Task<Pagination<SubjectBook>?> GetSubjectBooksBySubjectWithSpecAsync(SubjectBookSpecParam subjectBookSpecParam);
     }
 }

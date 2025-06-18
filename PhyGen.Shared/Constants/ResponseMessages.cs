@@ -30,15 +30,15 @@ namespace PhyGen.Shared.Constants
 
             // SubjectBook messages
             { StatusCode.SubjectBookNotFound, "Không tìm thấy sách môn học với mã được cung cấp." },
-            { StatusCode.SubjectBookSameName, "Sách môn học với tên này đã tồn tại." },
+            { StatusCode.SubjectBookAlreadyExist, "Sách môn học này đã tồn tại." },
 
             // Chapter messages
             { StatusCode.ChapterNotFound, "Không tìm thấy chương với mã được cung cấp." },
-            { StatusCode.ChapterSameName, "Chương với tên này đã tồn tại." },
+            { StatusCode.ChapterAlreadyExist, "Chương này đã tồn tại." },
 
             // Topic messages
             { StatusCode.TopicNotFound, "Không tìm thấy chủ đề với mã được cung cấp." },
-            { StatusCode.TopicSameName, "Chủ đề với tên này đã tồn tại." },
+            { StatusCode.TopicAlreadyExist, "Chủ đề này đã tồn tại." },
 
             // ContentFlow messages
             { StatusCode.ContentFlowNotFound, "Không tìm thấy luồng nội dung với mã được cung cấp." },

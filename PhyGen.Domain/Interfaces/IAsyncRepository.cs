@@ -3,6 +3,7 @@ using PhyGen.Domain.Specs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,5 +17,6 @@ namespace PhyGen.Domain.Interfaces
         Task<TEntity> AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
+        Task<bool> AlreadyExistAsync(Expression<Func<TEntity, bool>> predicate); 
     }
 }

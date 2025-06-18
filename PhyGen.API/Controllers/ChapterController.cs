@@ -10,6 +10,7 @@ using PhyGen.Application.Chapters.Responses;
 using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
+using PhyGen.Domain.Specs;
 
 namespace PhyGen.API.Controllers
 {
@@ -28,12 +29,12 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetChapterByIdQuery, ChapterResponse>(request);
         }
 
-        [HttpGet("subjectbook/{subjectBookId}")]
+        [HttpGet("subjectbook")]
         [ProducesResponseType(typeof(ApiResponse<List<ChapterResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetChaptersBySubjectBookId(Guid subjectBookId)
+        public async Task<IActionResult> GetChaptersBySubjectBookId([FromQuery] ChapterSpecParam chapterSpecParam)
         {
-            var request = new GetChaptersBySubjectBookIdQuery(subjectBookId);
-            return await ExecuteAsync<GetChaptersBySubjectBookIdQuery, List<ChapterResponse>>(request);
+            var request = new GetChaptersBySubjectBookIdQuery(chapterSpecParam);
+            return await ExecuteAsync<GetChaptersBySubjectBookIdQuery, Pagination<ChapterResponse>>(request);
         }
 
         [HttpPost]
@@ -68,6 +69,23 @@ namespace PhyGen.API.Controllers
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateChapterCommand>(request);
             return await ExecuteAsync<UpdateChapterCommand, Unit>(command);
+        }
+
+        [HttpDelete("{chapterId}")]
+        [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteChapter(Guid chapterId, [FromBody] DeleteChapterRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<DeleteChapterCommand>(request);
+            return await ExecuteAsync<DeleteChapterCommand, Unit>(command);
         }
     }
 }

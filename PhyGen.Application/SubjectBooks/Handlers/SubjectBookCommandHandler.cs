@@ -3,6 +3,7 @@ using PhyGen.Application.Mapping;
 using PhyGen.Application.SubjectBooks.Commands;
 using PhyGen.Application.SubjectBooks.Exceptions;
 using PhyGen.Application.SubjectBooks.Responses;
+using PhyGen.Application.Subjects.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -26,12 +27,18 @@ namespace PhyGen.Application.SubjectBooks.Handlers
 
         public async Task<SubjectBookResponse> Handle(CreateSubjectBookCommand request, CancellationToken cancellationToken)
         {
-            if (await _subjectRepository.GetByIdAsync(request.SubjectId) == null)
-                throw new SubjectBookNotFoundException();
+            var subject = await _subjectRepository.GetByIdAsync(request.SubjectId);
+            if (subject == null)
+                throw new SubjectNotFoundException();
 
-            if (await _subjectBookRepository.GetSubjectBooksBySubjectIdAsync(request.SubjectId) == null)
-                throw new SubjectBookSameNameException();
-
+            if (await _subjectBookRepository.AlreadyExistAsync(sb =>
+                sb.SubjectId == request.SubjectId &&
+                sb.Name.ToLower() == request.Name.ToLower() &&
+                sb.Grade == request.Grade))
+            {
+                throw new SubjectBookAlreadyExistException();
+            }    
+                
             var subjectBook = new SubjectBook
             {
                 SubjectId = request.SubjectId,
@@ -62,12 +69,35 @@ namespace PhyGen.Application.SubjectBooks.Handlers
             if (await _subjectRepository.GetByIdAsync(request.SubjectId) == null)
                 throw new SubjectBookNotFoundException();
 
-            if (await _subjectBookRepository.GetSubjectBooksBySubjectIdAsync(request.SubjectId) == null)
-                throw new SubjectBookSameNameException();
+            if (await _subjectBookRepository.AlreadyExistAsync(sb =>
+                sb.SubjectId == request.SubjectId &&
+                sb.Name.ToLower() == request.Name.ToLower() &&
+                sb.Grade == request.Grade))
+            {
+                throw new SubjectBookAlreadyExistException();
+            }
 
             subjectBook.SubjectId = request.SubjectId;
             subjectBook.Name = request.Name;
             subjectBook.Grade = request.Grade;
+
+            await _subjectBookRepository.UpdateAsync(subjectBook);
+            return Unit.Value;
+        }
+    }
+
+    public class DeleteSubjectBookCommandHandler : IRequestHandler<DeleteSubjectBookCommand, Unit>
+    {
+        private readonly ISubjectBookRepository _subjectBookRepository;
+        public DeleteSubjectBookCommandHandler(ISubjectBookRepository subjectBookRepository)
+        {
+            _subjectBookRepository = subjectBookRepository;
+        }
+        public async Task<Unit> Handle(DeleteSubjectBookCommand request, CancellationToken cancellationToken)
+        {
+            var subjectBook = await _subjectBookRepository.GetByIdAsync(request.Id) ?? throw new SubjectBookNotFoundException();
+            
+            subjectBook.DeletedAt = DateTime.UtcNow;
 
             await _subjectBookRepository.UpdateAsync(subjectBook);
             return Unit.Value;

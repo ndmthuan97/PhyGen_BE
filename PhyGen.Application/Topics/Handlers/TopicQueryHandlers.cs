@@ -5,6 +5,7 @@ using PhyGen.Application.Topics.Exceptions;
 using PhyGen.Application.Topics.Queries;
 using PhyGen.Application.Topics.Responses;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Domain.Specs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace PhyGen.Application.Topics.Handlers
         }
     }
 
-    public class GetTopicsByChapterIdQueryHandler : IRequestHandler<GetTopicsByChapterIdQuery, List<TopicResponse>>
+    public class GetTopicsByChapterIdQueryHandler : IRequestHandler<GetTopicsByChapterIdQuery, Pagination<TopicResponse>>
     {
         private readonly ITopicRepository _topicRepository;
         private readonly IChapterRepository _chapterRepository;
@@ -39,17 +40,11 @@ namespace PhyGen.Application.Topics.Handlers
             _chapterRepository = chapterRepository;
         }
 
-        public async Task<List<TopicResponse>> Handle(GetTopicsByChapterIdQuery request, CancellationToken cancellationToken)
+        public async Task<Pagination<TopicResponse>> Handle(GetTopicsByChapterIdQuery request, CancellationToken cancellationToken)
         {
-            if (await _chapterRepository.GetByIdAsync(request.ChapterId) == null)
-                throw new ChapterNotFoundException();
+            var topics = await _topicRepository.GetTopicsByChapterAsync(request.TopicSpecParam);
 
-            var topics = await _topicRepository.GetTopicsByChapterIdAsync(request.ChapterId);
-
-            if (topics == null || !topics.Any())
-                throw new TopicNotFoundException();
-
-            return AppMapper<CoreMappingProfile>.Mapper.Map<List<TopicResponse>>(topics.OrderBy(t => t.OrderNo));
+            return AppMapper<CoreMappingProfile>.Mapper.Map<Pagination<TopicResponse>>(topics);
         }
     }
 }

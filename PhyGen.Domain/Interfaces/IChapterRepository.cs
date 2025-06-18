@@ -1,4 +1,5 @@
 ﻿using PhyGen.Domain.Entities;
+using PhyGen.Domain.Specs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace PhyGen.Domain.Interfaces
 {
     public interface IChapterRepository : IAsyncRepository<Chapter, Guid>
     {
-        Task<Chapter?> GetChapterBySubjectBookIdAndNameAsync(Guid subjectBookId, string name);
-        Task<List<Chapter>> GetChaptersBySubjectBookIdAsync(Guid subjectBookId);
+        Task<Pagination<Chapter>?> GetChaptersBySubjectBookAsync(ChapterSpecParam chapterSpecParam);
     }
 }

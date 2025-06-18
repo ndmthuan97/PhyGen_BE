@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Topics.Exceptions
 {
-    public class TopicSameNameException : AppException
+    public class TopicAlreadyExistException : AppException
     {
-        public TopicSameNameException(): base(StatusCode.TopicSameName)
+        public TopicAlreadyExistException(): base(StatusCode.TopicAlreadyExist)
         {
         }
     }

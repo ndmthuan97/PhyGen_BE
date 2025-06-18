@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Chapters.Exceptions
 {
-    public class ChapterSameNameException : AppException
+    public class ChapterAlreadyExistException : AppException
     {
-        public ChapterSameNameException() : base(StatusCode.ChapterSameName) { }
+        public ChapterAlreadyExistException() : base(StatusCode.ChapterAlreadyExist) { }
     }
 }

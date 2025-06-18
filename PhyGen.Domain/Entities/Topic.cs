@@ -18,6 +18,8 @@ namespace PhyGen.Domain.Entities
 
         public int? OrderNo { get; set; }
 
+        public DateTime? DeletedAt { get; set; }
+
         // Navigation Properties
         public virtual Chapter Chapter { get; set; } = null!;
         public virtual ICollection<Question> Questions { get; set; } = new List<Question>();

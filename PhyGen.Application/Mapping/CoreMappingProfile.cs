@@ -51,13 +51,11 @@ namespace PhyGen.Application.Mapping
 
             // Mapping for Chapter
             CreateMap<Chapter, ChapterResponse>();
-            CreateMap<CreateChapterCommand, Chapter>();
-            CreateMap<UpdateChapterCommand, Chapter>();
+            CreateMap<Pagination<Chapter>, Pagination<ChapterResponse>>();
 
             // Mapping for Topic
             CreateMap<Topic, TopicResponse>();
-            CreateMap<CreateTopicCommand, Topic>();
-            CreateMap<UpdateTopicCommand, Topic>();
+            CreateMap<Pagination<Topic>, Pagination<TopicResponse>>();
 
             // Mapping for ContentFlow
             CreateMap<ContentFlow, ContentFlowResponse>();

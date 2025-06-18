@@ -22,7 +22,7 @@ namespace PhyGen.Application.ExamCategories.Handlers
 
         public async Task<Guid> Handle(CreateExamCategoryCommand request, CancellationToken cancellationToken)
         {
-            if (await _examCategoryRepository.GetByNameAsync(request.Name) != null)
+            if (await _examCategoryRepository.AlreadyExistAsync(ec => ec.Name.ToLower() == request.Name.ToLower()))
                 throw new ExamCategorySameNameException();
 
             var examCategory = new ExamCategory
@@ -50,8 +50,7 @@ namespace PhyGen.Application.ExamCategories.Handlers
             if (examCategory == null)
                 throw new ExamCategoryNotFoundException();
 
-            if (await _examCategoryRepository.GetByNameAsync(request.Name) != null &&
-                examCategory.Name.ToLower() != request.Name.ToLower())
+            if (await _examCategoryRepository.AlreadyExistAsync(ec => ec.Name.ToLower() == request.Name.ToLower()))
                 throw new ExamCategorySameNameException();
 
             examCategory.Name = request.Name;
