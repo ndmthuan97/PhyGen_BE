@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.ContentItems.Exceptions
 {
-    public class ContentItemSameNameException : AppException
+    public class ContentItemAlreadyExistException : AppException
     {
-        public ContentItemSameNameException() : base(StatusCode.ContentItemSameName)
+        public ContentItemAlreadyExistException() : base(StatusCode.ContentItemAlreadyExist)
         {
         }
     }

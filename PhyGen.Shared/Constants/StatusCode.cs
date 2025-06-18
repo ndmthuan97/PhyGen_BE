@@ -43,11 +43,11 @@ namespace PhyGen.Shared.Constants
         TopicNotFound = 2131,
 
         // ContentFlow errors (2150–2169)
-        ContentFlowSameName = 2150,
+        ContentFlowAlreadyExist = 2150,
         ContentFlowNotFound = 2151,
 
         // ContentItem errors (2170–2189)
-        ContentItemSameName = 2170,
+        ContentItemAlreadyExist = 2170,
         ContentItemNotFound = 2171,
 
         // ExamCategory errors (2190–2209)

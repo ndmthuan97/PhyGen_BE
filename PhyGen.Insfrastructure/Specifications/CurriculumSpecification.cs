@@ -28,7 +28,8 @@ namespace PhyGen.Infrastructure.Specifications
         public CurriculumSpecification(CurriculumSpecParam param)
         {
             Criteria = curriculum =>
-                string.IsNullOrEmpty(param.Search) || curriculum.Name.ToLower().Contains(param.Search.ToLower());
+                (string.IsNullOrEmpty(param.Search) || curriculum.Name.ToLower().Contains(param.Search.ToLower()))
+                && !curriculum.DeletedAt.HasValue;
 
             if (!string.IsNullOrEmpty(param.Sort))
             {

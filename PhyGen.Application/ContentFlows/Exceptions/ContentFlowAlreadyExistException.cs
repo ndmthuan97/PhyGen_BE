@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.ContentFlows.Exceptions
 {
-    public class ContentFlowSameNameException : AppException
+    public class ContentFlowAlreadyExistException : AppException
     {
-        public ContentFlowSameNameException() : base(StatusCode.ContentFlowSameName)
+        public ContentFlowAlreadyExistException() : base(StatusCode.ContentFlowAlreadyExist)
         {
         }
     }

@@ -31,7 +31,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
                 throw new CurriculumNotFoundException();
             
             if (await _repository.GetContentFlowByCurriculumIdAndNameAsync(request.CurriculumId, request.Name) != null)
-                throw new ContentFlowSameNameException();
+                throw new ContentFlowAlreadyExistException();
 
             var contentFlow = new ContentFlow
             {
@@ -61,7 +61,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
                 throw new CurriculumNotFoundException();
 
             if (await _repository.GetContentFlowByCurriculumIdAndNameAsync(request.CurriculumId, request.Name) != null)
-                throw new ContentFlowSameNameException();
+                throw new ContentFlowAlreadyExistException();
 
             var contentFlow = await _repository.GetByIdAsync(request.Id);
             if (contentFlow == null)

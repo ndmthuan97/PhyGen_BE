@@ -131,6 +131,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("Grade")
                         .HasColumnType("integer");
 

@@ -30,7 +30,7 @@ namespace PhyGen.Application.ContentItems.Handlers
             if (await _contentFlowRepository.GetByIdAsync(request.ContentFlowId) == null)
                 throw new ContentFlowNotFoundException();
             if (await _contentItemRepository.GetContentItemByContentFlowIdAndNameAsync(request.ContentFlowId, request.Name) != null)
-                throw new ContentItemSameNameException();
+                throw new ContentItemAlreadyExistException();
 
             var contentItem = new ContentItem
             {
@@ -60,7 +60,7 @@ namespace PhyGen.Application.ContentItems.Handlers
                 throw new ContentFlowNotFoundException();
 
             if (await _contentItemRepository.GetContentItemByContentFlowIdAndNameAsync(request.ContentFlowId, request.Name) != null)
-                throw new ContentItemSameNameException();
+                throw new ContentItemAlreadyExistException();
 
             var contentItem = await _contentItemRepository.GetByIdAsync(request.Id);
             if (contentItem == null)

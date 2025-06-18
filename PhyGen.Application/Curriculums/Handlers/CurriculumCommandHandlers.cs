@@ -65,4 +65,24 @@ namespace PhyGen.Application.Curriculums.Handlers
             return Unit.Value;
         }
     }
+
+    public class DeleteCurriculumCommandHandler : IRequestHandler<DeleteCurriculumCommand, Unit>
+    {
+        private readonly ICurriculumRepository _curriculumRepository;
+
+        public DeleteCurriculumCommandHandler(ICurriculumRepository curriculumRepository)
+        {
+            _curriculumRepository = curriculumRepository;
+        }
+
+        public async Task<Unit> Handle(DeleteCurriculumCommand request, CancellationToken cancellationToken)
+        {
+            var curriculum = await _curriculumRepository.GetByIdAsync(request.Id) ?? throw new CurriculumNotFoundException();
+
+            curriculum.DeletedAt = DateTime.UtcNow;
+
+            await _curriculumRepository.UpdateAsync(curriculum);
+            return Unit.Value;
+        }
+    }
 }

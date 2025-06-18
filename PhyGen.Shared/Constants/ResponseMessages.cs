@@ -42,11 +42,11 @@ namespace PhyGen.Shared.Constants
 
             // ContentFlow messages
             { StatusCode.ContentFlowNotFound, "Không tìm thấy luồng nội dung với mã được cung cấp." },
-            { StatusCode.ContentFlowSameName, "Luồng nội dung với tên này đã tồn tại." },
+            { StatusCode.ContentFlowAlreadyExist, "Luồng nội dung đã tồn tại." },
 
             // ContentItem messages
             { StatusCode.ContentItemNotFound, "Không tìm thấy mục nội dung với mã được cung cấp." },
-            { StatusCode.ContentItemSameName, "Mục nội dung với tên này đã tồn tại." },
+            { StatusCode.ContentItemAlreadyExist, "Mục nội dung đã tồn tại." },
 
             // ExamCategory messages
             { StatusCode.ExamCategoryNotFound, "Không tìm thấy danh mục bài kiểm tra với mã được cung cấp." },

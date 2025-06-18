@@ -25,4 +25,10 @@ namespace PhyGen.API.Models
         [Required(ErrorMessage = "Grade is required.")]
         public int Grade { get; set; }
     }
+
+    public class DeleteCurriculumRequest
+    {
+        [JsonRequired]
+        public Guid Id { get; set; }
+    }
 }

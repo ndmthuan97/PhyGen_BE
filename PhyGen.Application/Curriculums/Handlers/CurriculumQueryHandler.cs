@@ -41,7 +41,11 @@ namespace PhyGen.Application.Curriculums.Handlers
 
         public async Task<CurriculumResponse> Handle(GetCurriculumByIdQuery request, CancellationToken cancellationToken)
         {
-            var curriculum = await _curriculumRepository.GetByIdAsync(request.CurriculumId) ?? throw new CurriculumNotFoundException();
+            var curriculum = await _curriculumRepository.GetByIdAsync(request.CurriculumId);
+
+            if (curriculum == null || curriculum.DeletedAt.HasValue)
+                throw new CurriculumNotFoundException();
+
             return AppMapper<CoreMappingProfile>.Mapper.Map<CurriculumResponse>(curriculum);
         }
     }

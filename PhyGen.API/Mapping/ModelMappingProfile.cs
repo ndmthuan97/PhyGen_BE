@@ -23,6 +23,7 @@ namespace PhyGen.API.Mapping
             // Mapping for Curriculum
             CreateMap<CreateCurriculumRequest, CreateCurriculumCommand>();
             CreateMap<UpdateCurriculumRequest, UpdateCurriculumCommand>();
+            CreateMap<DeleteCurriculumRequest, DeleteCurriculumCommand>();
 
             // Mapping for Subject
             CreateMap<CreateSubjectRequest, CreateSubjectCommand>();
