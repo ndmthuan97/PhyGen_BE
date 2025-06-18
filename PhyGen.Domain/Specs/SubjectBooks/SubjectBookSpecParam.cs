@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace PhyGen.Domain.Specs.Curriculums
+namespace PhyGen.Domain.Specs.SubjectBooks
 {
-    public class CurriculumSpecParam : BaseSpecParam
+    public class SubjectBookSpecParam : BaseSpecParam
     {
+        [JsonIgnore]
+        public Guid SubjectId { get; set; }
         public string? Search { get; set; }
-
         public string? Sort { get; set; }
     }
 }

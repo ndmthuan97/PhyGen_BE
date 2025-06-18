@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using PhyGen.Application.Mapping;
 using PhyGen.Application.SubjectBooks.Commands;
 using PhyGen.Application.SubjectBooks.Exceptions;
+using PhyGen.Application.SubjectBooks.Responses;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.SubjectBooks.Handlers
 {
-    public class CreateSubjectBookCommandHandler : IRequestHandler<CreateSubjectBookCommand, Guid>
+    public class CreateSubjectBookCommandHandler : IRequestHandler<CreateSubjectBookCommand, SubjectBookResponse>
     {
         private readonly ISubjectBookRepository _subjectBookRepository;
         private readonly ISubjectRepository _subjectRepository;
@@ -22,7 +24,7 @@ namespace PhyGen.Application.SubjectBooks.Handlers
             _subjectRepository = subjectRepository;
         }
 
-        public async Task<Guid> Handle(CreateSubjectBookCommand request, CancellationToken cancellationToken)
+        public async Task<SubjectBookResponse> Handle(CreateSubjectBookCommand request, CancellationToken cancellationToken)
         {
             if (await _subjectRepository.GetByIdAsync(request.SubjectId) == null)
                 throw new SubjectBookNotFoundException();
@@ -38,7 +40,7 @@ namespace PhyGen.Application.SubjectBooks.Handlers
             };
 
             await _subjectBookRepository.AddAsync(subjectBook);
-            return subjectBook.Id;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<SubjectBookResponse>(subjectBook);
         }
     }
 

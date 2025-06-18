@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Domain.Specs;
+using PhyGen.Domain.Specs.SubjectBooks;
+using PhyGen.Infrastructure.Specifications.SubjectBooks;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 using PhyGen.Insfrastructure.Persistence.Repositories;
 using System;
@@ -23,11 +26,23 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
                 .FirstOrDefaultAsync(sb => sb.Name.ToLower() == name.ToLower());
         }
 
+        public async Task<Pagination<SubjectBook>?> GetSubjectBooksAsync(SubjectBookSpecParam subjectBookSpecParam)
+        {
+            var spec = new SubjectBookSpecification(subjectBookSpecParam);
+            return await GetWithSpecAsync(spec);
+        }
+
         public async Task<List<SubjectBook>> GetSubjectBooksBySubjectIdAsync(Guid subjectId)
         {
             return await _context.SubjectBooks
                 .Where(sb => sb.SubjectId == subjectId)
                 .ToListAsync();
+        }
+
+        public async Task<Pagination<SubjectBook>?> GetSubjectBooksBySubjectIdWithSpecAsync(SubjectBookBySubjectIdSpecParam subjectBookBySubjectIdSpecParam)
+        {
+            var spec = new SubjectBookBySubjectIdSpecification(subjectBookBySubjectIdSpecParam);
+            return await GetWithSpecAsync(spec);
         }
     }
 }

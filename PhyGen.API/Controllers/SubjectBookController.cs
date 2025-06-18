@@ -10,6 +10,8 @@ using PhyGen.Application.SubjectBooks.Responses;
 using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
+using PhyGen.Domain.Specs;
+using PhyGen.Domain.Specs.SubjectBooks;
 
 namespace PhyGen.API.Controllers
 {
@@ -28,12 +30,12 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetSubjectBookByIdQuery, SubjectBookResponse>(request);
         }
 
-        [HttpGet("subject/{subjectId}")]
-        [ProducesResponseType(typeof(ApiResponse<List<SubjectBookResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetSubjectBooksBySubjectId(Guid subjectId)
+        [HttpGet("subject/pagination")]
+        [ProducesResponseType(typeof(ApiResponse<Pagination<SubjectBookResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetSubjectBooksBySubjectId([FromQuery] SubjectBookBySubjectIdSpecParam param)
         {
-            var request = new GetSubjectBooksBySubjectIdQuery(subjectId);
-            return await ExecuteAsync<GetSubjectBooksBySubjectIdQuery, List<SubjectBookResponse>>(request);
+            var request = new GetSubjectBooksBySubjectIdQuery(param);
+            return await ExecuteAsync<GetSubjectBooksBySubjectIdQuery, Pagination<SubjectBookResponse>>(request);
         }
 
         [HttpPost]
@@ -50,7 +52,7 @@ namespace PhyGen.API.Controllers
                 });
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateSubjectBookCommand>(request);
-            return await ExecuteAsync<CreateSubjectBookCommand, Guid>(command);
+            return await ExecuteAsync<CreateSubjectBookCommand, SubjectBookResponse>(command);
         }
 
         [HttpPut("{subjectBookId}")]

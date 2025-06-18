@@ -1,4 +1,6 @@
 ﻿using PhyGen.Domain.Entities;
+using PhyGen.Domain.Specs;
+using PhyGen.Domain.Specs.SubjectBooks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +13,7 @@ namespace PhyGen.Domain.Interfaces
     {
         Task<SubjectBook?> GetSubjectBookByNameAsync(string name);
         Task<List<SubjectBook>> GetSubjectBooksBySubjectIdAsync(Guid subjectId);
+        Task<Pagination<SubjectBook>?> GetSubjectBooksAsync(SubjectBookSpecParam subjectBookSpecParam);
+        Task<Pagination<SubjectBook>?> GetSubjectBooksBySubjectIdWithSpecAsync(SubjectBookBySubjectIdSpecParam subjectBookBySubjectIdSpecParam);
     }
 }

@@ -47,8 +47,7 @@ namespace PhyGen.Application.Mapping
 
             // Mapping for SubjectBook
             CreateMap<SubjectBook, SubjectBookResponse>();
-            CreateMap<CreateSubjectBookCommand, SubjectBook>();
-            CreateMap<UpdateSubjectBookCommand, SubjectBook>();
+            CreateMap<Pagination<SubjectBook>, Pagination<SubjectBookResponse>>();
 
             // Mapping for Chapter
             CreateMap<Chapter, ChapterResponse>();

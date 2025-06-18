@@ -5,6 +5,7 @@ using PhyGen.Application.SubjectBooks.Queries;
 using PhyGen.Application.SubjectBooks.Responses;
 using PhyGen.Application.Subjects.Exceptions;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Domain.Specs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace PhyGen.Application.SubjectBooks.Handlers
         }
     }
 
-    public class GetSubjectBooksBySubjectIdQueryHandler : IRequestHandler<GetSubjectBooksBySubjectIdQuery, List<SubjectBookResponse>>
+    public class GetSubjectBooksBySubjectIdQueryHandler : IRequestHandler<GetSubjectBooksBySubjectIdQuery, Pagination<SubjectBookResponse>>
     {
         private readonly ISubjectBookRepository _subjectBookRepository;
         private readonly ISubjectRepository _subjectRepository;
@@ -41,17 +42,11 @@ namespace PhyGen.Application.SubjectBooks.Handlers
             _subjectRepository = subjectRepository;
         }
 
-        public async Task<List<SubjectBookResponse>> Handle(GetSubjectBooksBySubjectIdQuery request, CancellationToken cancellationToken)
+        public async Task<Pagination<SubjectBookResponse>> Handle(GetSubjectBooksBySubjectIdQuery request, CancellationToken cancellationToken)
         {
-            if (await _subjectRepository.GetByIdAsync(request.SubjectId) == null)
-                throw new SubjectNotFoundException();
+            var subjectBooks = await _subjectBookRepository.GetSubjectBooksBySubjectIdWithSpecAsync(request.SubjectBookBySubjectIdSpecParam);
 
-            var subjectBooks = await _subjectBookRepository.GetSubjectBooksBySubjectIdAsync(request.SubjectId);
-
-            if (subjectBooks == null || !subjectBooks.Any())
-                throw new SubjectBookNotFoundException();
-
-            return AppMapper<CoreMappingProfile>.Mapper.Map<List<SubjectBookResponse>>(subjectBooks.OrderBy(sb => sb.Name));
+            return AppMapper<CoreMappingProfile>.Mapper.Map<Pagination<SubjectBookResponse>>(subjectBooks);
         }
     }
 }

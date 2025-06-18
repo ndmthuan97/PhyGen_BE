@@ -30,17 +30,35 @@ namespace PhyGen.Infrastructure.Specifications.Curriculums
         {
             Criteria = curriculum =>
                 (string.IsNullOrEmpty(param.Search) || curriculum.Name.ToLower().Contains(param.Search.ToLower()));
-            if (param.Sort == "Name")
+
+            if (!string.IsNullOrEmpty(param.Sort))
+            {
+                switch (param.Sort.ToLower())
+                {
+                    case "name":
+                        OrderBy = query => query.OrderBy(c => c.Name);
+                        break;
+                    case "namedesc":
+                        OrderByDescending = query => query.OrderByDescending(c => c.Name);
+                        break;
+                    case "grade":
+                        OrderBy = query => query.OrderBy(c => c.Grade);
+                        break;
+                    case "gradedesc":
+                        OrderByDescending = query => query.OrderByDescending(c => c.Grade);
+                        break;
+                    default:
+                        OrderBy = query => query.OrderBy(c => c.Name);
+                        break;
+                }
+            }
+            else
             {
                 OrderBy = query => query.OrderBy(c => c.Name);
             }
-            else if (param.Sort == "Grade")
-            {
-                OrderBy = query => query.OrderBy(c => c.Grade);
-            }
+
             Skip = (param.PageIndex - 1) * param.PageSize;
             Take = param.PageSize;
-            Includes.Add(c => c.ContentFlows);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using PhyGen.Application.Chapters.Commands;
 using PhyGen.Application.Chapters.Exceptions;
+using PhyGen.Application.Chapters.Responses;
+using PhyGen.Application.Mapping;
 using PhyGen.Application.SubjectBooks.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Chapters.Handlers
 {
-    public class CreateChapterCommandHandlers : IRequestHandler<CreateChapterCommand, Guid>
+    public class CreateChapterCommandHandlers : IRequestHandler<CreateChapterCommand, ChapterResponse>
     {
         private readonly IChapterRepository _chapterRepository;
         private readonly ISubjectBookRepository _subjectBookRepository;
@@ -23,7 +25,7 @@ namespace PhyGen.Application.Chapters.Handlers
             _subjectBookRepository = subjectBookRepository;
         }
 
-        public async Task<Guid> Handle(CreateChapterCommand request, CancellationToken cancellationToken)
+        public async Task<ChapterResponse> Handle(CreateChapterCommand request, CancellationToken cancellationToken)
         {
             if (await _subjectBookRepository.GetByIdAsync(request.SubjectBookId) == null)
                 throw new SubjectBookNotFoundException();
@@ -39,7 +41,7 @@ namespace PhyGen.Application.Chapters.Handlers
             };
 
             await _chapterRepository.AddAsync(chapter);
-            return chapter.Id;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<ChapterResponse>(chapter);
         }
     }
     public class UpdateChapterCommandHandlers : IRequestHandler<UpdateChapterCommand, Unit>
