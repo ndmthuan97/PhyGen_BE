@@ -1,4 +1,6 @@
 ﻿using PhyGen.Domain.Entities;
+using PhyGen.Domain.Specs;
+using PhyGen.Domain.Specs.Curriculums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +12,7 @@ namespace PhyGen.Domain.Interfaces
     public interface ICurriculumRepository : IAsyncRepository<Curriculum, Guid>
     {
         Task<Curriculum?> GetCurriculumByNameAsync(string curriculumName);
+
+        Task<Pagination<Curriculum>?> GetCurriculumsAsync(CurriculumSpecParam curriculumSpecParam);
     }
 }

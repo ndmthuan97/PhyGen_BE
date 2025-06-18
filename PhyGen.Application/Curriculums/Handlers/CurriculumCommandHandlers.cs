@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.Curriculums.Exceptions;
+using PhyGen.Application.Curriculums.Response;
+using PhyGen.Application.Mapping;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Curriculums.Handlers
 {
-    public class CreateCurriculumCommandHandlers : IRequestHandler<CreateCurriculumCommand, Guid>
+    public class CreateCurriculumCommandHandlers : IRequestHandler<CreateCurriculumCommand, CurriculumResponse>
     {
         private readonly ICurriculumRepository _curriculumRepository;
 
@@ -20,7 +22,7 @@ namespace PhyGen.Application.Curriculums.Handlers
             _curriculumRepository = curriculumRepository;
         }
 
-        public async Task<Guid> Handle(CreateCurriculumCommand request, CancellationToken cancellationToken)
+        public async Task<CurriculumResponse> Handle(CreateCurriculumCommand request, CancellationToken cancellationToken)
         {
             if (await _curriculumRepository.GetCurriculumByNameAsync(request.Name) != null)
                 throw new CurriculumSameNameException();
@@ -32,7 +34,7 @@ namespace PhyGen.Application.Curriculums.Handlers
             };
 
             curriculum = await _curriculumRepository.AddAsync(curriculum);
-            return curriculum.Id;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<CurriculumResponse>(curriculum);
         }
     }
 

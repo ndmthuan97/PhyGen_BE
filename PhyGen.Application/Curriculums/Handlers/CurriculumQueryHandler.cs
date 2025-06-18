@@ -4,6 +4,7 @@ using PhyGen.Application.Curriculums.Queries;
 using PhyGen.Application.Curriculums.Response;
 using PhyGen.Application.Mapping;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Domain.Specs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,20 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Curriculums.Handlers
 {
-    public class GetAllCurriculumsQueryHandler : IRequestHandler<GetAllCurriculumsQuery, List<CurriculumResponse>>
+    public class GetCurriculumsQueryHandler : IRequestHandler<GetCurriculumsQuery, Pagination<CurriculumResponse>>
     {
         private readonly ICurriculumRepository _curriculumRepository;
 
-        public GetAllCurriculumsQueryHandler(ICurriculumRepository curriculumRepository)
+        public GetCurriculumsQueryHandler(ICurriculumRepository curriculumRepository)
         {
             _curriculumRepository = curriculumRepository;
         }
 
-        public async Task<List<CurriculumResponse>> Handle(GetAllCurriculumsQuery request, CancellationToken cancellationToken)
+        public async Task<Pagination<CurriculumResponse>> Handle(GetCurriculumsQuery request, CancellationToken cancellationToken)
         {
-            var curriculums = await _curriculumRepository.GetAllAsync();
+            var curriculums = await _curriculumRepository.GetCurriculumsAsync(request.CurriculumSpecParam);
 
-            return AppMapper<CoreMappingProfile>.Mapper.Map<List<CurriculumResponse>>(curriculums.OrderBy(c => c.Name));
+            return AppMapper<CoreMappingProfile>.Mapper.Map<Pagination<CurriculumResponse>>(curriculums);
         }
     }
 

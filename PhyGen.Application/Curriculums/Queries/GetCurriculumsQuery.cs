@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using PhyGen.Application.Curriculums.Response;
+using PhyGen.Domain.Specs;
+using PhyGen.Domain.Specs.Curriculums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,5 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Curriculums.Queries
 {
-    public class GetAllCurriculumsQuery : IRequest<List<CurriculumResponse>>
-    {
-    }
+    public record GetCurriculumsQuery(CurriculumSpecParam CurriculumSpecParam) : IRequest<Pagination<CurriculumResponse>>;
 }

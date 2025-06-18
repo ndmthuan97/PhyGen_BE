@@ -20,6 +20,7 @@ using PhyGen.Application.Subjects.Responses;
 using PhyGen.Application.Topics.Commands;
 using PhyGen.Application.Topics.Responses;
 using PhyGen.Domain.Entities;
+using PhyGen.Domain.Specs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,8 +38,7 @@ namespace PhyGen.Application.Mapping
             
             // Mapping for Curriculum
             CreateMap<Curriculum, CurriculumResponse>();
-            CreateMap<CreateCurriculumCommand, Curriculum>();
-            CreateMap<UpdateCurriculumCommand, Curriculum>();
+            CreateMap<Pagination<Curriculum>, Pagination<CurriculumResponse>>();
 
             // Mapping for Subject
             CreateMap<Subject, SubjectResponse>();

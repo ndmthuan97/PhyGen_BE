@@ -10,6 +10,8 @@ using PhyGen.Application.Mapping;
 using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
+using PhyGen.Domain.Specs;
+using PhyGen.Domain.Specs.Curriculums;
 
 namespace PhyGen.API.Controllers
 {
@@ -22,10 +24,10 @@ namespace PhyGen.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<List<CurriculumResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAllCurriculums()
+        public async Task<IActionResult> GetAllCurriculums([FromQuery] CurriculumSpecParam curriculumSpecParam)
         {
-            var request = new GetAllCurriculumsQuery();
-            return await ExecuteAsync<GetAllCurriculumsQuery, List<CurriculumResponse>>(request);
+            var query = new GetCurriculumsQuery(curriculumSpecParam);
+            return await ExecuteAsync<GetCurriculumsQuery, Pagination<CurriculumResponse>>(query);
         }
 
         [HttpGet("{curriculumId}")]
@@ -50,7 +52,7 @@ namespace PhyGen.API.Controllers
                 });
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateCurriculumCommand>(request);
-            return await ExecuteAsync<CreateCurriculumCommand, Guid>(command);
+            return await ExecuteAsync<CreateCurriculumCommand, CurriculumResponse>(command);
         }
 
         [HttpPut("{curriculumId}")]

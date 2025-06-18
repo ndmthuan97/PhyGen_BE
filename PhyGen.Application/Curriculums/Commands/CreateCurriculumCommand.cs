@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PhyGen.Application.Curriculums.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Curriculums.Commands
 {
-    public class CreateCurriculumCommand : IRequest<Guid>
+    public class CreateCurriculumCommand : IRequest<CurriculumResponse>
     {
         public string Name { get; set; } = string.Empty;
 

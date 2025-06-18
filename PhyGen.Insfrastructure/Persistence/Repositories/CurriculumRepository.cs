@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Domain.Specs;
+using PhyGen.Domain.Specs.Curriculums;
+using PhyGen.Infrastructure.Specifications.Curriculums;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 using System;
 using System.Collections.Generic;
@@ -21,6 +24,12 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
         {
             return await _context.Curriculums
                 .FirstOrDefaultAsync(c => c.Name.ToLower() == curriculumName.ToLower());
+        }
+
+        public async Task<Pagination<Curriculum>?> GetCurriculumsAsync(CurriculumSpecParam curriculumSpecParam)
+        {
+            var spec = new CurriculumSpecification(curriculumSpecParam);
+            return await GetWithSpecAsync(spec);
         }
     }
 }

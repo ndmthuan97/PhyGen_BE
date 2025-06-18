@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Domain.Specs;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 using System;
 using System.Collections.Generic;
@@ -19,41 +20,41 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
             _context = context;
         }
 
-        //public async Task<Pagination<TEntity>> GetWithSpecAsync<TSpec>(TSpec spec) where TSpec : ISpecification<TEntity>
-        //{
-        //    var query = _context.Set<TEntity>().AsQueryable();
+        public async Task<Pagination<TEntity>> GetWithSpecAsync<TSpec>(TSpec spec) where TSpec : ISpecification<TEntity>
+        {
+            var query = _context.Set<TEntity>().AsQueryable();
 
-        //    if (spec.Criteria != null)
-        //    {
-        //        query = query.Where(spec.Criteria);
-        //    }
+            if (spec.Criteria != null)
+            {
+                query = query.Where(spec.Criteria);
+            }
 
-        //    foreach (var includeExpression in spec.Includes)
-        //    {
-        //        query = query.Include(includeExpression);
-        //    }
+            foreach (var includeExpression in spec.Includes)
+            {
+                query = query.Include(includeExpression);
+            }
 
-        //    if (spec.OrderBy != null)
-        //    {
-        //        query = spec.OrderBy(query);
-        //    }
+            if (spec.OrderBy != null)
+            {
+                query = spec.OrderBy(query);
+            }
 
-        //    else if (spec.OrderByDescending != null)
-        //    {
-        //        query = spec.OrderByDescending(query);
-        //    }
+            else if (spec.OrderByDescending != null)
+            {
+                query = spec.OrderByDescending(query);
+            }
 
-        //    if (spec.Selector != null)
-        //    {
-        //        query = spec.Selector(query);
-        //    }
+            if (spec.Selector != null)
+            {
+                query = spec.Selector(query);
+            }
 
-        //    var count = await query.CountAsync();
+            var count = await query.CountAsync();
 
-        //    var data = await query.Skip(spec.Skip).Take(spec.Take).AsNoTracking().ToListAsync();
+            var data = await query.Skip(spec.Skip).Take(spec.Take).AsNoTracking().ToListAsync();
 
-        //    return new Pagination<TEntity>(spec.Skip / spec.Take + 1, spec.Take, count, data);
-        //}
+            return new Pagination<TEntity>(spec.Skip / spec.Take + 1, spec.Take, count, data);
+        }
 
         public async Task<IReadOnlyList<TEntity>> GetAllAsync()
         {
