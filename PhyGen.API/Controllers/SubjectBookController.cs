@@ -11,7 +11,6 @@ using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
 using PhyGen.Domain.Specs;
-using PhyGen.Domain.Specs.SubjectBooks;
 
 namespace PhyGen.API.Controllers
 {
@@ -30,9 +29,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetSubjectBookByIdQuery, SubjectBookResponse>(request);
         }
 
-        [HttpGet("subject/pagination")]
+        [HttpGet("subject")]
         [ProducesResponseType(typeof(ApiResponse<Pagination<SubjectBookResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetSubjectBooksBySubjectId([FromQuery] SubjectBookBySubjectIdSpecParam param)
+        public async Task<IActionResult> GetSubjectBooksBySubjectId([FromQuery] SubjectBookBySubjectSpecParam param)
         {
             var request = new GetSubjectBooksBySubjectIdQuery(param);
             return await ExecuteAsync<GetSubjectBooksBySubjectIdQuery, Pagination<SubjectBookResponse>>(request);

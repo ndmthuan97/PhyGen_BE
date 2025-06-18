@@ -2,8 +2,7 @@
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Domain.Specs;
-using PhyGen.Domain.Specs.Curriculums;
-using PhyGen.Infrastructure.Specifications.Curriculums;
+using PhyGen.Infrastructure.Specifications;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 using System;
 using System.Collections.Generic;

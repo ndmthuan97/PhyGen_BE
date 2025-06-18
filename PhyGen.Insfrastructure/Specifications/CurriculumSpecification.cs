@@ -1,6 +1,5 @@
 ﻿using PhyGen.Domain.Entities;
 using PhyGen.Domain.Specs;
-using PhyGen.Domain.Specs.Curriculums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhyGen.Infrastructure.Specifications.Curriculums
+namespace PhyGen.Infrastructure.Specifications
 {
     public class CurriculumSpecification : ISpecification<Curriculum>
     {
@@ -29,7 +28,7 @@ namespace PhyGen.Infrastructure.Specifications.Curriculums
         public CurriculumSpecification(CurriculumSpecParam param)
         {
             Criteria = curriculum =>
-                (string.IsNullOrEmpty(param.Search) || curriculum.Name.ToLower().Contains(param.Search.ToLower()));
+                string.IsNullOrEmpty(param.Search) || curriculum.Name.ToLower().Contains(param.Search.ToLower());
 
             if (!string.IsNullOrEmpty(param.Sort))
             {

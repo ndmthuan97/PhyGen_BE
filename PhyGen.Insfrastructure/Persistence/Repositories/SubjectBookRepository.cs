@@ -2,8 +2,7 @@
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Domain.Specs;
-using PhyGen.Domain.Specs.SubjectBooks;
-using PhyGen.Infrastructure.Specifications.SubjectBooks;
+using PhyGen.Infrastructure.Specifications;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
 using PhyGen.Insfrastructure.Persistence.Repositories;
 using System;
@@ -39,9 +38,9 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Pagination<SubjectBook>?> GetSubjectBooksBySubjectIdWithSpecAsync(SubjectBookBySubjectIdSpecParam subjectBookBySubjectIdSpecParam)
+        public async Task<Pagination<SubjectBook>?> GetSubjectBooksBySubjectIdWithSpecAsync(SubjectBookBySubjectSpecParam subjectBookBySubjectSpecParam)
         {
-            var spec = new SubjectBookBySubjectIdSpecification(subjectBookBySubjectIdSpecParam);
+            var spec = new SubjectBookBySubjectSpecification(subjectBookBySubjectSpecParam);
             return await GetWithSpecAsync(spec);
         }
     }

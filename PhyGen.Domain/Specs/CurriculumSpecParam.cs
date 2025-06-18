@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhyGen.Domain.Specs.Curriculums
+namespace PhyGen.Domain.Specs
 {
     public class CurriculumSpecParam : BaseSpecParam
     {

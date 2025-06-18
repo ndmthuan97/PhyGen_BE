@@ -1,6 +1,5 @@
 ﻿using PhyGen.Domain.Entities;
 using PhyGen.Domain.Specs;
-using PhyGen.Domain.Specs.Curriculums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

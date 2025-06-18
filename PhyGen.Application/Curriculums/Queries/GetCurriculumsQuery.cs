@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using PhyGen.Application.Curriculums.Response;
 using PhyGen.Domain.Specs;
-using PhyGen.Domain.Specs.Curriculums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

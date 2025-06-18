@@ -44,7 +44,7 @@ namespace PhyGen.Application.SubjectBooks.Handlers
 
         public async Task<Pagination<SubjectBookResponse>> Handle(GetSubjectBooksBySubjectIdQuery request, CancellationToken cancellationToken)
         {
-            var subjectBooks = await _subjectBookRepository.GetSubjectBooksBySubjectIdWithSpecAsync(request.SubjectBookBySubjectIdSpecParam);
+            var subjectBooks = await _subjectBookRepository.GetSubjectBooksBySubjectIdWithSpecAsync(request.SubjectBookBySubjectSpecParam);
 
             return AppMapper<CoreMappingProfile>.Mapper.Map<Pagination<SubjectBookResponse>>(subjectBooks);
         }

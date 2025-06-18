@@ -11,7 +11,6 @@ using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
 using PhyGen.Domain.Specs;
-using PhyGen.Domain.Specs.Curriculums;
 
 namespace PhyGen.API.Controllers
 {
