@@ -11,4 +11,19 @@ namespace PhyGen.Shared.Constants
         Admin,
         User
     }
+
+    public enum DifficultyLevel
+    {
+        NhậnBiết,
+        ThôngHiểu,
+        VậnDụng
+    }
+
+    public enum QuestionType
+    {
+        MultipleChoice,
+        TrueFalse,
+        ShortAnswer,
+        Essay
+    }
 }

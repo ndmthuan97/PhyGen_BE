@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PhyGen.Application.Subjects.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Subjects.Commands
 {
-    public class UpdateSubjectCommand : IRequest<Unit>
+    public class CreateSubjectCommand : IRequest<SubjectResponse>
     {
-        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 }

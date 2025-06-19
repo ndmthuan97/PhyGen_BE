@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using PhyGen.Application.ContentItemExamCategories.Commands;
 using PhyGen.Application.ContentItemExamCategories.Exceptions;
+using PhyGen.Application.ContentItemExamCategories.Responses;
 using PhyGen.Application.ContentItems.Exceptions;
 using PhyGen.Application.ExamCategories.Exceptions;
+using PhyGen.Application.Mapping;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.ContentItemExamCategories.Handlers
 {
-    public class CreateContentItemExamCategoryCommandHandler : IRequestHandler<CreateContentItemExamCategoryCommand, Guid>
+    public class CreateContentItemExamCategoryCommandHandler : IRequestHandler<CreateContentItemExamCategoryCommand, ContentItemExamCategoryResponse>
     {
         private readonly IContentItemExamCategoryRepository _contentItemExamCategoryRepository;
         private readonly IContentItemRepository _contentItemRepository;
@@ -29,7 +31,7 @@ namespace PhyGen.Application.ContentItemExamCategories.Handlers
             _examCategoryRepository = examCategoryRepository;
         }
 
-        public async Task<Guid> Handle(CreateContentItemExamCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<ContentItemExamCategoryResponse> Handle(CreateContentItemExamCategoryCommand request, CancellationToken cancellationToken)
         {
             if (await _contentItemRepository.GetByIdAsync(request.ContentItemId) == null)
                 throw new ContentItemNotFoundException();
@@ -46,7 +48,7 @@ namespace PhyGen.Application.ContentItemExamCategories.Handlers
                 ExamCategoryId = request.ExamCategoryId,
             };
             await _contentItemExamCategoryRepository.AddAsync(contentItemExamCategory);
-            return contentItemExamCategory.Id;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<ContentItemExamCategoryResponse>(contentItemExamCategory);
         }
     }
     public class UpdateContentItemExamCategoryCommandHandler : IRequestHandler<UpdateContentItemExamCategoryCommand, Unit>

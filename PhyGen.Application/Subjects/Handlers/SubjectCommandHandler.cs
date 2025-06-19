@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using PhyGen.Application.Mapping;
 using PhyGen.Application.Subjects.Commands;
 using PhyGen.Application.Subjects.Exceptions;
+using PhyGen.Application.Subjects.Responses;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Subjects.Handlers
 {
-    public class CreateSubjectCommandHandler : IRequestHandler<CreateSubjectCommand, Guid>
+    public class CreateSubjectCommandHandler : IRequestHandler<CreateSubjectCommand, SubjectResponse>
     {
         private readonly ISubjectRepository _subjectRepository;
 
@@ -20,7 +22,7 @@ namespace PhyGen.Application.Subjects.Handlers
             _subjectRepository = subjectRepository;
         }
 
-        public async Task<Guid> Handle(CreateSubjectCommand request, CancellationToken cancellationToken)
+        public async Task<SubjectResponse> Handle(CreateSubjectCommand request, CancellationToken cancellationToken)
         {
             if (await _subjectRepository.GetSubjectByNameAsync(request.Name) != null)
                 throw new SubjectSameNameException();
@@ -31,7 +33,7 @@ namespace PhyGen.Application.Subjects.Handlers
             };
 
             await _subjectRepository.AddAsync(subject);
-            return subject.Id;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<SubjectResponse>(subject);
         }
     }
 

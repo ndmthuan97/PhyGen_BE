@@ -50,7 +50,7 @@ namespace PhyGen.API.Controllers
                 });
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateExamCategoryChapterCommand>(request);
-            return await ExecuteAsync<CreateExamCategoryChapterCommand, Guid>(command);
+            return await ExecuteAsync<CreateExamCategoryChapterCommand, ExamCategoryChapterResponse>(command);
         }
 
         [HttpPut("{examCategoryChapterId}")]

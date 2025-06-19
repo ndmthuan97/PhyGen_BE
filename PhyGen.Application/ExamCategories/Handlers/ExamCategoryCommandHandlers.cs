@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using PhyGen.Application.ExamCategories.Commands;
 using PhyGen.Application.ExamCategories.Exceptions;
+using PhyGen.Application.ExamCategories.Responses;
+using PhyGen.Application.Mapping;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.ExamCategories.Handlers
 {
-    public class CreateExamCategoryCommandHandler : IRequestHandler<CreateExamCategoryCommand, Guid>
+    public class CreateExamCategoryCommandHandler : IRequestHandler<CreateExamCategoryCommand, ExamCategoryResponse>
     {
         private readonly IExamCategoryRepository _examCategoryRepository;
 
@@ -20,7 +22,7 @@ namespace PhyGen.Application.ExamCategories.Handlers
             _examCategoryRepository = examCategoryRepository;
         }
 
-        public async Task<Guid> Handle(CreateExamCategoryCommand request, CancellationToken cancellationToken)
+        public async Task<ExamCategoryResponse> Handle(CreateExamCategoryCommand request, CancellationToken cancellationToken)
         {
             if (await _examCategoryRepository.AlreadyExistAsync(ec => ec.Name.ToLower() == request.Name.ToLower()))
                 throw new ExamCategorySameNameException();
@@ -31,7 +33,7 @@ namespace PhyGen.Application.ExamCategories.Handlers
             };
 
             await _examCategoryRepository.AddAsync(examCategory);
-            return examCategory.Id;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<ExamCategoryResponse>(examCategory);
         }
     }
 

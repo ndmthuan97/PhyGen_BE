@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250619030444_Initial")]
+    [Migration("20250619043714_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -199,20 +199,45 @@ namespace PhyGen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ExamCategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
+                    b.Property<int>("Grade")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("RandomizeQuestions")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Title")
                         .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("text");
 
+                    b.Property<int?>("TotalQuestionCount")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("VersionCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("Year")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("ExamCategoryId");
 
                     b.HasIndex("UserId");
 
@@ -262,8 +287,21 @@ namespace PhyGen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("ExamId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("QuestionOrder")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -278,26 +316,37 @@ namespace PhyGen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
-                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("text");
 
                     b.Property<Guid>("ExamCategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Grade")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("text");
+                    b.Property<int>("Grade")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(200)
                         .IsUnicode(true)
-                        .HasColumnType("text");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("TotalQuestionCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -335,8 +384,24 @@ namespace PhyGen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("MatrixId")
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("MatrixId")
                         .HasColumnType("uuid");
+
+                    b.Property<double?>("Score")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -351,11 +416,32 @@ namespace PhyGen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
                     b.Property<Guid>("MatrixSectionId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("SectionId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -479,6 +565,13 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
+                    b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Image")
                         .IsUnicode(true)
                         .HasColumnType("text");
@@ -535,8 +628,18 @@ namespace PhyGen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uuid");
+
+                    b.Property<double?>("Score")
+                        .HasColumnType("double precision");
 
                     b.Property<Guid>("SectionId")
                         .HasColumnType("uuid");
@@ -556,8 +659,29 @@ namespace PhyGen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("ExamId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("SectionType")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -773,9 +897,9 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Exam", b =>
                 {
-                    b.HasOne("PhyGen.Domain.Entities.ExamCategory", "Category")
+                    b.HasOne("PhyGen.Domain.Entities.ExamCategory", "ExamCategory")
                         .WithMany("Exams")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("ExamCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -785,7 +909,7 @@ namespace PhyGen.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("ExamCategory");
 
                     b.Navigation("User");
                 });
@@ -811,11 +935,13 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.ExamVersion", b =>
                 {
-                    b.HasOne("PhyGen.Domain.Entities.Exam", null)
+                    b.HasOne("PhyGen.Domain.Entities.Exam", "Exam")
                         .WithMany("ExamVersions")
                         .HasForeignKey("ExamId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Exam");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Matrix", b =>
@@ -858,10 +984,13 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.MatrixSection", b =>
                 {
-                    b.HasOne("PhyGen.Domain.Entities.Matrix", null)
+                    b.HasOne("PhyGen.Domain.Entities.Matrix", "Matrix")
                         .WithMany("MatrixSections")
                         .HasForeignKey("MatrixId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Matrix");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.MatrixSectionDetail", b =>
@@ -873,7 +1002,7 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("PhyGen.Domain.Entities.Section", "Section")
-                        .WithMany("MatrixSectionDetails")
+                        .WithMany()
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -902,13 +1031,13 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Question", b =>
                 {
-                    b.HasOne("PhyGen.Domain.Entities.Topic", "Topics")
+                    b.HasOne("PhyGen.Domain.Entities.Topic", "Topic")
                         .WithMany("Questions")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Topics");
+                    b.Navigation("Topic");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.QuestionMedia", b =>
@@ -1037,8 +1166,6 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Section", b =>
                 {
-                    b.Navigation("MatrixSectionDetails");
-
                     b.Navigation("QuestionSections");
                 });
 

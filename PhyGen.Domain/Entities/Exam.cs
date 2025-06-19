@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,42 +13,28 @@ namespace PhyGen.Domain.Entities
         [Required]
         public Guid ExamCategoryId { get; set; }
         [Required]
-        public Guid MatrixId { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
-        public string Title { get; set; } = string.Empty; // Tên bài thi (VD: Đề kiểm tra giữa kỳ lớp 10)
-        public string? Description { get; set; } // Mô tả bài thi
+        public string Title { get; set; } = string.Empty;
 
-        public int Grade { get; set; } // Lớp (10, 11, 12)
-        public DateTime? Year { get; set; } // Năm học
-        public int? TotalQuestionCount { get; set; } // Tổng số câu hỏi
+        [Column(TypeName = "text")]
+        public string? Description { get; set; }
 
-        public int VersionCount { get; set; } // Số lượng đề cần sinh
-        public bool RandomizeQuestions { get; set; } // Có xáo trộn câu hỏi không
+        public int Grade { get; set; }
+        public DateTime? Year { get; set; }
+        public int? TotalQuestionCount { get; set; }
 
-        public Guid CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public Guid? UpdatedBy { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-        public Guid? DeletedBy { get; set; }
+        public int VersionCount { get; set; }
+        public bool RandomizeQuestions { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
         // --- Navigation Properties ---
-        public virtual ExamCategory ExamCategory { get; set; } = default!;
-        public virtual Matrix Matrix { get; set; } = default!;
-        public virtual ICollection<Section> Sections { get; set; } = new List<Section>(); // Thay Questions bằng Sections
+        public virtual ExamCategory ExamCategory { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
+        public virtual ICollection<Section> Sections { get; set; } = new List<Section>();
         public virtual ICollection<ExamVersion> ExamVersions { get; set; } = new List<ExamVersion>();
-
-        //** --- Comment các thuộc tính có thể dùng trong tương lai (hiện tại không dùng đến) ---
-        // public Guid SubjectId { get; set; } // Môn học nhưng tạm fix là môn Vật lý
-        // public bool IsPublic { get; set; } // Có được chia sẻ công khai không
-        // public string ExamType { get; set; } // Kiểu đề (Tự luận, Trắc nghiệm, Kết hợp)
-        // public bool IsAIGenerated { get; set; } // Đề có được tạo bởi AI không
-        // public string? PromptTemplate { get; set; } // Prompt dùng để tạo đề
-        // public string Status { get; set; } // Nháp, Đã tạo, Đã duyệt, Công khai
-        // public bool IsUsed { get; set; } // Đã dùng trong kỳ thi nào chưa
-        // public bool RandomizeWithinSections { get; set; } // Xáo trộn trong từng Section (mặc định true), dùng thuộc tính này thì bỏ QuestionOrder trong ExamVersion
-        // public int? DurationMinutes { get; set; } // Thời gian làm bài
-        //**
     }
 }

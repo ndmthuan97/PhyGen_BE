@@ -3,6 +3,8 @@ using PhyGen.Application.Chapters.Exceptions;
 using PhyGen.Application.ExamCategories.Exceptions;
 using PhyGen.Application.ExamCategoryChapters.Commands;
 using PhyGen.Application.ExamCategoryChapters.Exceptions;
+using PhyGen.Application.ExamCategoryChapters.Responses;
+using PhyGen.Application.Mapping;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.ExamCategoryChapters.Handlers
 {
-    public class CreateExamCategoryChapterCommandHandler : IRequestHandler<CreateExamCategoryChapterCommand, Guid>
+    public class CreateExamCategoryChapterCommandHandler : IRequestHandler<CreateExamCategoryChapterCommand, ExamCategoryChapterResponse>
     {
         private readonly IExamCategoryChapterRepository _examCategoryChapterRepository;
         private readonly IExamCategoryRepository _examCategoryRepository;
@@ -29,7 +31,7 @@ namespace PhyGen.Application.ExamCategoryChapters.Handlers
             _chapterRepository = chapterRepository;
         }
 
-        public async Task<Guid> Handle(CreateExamCategoryChapterCommand request, CancellationToken cancellationToken)
+        public async Task<ExamCategoryChapterResponse> Handle(CreateExamCategoryChapterCommand request, CancellationToken cancellationToken)
         {
             if (await _examCategoryRepository.GetByIdAsync(request.ExamCategoryId) == null)
                 throw new ExamCategoryNotFoundException();
@@ -48,7 +50,7 @@ namespace PhyGen.Application.ExamCategoryChapters.Handlers
             };
 
             await _examCategoryChapterRepository.AddAsync(examCategoryChapter);
-            return examCategoryChapter.Id;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<ExamCategoryChapterResponse>(examCategoryChapter);
         }
     }
 

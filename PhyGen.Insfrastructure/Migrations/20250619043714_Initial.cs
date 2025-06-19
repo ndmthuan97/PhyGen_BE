@@ -109,9 +109,13 @@ namespace PhyGen.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     SubjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     ExamCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    Grade = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    TotalQuestionCount = table.Column<int>(type: "integer", nullable: false),
+                    Grade = table.Column<int>(type: "integer", nullable: false),
+                    Year = table.Column<int>(type: "integer", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -180,16 +184,24 @@ namespace PhyGen.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExamCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Grade = table.Column<int>(type: "integer", nullable: false),
+                    Year = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    TotalQuestionCount = table.Column<int>(type: "integer", nullable: true),
+                    VersionCount = table.Column<int>(type: "integer", nullable: false),
+                    RandomizeQuestions = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Exams", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Exams_ExamCategories_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_Exams_ExamCategories_ExamCategoryId",
+                        column: x => x.ExamCategoryId,
                         principalTable: "ExamCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -273,7 +285,11 @@ namespace PhyGen.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    MatrixId = table.Column<Guid>(type: "uuid", nullable: true)
+                    MatrixId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Score = table.Column<double>(type: "double precision", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -312,7 +328,10 @@ namespace PhyGen.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExamId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ExamId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: false),
+                    QuestionOrder = table.Column<string>(type: "text", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -330,7 +349,12 @@ namespace PhyGen.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExamId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ExamId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    SectionType = table.Column<string>(type: "text", nullable: false),
+                    DisplayOrder = table.Column<int>(type: "integer", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -445,7 +469,12 @@ namespace PhyGen.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     MatrixSectionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SectionId = table.Column<Guid>(type: "uuid", nullable: false)
+                    SectionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    Level = table.Column<string>(type: "text", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -480,7 +509,9 @@ namespace PhyGen.Infrastructure.Migrations
                     Answer4 = table.Column<string>(type: "text", nullable: true),
                     Answer5 = table.Column<string>(type: "text", nullable: true),
                     Answer6 = table.Column<string>(type: "text", nullable: true),
-                    CorrectAnswer = table.Column<string>(type: "text", nullable: true)
+                    CorrectAnswer = table.Column<string>(type: "text", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -518,8 +549,11 @@ namespace PhyGen.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    SectionId = table.Column<Guid>(type: "uuid", nullable: false),
                     QuestionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SectionId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Score = table.Column<double>(type: "double precision", nullable: true),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -584,9 +618,9 @@ namespace PhyGen.Infrastructure.Migrations
                 column: "ExamCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exams_CategoryId",
+                name: "IX_Exams_ExamCategoryId",
                 table: "Exams",
-                column: "CategoryId");
+                column: "ExamCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Exams_UserId",

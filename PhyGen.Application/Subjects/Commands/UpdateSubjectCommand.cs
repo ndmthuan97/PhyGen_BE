@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Subjects.Commands
 {
-    public class CreateSubjectCommand : IRequest<Guid>
+    public class UpdateSubjectCommand : IRequest<Unit>
     {
+        public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 }

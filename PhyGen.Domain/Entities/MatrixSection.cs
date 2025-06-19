@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,26 +15,18 @@ namespace PhyGen.Domain.Entities
 
         [Required]
         [MaxLength(100)]
-        public string Title { get; set; } = default!; // VD: "Phần 1"
+        public string Title { get; set; } = string.Empty;
 
-        public double? Score { get; set; } // Điểm số của câu hỏi trong phần
+        public double? Score { get; set; }
 
-        public string? Description { get; set; } // Ghi chú thêm nếu cần
+        [Column(TypeName = "text")]
+        public string? Description { get; set; }
 
-        public Guid? CreatedBy { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public Guid? UpdatedBy { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-        public Guid? DeletedBy { get; set; }
         public DateTime? DeletedAt { get; set; }
 
         // --- Navigation Properties ---
-        public virtual Matrix Matrix { get; set; } = default!;
+        public virtual Matrix Matrix { get; set; } = null!;
         public virtual ICollection<MatrixSectionDetail> MatrixSectionDetails { get; set; } = new List<MatrixSectionDetail>();
-
-        //** --- Comment các thuộc tính có thể dùng trong tương lai (hiện tại không dùng đến) ---
-        // public int DisplayOrder { get; set; } // Thứ tự hiển thị của phần trong ma trận
-        //**
     }
 
 }
