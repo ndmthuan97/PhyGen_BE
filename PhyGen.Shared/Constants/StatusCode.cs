@@ -61,5 +61,29 @@ namespace PhyGen.Shared.Constants
         // ContentItemExamCategory errors (2230–2249)
         ContentItemExamCategoryNotFound = 2231,
         ContentItemExamCategoryAlreadyExist = 2232,
+
+        // Authentication errors (2250–2300)
+        RegisterFailed = 2250,
+        LoginFailed = 2251,
+        EmailAlreadyExists = 2252,
+        EmailDoesNotExists = 2253,
+        InvalidUser = 2254,
+        InvalidPassword = 2255,
+        InvalidOtp = 2256,
+        EmailNotFound = 2257,
+        AccountNotConfirmed = 2258,
+        AlreadyConfirmed = 2259,
+        ConfirmSuccess = 2260,
+        PasswordMismatch = 2261,
+        InvalidPasswordFormat = 2262,
+        InvalidGoogleToken = 2263,
+        InvalidToken = 2264,
+        MustLoginWithEmailPassword = 2265,
+        MustLoginWithGoogle = 2266,
+        AccountLocked = 2267,
+
+        // Notification errors (2540–2559)
+        NotifcationNotFound = 2541,
+        NotifcationSend = 2542,
     }
 }

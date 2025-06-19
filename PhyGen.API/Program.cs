@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PhyGen.API.Mapping;
+using PhyGen.Application.Authentication.DTOs.Dtos;
+using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Insfrastructure.Extensions;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
@@ -25,8 +28,40 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 builder.Services.AddDatabase<AppDbContext>(builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidDataException("The DefaultConnection string is missing in the configuration."));
 
+builder.Services.Configure<PhyGen.Application.PayOs.Config.PayOSConfig>(builder.Configuration.GetSection("PayOS"));
 builder.Services.AddCoreInfrastructure(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(ModelMappingProfile));
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+var secretKey = Encoding.UTF8.GetBytes(jwtSettings.Secret);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ClockSkew = TimeSpan.Zero,
+
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+
+        NameClaimType = ClaimTypes.Name,
+        RoleClaimType = ClaimTypes.Role
+    };
+});
 
 var app = builder.Build();
 

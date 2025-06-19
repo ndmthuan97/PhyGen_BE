@@ -26,4 +26,11 @@
     <ProjectReference Include="..\PhyGen.Domain\PhyGen.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PayOs\Authentication\DTOs\Dtos\" />
+    <Folder Include="PayOs\Authentication\DTOs\Responses\" />
+    <Folder Include="PayOs\Authentication\Interface\" />
+    <Folder Include="PayOs\Authentication\Models\Requests\" />
+  </ItemGroup>
+
 </Project>
