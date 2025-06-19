@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhyGen.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,30 +14,31 @@ namespace PhyGen.Domain.Entities
         public Guid TopicId { get; set; }
 
         [Required]
-        public string Content { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty; // Nội dung câu hỏi
 
-        public string Type { get; set; } = string.Empty;
+        public QuestionType Type { get; set; } // Loại câu hỏi (MultipleChoice, TrueFalse, ShortAnswer, Essay)
+        public DifficultyLevel Level { get; set; } // Mức độ
 
-        public string Level { get; set; } = string.Empty;
+        public string? Image { get; set; } // Hình ảnh minh họa (nếu có)
 
-        public string? Image { get; set; }
+        public string? Answer1 { get; set; } // Đáp án 1 
+        public string? Answer2 { get; set; } // Đáp án 2
+        public string? Answer3 { get; set; } // Đáp án 3
+        public string? Answer4 { get; set; } // Đáp án 4
+        public string? Answer5 { get; set; } // Đáp án 5
+        public string? Answer6 { get; set; } // Đáp án 6
 
-        public string? Answer1 { get; set; }
+        public string? CorrectAnswer { get; set; } // Đáp án đúng (A, B, true, hoặc text)
 
-        public string? Answer2 { get; set; }
+        public Guid? CreatedBy { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public Guid? UpdatedBy { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public Guid? DeletedBy { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
-        public string? Answer3 { get; set; }
-
-        public string? Answer4 { get; set; }
-
-        public string? Answer5 { get; set; }
-
-        public string? Answer6 { get; set; }
-
-        public string? CorrectAnswer { get; set; }
-
-        // Navigation Properties
-        public virtual Topic Topics { get; set; } = null!;
+        // --- Navigation Properties ---
+        public virtual Topic Topic { get; set; } = default!;
         public virtual ICollection<QuestionMedia> QuestionMedias { get; set; } = new List<QuestionMedia>();
         public virtual ICollection<QuestionSection> QuestionSections { get; set; } = new List<QuestionSection>();
     }
