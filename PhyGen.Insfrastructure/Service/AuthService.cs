@@ -80,6 +80,7 @@ public class AuthService : IAuthService
             Gender = dto.Gender,
             Role = "User",
             isConfirm = false,
+            IsActive = true,
             CreatedAt = DateTime.UtcNow
         };
 

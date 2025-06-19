@@ -63,7 +63,7 @@ namespace PhyGen.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(
         [FromBody] LoginRequest request,
-        [FromHeader(Name = "Authorization")] string authorizationHeader)
+        [FromHeader(Name = "Authorization")] string? authorizationHeader)
         {
             var dto = _mapper.Map<LoginDto>(request);
             string token = null;
