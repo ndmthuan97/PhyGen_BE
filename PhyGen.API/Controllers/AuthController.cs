@@ -15,7 +15,7 @@ using PhyGen.Application.Authentication.DTOs.Responses;
 namespace PhyGen.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auths")]
     public class AuthController : BaseController<AuthController>
     {
         private readonly IAuthService _authService;

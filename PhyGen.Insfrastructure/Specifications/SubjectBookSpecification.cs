@@ -25,9 +25,9 @@ namespace PhyGen.Infrastructure.Specifications
                 (string.IsNullOrEmpty(param.Search) || subjectBook.Name.ToLower().Contains(param.Search.ToLower())) &&
                 !subjectBook.DeletedAt.HasValue;
 
-            if(!string.IsNullOrEmpty(param.Search))
+            if(!string.IsNullOrEmpty(param.Sort))
             {
-                switch (param.Search.ToLower())
+                switch (param.Sort.ToLower())
                 {
                     case "name":
                         OrderBy = query => query.OrderBy(sb => sb.Name);

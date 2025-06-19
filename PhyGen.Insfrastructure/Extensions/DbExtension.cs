@@ -44,7 +44,9 @@ namespace PhyGen.Insfrastructure.Extensions
             // Đảm bảo DB được migrate trước khi seed
             await context.Database.MigrateAsync().ConfigureAwait(false);
 
-            var usersToSeed = new List<User>
+            if (!await context.Users.AnyAsync())
+            {
+                var usersToSeed = new List<User>
                 {
                     new User
                     {
@@ -107,19 +109,18 @@ namespace PhyGen.Insfrastructure.Extensions
                     }
                 };
 
-            foreach (var user in usersToSeed)
-            {
-                var exists = await context.Users.AnyAsync(u => u.Email == user.Email).ConfigureAwait(false);
-                if (!exists)
+                foreach (var user in usersToSeed)
                 {
-                    context.Users.Add(user);
+                    var exists = await context.Users.AnyAsync(u => u.Email == user.Email).ConfigureAwait(false);
+                    if (!exists)
+                    {
+                        context.Users.Add(user);
+                    }
                 }
+
+                await context.SaveChangesAsync().ConfigureAwait(false);
             }
-
-            await context.SaveChangesAsync().ConfigureAwait(false);
-
             return app;
-
         }
     }
 }

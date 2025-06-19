@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace PhyGen.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UserController : BaseController<UserController>
     {
         private readonly IUserService _userService;
