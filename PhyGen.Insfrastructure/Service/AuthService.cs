@@ -172,189 +172,152 @@ public class AuthService : IAuthService
         await _context.EmailOtpManagers.AddAsync(_opt);
         await _context.SaveChangesAsync();
     }
-    public async Task<object> LoginAsync(LoginDto dto, string accessToken)
+    public async Task<object> LoginAsync(LoginDto dto, string token)
     {
-        if (!string.IsNullOrEmpty(accessToken))
+        if (!string.IsNullOrEmpty(token))
         {
-            try
-            {
-                var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-                var token = jwtSecurityTokenHandler.ReadJwtToken(accessToken);
-
-                var emailFromToken = token.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
-                var userMetadataJson = token.Claims.FirstOrDefault(c => c.Type == "user_metadata")?.Value;
-
-                string fullName = null;
-                string avatarUrl = null;
-
-                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email.Trim().ToLower() == emailFromToken.Trim().ToLower());
-
-                if (existingUser != null)
-                {
-                    // ✅ Kiểm tra tài khoản bị khóa
-                    if (!existingUser.IsActive)
-                    {
-                        return new AuthenticationResponse
-                        {
-                            Email = emailFromToken,
-                            StatusCode = StatusCode.AccountLocked
-                        };
-                    }
-
-                    if (!string.IsNullOrEmpty(existingUser.Password))
-                    {
-                        return new AuthenticationResponse
-                        {
-                            Email = emailFromToken,
-                            StatusCode = StatusCode.MustLoginWithEmailPassword
-                        };
-                    }
-                    else
-                    {
-                        existingUser.LastLogin = DateTime.UtcNow;
-                        await _context.SaveChangesAsync();
-                        return new LoginResponse
-                        {
-                            Response = new AuthenticationResponse
-                            {
-                                Email = emailFromToken,
-                                StatusCode = StatusCode.LoginSuccess
-                            },
-                            Role = existingUser.Role
-                        };
-                    }
-                }
-                else
-                {
-                    var userMetadata = JsonSerializer.Deserialize<UserMetadata>(userMetadataJson);
-                    fullName = userMetadata?.full_name?.Trim() ?? "";
-                    avatarUrl = userMetadata?.avatar_url;
-                    string firstName = "";
-                    string lastName = "";
-
-                    if (!string.IsNullOrWhiteSpace(fullName))
-                    {
-                        var nameParts = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-                        if (nameParts.Length > 1)
-                        {
-                            firstName = nameParts[0];
-                            lastName = string.Join(" ", nameParts.Skip(1));
-                        }
-                        else
-                        {
-                            firstName = fullName;
-                        }
-                    }
-
-                    var tokenEntity = new User
-                    {
-                        Email = emailFromToken,
-                        FirstName = firstName,
-                        LastName = lastName,
-                        photoURL = avatarUrl,
-                        CreatedAt = DateTime.UtcNow,
-                        isConfirm = true,
-                        IsActive = true,
-                        Role = "User",
-                        LastLogin = DateTime.UtcNow
-                    };
-
-                    _context.Users.Add(tokenEntity);
-                    await _context.SaveChangesAsync();
-
-                    return new LoginResponse
-                    {
-                        Response = new AuthenticationResponse
-                        {
-                            Email = emailFromToken,
-                            StatusCode = StatusCode.LoginSuccess
-                        },
-                        Role = tokenEntity.Role                  
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Token invalid or parsing error: {ex.Message}");
-
-                return new AuthenticationResponse
-                {
-                    Email = dto.Email,
-                    StatusCode = StatusCode.InvalidToken,
-                };
-            }
+            return await HandleLoginWithTokenAsync(dto, token);
         }
-        else
+        return await HandleLoginWithEmailsAsync(dto);
+    }
+
+    private async Task<object> HandleLoginWithTokenAsync(LoginDto dto, string accessToken)
+    {
+        try
         {
-            var email = dto.Email.Trim().ToLower();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.ReadJwtToken(accessToken);
 
-            if (user == null)
+            var email = token.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+            var userMetadataJson = token.Claims.FirstOrDefault(c => c.Type == "user_metadata")?.Value;
+
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email.Trim().ToLower() == email.Trim().ToLower());
+
+            if (existingUser != null)
             {
-                return new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.EmailNotFound
-                };
+                return await HandleExistingUserLoginAsync(existingUser, email);
             }
 
-            // ✅ Kiểm tra tài khoản bị khóa
-            if (!user.IsActive)
+            return await HandleNewTokenUserRegistrationAsync(email, userMetadataJson);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Token invalid or parsing error: {ex.Message}");
+
+            return new AuthenticationResponse
             {
-                return new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.AccountLocked
-                };
-            }
-
-            if (string.IsNullOrEmpty(user.Password))
-            {
-                return new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.MustLoginWithGoogle
-                };
-            }
-
-            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
-            {
-                return new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.InvalidPassword
-                };
-            }
-
-            if (!user.isConfirm)
-            {
-                string otp = Generaterandomnumber();
-                await UpdateOtp(email, otp, "login");
-                await SendOtpMail(email, otp, email, "login");
-
-                return new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.AccountNotConfirmed
-                };
-            }
-            user.LastLogin = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
-
-            var newToken = _jwtTokenGenerator.GenerateToken(user);
-
-            return new LoginResponse
-            {
-                Response = new AuthenticationResponse
-                {
-                    Email = email,
-                    StatusCode = StatusCode.LoginSuccess
-                },
-                Token = newToken,
-                Role = user.Role
+                Email = dto.Email,
+                StatusCode = StatusCode.InvalidToken,
             };
         }
+    }
+
+    private async Task<object> HandleExistingUserLoginAsync(User user, string email)
+    {
+        if (!user.IsActive)
+        {
+            return new AuthenticationResponse { Email = email, StatusCode = StatusCode.AccountLocked };
+        }
+
+        if (!string.IsNullOrEmpty(user.Password))
+        {
+            return new AuthenticationResponse { Email = email, StatusCode = StatusCode.MustLoginWithEmailPassword };
+        }
+
+        user.LastLogin = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        return new LoginResponse
+        {
+            Response = new AuthenticationResponse { Email = email, StatusCode = StatusCode.LoginSuccess },
+            Role = user.Role
+        };
+    }
+
+    private async Task<object> HandleNewTokenUserRegistrationAsync(string email, string metadataJson)
+    {
+        var metadata = JsonSerializer.Deserialize<UserMetadata>(metadataJson);
+        var fullName = metadata?.full_name?.Trim() ?? "";
+        var avatarUrl = metadata?.avatar_url;
+
+        var (firstName, lastName) = ParseFullName(fullName);
+
+        var newUser = new User
+        {
+            Email = email,
+            FirstName = firstName,
+            LastName = lastName,
+            photoURL = avatarUrl,
+            CreatedAt = DateTime.UtcNow,
+            isConfirm = true,
+            IsActive = true,
+            Role = "User",
+            LastLogin = DateTime.UtcNow
+        };
+
+        _context.Users.Add(newUser);
+        await _context.SaveChangesAsync();
+
+        return new LoginResponse
+        {
+            Response = new AuthenticationResponse { Email = email, StatusCode = StatusCode.LoginSuccess },
+            Role = newUser.Role
+        };
+    }
+
+    private (string FirstName, string LastName) ParseFullName(string fullName)
+    {
+        var parts = fullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length > 1
+            ? (parts[0], string.Join(" ", parts.Skip(1)))
+            : (fullName, "");
+    }
+
+    private async Task<object> HandleLoginWithEmailsAsync(LoginDto dto)
+    {
+        var email = dto.Email.Trim().ToLower();
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+
+        if (user == null)
+        {
+            return new AuthenticationResponse { Email = email, StatusCode = StatusCode.EmailNotFound };
+        }
+
+        if (!user.IsActive)
+        {
+            return new AuthenticationResponse { Email = email, StatusCode = StatusCode.AccountLocked };
+        }
+
+        if (string.IsNullOrEmpty(user.Password))
+        {
+            return new AuthenticationResponse { Email = email, StatusCode = StatusCode.MustLoginWithGoogle };
+        }
+
+        if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
+        {
+            return new AuthenticationResponse { Email = email, StatusCode = StatusCode.InvalidPassword };
+        }
+
+        if (!user.isConfirm)
+        {
+            var otp = Generaterandomnumber();
+            await UpdateOtp(email, otp, "login");
+            await SendOtpMail(email, otp, email, "login");
+
+            return new AuthenticationResponse { Email = email, StatusCode = StatusCode.AccountNotConfirmed };
+        }
+
+        user.LastLogin = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        var token = _jwtTokenGenerator.GenerateToken(user);
+
+        return new LoginResponse
+        {
+            Response = new AuthenticationResponse { Email = email, StatusCode = StatusCode.LoginSuccess },
+            Token = token,
+            Role = user.Role
+        };
     }
 
     public async Task<object> ConfirmLogin(string email, string otpText)

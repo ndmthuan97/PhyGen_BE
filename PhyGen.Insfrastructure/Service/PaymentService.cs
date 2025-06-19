@@ -94,10 +94,10 @@ namespace PhyGen.Insfrastructure.Service
             };
         }
 
-        public async Task<Payment> GetPaymentStatusAsync(long paymenLinkId)
+        public async Task<Payment> GetPaymentStatusAsync(long paymentLinkId)
         {
             var payment = await _context.Payments
-                .FirstOrDefaultAsync(p => p.PaymentLinkId == paymenLinkId);
+                .FirstOrDefaultAsync(p => p.PaymentLinkId == paymentLinkId);
 
             if (payment == null)
             {
@@ -113,17 +113,17 @@ namespace PhyGen.Insfrastructure.Service
             return payment;
         }
 
-        public async Task<WebhookResult> HandleWebhookByTransactionIdAsync(long orderCode)
+        public async Task<WebhookResult> HandleWebhookByTransactionIdAsync(long paymentLinkId)
         {
             try
             {
                 // 1. Tìm payment theo paymenlinkId
                 var payment = await _context.Payments
-                    .FirstOrDefaultAsync(p => p.PaymentLinkId == orderCode);
+                    .FirstOrDefaultAsync(p => p.PaymentLinkId == paymentLinkId);
 
                 if (payment == null)
                 {
-                    string msg = $"[Webhook] Không tìm thấy giao dịch với orderCode: {orderCode}";
+                    string msg = $"[Webhook] Không tìm thấy giao dịch với orderCode: {paymentLinkId}";
                     Console.WriteLine(msg);
                     return new WebhookResult { Success = false, Message = msg };
                 }

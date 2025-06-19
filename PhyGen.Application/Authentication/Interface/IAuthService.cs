@@ -12,9 +12,9 @@ namespace PhyGen.Application.Authentication.Interface
         Task<AuthenticationResponse> RegisterAsync(RegisterDto dto);
         Task<object> LoginAsync(LoginDto dto, string token);
         Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordDto dto);
-        Task<AuthenticationResponse> ConfirmRegister(string username, string otptext);
-        Task<object> ConfirmLogin(string username, string otptext);
-        Task<AuthenticationResponse> ForgetPassword(string username);
-        Task<AuthenticationResponse> UpdatePassword(string username, string Password, string Otptext);
+        Task<AuthenticationResponse> ConfirmRegister(string email, string otptext);
+        Task<object> ConfirmLogin(string email, string otpText);
+        Task<AuthenticationResponse> ForgetPassword(string email);
+        Task<AuthenticationResponse> UpdatePassword(string email, string password, string otpText);
     }
 }

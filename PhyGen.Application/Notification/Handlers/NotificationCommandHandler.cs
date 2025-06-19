@@ -121,7 +121,7 @@ namespace PhyGen.Application.Notification.Handlers
             var originalNotification = await _notificationRepository.GetByIdAsync(request.Id);
 
             if (originalNotification == null)
-                throw new Exception($"Notification with ID {request.Id} not found.");
+                throw new NotificationNotFoundException();
 
             var notifications = new List<PhyGen.Domain.Entities.Notification>();
 

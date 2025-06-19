@@ -85,7 +85,6 @@ namespace PhyGen.API.Controllers
                 Id = Id,    
                 UserId = UserId
             };
-            var result = await _mediator.Send(filter);
             return Ok(new NotificationSend {});
         }
         [HttpPut("maskasread")]

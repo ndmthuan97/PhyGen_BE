@@ -23,14 +23,14 @@ namespace PhyGen.Infrastructure.Service
             emailSettings = options.Value;
         }
 
-        public async Task SendEmailAsync(EmailRequest mailrequest)
+        public async Task SendEmailAsync(EmailRequest request)
         {
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(emailSettings.Email);
-            email.To.Add(MailboxAddress.Parse(mailrequest.Email));
-            email.Subject = mailrequest.Subject;
+            email.To.Add(MailboxAddress.Parse(request.Email));
+            email.Subject = request.Subject;
             var builder = new BodyBuilder();
-            builder.HtmlBody = mailrequest.Emailbody;
+            builder.HtmlBody = request.Emailbody;
             email.Body = builder.ToMessageBody();
 
             using var smtp = new MailKit.Net.Smtp.SmtpClient(); // Use MailKit's SmtpClient

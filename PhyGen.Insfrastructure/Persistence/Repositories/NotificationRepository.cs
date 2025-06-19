@@ -17,7 +17,7 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
         {
             _context = context;
         }
-        public async Task<List<Notification>> GetByUserIdAsync(Guid id)
+        public async Task<List<Notification>> GetByUserIdAsync(Guid? id)
         {
             if (id == null)
                 return new List<Notification>();
