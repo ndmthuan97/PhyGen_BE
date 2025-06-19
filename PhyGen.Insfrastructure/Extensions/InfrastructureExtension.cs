@@ -1,12 +1,22 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using PhyGen.Application.Authentication.DTOs.Dtos;
+using PhyGen.Application.Authentication.Interface;
+using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Mapping;
+using PhyGen.Application.PayOs.Interfaces;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Infrastructure.Persistence.Repositories;
+using PhyGen.Infrastructure.Service;
 using PhyGen.Insfrastructure.Persistence.Repositories;
+using PhyGen.Insfrastructure.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,6 +52,14 @@ namespace PhyGen.Insfrastructure.Extensions
             services.AddScoped<IExamCategoryRepository, ExamCategoryRepository>();
             services.AddScoped<IContentItemExamCategoryRepository, ContentItemExamCategoryRepository>();
             services.AddScoped<IExamCategoryChapterRepository, ExamCategoryChapterRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            
+
         }
     }
 }
