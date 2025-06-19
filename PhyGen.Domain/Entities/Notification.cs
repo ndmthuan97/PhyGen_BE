@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Domain.Entities
 {
-    public class Notification : EntityBase<Guid>
+    public class Notification : EntityBase<int>
     {
-        [Required]
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         public string Title { get; set; } = string.Empty;
 
@@ -21,8 +20,5 @@ namespace PhyGen.Domain.Entities
         public bool IsRead { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        // Navigation Property
-        public virtual User User { get; set; } = null!;
     }
 }

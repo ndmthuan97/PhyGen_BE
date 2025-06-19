@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250618155657_Initial")]
+    [Migration("20250619030444_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -368,9 +368,11 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Notification", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -390,7 +392,7 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -409,19 +411,27 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("text");
 
+                    b.Property<long>("PaymentLinkId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Status")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ValidUntil")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -660,6 +670,9 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
+                    b.Property<DateTime?>("LastLogin")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -872,24 +885,19 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Notification", b =>
                 {
-                    b.HasOne("PhyGen.Domain.Entities.User", "User")
+                    b.HasOne("PhyGen.Domain.Entities.User", null)
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Payment", b =>
                 {
-                    b.HasOne("PhyGen.Domain.Entities.User", "User")
+                    b.HasOne("PhyGen.Domain.Entities.User", null)
                         .WithMany("Transactions")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Question", b =>

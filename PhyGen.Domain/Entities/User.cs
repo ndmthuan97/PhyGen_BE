@@ -35,6 +35,8 @@ namespace PhyGen.Domain.Entities
         public int Coin { get; set; }
 
         public DateTime CreatedAt { get; set; }
+        public DateTime? LastLogin { get; set; }
+
 
         // Navigation Properties
         public virtual ICollection<Exam> Exams { get; set; } = new List<Exam>();

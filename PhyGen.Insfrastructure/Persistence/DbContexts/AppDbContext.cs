@@ -152,9 +152,11 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.UserId).IsRequired();
                 e.Property(p => p.Amount);
+                e.Property(p => p.PaymentLinkId);
                 e.Property(p => p.Description);
                 e.Property(p => p.Status);
-                e.Property(p => p.CreatedAt); // Không cần IsRequired() nếu không yêu cầu
+                e.Property(p => p.CreatedAt);
+                e.Property(p => p.ValidUntil);
             });
 
             modelBuilder.Entity<Question>(e =>
@@ -225,6 +227,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.IsActive);
                 e.Property(p => p.Coin);
                 e.Property(p => p.CreatedAt);
+                e.Property(p => p.LastLogin);
             });
 
             // Gọi cấu hình delete và soft delete
