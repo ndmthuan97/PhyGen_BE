@@ -9,8 +9,6 @@ namespace PhyGen.Domain.Interfaces
 {
     public interface IContentFlowRepository : IAsyncRepository<ContentFlow, Guid>
     {
-        Task<ContentFlow?> GetContentFlowByCurriculumIdAndNameAsync(Guid curriculumId, string name);
-
         Task<List<ContentFlow>> GetContentFlowsByCurriculumIdAsync(Guid curriculumId);
     }
 }

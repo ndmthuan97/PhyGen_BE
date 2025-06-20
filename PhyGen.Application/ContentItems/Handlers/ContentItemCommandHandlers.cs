@@ -29,7 +29,12 @@ namespace PhyGen.Application.ContentItems.Handlers
         {
             if (await _contentFlowRepository.GetByIdAsync(request.ContentFlowId) == null)
                 throw new ContentFlowNotFoundException();
-            if (await _contentItemRepository.GetContentItemByContentFlowIdAndNameAsync(request.ContentFlowId, request.Name) != null)
+
+            if (await _contentItemRepository.AlreadyExistAsync(c =>
+                c.ContentFlowId == request.ContentFlowId &&
+                c.Name.ToLower() == request.Name.ToLower() &&
+                c.LearningOutcome.ToLower() == request.LearningOutcome.ToLower())
+                )
                 throw new ContentItemAlreadyExistException();
 
             var contentItem = new ContentItem
@@ -59,12 +64,17 @@ namespace PhyGen.Application.ContentItems.Handlers
             if (await _contentFlowRepository.GetByIdAsync(request.ContentFlowId) == null)
                 throw new ContentFlowNotFoundException();
 
-            if (await _contentItemRepository.GetContentItemByContentFlowIdAndNameAsync(request.ContentFlowId, request.Name) != null)
-                throw new ContentItemAlreadyExistException();
-
             var contentItem = await _contentItemRepository.GetByIdAsync(request.Id);
             if (contentItem == null)
                 throw new ContentItemNotFoundException();
+
+            if (await _contentItemRepository.AlreadyExistAsync(c =>
+                c.Id == request.Id &&
+                c.ContentFlowId == request.ContentFlowId &&
+                c.Name.ToLower() == request.Name.ToLower() &&
+                c.LearningOutcome.ToLower() == request.LearningOutcome.ToLower())
+                )
+                throw new ContentItemAlreadyExistException();
 
             contentItem.Name = request.Name;
             contentItem.LearningOutcome = request.LearningOutcome;

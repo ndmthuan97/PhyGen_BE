@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PhyGen.API.Models
 {
@@ -6,7 +7,9 @@ namespace PhyGen.API.Models
     {
         [JsonRequired]
         public Guid ContentFlowId { get; set; }
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public string Name { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public string LearningOutcome { get; set; } = string.Empty;
     }
     public class UpdateContentItemRequest
@@ -15,7 +18,9 @@ namespace PhyGen.API.Models
         public Guid Id { get; set; }
         [JsonRequired]
         public Guid ContentFlowId { get; set; }
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public string Name { get; set; } = string.Empty;
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public string LearningOutcome { get; set; } = string.Empty;
     }
 }

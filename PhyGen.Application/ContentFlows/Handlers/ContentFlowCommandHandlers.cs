@@ -29,8 +29,13 @@ namespace PhyGen.Application.ContentFlows.Handlers
         {
             if (await _curriculumRepository.GetByIdAsync(request.CurriculumId) == null)
                 throw new CurriculumNotFoundException();
-            
-            if (await _repository.GetContentFlowByCurriculumIdAndNameAsync(request.CurriculumId, request.Name) != null)
+
+            if (await _repository.AlreadyExistAsync(cf =>
+                cf.CurriculumId == request.CurriculumId &&
+                cf.SubjectId == request.SubjectId &&
+                cf.Name.ToLower() == request.Name.ToLower() &&
+                cf.Description.ToLower() == request.Description.ToLower()
+                ))
                 throw new ContentFlowAlreadyExistException();
 
             var contentFlow = new ContentFlow
@@ -60,7 +65,13 @@ namespace PhyGen.Application.ContentFlows.Handlers
             if (await _curriculumRepository.GetByIdAsync(request.CurriculumId) == null)
                 throw new CurriculumNotFoundException();
 
-            if (await _repository.GetContentFlowByCurriculumIdAndNameAsync(request.CurriculumId, request.Name) != null)
+            if (await _repository.AlreadyExistAsync(cf =>
+                cf.Id != request.Id &&
+                cf.CurriculumId == request.CurriculumId &&
+                cf.SubjectId == request.SubjectId &&
+                cf.Name.ToLower() == request.Name.ToLower() &&
+                cf.Description.ToLower() == request.Description.ToLower()
+                ))
                 throw new ContentFlowAlreadyExistException();
 
             var contentFlow = await _repository.GetByIdAsync(request.Id);

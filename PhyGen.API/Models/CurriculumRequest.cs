@@ -5,11 +5,10 @@ namespace PhyGen.API.Models
 {
     public class CreateCurriculumRequest
     {
-        [Required(ErrorMessage = "Name is required.")]
-        [StringLength(255, MinimumLength = 1, ErrorMessage = "Name must be between 1 and 255 characters.")]
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public string Name { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Grade is required.")]
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public int Grade { get; set; }
     }
 
@@ -18,11 +17,10 @@ namespace PhyGen.API.Models
         [JsonRequired]
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "Name is required.")]
-        [StringLength(255, MinimumLength = 1, ErrorMessage = "Name must be between 1 and 255 characters.")]
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public string Name { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Grade is required.")]
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public int Grade { get; set; }
     }
 

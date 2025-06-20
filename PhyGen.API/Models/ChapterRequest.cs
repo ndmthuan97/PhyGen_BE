@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PhyGen.API.Models
 {
@@ -6,6 +7,7 @@ namespace PhyGen.API.Models
     {
         [JsonRequired]
         public Guid SubjectBookId { get; set; }
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public string Name { get; set; } = string.Empty;
         public int OrderNo { get; set; }
     }
@@ -15,6 +17,7 @@ namespace PhyGen.API.Models
         public Guid Id { get; set; }
         [JsonRequired]
         public Guid SubjectBookId { get; set; }
+        [Required(ErrorMessage = "Trường này không được để trống.")]
         public string Name { get; set; } = string.Empty;
         public int OrderNo { get; set; }
     }

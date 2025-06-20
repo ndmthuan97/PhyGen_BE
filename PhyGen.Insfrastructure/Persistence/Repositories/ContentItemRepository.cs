@@ -17,12 +17,6 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         {
         }
 
-        public Task<ContentItem?> GetContentItemByContentFlowIdAndNameAsync(Guid contentFlowId, string name)
-        {
-            return _context.ContentItems
-                .FirstOrDefaultAsync(ci => ci.ContentFlowId == contentFlowId && ci.Name.ToLower() == name.ToLower());
-        }
-
         public Task<List<ContentItem>> GetContentItemsByContentFlowIdAsync(Guid contentFlowId)
         {
             return _context.ContentItems
