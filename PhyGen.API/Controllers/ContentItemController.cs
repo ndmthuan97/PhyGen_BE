@@ -69,5 +69,22 @@ namespace PhyGen.API.Controllers
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateContentItemCommand>(request);
             return await ExecuteAsync<UpdateContentItemCommand, Unit>(command);
         }
+
+        [HttpDelete("{contentItemId}")]
+        [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteContentItem(Guid contentItemId, [FromBody] DeleteContentItemRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<DeleteContentItemCommand>(request);
+            return await ExecuteAsync<DeleteContentItemCommand, Unit>(command);
+        }
     }
 }

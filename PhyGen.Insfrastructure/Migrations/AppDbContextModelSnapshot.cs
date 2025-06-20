@@ -59,6 +59,9 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<Guid>("CurriculumId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .IsUnicode(true)
@@ -89,6 +92,9 @@ namespace PhyGen.Infrastructure.Migrations
 
                     b.Property<Guid>("ContentFlowId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LearningOutcome")
                         .IsRequired()
@@ -246,6 +252,9 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()

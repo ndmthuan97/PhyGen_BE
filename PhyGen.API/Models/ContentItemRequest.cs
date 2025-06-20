@@ -23,4 +23,9 @@ namespace PhyGen.API.Models
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public string LearningOutcome { get; set; } = string.Empty;
     }
+    public class DeleteContentItemRequest
+    {
+        [JsonRequired]
+        public Guid Id { get; set; }
+    }
 }

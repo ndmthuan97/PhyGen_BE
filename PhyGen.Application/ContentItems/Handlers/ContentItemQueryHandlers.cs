@@ -24,7 +24,10 @@ namespace PhyGen.Application.ContentItems.Handlers
 
         public async Task<ContentItemResponse> Handle(GetContentItemByIdQuery request, CancellationToken cancellationToken)
         {
-            var contentItem = await _contentItemRepository.GetByIdAsync(request.Id) ?? throw new ContentItemNotFoundException();
+            var contentItem = await _contentItemRepository.GetByIdAsync(request.Id);
+
+            if (contentItem == null || contentItem.DeletedAt.HasValue)
+                throw new ContentItemNotFoundException();
 
             return AppMapper<CoreMappingProfile>.Mapper.Map<ContentItemResponse>(contentItem);
         }
@@ -43,10 +46,14 @@ namespace PhyGen.Application.ContentItems.Handlers
 
         public async Task<List<ContentItemResponse>> Handle(GetContentItemsByContentFlowIdQuery request, CancellationToken cancellationToken)
         {
-            if (await _contentFlowRepository.GetByIdAsync(request.ContentFlowId) == null)
+            var contentFlow = await _contentFlowRepository.GetByIdAsync(request.ContentFlowId);
+            if (contentFlow == null || contentFlow.DeletedAt.HasValue)
                 throw new ContentFlowNotFoundException();
 
             var contentItems = await _contentItemRepository.GetContentItemsByContentFlowIdAsync(request.ContentFlowId);
+
+            contentItems = contentItems?.Where(ci => !ci.DeletedAt.HasValue).ToList();
+
             if (contentItems == null || !contentItems.Any())
                 throw new ContentItemNotFoundException();
 

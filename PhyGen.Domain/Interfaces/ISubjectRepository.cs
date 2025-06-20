@@ -9,6 +9,5 @@ namespace PhyGen.Domain.Interfaces
 {
     public interface ISubjectRepository : IAsyncRepository<Subject, Guid>
     {
-        Task<Subject?> GetSubjectByNameAsync(string name);
     }
 }

@@ -16,11 +16,5 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         public SubjectRepository(AppDbContext context) : base(context)
         {
         }
-
-        public async Task<Subject?> GetSubjectByNameAsync(string name)
-        {
-            return await _context.Subjects
-                .FirstOrDefaultAsync(s => s.Name.ToLower() == name.ToLower());
-        }
     }
 }

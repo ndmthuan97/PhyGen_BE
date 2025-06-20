@@ -24,7 +24,9 @@ namespace PhyGen.Application.Subjects.Handlers
 
         public async Task<SubjectResponse> Handle(CreateSubjectCommand request, CancellationToken cancellationToken)
         {
-            if (await _subjectRepository.GetSubjectByNameAsync(request.Name) != null)
+            if (await _subjectRepository.AlreadyExistAsync(x => 
+                x.Name.ToLower() == request.Name.ToLower()
+                ))
                 throw new SubjectSameNameException();
 
             var subject = new Subject
@@ -50,7 +52,9 @@ namespace PhyGen.Application.Subjects.Handlers
         {
             var subject = await _subjectRepository.GetByIdAsync(request.Id) ?? throw new SubjectNotFoundException();
 
-            if (await _subjectRepository.GetSubjectByNameAsync(request.Name) != null)
+            if (await _subjectRepository.AlreadyExistAsync(x =>
+                x.Name.ToLower() == request.Name.ToLower()
+                ))
                 throw new SubjectSameNameException();
 
             subject.Name = request.Name;

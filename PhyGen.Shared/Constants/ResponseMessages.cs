@@ -19,7 +19,7 @@ namespace PhyGen.Shared.Constants
 
             // Curriculum messages
             { StatusCode.CurriculumNotFound, "Không tìm thấy chương trình học với mã được cung cấp." },
-            { StatusCode.CurriculumSameName, "Chương trình học với tên này đã tồn tại." },
+            { StatusCode.CurriculumAlreadyExist, "Chương trình này đã tồn tại." },
 
             // Subject messages
             { StatusCode.SubjectNotFound, "Không tìm thấy môn học với mã được cung cấp." },

@@ -23,7 +23,7 @@ namespace PhyGen.Shared.Constants
         UserNotFound = 2004,
 
         // Curriculum errors (2050–2069)
-        CurriculumSameName = 2050,
+        CurriculumAlreadyExist = 2050,
         CurriculumNotFound = 2051,
 
         // Subject errors (2070–2089)

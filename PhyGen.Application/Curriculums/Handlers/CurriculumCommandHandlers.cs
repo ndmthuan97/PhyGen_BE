@@ -24,8 +24,12 @@ namespace PhyGen.Application.Curriculums.Handlers
 
         public async Task<CurriculumResponse> Handle(CreateCurriculumCommand request, CancellationToken cancellationToken)
         {
-            if (await _curriculumRepository.GetCurriculumByNameAsync(request.Name) != null)
-                throw new CurriculumSameNameException();
+            if (await _curriculumRepository.AlreadyExistAsync(x =>
+                x.Name.ToLower() == request.Name.ToLower() &&
+                x.Grade == request.Grade && 
+                x.DeletedAt == null
+                ))
+                throw new CurriculumAlreadyExistException();
 
             var curriculum = new Curriculum
             {
@@ -51,11 +55,15 @@ namespace PhyGen.Application.Curriculums.Handlers
         {
             var curriculum = await _curriculumRepository.GetByIdAsync(request.Id);
 
-            if (curriculum == null)
+            if (curriculum == null || curriculum.DeletedAt.HasValue)
                 throw new CurriculumNotFoundException();
 
-            if (await _curriculumRepository.GetCurriculumByNameAsync(request.Name) != null)
-                throw new CurriculumSameNameException();
+            if (await _curriculumRepository.AlreadyExistAsync(x =>
+                x.Name.ToLower() == request.Name.ToLower() &&
+                x.Grade == request.Grade &&
+                x.DeletedAt == null
+                ))
+                throw new CurriculumAlreadyExistException();
 
             curriculum.Name = request.Name;
             curriculum.Grade = request.Grade;

@@ -19,12 +19,6 @@ namespace PhyGen.Insfrastructure.Persistence.Repositories
 
         }
 
-        public async Task<Curriculum?> GetCurriculumByNameAsync(string curriculumName)
-        {
-            return await _context.Curriculums
-                .FirstOrDefaultAsync(c => c.Name.ToLower() == curriculumName.ToLower());
-        }
-
         public async Task<Pagination<Curriculum>?> GetCurriculumsAsync(CurriculumSpecParam curriculumSpecParam)
         {
             var spec = new CurriculumSpecification(curriculumSpecParam);

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Curriculums.Exceptions
 {
-    public class CurriculumSameNameException : AppException
+    public class CurriculumAlreadyExistException : AppException
     {
-        public CurriculumSameNameException() : base(StatusCode.CurriculumSameName)
+        public CurriculumAlreadyExistException() : base(StatusCode.CurriculumAlreadyExist)
         {
         }
     }

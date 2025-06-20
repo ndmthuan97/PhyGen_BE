@@ -74,14 +74,17 @@ namespace PhyGen.API.Mapping
             // Mapping for ContentFlow
             CreateMap<CreateContentFlowRequest, CreateContentFlowCommand>();
             CreateMap<UpdateContentFlowRequest, UpdateContentFlowCommand>();
+            CreateMap<DeleteContentFlowRequest, DeleteContentFlowCommand>();
 
             // Mapping for ContentItem
             CreateMap<CreateContentItemRequest, CreateContentItemCommand>();
             CreateMap<UpdateContentItemRequest, UpdateContentItemCommand>();
+            CreateMap<DeleteContentItemRequest, DeleteContentItemCommand>();
 
             // Mapping for ExamCategory
             CreateMap<CreateExamCategoryRequest, CreateExamCategoryCommand>();
             CreateMap<UpdateExamCategoryRequest, UpdateExamCategoryCommand>();
+            CreateMap<DeleteExamCategoryRequest, DeleteExamCategoryCommand>();
 
             // Mapping for ContentItemExamCaterory
             CreateMap<CreateContentItemExamCategoryRequest, CreateContentItemExamCategoryCommand>();

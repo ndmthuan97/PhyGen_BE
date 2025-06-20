@@ -22,7 +22,11 @@ namespace PhyGen.Application.ContentFlows.Handlers
         }
         public async Task<ContentFlowResponse> Handle(GetContentFlowByIdQuery request, CancellationToken cancellationToken)
         {
-            var contentFlow = await _repository.GetByIdAsync(request.Id) ?? throw new ContentFlowNotFoundException();
+            var contentFlow = await _repository.GetByIdAsync(request.Id);
+
+            if (contentFlow == null || contentFlow.DeletedAt.HasValue)
+                throw new ContentFlowNotFoundException();
+
             return AppMapper<CoreMappingProfile>.Mapper.Map<ContentFlowResponse>(contentFlow);
         }
     }
@@ -44,6 +48,8 @@ namespace PhyGen.Application.ContentFlows.Handlers
                 throw new CurriculumNotFoundException();
 
             var contentFlows = await _repository.GetContentFlowsByCurriculumIdAsync(request.CurriculumId);
+
+            contentFlows = contentFlows?.Where(cf => !cf.DeletedAt.HasValue).ToList();
 
             if (contentFlows == null || !contentFlows.Any())
                 throw new ContentFlowNotFoundException();

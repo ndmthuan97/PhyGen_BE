@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250619150407_Initial")]
+    [Migration("20250620163651_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -62,6 +62,9 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<Guid>("CurriculumId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .IsUnicode(true)
@@ -92,6 +95,9 @@ namespace PhyGen.Infrastructure.Migrations
 
                     b.Property<Guid>("ContentFlowId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LearningOutcome")
                         .IsRequired()
@@ -249,6 +255,9 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()

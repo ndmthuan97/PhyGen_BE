@@ -10,8 +10,6 @@ namespace PhyGen.Domain.Interfaces
 {
     public interface ICurriculumRepository : IAsyncRepository<Curriculum, Guid>
     {
-        Task<Curriculum?> GetCurriculumByNameAsync(string curriculumName);
-
         Task<Pagination<Curriculum>?> GetCurriculumsAsync(CurriculumSpecParam curriculumSpecParam);
     }
 }

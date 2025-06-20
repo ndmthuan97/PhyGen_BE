@@ -24,7 +24,10 @@ namespace PhyGen.Application.ExamCategories.Handlers
 
         public async Task<ExamCategoryResponse> Handle(CreateExamCategoryCommand request, CancellationToken cancellationToken)
         {
-            if (await _examCategoryRepository.AlreadyExistAsync(ec => ec.Name.ToLower() == request.Name.ToLower()))
+            if (await _examCategoryRepository.AlreadyExistAsync(ec => 
+                ec.Name.ToLower() == request.Name.ToLower() &&
+                ec.DeletedAt == null
+                ))
                 throw new ExamCategorySameNameException();
 
             var examCategory = new ExamCategory
@@ -49,13 +52,36 @@ namespace PhyGen.Application.ExamCategories.Handlers
         public async Task<Unit> Handle(UpdateExamCategoryCommand request, CancellationToken cancellationToken)
         {
             var examCategory = await _examCategoryRepository.GetByIdAsync(request.Id);
-            if (examCategory == null)
+            if (examCategory == null || examCategory.DeletedAt.HasValue)
                 throw new ExamCategoryNotFoundException();
 
-            if (await _examCategoryRepository.AlreadyExistAsync(ec => ec.Name.ToLower() == request.Name.ToLower()))
+            if (await _examCategoryRepository.AlreadyExistAsync(ec => 
+                ec.Name.ToLower() == request.Name.ToLower() &&
+                ec.DeletedAt == null
+                ))
                 throw new ExamCategorySameNameException();
 
             examCategory.Name = request.Name;
+
+            await _examCategoryRepository.UpdateAsync(examCategory);
+            return Unit.Value;
+        }
+    }
+    public class DeleteExamCategoryCommandHandler : IRequestHandler<DeleteExamCategoryCommand, Unit>
+    {
+        private readonly IExamCategoryRepository _examCategoryRepository;
+        public DeleteExamCategoryCommandHandler(IExamCategoryRepository examCategoryRepository)
+        {
+            _examCategoryRepository = examCategoryRepository;
+        }
+        public async Task<Unit> Handle(DeleteExamCategoryCommand request, CancellationToken cancellationToken)
+        {
+            var examCategory = await _examCategoryRepository.GetByIdAsync(request.Id);
+
+            if (examCategory == null || examCategory.DeletedAt.HasValue)
+                throw new ExamCategoryNotFoundException();
+
+            examCategory.DeletedAt = DateTime.UtcNow;
 
             await _examCategoryRepository.UpdateAsync(examCategory);
             return Unit.Value;
