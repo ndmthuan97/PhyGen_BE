@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PhyGen.Application.Admin.Interfaces;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
@@ -58,7 +59,7 @@ namespace PhyGen.Insfrastructure.Extensions
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
-            
+            services.AddScoped<IStatisticService, AdminService>();
 
         }
     }
