@@ -208,7 +208,7 @@ public class AuthService : IAuthService
             return new AuthenticationResponse
             {
                 Email = dto.Email,
-                StatusCode = StatusCode.InvalidToken,
+                StatusCode = StatusCode.InvalidToken
             };
         }
     }
@@ -231,7 +231,8 @@ public class AuthService : IAuthService
         return new LoginResponse
         {
             Response = new AuthenticationResponse { Email = email, StatusCode = StatusCode.LoginSuccess },
-            Role = user.Role
+            Role = user.Role,
+            Token = _jwtTokenGenerator.GenerateToken(user)
         };
     }
 

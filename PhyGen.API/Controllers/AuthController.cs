@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using PhyGen.API.Controllers;
-using PhyGen.Insfrastructure.Service;
-using PhyGen.Application.Authentication.DTOs.Dtos;
-using PhyGen.Application.Authentication.Interface;
-using PhyGen.Shared.Constants;
+﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using PhyGen.API.Controllers;
+using PhyGen.Application.Authentication.DTOs.Dtos;
+using PhyGen.Application.Authentication.DTOs.Responses;
+using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Authentication.Responses;
-using PhyGen.Application.Authentication.DTOs.Responses;
+using PhyGen.Insfrastructure.Service;
+using PhyGen.Shared.Constants;
+using System.Security.Claims;
 
 
 namespace PhyGen.API.Controllers
@@ -68,6 +70,7 @@ namespace PhyGen.API.Controllers
             var dto = _mapper.Map<LoginDto>(request);
             string token = null;
 
+            // Nếu header không null và bắt đầu bằng "Bearer " => lấy token từ header
             if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
             {
                 token = authorizationHeader.Substring("Bearer ".Length).Trim();
@@ -88,13 +91,18 @@ namespace PhyGen.API.Controllers
 
             if (result is LoginResponse loginResponse)
             {
-                // Thành công => trả về cả Token và Role
+                // Nếu token chưa được gán (do header null), thì lấy token từ response
+                if (string.IsNullOrEmpty(token))
+                {
+                    token = loginResponse.Token;
+                }
+
                 return Ok(new
                 {
                     loginResponse.Response.Email,
                     loginResponse.Response.StatusCode,
                     loginResponse.Response.Message,
-                    Token = loginResponse.Token,
+                    Token = token,
                     Role = loginResponse.Role
                 });
             }
@@ -177,6 +185,28 @@ namespace PhyGen.API.Controllers
                 Shared.Constants.StatusCode.ChangedPasswordSuccess => Ok(data),
                 _ => StatusCode(500, data)
             };
+        }
+
+        [Authorize]
+        [HttpGet("check-access")]
+        public IActionResult CheckAccessForUserPages()
+        {
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (role == "Admin")
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new
+                {
+                    Success = false,
+                    Message = "Admin không được truy cập trang người dùng."
+                });
+            }
+
+            return Ok(new
+            {
+                Success = true,
+                Message = "Truy cập được."
+            });
         }
 
     }
