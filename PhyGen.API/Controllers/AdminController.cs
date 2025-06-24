@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PhyGen.Application.Admin.Interfaces;
+using PhyGen.Application.Admin.Response;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
@@ -34,6 +35,13 @@ namespace PhyGen.API.Controllers
             var result = await _statisticService.GetWeeklyStatisticsAsync();
             return Ok(result);
         }
-    }
 
+        [HttpGet("statistics")]
+        [ProducesResponseType(typeof(InvoiceResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetInvoiceStatistics()
+        {
+            var result = await _statisticService.GetInvoiceStatistics();
+            return Ok(result);
+        }
+    }
 }

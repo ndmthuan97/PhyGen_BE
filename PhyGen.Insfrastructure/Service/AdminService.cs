@@ -2,6 +2,7 @@
 using PhyGen.Application.Admin.Interfaces;
 using PhyGen.Application.Admin.Response;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
+using PhyGen.Shared.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,7 @@ namespace PhyGen.Infrastructure.Service
             double loginRateBeforeNow = totalUserBeforeNow > 0
                 ? Math.Round((double)totalLoginBeforeNow / totalUserBeforeNow * 100, 2)
                 : 0;
-            double userRateNow = totalUserBeforeLastWeek > 0 
+            double userRateNow = totalUserBeforeLastWeek > 0
                 ? Math.Round(((double)(totalUserBeforeNow - totalUserBeforeLastWeek) / totalUserBeforeLastWeek) * 100, 2)
                 : (totalUserBeforeNow > 0 ? 100 : 0);
 
@@ -84,6 +85,37 @@ namespace PhyGen.Infrastructure.Service
                 //LoginRateBeforeLastWeek = loginRateBeforeLastWeek
                 UserRateNow = userRateNow
             };
+        }
+        public async Task<InvoiceResponse> GetInvoiceStatistics()
+        {
+            var payments = await _context.Payments.ToListAsync();
+            var users = await _context.Users.ToListAsync();
+
+            var invoiceItems = (from p in payments
+                                join u in users on p.UserId equals u.Id
+                                select new InvoiceItem
+                                {
+                                    InvoiceId = $"{p.PaymentLinkId}",
+                                    FullName = $"{u.FirstName} {u.LastName}",
+                                    CreatedAt = p.CreatedAt,
+                                    Amount = p.Amount,
+                                    PaymentMethod = "PayOS",
+                                    Status = p.Status,
+                                    AvatarUrl = u.photoURL ?? ""
+                                }).ToList();
+
+            var response = new InvoiceResponse
+            {
+                TotalBill = payments.Count,
+                PendingBill = payments.Count(p => p.Status == PaymentStatus.Pending.ToString()),
+                CompletedBill = payments.Count(p => p.Status == PaymentStatus.Completed.ToString()),
+                CanceledBill = payments.Count(p =>
+                    p.Status == PaymentStatus.Cancelled.ToString() ||
+                    p.Status == PaymentStatus.Expired.ToString()),
+                Invoices = invoiceItems
+            };
+
+            return response;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace PhyGen.Application.Admin.Interfaces
 {
     public interface IStatisticService
     {
+        Task<InvoiceResponse> GetInvoiceStatistics();
         Task<AdminWeeklyResponse> GetWeeklyStatisticsAsync();
     }
 }
