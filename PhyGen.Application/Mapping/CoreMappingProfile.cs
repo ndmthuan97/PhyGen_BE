@@ -38,7 +38,7 @@ namespace PhyGen.Application.Mapping
             CreateMap<LoginRequest, LoginDto>();
 
             //Mapping for Notification
-            CreateMap<PhyGen.Domain.Entities.Notification, NotificationResponse>()
+            CreateMap<Domain.Entities.Notification, NotificationResponse>()
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Message))
                 .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt));
@@ -49,8 +49,6 @@ namespace PhyGen.Application.Mapping
 
             // Mapping for Subject
             CreateMap<Subject, SubjectResponse>();
-            CreateMap<CreateSubjectCommand, Subject>();
-            CreateMap<UpdateSubjectCommand, Subject>();
 
             // Mapping for SubjectBook
             CreateMap<SubjectBook, SubjectBookResponse>();
@@ -72,23 +70,16 @@ namespace PhyGen.Application.Mapping
 
             // Mapping for ExamCategory
             CreateMap<ExamCategory, ExamCategoryResponse>();
-            CreateMap<CreateExamCategoryCommand, ExamCategory>();
-            CreateMap<UpdateExamCategoryCommand, ExamCategory>();
 
             // Mapping for ContentItemExamCategory
             CreateMap<ContentItemExamCategory, ContentItemExamCategoryResponse>();
-            CreateMap<CreateContentItemExamCategoryCommand, ContentItemExamCategory>();
-            CreateMap<UpdateContentItemExamCategoryCommand, ContentItemExamCategory>();
 
             // Mapping for ExamCategoryChapter
             CreateMap<ExamCategoryChapter, ExamCategoryChapterResponse>();
-            CreateMap<CreateExamCategoryChapterCommand, ExamCategoryChapter>();
-            CreateMap<UpdateExamCategoryChapterCommand, ExamCategoryChapter>();
 
             // Mapping for Question
             CreateMap<Question, QuestionResponse>();
-            CreateMap<CreateQuestionCommand, Question>();
-            CreateMap<UpdateQuestionCommand, Question>();
+            CreateMap<Pagination<Question>, Pagination<QuestionResponse>>();
         }
     }
 }

@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250624051021_Initial")]
+    [Migration("20250624064058_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
