@@ -30,8 +30,8 @@ namespace PhyGen.Infrastructure.Specifications.Questions
         {
             Criteria = question =>
                 (string.IsNullOrEmpty(param.Search) || question.Content.ToLower().Contains(param.Search.ToLower())) &&
-                (param.Level == 0 || question.Level == param.Level) &&
-                (param.Type == 0 || question.Type == param.Type) &&
+                (!param.Level.HasValue || question.Level == param.Level.Value) &&
+                (!param.Type.HasValue || question.Type == param.Type.Value) &&
                 !question.DeletedAt.HasValue;
 
             if (!string.IsNullOrEmpty(param.Sort))

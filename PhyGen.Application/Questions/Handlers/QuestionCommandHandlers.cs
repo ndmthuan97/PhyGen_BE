@@ -31,16 +31,15 @@ namespace PhyGen.Application.Questions.Handlers
             if (topic == null || topic.DeletedAt.HasValue)
                 throw new TopicNotFoundException();
 
-            if (await _questionRepository.AlreadyExistAsync(q =>
+            var isExist = await _questionRepository.AlreadyExistAsync(q =>
                 q.TopicId == request.TopicId &&
                 q.Content.ToLower() == request.Content.ToLower() &&
                 q.Level == request.Level &&
                 q.Type == request.Type &&
                 q.DeletedAt == null
-            ))
-            {
+            );
+            if (isExist)
                 throw new QuestionAlreadyExistException();
-            }
 
             var question = new Question
             {
@@ -48,7 +47,14 @@ namespace PhyGen.Application.Questions.Handlers
                 Content = request.Content,
                 Level = request.Level,
                 Type = request.Type,
-                Image = request.Image
+                Image = request.Image,
+                Answer1 = request.Answer1,
+                Answer2 = request.Answer2,
+                Answer3 = request.Answer3,
+                Answer4 = request.Answer4,
+                Answer5 = request.Answer5,
+                Answer6 = request.Answer6,
+                CorrectAnswer = request.CorrectAnswer
             };
 
             await _questionRepository.AddAsync(question);
@@ -77,23 +83,29 @@ namespace PhyGen.Application.Questions.Handlers
             if (topic == null || topic.DeletedAt.HasValue)
                 throw new TopicNotFoundException();
 
-            if (await _questionRepository.AlreadyExistAsync(q =>
+            var isExist = await _questionRepository.AlreadyExistAsync(q =>
                 q.Id != request.Id &&
                 q.TopicId == request.TopicId &&
                 q.Content.ToLower() == request.Content.ToLower() &&
                 q.Level == request.Level &&
                 q.Type == request.Type &&
                 q.DeletedAt == null
-            ))
-            {
+            );
+            if (isExist)
                 throw new QuestionAlreadyExistException();
-            }
 
             question.TopicId = request.TopicId;
             question.Content = request.Content;
             question.Level = request.Level;
             question.Type = request.Type;
             question.Image = request.Image;
+            question.Answer1 = request.Answer1;
+            question.Answer2 = request.Answer2;
+            question.Answer3 = request.Answer3;
+            question.Answer4 = request.Answer4;
+            question.Answer5 = request.Answer5;
+            question.Answer6 = request.Answer6;
+            question.CorrectAnswer = request.CorrectAnswer;
 
             await _questionRepository.UpdateAsync(question);
             return Unit.Value;

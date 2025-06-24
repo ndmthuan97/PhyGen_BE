@@ -9,9 +9,9 @@ namespace PhyGen.Domain.Specs.Question
 {
     public class QuestionSpecParam : BaseSpecParam
     {
-        public DifficultyLevel Level { get; set; }
+        public DifficultyLevel? Level { get; set; }
 
-        public QuestionType Type { get; set; }
+        public QuestionType? Type { get; set; }
 
         public string? Search { get; set; }
 
