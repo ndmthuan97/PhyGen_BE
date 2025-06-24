@@ -35,12 +35,10 @@ namespace PhyGen.Application.Questions.Handlers
     public class GetQuestionsByTopicIdQueryHandler : IRequestHandler<GetQuestionsByTopicIdQuery, Pagination<QuestionResponse>>
     {
         private readonly IQuestionRepository _questionRepository;
-        private readonly ITopicRepository _topicRepository;
 
-        public GetQuestionsByTopicIdQueryHandler(IQuestionRepository questionRepository, ITopicRepository topicRepository)
+        public GetQuestionsByTopicIdQueryHandler(IQuestionRepository questionRepository)
         {
             _questionRepository = questionRepository;
-            _topicRepository = topicRepository;
         }
 
         public async Task<Pagination<QuestionResponse>> Handle(GetQuestionsByTopicIdQuery request, CancellationToken cancellationToken)
