@@ -6,6 +6,5 @@ namespace PhyGen.Domain.Interfaces
     {
         Task<(List<Notification>, int)> GetByUserIdAsync(Guid userId, int skip, int take);
         Task<List<Notification>> GetByUserIdAsync(Guid? userId);
-
     }
 }
