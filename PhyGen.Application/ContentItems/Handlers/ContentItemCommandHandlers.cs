@@ -35,6 +35,7 @@ namespace PhyGen.Application.ContentItems.Handlers
                 c.ContentFlowId == request.ContentFlowId &&
                 c.Name.ToLower() == request.Name.ToLower() &&
                 c.LearningOutcome.ToLower() == request.LearningOutcome.ToLower() &&
+                c.OrderNo == request.OrderNo &&
                 c.DeletedAt == null
                 ))
                 throw new ContentItemAlreadyExistException();
@@ -76,6 +77,7 @@ namespace PhyGen.Application.ContentItems.Handlers
                 c.ContentFlowId == request.ContentFlowId &&
                 c.Name.ToLower() == request.Name.ToLower() &&
                 c.LearningOutcome.ToLower() == request.LearningOutcome.ToLower() &&
+                c.OrderNo == request.OrderNo &&
                 c.DeletedAt == null
                 ))
                 throw new ContentItemAlreadyExistException();

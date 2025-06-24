@@ -12,7 +12,7 @@ using PhyGen.Insfrastructure.Persistence.DbContexts;
 namespace PhyGen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250620163651_Initial")]
+    [Migration("20250624051021_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -75,6 +75,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
+                    b.Property<int>("OrderNo")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");
 
@@ -108,6 +111,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("text");
+
+                    b.Property<int>("OrderNo")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

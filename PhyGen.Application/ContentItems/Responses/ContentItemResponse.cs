@@ -12,5 +12,6 @@ namespace PhyGen.Application.ContentItems.Responses
         public Guid ContentFlowId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string LearningOutcome { get; set; } = string.Empty;
+        public int OrderNo { get; set; }
     }
 }

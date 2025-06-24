@@ -57,7 +57,7 @@ namespace PhyGen.Application.ContentItems.Handlers
             if (contentItems == null || !contentItems.Any())
                 throw new ContentItemNotFoundException();
 
-            return AppMapper<CoreMappingProfile>.Mapper.Map<List<ContentItemResponse>>(contentItems.OrderBy(ci => ci.Name));
+            return AppMapper<CoreMappingProfile>.Mapper.Map<List<ContentItemResponse>>(contentItems.OrderBy(ci => ci.OrderNo));
         }
     }
 }

@@ -72,6 +72,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
+                    b.Property<int>("OrderNo")
+                        .HasColumnType("integer");
+
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");
 
@@ -105,6 +108,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("text");
+
+                    b.Property<int>("OrderNo")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

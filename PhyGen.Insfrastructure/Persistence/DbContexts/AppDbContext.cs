@@ -69,6 +69,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.SubjectId).IsRequired();
                 e.Property(p => p.Name).IsRequired();
                 e.Property(p => p.Description);
+                e.Property(p => p.OrderNo);
             });
 
             modelBuilder.Entity<ContentItem>(e =>
@@ -76,6 +77,7 @@ namespace PhyGen.Insfrastructure.Persistence.DbContexts
                 e.Property(p => p.ContentFlowId).IsRequired();
                 e.Property(p => p.Name).IsRequired();
                 e.Property(p => p.LearningOutcome);
+                e.Property(p => p.OrderNo);
             });
 
             modelBuilder.Entity<ContentItemExamCategory>(e =>

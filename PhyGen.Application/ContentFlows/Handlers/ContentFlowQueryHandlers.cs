@@ -54,7 +54,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
             if (contentFlows == null || !contentFlows.Any())
                 throw new ContentFlowNotFoundException();
 
-            return AppMapper<CoreMappingProfile>.Mapper.Map<List<ContentFlowResponse>>(contentFlows.OrderBy(cf => cf.Name));
+            return AppMapper<CoreMappingProfile>.Mapper.Map<List<ContentFlowResponse>>(contentFlows.OrderBy(cf => cf.OrderNo));
         }
     }
 }

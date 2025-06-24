@@ -11,6 +11,7 @@ namespace PhyGen.Domain.Entities
         public Guid ContentFlowId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string LearningOutcome { get; set; } = string.Empty;
+        public int OrderNo { get; set; }
         public DateTime? DeletedAt { get; set; }
 
         public virtual ContentFlow ContentFlow { get; set; } = null!;

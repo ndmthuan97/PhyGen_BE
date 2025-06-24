@@ -42,6 +42,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
                 cf.SubjectId == request.SubjectId &&
                 cf.Name.ToLower() == request.Name.ToLower() &&
                 cf.Description.ToLower() == request.Description.ToLower() &&
+                cf.OrderNo == request.OrderNo &&
                 cf.DeletedAt == null
                 ))
                 throw new ContentFlowAlreadyExistException();
@@ -87,7 +88,9 @@ namespace PhyGen.Application.ContentFlows.Handlers
                 cf.CurriculumId == request.CurriculumId &&
                 cf.SubjectId == request.SubjectId &&
                 cf.Name.ToLower() == request.Name.ToLower() &&
-                cf.Description.ToLower() == request.Description.ToLower()
+                cf.Description.ToLower() == request.Description.ToLower() &&
+                cf.OrderNo == request.OrderNo &&
+                cf.DeletedAt == null
                 ))
                 throw new ContentFlowAlreadyExistException();
 
