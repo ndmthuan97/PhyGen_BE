@@ -31,25 +31,21 @@ namespace PhyGen.Infrastructure.Service
             var loginThisWeek = await _context.Users
                 .CountAsync(u => u.LastLogin.HasValue && u.LastLogin >= startOfThisWeek);
 
-            var loginLastWeek = await _context.Users
-                .CountAsync(u => u.LastLogin.HasValue && u.LastLogin >= startOfLastWeek && u.LastLogin <= endOfLastWeek);
+            //var loginLastWeek = await _context.Users
+            //    .CountAsync(u => u.LastLogin.HasValue && u.LastLogin >= startOfLastWeek && u.LastLogin <= endOfLastWeek);
 
             // Doanh thu
-            var revenueThisWeek = await _context.Payments
-                .Where(p => p.CreatedAt >= startOfThisWeek && p.Status == "PAID")
+            var totalRevenue = await _context.Payments
+                .Where(p => p.CreatedAt <= now && p.Status == "Completed")
                 .SumAsync(p => (decimal?)p.Amount) ?? 0;
 
-            var revenueLastWeek = await _context.Payments
-                .Where(p => p.CreatedAt >= startOfLastWeek && p.CreatedAt <= endOfLastWeek && p.Status == "PAID")
-                .SumAsync(p => (decimal?)p.Amount) ?? 0;
-
-            var toalrevenue = await _context.Payments
-                .Where(p => p.CreatedAt >= now)
+            var TotalRevenueLastWeek = await _context.Payments
+                .Where(p => p.CreatedAt <= startOfLastWeek && p.Status == "Completed")
                 .SumAsync(p => (decimal?)p.Amount) ?? 0;
 
             // Tổng người dùng trước tuần này
-            var totalUserBeforeThisWeek = await _context.Users
-                .CountAsync(u => u.CreatedAt < startOfThisWeek);
+            var totalUserBeforeLastWeek = await _context.Users
+                .CountAsync(u => u.CreatedAt < startOfLastWeek);
 
             // Tổng login trước tuần trước
             var totalLoginBeforeLastWeek = await _context.Users
@@ -62,27 +58,31 @@ namespace PhyGen.Infrastructure.Service
             var totalLoginBeforeNow = await _context.Users
                 .CountAsync(u => u.LastLogin.HasValue && u.LastLogin < now);
 
-            double revenueRate = (double)(revenueThisWeek > 0
-                ? Math.Round((revenueThisWeek - revenueLastWeek) / revenueThisWeek * 100, 2)
-                : 0);
+            double revenueRate = (double)(TotalRevenueLastWeek > 0
+                ? Math.Round((totalRevenue - TotalRevenueLastWeek) / TotalRevenueLastWeek * 100, 2)
+                : (TotalRevenueLastWeek > 0 ? 100 : 0));
             // Tính tỷ lệ login
             double loginRateBeforeNow = totalUserBeforeNow > 0
                 ? Math.Round((double)totalLoginBeforeNow / totalUserBeforeNow * 100, 2)
                 : 0;
+            double userRateNow = totalUserBeforeLastWeek > 0 
+                ? Math.Round(((double)(totalUserBeforeNow - totalUserBeforeLastWeek) / totalUserBeforeLastWeek) * 100, 2)
+                : (totalUserBeforeNow > 0 ? 100 : 0);
 
-            double loginRateBeforeLastWeek = totalUserBeforeThisWeek > 0
-                ? Math.Round((double)totalLoginBeforeLastWeek / totalUserBeforeThisWeek * 100, 2)
-                : 0;
+            //double loginRateBeforeLastWeek = totalUserBeforeThisWeek > 0
+            //    ? Math.Round((double)totalLoginBeforeLastWeek / totalUserBeforeThisWeek * 100, 2)
+            //    : 0;
 
             return new AdminWeeklyResponse
             {
                 LoginThisWeek = loginThisWeek,
-                LoginLastWeek = loginLastWeek,
+                //LoginLastWeek = loginLastWeek,
                 TotalUserBeforeNow = totalUserBeforeNow,
-                TotalRevenue = toalrevenue,
+                TotalRevenue = totalRevenue,
                 RateRevenue = revenueRate,
                 LoginRateBeforeNow = loginRateBeforeNow,
-                LoginRateBeforeLastWeek = loginRateBeforeLastWeek
+                //LoginRateBeforeLastWeek = loginRateBeforeLastWeek
+                UserRateNow = userRateNow
             };
         }
     }
