@@ -85,5 +85,9 @@ namespace PhyGen.Shared.Constants
         // Notification errors (2540–2559)
         NotifcationNotFound = 2541,
         NotifcationSend = 2542,
+
+        // Question errors (2560–2599)
+        QuestionNotFound = 2560,
+        QuestionAlreadyExist = 2561,
     }
 }

@@ -12,6 +12,7 @@ using PhyGen.Application.ExamCategoryChapters.Commands;
 using PhyGen.Application.Notification.Commands;
 using PhyGen.Application.Notification.Responses;
 using PhyGen.Application.PayOs.Response;
+using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.SubjectBooks.Commands;
 using PhyGen.Application.Subjects.Commands;
 using PhyGen.Application.Topics.Commands;
@@ -93,6 +94,11 @@ namespace PhyGen.API.Mapping
             // Mapping for ExamCategoryChapter
             CreateMap<CreateExamCategoryChapterRequest, CreateExamCategoryChapterCommand>();
             CreateMap<UpdateExamCategoryChapterRequest, UpdateExamCategoryChapterCommand>();
+
+            // Mapping for Question
+            CreateMap<CreateQuestionRequest, CreateQuestionCommand>();
+            CreateMap<UpdateQuestionRequest, UpdateQuestionCommand>();
+            CreateMap<DeleteQuestionRequest, DeleteQuestionCommand>();
         }
     }
 }
