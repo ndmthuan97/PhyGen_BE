@@ -15,6 +15,6 @@ namespace PhyGen.Application.Admin.Response
         public double RateRevenue { get; set; }
         public double LoginRateBeforeNow { get; set; }
         public double LoginRateBeforeLastWeek { get; set; }
-
+        public double UserRateNow { get; set; }
     }
 }

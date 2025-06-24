@@ -106,9 +106,11 @@ namespace PhyGen.Insfrastructure.Service
 
             // Lấy thông tin từ PayOS
             PaymentLinkInformation info = await _payOS.getPaymentLinkInformation(payment.PaymentLinkId);
-            payment.Status = info.status == "PAID" ? PaymentStatus.Completed.ToString() :
-                             info.status == "CANCELLED" ? PaymentStatus.Failed.ToString() : PaymentStatus.Pending.ToString();
-
+            payment.Status = (payment.ValidUntil < DateTime.UtcNow && info.status != "PAID")
+                            ? PaymentStatus.Expired.ToString()
+                            : info.status == "PAID" ? PaymentStatus.Completed.ToString()
+                            : info.status == "CANCELLED" ? PaymentStatus.Cancelled.ToString()
+                            : PaymentStatus.Pending.ToString();
             await _context.SaveChangesAsync();
             return payment;
         }
@@ -136,7 +138,8 @@ namespace PhyGen.Insfrastructure.Service
                 {
                     nameof(PaymentStatus.Completed) => "Xử lý giao dịch thành công.",
                     nameof(PaymentStatus.Pending) => "Giao dịch đang chờ xử lý.",
-                    nameof(PaymentStatus.Failed) => "Giao dịch đã bị hủy.",
+                    nameof(PaymentStatus.Cancelled) => "Giao dịch đã bị hủy.",
+                    nameof(PaymentStatus.Expired) => "Giao dịch đã hết hạn",
                     _ => "Trạng thái giao dịch không xác định."
                 };
 

@@ -12,6 +12,7 @@ using PhyGen.Application.PayOs.Interfaces;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Infrastructure.Persistence.Repositories;
 using PhyGen.Infrastructure.Service;
+using PhyGen.Insfrastructure.BackgroundServices;
 using PhyGen.Insfrastructure.Persistence.Repositories;
 using PhyGen.Insfrastructure.Service;
 using System;
@@ -60,6 +61,7 @@ namespace PhyGen.Insfrastructure.Extensions
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IStatisticService, AdminService>();
+            services.AddHostedService<ExpirePaymentBackgroundService>();
 
         }
     }

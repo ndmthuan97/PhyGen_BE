@@ -7,6 +7,7 @@ namespace PhyGen.API.Models
     {
         [Required(ErrorMessage = "Title is required.")]
         [StringLength(255, MinimumLength = 1, ErrorMessage = "Title must be between 1 and 255 characters.")]
+        public Guid? UserId { get; set; }
         public string Title { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Message is required.")]

@@ -44,8 +44,17 @@ namespace PhyGen.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<Guid>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> CreateNotification([FromBody] CreateNotificationRequest request)
+        public async Task<IActionResult> CreateNotification(
+            [FromQuery] Guid? UserId,
+            [FromQuery] string Title,
+            [FromQuery] string Message)
         {
+            var request = new CreateNotificationRequest
+            {
+                UserId = UserId,
+                Title = Title,
+                Message = Message
+            };
             if (request == null)
                 return HandleNullRequest();
 
@@ -75,18 +84,6 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<DeleteNotificationCommand, Unit>(command);
         }
 
-        [HttpPost("send")]
-        public async Task<IActionResult> SendNotification(
-            [FromQuery] int Id,
-            [FromQuery] Guid? UserId)
-        {
-            var filter = new SendNotificationCommand
-            {
-                Id = Id,    
-                UserId = UserId
-            };
-            return Ok(new NotificationSend {});
-        }
         [HttpPut("maskasread")]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateReadNotification([FromQuery] Guid UserId)

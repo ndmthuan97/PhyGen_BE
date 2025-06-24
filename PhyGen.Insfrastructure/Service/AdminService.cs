@@ -2,6 +2,7 @@
 using PhyGen.Application.Admin.Interfaces;
 using PhyGen.Application.Admin.Response;
 using PhyGen.Insfrastructure.Persistence.DbContexts;
+using PhyGen.Shared.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,25 +32,21 @@ namespace PhyGen.Infrastructure.Service
             var loginThisWeek = await _context.Users
                 .CountAsync(u => u.LastLogin.HasValue && u.LastLogin >= startOfThisWeek);
 
-            var loginLastWeek = await _context.Users
-                .CountAsync(u => u.LastLogin.HasValue && u.LastLogin >= startOfLastWeek && u.LastLogin <= endOfLastWeek);
+            //var loginLastWeek = await _context.Users
+            //    .CountAsync(u => u.LastLogin.HasValue && u.LastLogin >= startOfLastWeek && u.LastLogin <= endOfLastWeek);
 
             // Doanh thu
-            var revenueThisWeek = await _context.Payments
-                .Where(p => p.CreatedAt >= startOfThisWeek && p.Status == "PAID")
+            var totalRevenue = await _context.Payments
+                .Where(p => p.CreatedAt <= now && p.Status == "Completed")
                 .SumAsync(p => (decimal?)p.Amount) ?? 0;
 
-            var revenueLastWeek = await _context.Payments
-                .Where(p => p.CreatedAt >= startOfLastWeek && p.CreatedAt <= endOfLastWeek && p.Status == "PAID")
-                .SumAsync(p => (decimal?)p.Amount) ?? 0;
-
-            var toalrevenue = await _context.Payments
-                .Where(p => p.CreatedAt >= now)
+            var TotalRevenueLastWeek = await _context.Payments
+                .Where(p => p.CreatedAt <= startOfLastWeek && p.Status == "Completed")
                 .SumAsync(p => (decimal?)p.Amount) ?? 0;
 
             // Tổng người dùng trước tuần này
-            var totalUserBeforeThisWeek = await _context.Users
-                .CountAsync(u => u.CreatedAt < startOfThisWeek);
+            var totalUserBeforeLastWeek = await _context.Users
+                .CountAsync(u => u.CreatedAt < startOfLastWeek);
 
             // Tổng login trước tuần trước
             var totalLoginBeforeLastWeek = await _context.Users
@@ -62,28 +59,63 @@ namespace PhyGen.Infrastructure.Service
             var totalLoginBeforeNow = await _context.Users
                 .CountAsync(u => u.LastLogin.HasValue && u.LastLogin < now);
 
-            double revenueRate = (double)(revenueThisWeek > 0
-                ? Math.Round((revenueThisWeek - revenueLastWeek) / revenueThisWeek * 100, 2)
-                : 0);
+            double revenueRate = (double)(TotalRevenueLastWeek > 0
+                ? Math.Round((totalRevenue - TotalRevenueLastWeek) / TotalRevenueLastWeek * 100, 2)
+                : (TotalRevenueLastWeek > 0 ? 100 : 0));
             // Tính tỷ lệ login
             double loginRateBeforeNow = totalUserBeforeNow > 0
                 ? Math.Round((double)totalLoginBeforeNow / totalUserBeforeNow * 100, 2)
                 : 0;
+            double userRateNow = totalUserBeforeLastWeek > 0
+                ? Math.Round(((double)(totalUserBeforeNow - totalUserBeforeLastWeek) / totalUserBeforeLastWeek) * 100, 2)
+                : (totalUserBeforeNow > 0 ? 100 : 0);
 
-            double loginRateBeforeLastWeek = totalUserBeforeThisWeek > 0
-                ? Math.Round((double)totalLoginBeforeLastWeek / totalUserBeforeThisWeek * 100, 2)
-                : 0;
+            //double loginRateBeforeLastWeek = totalUserBeforeThisWeek > 0
+            //    ? Math.Round((double)totalLoginBeforeLastWeek / totalUserBeforeThisWeek * 100, 2)
+            //    : 0;
 
             return new AdminWeeklyResponse
             {
                 LoginThisWeek = loginThisWeek,
-                LoginLastWeek = loginLastWeek,
+                //LoginLastWeek = loginLastWeek,
                 TotalUserBeforeNow = totalUserBeforeNow,
-                TotalRevenue = toalrevenue,
+                TotalRevenue = totalRevenue,
                 RateRevenue = revenueRate,
                 LoginRateBeforeNow = loginRateBeforeNow,
-                LoginRateBeforeLastWeek = loginRateBeforeLastWeek
+                //LoginRateBeforeLastWeek = loginRateBeforeLastWeek
+                UserRateNow = userRateNow
             };
+        }
+        public async Task<InvoiceResponse> GetInvoiceStatistics()
+        {
+            var payments = await _context.Payments.ToListAsync();
+            var users = await _context.Users.ToListAsync();
+
+            var invoiceItems = (from p in payments
+                                join u in users on p.UserId equals u.Id
+                                select new InvoiceItem
+                                {
+                                    InvoiceId = $"{p.PaymentLinkId}",
+                                    FullName = $"{u.FirstName} {u.LastName}",
+                                    CreatedAt = p.CreatedAt,
+                                    Amount = p.Amount,
+                                    PaymentMethod = "PayOS",
+                                    Status = p.Status,
+                                    AvatarUrl = u.photoURL ?? ""
+                                }).ToList();
+
+            var response = new InvoiceResponse
+            {
+                TotalBill = payments.Count,
+                PendingBill = payments.Count(p => p.Status == PaymentStatus.Pending.ToString()),
+                CompletedBill = payments.Count(p => p.Status == PaymentStatus.Completed.ToString()),
+                CanceledBill = payments.Count(p =>
+                    p.Status == PaymentStatus.Cancelled.ToString() ||
+                    p.Status == PaymentStatus.Expired.ToString()),
+                Invoices = invoiceItems
+            };
+
+            return response;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace PhyGen.Shared.Constants
     {
         Pending,    // Chờ xử lý
         Completed,  // Đã hoàn thành
-        Failed,     // Thất bại
+        Expired,     // Hết hạn
         Cancelled   // Đã hủy
     }
 }
