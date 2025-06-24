@@ -62,7 +62,7 @@ namespace PhyGen.Insfrastructure.Extensions
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IStatisticService, AdminService>();
             services.AddHostedService<ExpirePaymentBackgroundService>();
-
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
         }
     }
 }

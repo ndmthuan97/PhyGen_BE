@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhyGen.Shared.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,8 +16,8 @@ namespace PhyGen.Domain.Entities
         [Required]
         public string Content { get; set; } = string.Empty;
 
-        public string Type { get; set; } = string.Empty;
-        public string Level { get; set; } = string.Empty;
+        public QuestionType Type { get; set; }
+        public DifficultyLevel Level { get; set; }
 
         public string? Image { get; set; }
 
