@@ -263,7 +263,9 @@ public class AuthService : IAuthService
         return new LoginResponse
         {
             Response = new AuthenticationResponse { Email = email, StatusCode = StatusCode.LoginSuccess },
-            Role = newUser.Role
+            Role = newUser.Role,
+            Token = _jwtTokenGenerator.GenerateToken(newUser)
+
         };
     }
 

@@ -91,18 +91,12 @@ namespace PhyGen.API.Controllers
 
             if (result is LoginResponse loginResponse)
             {
-                // Nếu token chưa được gán (do header null), thì lấy token từ response
-                if (string.IsNullOrEmpty(token))
-                {
-                    token = loginResponse.Token;
-                }
-
                 return Ok(new
                 {
                     loginResponse.Response.Email,
                     loginResponse.Response.StatusCode,
                     loginResponse.Response.Message,
-                    Token = token,
+                    Token = loginResponse.Token,
                     Role = loginResponse.Role
                 });
             }
