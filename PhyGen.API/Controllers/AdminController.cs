@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace PhyGen.API.Controllers
 {
     [ApiController]
-    [Route("api/admin")]
+    [Route("api/admins")]
     public class StatisticController : ControllerBase
     {
         private readonly IStatisticService _statisticService;

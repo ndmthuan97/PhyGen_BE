@@ -35,20 +35,20 @@ namespace PhyGen.Infrastructure.Specifications
             {
                 switch (param.Sort.ToLower())
                 {
-                    case "name":
-                        OrderBy = query => query.OrderBy(c => c.Name);
+                    case "orderno":
+                        OrderBy = query => query.OrderBy(c => c.OrderNo);
                         break;
-                    case "namedesc":
-                        OrderByDescending = query => query.OrderByDescending(c => c.Name);
+                    case "ordernodesc":
+                        OrderByDescending = query => query.OrderByDescending(c => c.OrderNo);
                         break;
                     default:
-                        OrderBy = query => query.OrderBy(c => c.Name);
+                        OrderBy = query => query.OrderBy(c => c.OrderNo);
                         break;
                 }
             }
             else
             {
-                OrderBy = query => query.OrderBy(c => c.Name);
+                OrderBy = query => query.OrderBy(c => c.OrderNo);
             }
             Skip = (param.PageIndex - 1) * param.PageSize;
             Take = param.PageSize;
