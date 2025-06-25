@@ -16,7 +16,10 @@ using PhyGen.Application.MatrixSections.Commands;
 using PhyGen.Application.Notification.Commands;
 using PhyGen.Application.Notification.Responses;
 using PhyGen.Application.PayOs.Response;
+using PhyGen.Application.QuestionMedias.Commands;
 using PhyGen.Application.Questions.Commands;
+using PhyGen.Application.QuestionSections.Commands;
+using PhyGen.Application.Sections.Commands;
 using PhyGen.Application.SubjectBooks.Commands;
 using PhyGen.Application.Subjects.Commands;
 using PhyGen.Application.Topics.Commands;
@@ -122,6 +125,20 @@ namespace PhyGen.API.Mapping
             // Mapping for MatrixContentItem
             CreateMap<CreateMatrixContentItemRequest, CreateMatrixContentItemCommand>();
             CreateMap<UpdateMatrixContentItemRequest, UpdateMatrixContentItemCommand>();
+
+            // Mapping for QuestionMedia
+            CreateMap<CreateQuestionMediaRequest, CreateQuestionMediaCommand>();
+            CreateMap<UpdateQuestionMediaRequest, UpdateQuestionMediaCommand>();
+            CreateMap<DeleteQuestionMediaRequest, DeleteQuestionMediaCommand>();
+
+            // Mapping for Section
+            CreateMap<CreateSectionRequest, CreateSectionCommand>();
+            CreateMap<UpdateSectionRequest, UpdateSectionCommand>();
+            CreateMap<DeleteSectionRequest, DeleteSectionCommand>();
+
+            // Mapping for QuestionSection
+            CreateMap<CreateQuestionSectionRequest, CreateQuestionSectionCommand>();
+            CreateMap<UpdateQuestionSectionRequest, UpdateQuestionSectionCommand>();
         }
     }
 }

@@ -105,5 +105,16 @@ namespace PhyGen.Shared.Constants
         // MatrixContentItem errors (2670–2689)
         MatrixContentItemNotFound = 2670,
         MatrixContentItemAlreadyExist = 2671,
+
+        // QuetionMedia errors (2690–2709)  
+        QuestionMediaNotFound = 2690,
+
+        // Section errors (2710–2729)
+        SectionNotFound = 2710,
+        SectionAlreadyExist = 2711,
+
+        // QuestionSection errors (2730–2749)
+        QuestionSectionNotFound = 2730,
+        QuestionSectionAlreadyExist = 2731,
     }
 }

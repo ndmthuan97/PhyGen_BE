@@ -27,7 +27,7 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetMatrixSectionByIdQuery, List<MatrixSectionResponse>>(query);
         }
 
-        [HttpGet]
+        [HttpGet("matrix/{matrixId}")]
         [ProducesResponseType(typeof(ApiResponse<List<MatrixSectionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetByMatrixId(Guid matrixId)
         {
