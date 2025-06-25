@@ -19,8 +19,11 @@ using PhyGen.Application.MatrixContentItems.Responses;
 using PhyGen.Application.MatrixSectionDetails.Responses;
 using PhyGen.Application.MatrixSections.Responses;
 using PhyGen.Application.Notification.Responses;
+using PhyGen.Application.QuestionMedias.Responses;
 using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Questions.Responses;
+using PhyGen.Application.QuestionSections.Responses;
+using PhyGen.Application.Sections.Responses;
 using PhyGen.Application.SubjectBooks.Responses;
 using PhyGen.Application.Subjects.Commands;
 using PhyGen.Application.Subjects.Responses;
@@ -97,6 +100,15 @@ namespace PhyGen.Application.Mapping
 
             // Mapping for MatrixContentItem
             CreateMap<MatrixContentItem, MatrixContentItemResponse>();
+
+            // Mapping for Question Media
+            CreateMap<QuestionMedia, QuestionMediaResponse>();
+
+            // Mapping for Section
+            CreateMap<Section, SectionResponse>();
+
+            // Mapping for QuestionSection
+            CreateMap<QuestionSection, QuestionSectionResponse>();
         }
     }
 }

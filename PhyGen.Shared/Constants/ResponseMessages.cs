@@ -105,6 +105,17 @@ namespace PhyGen.Shared.Constants
             // MatrixContentItem messages
             { StatusCode.MatrixContentItemNotFound, "Không tìm thấy mục nội dung ma trận với mã được cung cấp." },
             { StatusCode.MatrixContentItemAlreadyExist, "Mục nội dung ma trận này đã tồn tại." },
+
+            // QuestionMedia messages
+            { StatusCode.QuestionMediaNotFound, "Không tìm thấy file phương tiện câu hỏi với mã được cung cấp." },
+
+            // Section messages
+            { StatusCode.SectionNotFound, "Không tìm thấy phần với mã được cung cấp." },
+            { StatusCode.SectionAlreadyExist, "Phần này đã tồn tại." },
+
+            // QuestionSection messages
+            { StatusCode.QuestionSectionNotFound, "Không tìm thấy phần câu hỏi với mã được cung cấp." },
+            { StatusCode.QuestionSectionAlreadyExist, "Phần câu hỏi này đã tồn tại." },
         };
 
         public static string GetMessage(StatusCode code)
