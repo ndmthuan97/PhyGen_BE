@@ -9,6 +9,10 @@ using PhyGen.Application.ContentItems.Commands;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.ExamCategories.Commands;
 using PhyGen.Application.ExamCategoryChapters.Commands;
+using PhyGen.Application.Matrices.Commands;
+using PhyGen.Application.MatrixContentItems.Commands;
+using PhyGen.Application.MatrixSectionDetails.Commands;
+using PhyGen.Application.MatrixSections.Commands;
 using PhyGen.Application.Notification.Commands;
 using PhyGen.Application.Notification.Responses;
 using PhyGen.Application.PayOs.Response;
@@ -99,6 +103,25 @@ namespace PhyGen.API.Mapping
             CreateMap<CreateQuestionRequest, CreateQuestionCommand>();
             CreateMap<UpdateQuestionRequest, UpdateQuestionCommand>();
             CreateMap<DeleteQuestionRequest, DeleteQuestionCommand>();
+
+            // Mapping for Matrix
+            CreateMap<CreateMatrixRequest, CreateMatrixCommand>();
+            CreateMap<UpdateMatrixRequest, UpdateMatrixCommand>();
+            CreateMap<DeleteMatrixRequest, DeleteMatrixCommand>();
+
+            // Mapping for MatrixSection
+            CreateMap<CreateMatrixSectionRequest, CreateMatrixSectionCommand>();
+            CreateMap<UpdateMatrixSectionRequest, UpdateMatrixSectionCommand>();
+            CreateMap<DeleteMatrixSectionRequest, DeleteMatrixSectionCommand>();
+
+            // Mapping for MatrixSectionDetail
+            CreateMap<CreateMatrixSectionDetailRequest, CreateMatrixSectionDetailCommand>();
+            CreateMap<UpdateMatrixSectionDetailRequest, UpdateMatrixSectionDetailCommand>();
+            CreateMap<DeleteMatrixSectionDetailRequest, DeleteMatrixSectionDetailCommand>();
+
+            // Mapping for MatrixContentItem
+            CreateMap<CreateMatrixContentItemRequest, CreateMatrixContentItemCommand>();
+            CreateMap<UpdateMatrixContentItemRequest, UpdateMatrixContentItemCommand>();
         }
     }
 }

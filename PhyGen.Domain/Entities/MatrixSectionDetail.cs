@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhyGen.Shared.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,8 +24,10 @@ namespace PhyGen.Domain.Entities
         [Column(TypeName = "text")]
         public string? Description { get; set; }
 
+        public DifficultyLevel Level { get; set; }
+        public QuestionType Type { get; set; }
+
         public int Quantity { get; set; }
-        public string Level { get; set; } = string.Empty;
 
         public DateTime? DeletedAt { get; set; }
 
