@@ -63,6 +63,10 @@ namespace PhyGen.Insfrastructure.Extensions
             services.AddScoped<IStatisticService, AdminService>();
             services.AddHostedService<ExpirePaymentBackgroundService>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IMatrixRepository, MatrixRepository>();
+            services.AddScoped<IMatrixSectionRepository, MatrixSectionRepository>();
+            services.AddScoped<IMatrixSectionDetailRepository, MatrixSectionDetailRepository>();
+            services.AddScoped<IMatrixContentItemRepository, MatrixContentItemRepository>();
         }
     }
 }

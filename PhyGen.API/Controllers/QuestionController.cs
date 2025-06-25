@@ -6,11 +6,11 @@ using PhyGen.Application.Mapping;
 using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Questions.Queries;
 using PhyGen.Application.Questions.Responses;
-using PhyGen.Shared.Constants;
-using PhyGen.Shared;
-using System.Net;
 using PhyGen.Domain.Specs;
 using PhyGen.Domain.Specs.Question;
+using PhyGen.Shared;
+using PhyGen.Shared.Constants;
+using System.Net;
 
 namespace PhyGen.API.Controllers
 {
@@ -20,6 +20,14 @@ namespace PhyGen.API.Controllers
     {
         public QuestionController(IMediator mediator, ILogger<QuestionController> logger)
             : base(mediator, logger) { }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<List<QuestionResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAllQuestions([FromQuery] QuestionSpecParam questionSpecParam)
+        {
+            var query = new GetQuestionsQuery(questionSpecParam);
+            return await ExecuteAsync<GetQuestionsQuery, Pagination<QuestionResponse>>(query);
+        }
 
         [HttpGet("{questionId}")]
         [ProducesResponseType(typeof(ApiResponse<QuestionResponse>), (int)HttpStatusCode.OK)]
@@ -37,7 +45,7 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetQuestionsByTopicIdQuery, Pagination<QuestionResponse>>(request);
         }
 
-        [HttpGet]
+        [HttpGet("level&type")]
         [ProducesResponseType(typeof(ApiResponse<Pagination<QuestionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetQuestionsByLevelAndType([FromQuery] QuestionSpecParam questionSpecParam)
         {

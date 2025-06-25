@@ -65,4 +65,20 @@ namespace PhyGen.Application.Questions.Handlers
             return AppMapper<CoreMappingProfile>.Mapper.Map<Pagination<QuestionResponse>>(questions);
         }
     }
+
+    public class GetQuestionsQueryHandler : IRequestHandler<GetQuestionsQuery, Pagination<QuestionResponse>>
+    {
+        private readonly IQuestionRepository _questionRepository;
+
+        public GetQuestionsQueryHandler(IQuestionRepository questionRepository)
+        {
+            _questionRepository = questionRepository;
+        }
+
+        public async Task<Pagination<QuestionResponse>> Handle(GetQuestionsQuery request, CancellationToken cancellationToken)
+        {
+            var questions = await _questionRepository.GetQuestionsAsync(request.QuestionSpecParam);
+            return AppMapper<CoreMappingProfile>.Mapper.Map<Pagination<QuestionResponse>>(questions);
+        }
+    }
 }
