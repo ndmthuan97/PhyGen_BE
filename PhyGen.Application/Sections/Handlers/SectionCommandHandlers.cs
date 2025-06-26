@@ -60,7 +60,7 @@ namespace PhyGen.Application.Sections.Handlers
             //    throw new ExamNotFoundException();
             //}
 
-            var section = await _sectionRepository.GetSectionByIdAsync(request.Id);
+            var section = await _sectionRepository.GetByIdAsync(request.Id);
             if (section == null)
             {
                 throw new SectionNotFoundException();
@@ -86,7 +86,7 @@ namespace PhyGen.Application.Sections.Handlers
 
         public async Task<Unit> Handle(DeleteSectionCommand request, CancellationToken cancellationToken)
         {
-            var section = await _sectionRepository.GetSectionByIdAsync(request.Id);
+            var section = await _sectionRepository.GetByIdAsync(request.Id);
             if (section == null)
             {
                 throw new SectionNotFoundException();

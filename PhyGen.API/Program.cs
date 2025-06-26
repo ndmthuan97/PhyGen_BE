@@ -5,9 +5,9 @@ using PhyGen.API.Mapping;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Domain.Interfaces;
-using PhyGen.Insfrastructure.Extensions;
-using PhyGen.Insfrastructure.Persistence.DbContexts;
-using PhyGen.Insfrastructure.Persistence.Repositories;
+using PhyGen.Infrastructure.Extensions;
+using PhyGen.Infrastructure.Persistence.DbContexts;
+using PhyGen.Infrastructure.Persistence.Repositories;
 using System.Security.Claims;
 using System.Text;
 

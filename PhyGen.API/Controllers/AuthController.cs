@@ -9,7 +9,7 @@ using PhyGen.Application.Authentication.DTOs.Responses;
 using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Authentication.Responses;
-using PhyGen.Insfrastructure.Service;
+using PhyGen.Infrastructure.Service;
 using PhyGen.Shared.Constants;
 using System.Security.Claims;
 
