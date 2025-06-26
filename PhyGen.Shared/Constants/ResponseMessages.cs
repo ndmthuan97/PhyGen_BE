@@ -116,6 +116,10 @@ namespace PhyGen.Shared.Constants
             // QuestionSection messages
             { StatusCode.QuestionSectionNotFound, "Không tìm thấy phần câu hỏi với mã được cung cấp." },
             { StatusCode.QuestionSectionAlreadyExist, "Phần câu hỏi này đã tồn tại." },
+
+            // Exam messages
+            { StatusCode.ExamNotFound, "Không tìm thấy bài kiểm tra với mã được cung cấp." },
+            { StatusCode.ExamAlreadyExist, "Bài kiểm tra này đã tồn tại." },
         };
 
         public static string GetMessage(StatusCode code)

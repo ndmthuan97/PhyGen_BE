@@ -1,8 +1,8 @@
 ﻿using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Domain.Specs;
-using PhyGen.Infrastructure.Specifications;
 using PhyGen.Infrastructure.Persistence.DbContexts;
+using PhyGen.Infrastructure.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Infrastructure.Persistence.Repositories
 {
-    public class MatrixRepository : RepositoryBase<Matrix, Guid>, IMatrixRepository
+    public class ExamRepository : RepositoryBase<Exam, Guid>, IExamRepository
     {
-        public MatrixRepository(AppDbContext context) : base(context) { }
+        public ExamRepository(AppDbContext context) : base(context) { }
 
-        public async Task<Pagination<Matrix>?> GetMatricesAsync(MatrixSpecParam matrixSpecParam)
+        public async Task<Pagination<Exam>?> GetExamsAsync(ExamSpecParam examSpecParam)
         {
-            var spec = new MatrixSpecification(matrixSpecParam);
+            var spec = new ExamSpecification(examSpecParam);
             return await GetWithSpecAsync(spec);
         }
     }

@@ -22,7 +22,7 @@ namespace PhyGen.Domain.Entities
         public string? Description { get; set; }
 
         public int Grade { get; set; }
-        public DateTime? Year { get; set; }
+        public int Year { get; set; }
         public int? TotalQuestionCount { get; set; }
 
         public int VersionCount { get; set; }

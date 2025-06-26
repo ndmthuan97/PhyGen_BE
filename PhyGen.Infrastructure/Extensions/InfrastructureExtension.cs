@@ -70,6 +70,7 @@ namespace PhyGen.Infrastructure.Extensions
             services.AddScoped<IQuestionMediaRepository, QuestionMediaRepository>();
             services.AddScoped<ISectionRepository, SectionRepository>();
             services.AddScoped<IQuestionSectionRepository, QuestionSectionRepository>();
+            services.AddScoped<IExamRepository, ExamRepository>();
         }
     }
 }
