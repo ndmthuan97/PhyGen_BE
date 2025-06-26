@@ -52,7 +52,8 @@ namespace PhyGen.Application.ContentFlows.Handlers
                 CurriculumId = request.CurriculumId,
                 SubjectId = request.SubjectId,
                 Name = request.Name,
-                Description = request.Description
+                Description = request.Description,
+                OrderNo = request.OrderNo
             };
 
             await _repository.AddAsync(contentFlow);
@@ -98,6 +99,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
             contentFlow.SubjectId = request.SubjectId;
             contentFlow.Name = request.Name;
             contentFlow.Description = request.Description;
+            contentFlow.OrderNo = request.OrderNo;
 
             await _repository.UpdateAsync(contentFlow);
             return Unit.Value;
