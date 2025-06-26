@@ -116,5 +116,9 @@ namespace PhyGen.Shared.Constants
         // QuestionSection errors (2730–2749)
         QuestionSectionNotFound = 2730,
         QuestionSectionAlreadyExist = 2731,
+
+        // Exam errors (2750–2769)
+        ExamNotFound = 2750,
+        ExamAlreadyExist = 2751,
     }
 }

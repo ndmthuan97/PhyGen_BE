@@ -9,6 +9,7 @@ using PhyGen.Application.ContentItems.Commands;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.ExamCategories.Commands;
 using PhyGen.Application.ExamCategoryChapters.Commands;
+using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Matrices.Commands;
 using PhyGen.Application.MatrixContentItems.Commands;
 using PhyGen.Application.MatrixSectionDetails.Commands;
@@ -139,6 +140,11 @@ namespace PhyGen.API.Mapping
             // Mapping for QuestionSection
             CreateMap<CreateQuestionSectionRequest, CreateQuestionSectionCommand>();
             CreateMap<UpdateQuestionSectionRequest, UpdateQuestionSectionCommand>();
+
+            // Mapping for Exam
+            CreateMap<CreateExamRequest, CreateExamCommand>();
+            CreateMap<UpdateExamRequest, UpdateExamCommand>();
+            CreateMap<DeleteExamRequest, DeleteExamCommand>();
         }
     }
 }

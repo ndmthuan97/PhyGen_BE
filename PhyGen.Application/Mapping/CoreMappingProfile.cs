@@ -14,6 +14,7 @@ using PhyGen.Application.ExamCategories.Commands;
 using PhyGen.Application.ExamCategories.Responses;
 using PhyGen.Application.ExamCategoryChapters.Commands;
 using PhyGen.Application.ExamCategoryChapters.Responses;
+using PhyGen.Application.Exams.Responses;
 using PhyGen.Application.Matrices.Responses;
 using PhyGen.Application.MatrixContentItems.Responses;
 using PhyGen.Application.MatrixSectionDetails.Responses;
@@ -109,6 +110,10 @@ namespace PhyGen.Application.Mapping
 
             // Mapping for QuestionSection
             CreateMap<QuestionSection, QuestionSectionResponse>();
+
+            // Mapping for Exam
+            CreateMap<Exam, ExamResponse>();
+            CreateMap<Pagination<Exam>, Pagination<ExamResponse>>();
         }
     }
 }
