@@ -94,6 +94,8 @@ namespace PhyGen.API.Controllers
                 return Ok(new
                 {
                     loginResponse.Response.Email,
+                    loginResponse.Response.FirstName,
+                    loginResponse.Response.LastName,
                     loginResponse.Response.StatusCode,
                     loginResponse.Response.Message,
                     Token = loginResponse.Token,
