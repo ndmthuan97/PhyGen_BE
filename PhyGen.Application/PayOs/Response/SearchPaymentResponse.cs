@@ -11,7 +11,7 @@ namespace PhyGen.Application.PayOs.Response
     {
         public int Amount { get; set; }
         public DateTime CreatedAt { get; set; }
-        public PaymentStatus Status { get; set; }
+        public string Status { get; set; }
         public long PaymentLinkId { get; set; }
     }
 }

@@ -9,8 +9,8 @@ namespace PhyGen.Shared.Constants
     public enum PaymentStatus
     {
         Pending,    // Chờ xử lý
-        Completed,  // Đã hoàn thành
-        Expired,     // Hết hạn
-        Cancelled   // Đã hủy
+        Completed,  // Đã hoàn thành        
+        Cancelled,  // Đã hủy
+        Expired     // Hết hạn
     }
 }
