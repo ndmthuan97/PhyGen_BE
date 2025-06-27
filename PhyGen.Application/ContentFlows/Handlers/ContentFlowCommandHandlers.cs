@@ -43,6 +43,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
                 cf.Name.ToLower() == request.Name.ToLower() &&
                 cf.Description.ToLower() == request.Description.ToLower() &&
                 cf.OrderNo == request.OrderNo &&
+                cf.Grade == request.Grade &&
                 cf.DeletedAt == null
                 ))
                 throw new ContentFlowAlreadyExistException();
@@ -53,7 +54,8 @@ namespace PhyGen.Application.ContentFlows.Handlers
                 SubjectId = request.SubjectId,
                 Name = request.Name,
                 Description = request.Description,
-                OrderNo = request.OrderNo
+                OrderNo = request.OrderNo,
+                Grade = request.Grade
             };
 
             await _repository.AddAsync(contentFlow);
@@ -91,6 +93,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
                 cf.Name.ToLower() == request.Name.ToLower() &&
                 cf.Description.ToLower() == request.Description.ToLower() &&
                 cf.OrderNo == request.OrderNo &&
+                cf.Grade == request.Grade &&
                 cf.DeletedAt == null
                 ))
                 throw new ContentFlowAlreadyExistException();
@@ -100,6 +103,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
             contentFlow.Name = request.Name;
             contentFlow.Description = request.Description;
             contentFlow.OrderNo = request.OrderNo;
+            contentFlow.Grade = request.Grade;
 
             await _repository.UpdateAsync(contentFlow);
             return Unit.Value;

@@ -70,6 +70,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.Name).IsRequired();
                 e.Property(p => p.Description);
                 e.Property(p => p.OrderNo);
+                e.Property(p => p.Grade);
             });
 
             modelBuilder.Entity<ContentItem>(e =>
@@ -89,7 +90,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             modelBuilder.Entity<Curriculum>(e =>
             {
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
-                e.Property(p => p.Grade);
+                e.Property(p => p.Year);
             });
 
             modelBuilder.Entity<EmailOtpManager>(e =>

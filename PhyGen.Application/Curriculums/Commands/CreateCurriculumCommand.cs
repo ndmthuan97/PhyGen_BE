@@ -12,6 +12,6 @@ namespace PhyGen.Application.Curriculums.Commands
     {
         public string Name { get; set; } = string.Empty;
 
-        public int Grade { get; set; }
+        public int Year { get; set; }
     }
 }

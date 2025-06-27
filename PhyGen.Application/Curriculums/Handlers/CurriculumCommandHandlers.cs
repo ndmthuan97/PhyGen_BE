@@ -26,15 +26,18 @@ namespace PhyGen.Application.Curriculums.Handlers
         {
             if (await _curriculumRepository.AlreadyExistAsync(x =>
                 x.Name.ToLower() == request.Name.ToLower() &&
-                x.Grade == request.Grade && 
+                x.Year == request.Year &&
                 x.DeletedAt == null
                 ))
                 throw new CurriculumAlreadyExistException();
 
+            if (request.Year < 2018 || request.Year > DateTime.Now.Year)
+                throw new Exception("Năm phải nằm trong khoảng từ 2018 đến hiện tại.");
+
             var curriculum = new Curriculum
             {
                 Name = request.Name,
-                Grade = request.Grade
+                Year = request.Year,
             };
 
             curriculum = await _curriculumRepository.AddAsync(curriculum);
@@ -60,13 +63,16 @@ namespace PhyGen.Application.Curriculums.Handlers
 
             if (await _curriculumRepository.AlreadyExistAsync(x =>
                 x.Name.ToLower() == request.Name.ToLower() &&
-                x.Grade == request.Grade &&
+                x.Year == request.Year &&
                 x.DeletedAt == null
                 ))
                 throw new CurriculumAlreadyExistException();
 
+            if (request.Year < 2018 || request.Year > DateTime.Now.Year)
+                throw new Exception("Năm phải nằm trong khoảng từ 2018 đến hiện tại.");
+
             curriculum.Name = request.Name;
-            curriculum.Grade = request.Grade;
+            curriculum.Year = request.Year;
 
             await _curriculumRepository.UpdateAsync(curriculum);
 

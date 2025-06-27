@@ -41,12 +41,6 @@ namespace PhyGen.Infrastructure.Specifications
                     case "namedesc":
                         OrderByDescending = query => query.OrderByDescending(c => c.Name);
                         break;
-                    case "grade":
-                        OrderBy = query => query.OrderBy(c => c.Grade);
-                        break;
-                    case "gradedesc":
-                        OrderByDescending = query => query.OrderByDescending(c => c.Grade);
-                        break;
                     default:
                         OrderBy = query => query.OrderBy(c => c.Name);
                         break;

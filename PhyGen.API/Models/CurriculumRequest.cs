@@ -9,7 +9,7 @@ namespace PhyGen.API.Models
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Trường này không được để trống.")]
-        public int Grade { get; set; }
+        public int Year { get; set; }
     }
 
     public class UpdateCurriculumRequest
@@ -21,7 +21,7 @@ namespace PhyGen.API.Models
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Trường này không được để trống.")]
-        public int Grade { get; set; }
+        public int Year { get; set; }
     }
 
     public class DeleteCurriculumRequest
