@@ -241,8 +241,8 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<int>("VersionCount")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("Year")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("Year")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -435,10 +435,8 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
-                    b.Property<string>("Level")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("text");
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("MatrixSectionId")
                         .HasColumnType("uuid");
@@ -454,6 +452,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .IsUnicode(true)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -588,18 +589,14 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
-                    b.Property<string>("Level")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("text");
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("TopicId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("text");
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
