@@ -270,6 +270,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
+                    b.Property<int>("OrderNo")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("ExamCategories");

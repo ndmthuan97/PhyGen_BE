@@ -28,7 +28,7 @@ namespace PhyGen.Application.ExamCategories.Handlers
             if (examCategories == null || !examCategories.Any())
                 throw new ExamCategoryNotFoundException();
 
-            return AppMapper<CoreMappingProfile>.Mapper.Map<List<ExamCategoryResponse>>(examCategories.OrderBy(ec => ec.Name));
+            return AppMapper<CoreMappingProfile>.Mapper.Map<List<ExamCategoryResponse>>(examCategories.OrderBy(ec => ec.OrderNo));
         }
     }
 

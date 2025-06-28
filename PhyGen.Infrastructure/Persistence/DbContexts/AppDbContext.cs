@@ -116,6 +116,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             modelBuilder.Entity<ExamCategory>(e =>
             {
                 e.Property(p => p.Name).IsRequired();
+                e.Property(P => P.OrderNo);
             });
 
             modelBuilder.Entity<ExamCategoryChapter>(e =>
