@@ -70,9 +70,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateContentItemCommand, Unit>(command);
         }
 
-        [HttpDelete("{contentItemId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteContentItem(Guid contentItemId, [FromBody] DeleteContentItemRequest request)
+        public async Task<IActionResult> DeleteContentItem([FromBody] DeleteContentItemRequest request)
         {
             if (request == null)
             {
