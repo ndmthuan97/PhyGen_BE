@@ -53,9 +53,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateSubjectCommand, SubjectResponse>(command);
         }
 
-        [HttpPut("{subjectId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateSubject(Guid subjectId, [FromBody] UpdateSubjectRequest request)
+        public async Task<IActionResult> UpdateSubject([FromBody] UpdateSubjectRequest request)
         {
             if (request == null)
             {

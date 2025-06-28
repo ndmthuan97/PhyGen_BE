@@ -54,9 +54,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateCurriculumCommand, CurriculumResponse>(command);
         }
 
-        [HttpPut("{curriculumId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateCurriculum(Guid curriculumId, [FromBody] UpdateCurriculumRequest request)
+        public async Task<IActionResult> UpdateCurriculum([FromBody] UpdateCurriculumRequest request)
         {
             if (request == null)
             {
@@ -71,9 +71,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateCurriculumCommand, Unit>(command);
         }
 
-        [HttpDelete("{curriculumId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteCurriculum(Guid curriculumId, [FromBody] DeleteCurriculumRequest request)
+        public async Task<IActionResult> DeleteCurriculum([FromBody] DeleteCurriculumRequest request)
         {
             if (request == null)
             {

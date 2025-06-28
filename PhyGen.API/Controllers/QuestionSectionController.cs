@@ -51,9 +51,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateQuestionSectionCommand, QuestionSectionResponse>(command);
         }
 
-        [HttpPut("{questionSectionId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateQuestionSection(Guid questionSectionId, [FromBody] UpdateQuestionSectionCommand request)
+        public async Task<IActionResult> UpdateQuestionSection([FromBody] UpdateQuestionSectionCommand request)
         {
             if (request == null)
             {
@@ -64,8 +64,8 @@ namespace PhyGen.API.Controllers
                     Errors = ["The request body does not contain required fields"]
                 });
             }
-            request.Id = questionSectionId;
-            return await ExecuteAsync<UpdateQuestionSectionCommand, Unit>(request);
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateQuestionSectionCommand>(request);
+            return await ExecuteAsync<UpdateQuestionSectionCommand, Unit>(command);
         }
     }
 }

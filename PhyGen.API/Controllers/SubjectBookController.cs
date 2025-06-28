@@ -54,9 +54,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateSubjectBookCommand, SubjectBookResponse>(command);
         }
 
-        [HttpPut("{subjectBookId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateSubjectBook(Guid subjectBookId, [FromBody] UpdateSubjectBookRequest request)
+        public async Task<IActionResult> UpdateSubjectBook([FromBody] UpdateSubjectBookRequest request)
         {
             if (request == null)
             {
@@ -71,9 +71,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateSubjectBookCommand, Unit>(command);
         }
         
-        [HttpDelete("{subjectBookId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteSubjectBook(Guid subjectBookId, [FromBody] DeleteSubjectBookRequest request)
+        public async Task<IActionResult> DeleteSubjectBook([FromBody] DeleteSubjectBookRequest request)
         {
             if (request == null)
             {

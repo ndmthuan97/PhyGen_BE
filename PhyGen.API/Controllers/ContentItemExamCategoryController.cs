@@ -53,9 +53,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateContentItemExamCategoryCommand, ContentItemExamCategoryResponse>(command);
         }
 
-        [HttpPut("{contentItemExamCategoryId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateContentItemExamCategory(Guid contentItemExamCategoryId, [FromBody] UpdateContentItemExamCategoryRequest request)
+        public async Task<IActionResult> UpdateContentItemExamCategory([FromBody] UpdateContentItemExamCategoryRequest request)
         {
             if (request == null)
             {

@@ -54,9 +54,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateMatrixCommand, MatrixResponse>(command);
         }
 
-        [HttpPut("{matrixId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateMatrix(Guid matrixId, [FromBody] UpdateMatrixRequest request)
+        public async Task<IActionResult> UpdateMatrix([FromBody] UpdateMatrixRequest request)
         {
             if (request == null)
             {
@@ -72,9 +72,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateMatrixCommand, Unit>(command);
         }
 
-        [HttpDelete("{matrixId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteMatrix(Guid matrixId, [FromBody] DeleteMatrixRequest request)
+        public async Task<IActionResult> DeleteMatrix([FromBody] DeleteMatrixRequest request)
         {
             if (request == null)
             {

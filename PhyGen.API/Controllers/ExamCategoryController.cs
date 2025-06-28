@@ -53,9 +53,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateExamCategoryCommand, ExamCategoryResponse>(command);
         }
 
-        [HttpPut("{examCategoryId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateExamCategory(Guid examCategoryId, [FromBody] UpdateExamCategoryRequest request)
+        public async Task<IActionResult> UpdateExamCategory([FromBody] UpdateExamCategoryRequest request)
         {
             if (request == null)
             {
@@ -70,9 +70,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateExamCategoryCommand, Unit>(command);
         }
 
-        [HttpDelete("{examCategoryId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteExamCategory(Guid examCategoryId, [FromBody] DeleteExamCategoryRequest request)
+        public async Task<IActionResult> DeleteExamCategory([FromBody] DeleteExamCategoryRequest request)
         {
             if (request == null)
             {

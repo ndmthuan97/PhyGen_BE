@@ -53,9 +53,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateMatrixSectionCommand, MatrixSectionResponse>(command);
         }
 
-        [HttpPut("{matrixSectionId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateMatrixSection(Guid matrixSectionId, [FromBody] UpdateMatrixSectionRequest request)
+        public async Task<IActionResult> UpdateMatrixSection([FromBody] UpdateMatrixSectionRequest request)
         {
             if (request == null)
             {
@@ -71,11 +71,20 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateMatrixSectionCommand, Unit>(command);
         }
 
-        [HttpDelete("{matrixSectionId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Delete(Guid matrixSectionId)
+        public async Task<IActionResult> Delete([FromBody] DeleteMatrixSectionRequest request)
         {
-            var command = new DeleteMatrixSectionCommand(matrixSectionId);
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<DeleteMatrixSectionCommand>(request);
             return await ExecuteAsync<DeleteMatrixSectionCommand, Unit>(command);
         }
     }

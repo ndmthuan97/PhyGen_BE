@@ -53,9 +53,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateExamCategoryChapterCommand, ExamCategoryChapterResponse>(command);
         }
 
-        [HttpPut("{examCategoryChapterId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateExamCategoryChapter(Guid examCategoryChapterId, [FromBody] UpdateExamCategoryChapterRequest request)
+        public async Task<IActionResult> UpdateExamCategoryChapter([FromBody] UpdateExamCategoryChapterRequest request)
         {
             if (request == null)
             {

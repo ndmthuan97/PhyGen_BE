@@ -52,11 +52,11 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateQuestionMediaCommand, QuestionMediaResponse>(command);
         }
 
-        [HttpPut("{questionMediaId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Update(Guid questionMediaId, [FromBody] UpdateQuestionMediaRequest request)
+        public async Task<IActionResult> Update([FromBody] UpdateQuestionMediaRequest request)
         {
-            if (request == null || questionMediaId != request.Id)
+            if (request == null)
             {
                 return BadRequest(new ApiResponse<object>
                 {
@@ -70,11 +70,11 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateQuestionMediaCommand, Unit>(command);
         }
 
-        [HttpDelete("{questionMediaId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Delete(Guid questionMediaId, [FromBody] DeleteQuestionMediaRequest request)
+        public async Task<IActionResult> Delete([FromBody] DeleteQuestionMediaRequest request)
         {
-            if (request == null || questionMediaId != request.Id)
+            if (request == null)
             {
                 return BadRequest(new ApiResponse<object>
                 {

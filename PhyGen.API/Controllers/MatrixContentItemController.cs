@@ -52,9 +52,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateMatrixContentItemCommand, MatrixContentItemResponse>(command);
         }
 
-        [HttpPut("{matrixContentItemId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateMatrixContentItem(Guid matrixContentItemId, [FromBody] UpdateMatrixContentItemCommand request)
+        public async Task<IActionResult> UpdateMatrixContentItem([FromBody] UpdateMatrixContentItemCommand request)
         {
             if (request == null)
             {

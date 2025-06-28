@@ -54,9 +54,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateChapterCommand, ChapterResponse>(command);
         }
 
-        [HttpPut("{chapterId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateChapter(Guid chapterId, [FromBody] UpdateChapterRequest request)
+        public async Task<IActionResult> UpdateChapter([FromBody] UpdateChapterRequest request)
         {
             if (request == null)
             {
@@ -71,9 +71,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateChapterCommand, Unit>(command);
         }
 
-        [HttpDelete("{chapterId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteChapter(Guid chapterId, [FromBody] DeleteChapterRequest request)
+        public async Task<IActionResult> DeleteChapter([FromBody] DeleteChapterRequest request)
         {
             if (request == null)
             {

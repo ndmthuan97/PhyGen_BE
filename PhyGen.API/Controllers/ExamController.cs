@@ -54,11 +54,11 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateExamCommand, ExamResponse>(command);
         }
 
-        [HttpPut("{examId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateExam(Guid examId, [FromBody] UpdateExamRequest request)
+        public async Task<IActionResult> UpdateExam([FromBody] UpdateExamRequest request)
         {
-            if (request == null || request.Id != examId)
+            if (request == null)
             {
                 return BadRequest(new ApiResponse<object>
                 {
@@ -72,11 +72,11 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateExamCommand, Unit>(command);
         }
 
-        [HttpDelete("{examId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteExam(Guid examId, [FromBody] DeleteExamRequest request)
+        public async Task<IActionResult> DeleteExam([FromBody] DeleteExamRequest request)
         {
-            if (request == null || request.Id != examId)
+            if (request == null)
             {
                 return BadRequest(new ApiResponse<object>
                 {

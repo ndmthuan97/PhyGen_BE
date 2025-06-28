@@ -54,9 +54,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateTopicCommand, Guid>(command);
         }
 
-        [HttpPut("{topicId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateTopic(Guid topicId, [FromBody] UpdateTopicRequest request)
+        public async Task<IActionResult> UpdateTopic([FromBody] UpdateTopicRequest request)
         {
             if (request == null)
             {
@@ -71,9 +71,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateTopicCommand, Unit>(command);
         }
 
-        [HttpDelete("{topicId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteTopic(Guid topicId, [FromBody] DeleteTopicRequest request)
+        public async Task<IActionResult> DeleteTopic([FromBody] DeleteTopicRequest request)
         {
             if (request == null)
             {

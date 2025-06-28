@@ -51,11 +51,11 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateSectionCommand, SectionResponse>(command);
         }
 
-        [HttpPut("{sectionId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Update(Guid sectionId, [FromBody] UpdateSectionRequest request)
+        public async Task<IActionResult> Update([FromBody] UpdateSectionRequest request)
         {
-            if (request == null || sectionId != request.Id)
+            if (request == null)
             {
                 return BadRequest(new ApiResponse<object>
                 {
@@ -68,11 +68,20 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateSectionCommand, Unit>(command);
         }
 
-        [HttpDelete("{sectionId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Delete(Guid sectionId)
+        public async Task<IActionResult> Delete([FromBody] DeleteSectionRequest request)
         {
-            var command = new DeleteSectionCommand(sectionId);
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields or the IDs do not match"]
+                });
+            }
+            var command = AppMapper<CoreMappingProfile>.Mapper.Map<DeleteSectionCommand>(request);
             return await ExecuteAsync<DeleteSectionCommand, Unit>(command);
         }
     }

@@ -70,9 +70,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateQuestionCommand, QuestionResponse>(command);
         }
 
-        [HttpPut("{questionId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateQuestion(Guid questionId, [FromBody] UpdateQuestionRequest request)
+        public async Task<IActionResult> UpdateQuestion([FromBody] UpdateQuestionRequest request)
         {
             if (request == null)
             {
@@ -87,9 +87,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateQuestionCommand, Unit>(command);
         }
 
-        [HttpDelete("{questionId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteQuestion(Guid questionId, [FromBody] DeleteQuestionRequest request)
+        public async Task<IActionResult> DeleteQuestion([FromBody] DeleteQuestionRequest request)
         {
             if (request == null)
             {
