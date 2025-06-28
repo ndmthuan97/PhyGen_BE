@@ -28,12 +28,12 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetContentFlowByIdQuery, ContentFlowResponse>(request);
         }
 
-        [HttpGet("curriculum/{curriculumId}")]
+        [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<List<ContentFlowResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetContentFlowsByCurriculumId(Guid curriculumId)
+        public async Task<IActionResult> GetContentFlowsByCurriculumId([FromQuery] Guid curriculumId, [FromQuery] Guid subjectId)
         {
-            var request = new GetContentFlowsByCurriculumIdQuery(curriculumId);
-            return await ExecuteAsync<GetContentFlowsByCurriculumIdQuery, List<ContentFlowResponse>>(request);
+            var request = new GetContentFlowsByCurriculumIdAndSubjectIdQuery(curriculumId, subjectId);
+            return await ExecuteAsync<GetContentFlowsByCurriculumIdAndSubjectIdQuery, List<ContentFlowResponse>>(request);
         }
 
         [HttpPost]
@@ -53,9 +53,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<CreateContentFlowCommand, ContentFlowResponse>(command);
         }
 
-        [HttpPut("{contentFlowId}")]
+        [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateContentFlow(Guid contentFlowId, [FromBody] UpdateContentFlowRequest request)
+        public async Task<IActionResult> UpdateContentFlow([FromBody] UpdateContentFlowRequest request)
         {
             if (request == null)
             {
@@ -70,9 +70,9 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateContentFlowCommand, Unit>(command);
         }
 
-        [HttpDelete("{contentFlowId}")]
+        [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteContentFlow(Guid contentFlowId, [FromBody] DeleteContentFlowRequest request)
+        public async Task<IActionResult> DeleteContentFlow([FromBody] DeleteContentFlowRequest request)
         {
             if (request == null)
             {

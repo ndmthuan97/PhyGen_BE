@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.ContentFlows.Queries
 {
-    public class GetContentFlowsByCurriculumIdQuery : IRequest<List<ContentFlowResponse>>
+    public class GetContentFlowsByCurriculumIdAndSubjectIdQuery : IRequest<List<ContentFlowResponse>>
     {
         public Guid CurriculumId { get; set; }
-        public GetContentFlowsByCurriculumIdQuery(Guid curriculumId)
+        public Guid SubjectId { get; set; }
+        public GetContentFlowsByCurriculumIdAndSubjectIdQuery(Guid curriculumId, Guid subjectId)
         {
             CurriculumId = curriculumId;
+            SubjectId = subjectId;
         }
     }
 }

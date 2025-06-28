@@ -4,6 +4,7 @@ using PhyGen.Application.ContentFlows.Queries;
 using PhyGen.Application.ContentFlows.Responses;
 using PhyGen.Application.Curriculums.Exceptions;
 using PhyGen.Application.Mapping;
+using PhyGen.Application.Subjects.Exceptions;
 using PhyGen.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -31,23 +32,28 @@ namespace PhyGen.Application.ContentFlows.Handlers
         }
     }
 
-    public class GetContentFlowsByCurriculumIdQueryHandler : IRequestHandler<GetContentFlowsByCurriculumIdQuery, List<ContentFlowResponse>>
+    public class GetContentFlowsByCurriculumIdAndSubjectIdQueryHandler : IRequestHandler<GetContentFlowsByCurriculumIdAndSubjectIdQuery, List<ContentFlowResponse>>
     {
         private readonly IContentFlowRepository _repository;
         private readonly ICurriculumRepository _curriculumRepository;
+        private readonly ISubjectRepository _subjectRepository;
 
-        public GetContentFlowsByCurriculumIdQueryHandler(IContentFlowRepository repository, ICurriculumRepository curriculumRepository)
+        public GetContentFlowsByCurriculumIdAndSubjectIdQueryHandler(IContentFlowRepository repository, ICurriculumRepository curriculumRepository, ISubjectRepository subjectRepository)
         {
             _repository = repository;
             _curriculumRepository = curriculumRepository;
+            _subjectRepository = subjectRepository;
         }
 
-        public async Task<List<ContentFlowResponse>> Handle(GetContentFlowsByCurriculumIdQuery request, CancellationToken cancellationToken)
+        public async Task<List<ContentFlowResponse>> Handle(GetContentFlowsByCurriculumIdAndSubjectIdQuery request, CancellationToken cancellationToken)
         {
             if (await _curriculumRepository.GetByIdAsync(request.CurriculumId) == null)
                 throw new CurriculumNotFoundException();
 
-            var contentFlows = await _repository.GetContentFlowsByCurriculumIdAsync(request.CurriculumId);
+            if (await _subjectRepository.GetByIdAsync(request.SubjectId) == null)
+                throw new SubjectNotFoundException();
+
+            var contentFlows = await _repository.GetContentFlowsByCurriculumIdAndSubjectIdAsync(request.CurriculumId, request.SubjectId);
 
             contentFlows = contentFlows?.Where(cf => !cf.DeletedAt.HasValue).ToList();
 

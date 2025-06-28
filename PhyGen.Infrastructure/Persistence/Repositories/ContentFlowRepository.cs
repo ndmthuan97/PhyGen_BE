@@ -17,10 +17,10 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         {
         }
 
-        public async Task<List<ContentFlow>> GetContentFlowsByCurriculumIdAsync(Guid curriculumId)
+        public Task<List<ContentFlow>> GetContentFlowsByCurriculumIdAndSubjectIdAsync(Guid curriculumId, Guid subjectId)
         {
-            return await _context.ContentFlows
-                .Where(cf => cf.CurriculumId == curriculumId)
+            return _context.ContentFlows
+                .Where(cf => cf.CurriculumId == curriculumId && cf.SubjectId == subjectId && cf.DeletedAt == null)
                 .ToListAsync();
         }
     }
