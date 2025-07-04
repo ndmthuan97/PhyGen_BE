@@ -12,6 +12,8 @@ namespace PhyGen.Application.Admin.Response
         public int LoginLastWeek { get; set; }
         public int TotalUserBeforeNow { get; set; }
         public decimal TotalRevenue { get; set; }
+        public int TotalBook { get; set; }
+        public int TotalQuestion { get; set; }
         public double RateRevenue { get; set; }
         public double LoginRateBeforeNow { get; set; }
         public double LoginRateBeforeLastWeek { get; set; }
