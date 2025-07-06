@@ -52,6 +52,9 @@ namespace PhyGen.Infrastructure.Service
             var totalLoginBeforeLastWeek = await _context.Users
                 .CountAsync(u => u.LastLogin.HasValue && u.LastLogin < startOfLastWeek);
 
+            var totalBook = await _context.SubjectBooks.CountAsync();
+            var totalQuestion = await _context.Questions.CountAsync();
+
             // Tổng trước thời điểm hiện tại
             var totalUserBeforeNow = await _context.Users
                 .CountAsync(u => u.CreatedAt < now);
@@ -82,6 +85,8 @@ namespace PhyGen.Infrastructure.Service
                 TotalRevenue = totalRevenue,
                 RateRevenue = revenueRate,
                 LoginRateBeforeNow = loginRateBeforeNow,
+                TotalBook = totalBook,
+                TotalQuestion = totalQuestion,
                 //LoginRateBeforeLastWeek = loginRateBeforeLastWeek
                 UserRateNow = userRateNow
             };

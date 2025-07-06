@@ -230,7 +230,7 @@ public class AuthService : IAuthService
 
         return new LoginResponse
         {
-            Response = new AuthenticationResponse { Email = email, StatusCode = StatusCode.LoginSuccess },
+            Response = new AuthenticationResponse { Email = email, FirstName = user.FirstName, LastName = user.LastName ,StatusCode = StatusCode.LoginSuccess },
             Role = user.Role,
             Token = _jwtTokenGenerator.GenerateToken(user)
         };
@@ -262,7 +262,7 @@ public class AuthService : IAuthService
 
         return new LoginResponse
         {
-            Response = new AuthenticationResponse { Email = email, StatusCode = StatusCode.LoginSuccess },
+            Response = new AuthenticationResponse { Email = email, FirstName = newUser.FirstName, LastName = newUser.LastName ,StatusCode = StatusCode.LoginSuccess },
             Role = newUser.Role,
             Token = _jwtTokenGenerator.GenerateToken(newUser)
 
@@ -318,7 +318,7 @@ public class AuthService : IAuthService
 
         return new LoginResponse
         {
-            Response = new AuthenticationResponse { Email = email, StatusCode = StatusCode.LoginSuccess },
+            Response = new AuthenticationResponse {Email = email, FirstName = user.FirstName, LastName = user.LastName, StatusCode = StatusCode.LoginSuccess },
             Token = token,
             Role = user.Role
         };
@@ -366,12 +366,14 @@ public class AuthService : IAuthService
                 Response = new AuthenticationResponse
                 {
                     Email = email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
                     StatusCode = StatusCode.ConfirmSuccess
                 },
                 Token = _jwtTokenGenerator.GenerateToken(user),
                 Role = user.Role
             };
-            }
+    }
 
     public async Task<AuthenticationResponse> ChangePasswordAsync(ChangePasswordDto dto)
     {
