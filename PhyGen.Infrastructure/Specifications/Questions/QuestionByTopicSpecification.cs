@@ -31,6 +31,9 @@ namespace PhyGen.Infrastructure.Specifications.Questions
             Criteria = question =>
                 question.TopicId == param.TopicId &&
                 (string.IsNullOrEmpty(param.Search) || question.Content.ToLower().Contains(param.Search.ToLower())) &&
+                (!param.Level.HasValue || question.Level == param.Level.Value) &&
+                (!param.Type.HasValue || question.Type == param.Type.Value) &&
+                (!param.CreatedAt.HasValue || question.CreatedAt.HasValue && question.CreatedAt.Value.Date == param.CreatedAt.Value.Date) &&
                 !question.DeletedAt.HasValue;
 
             if (!string.IsNullOrEmpty(param.Sort))
@@ -49,8 +52,14 @@ namespace PhyGen.Infrastructure.Specifications.Questions
                     case "typedesc":
                         OrderByDescending = query => query.OrderByDescending(q => q.Type);
                         break;
+                    case "createdat":
+                        OrderBy = query => query.OrderBy(q => q.CreatedAt);
+                        break;
+                    case "createdatdesc":
+                        OrderByDescending = query => query.OrderByDescending(q => q.CreatedAt);
+                        break;
                     default:
-                        OrderBy = query => query.OrderBy(q => q.Level);
+                        OrderBy = query => query.OrderBy(q => q.CreatedAt);
                         break;
                 }
             }

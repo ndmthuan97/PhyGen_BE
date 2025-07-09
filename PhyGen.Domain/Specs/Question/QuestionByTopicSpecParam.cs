@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhyGen.Shared.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,12 @@ namespace PhyGen.Domain.Specs.Question
     public class QuestionByTopicSpecParam : BaseSpecParam
     {
         public Guid TopicId { get; set; }
+
+        public DifficultyLevel? Level { get; set; }
+
+        public QuestionType? Type { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
 
         public string? Search { get; set; }
 

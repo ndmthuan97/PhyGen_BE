@@ -31,6 +31,7 @@ namespace PhyGen.Domain.Entities
         public string? CorrectAnswer { get; set; }
 
         public string? CreatedBy { get; set; }
+        public DateTime? CreatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
         // --- Navigation Properties ---

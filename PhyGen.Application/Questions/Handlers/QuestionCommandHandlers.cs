@@ -54,7 +54,8 @@ namespace PhyGen.Application.Questions.Handlers
                 Answer4 = request.Answer4,
                 Answer5 = request.Answer5,
                 Answer6 = request.Answer6,
-                CorrectAnswer = request.CorrectAnswer
+                CorrectAnswer = request.CorrectAnswer,
+                CreatedAt = DateTime.UtcNow,
             };
 
             await _questionRepository.AddAsync(question);

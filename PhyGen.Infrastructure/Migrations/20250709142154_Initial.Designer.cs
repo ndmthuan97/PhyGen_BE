@@ -12,7 +12,7 @@ using PhyGen.Infrastructure.Persistence.DbContexts;
 namespace PhyGen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250628025530_Initial")]
+    [Migration("20250709142154_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -586,6 +586,9 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<string>("CorrectAnswer")
                         .IsUnicode(true)
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsUnicode(true)

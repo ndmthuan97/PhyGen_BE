@@ -584,6 +584,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("CreatedBy")
                         .IsUnicode(true)
                         .HasColumnType("text");

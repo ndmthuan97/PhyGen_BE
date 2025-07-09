@@ -13,6 +13,8 @@ namespace PhyGen.Domain.Specs.Question
 
         public QuestionType? Type { get; set; }
 
+        public DateTime? CreatedAt { get; set; }
+
         public string? Search { get; set; }
 
         public string? Sort { get; set; }
