@@ -32,8 +32,8 @@ namespace PhyGen.Infrastructure.Service
             var loginThisWeek = await _context.Users
                 .CountAsync(u => u.LastLogin.HasValue && u.LastLogin >= startOfThisWeek);
 
-            //var loginLastWeek = await _context.Users
-            //    .CountAsync(u => u.LastLogin.HasValue && u.LastLogin >= startOfLastWeek && u.LastLogin <= endOfLastWeek);
+            var loginLastWeek = await _context.Users
+                .CountAsync(u => u.LastLogin.HasValue && u.LastLogin >= startOfLastWeek && u.LastLogin <= endOfLastWeek);
 
             // Doanh thu
             var totalRevenue = await _context.Payments
@@ -53,8 +53,15 @@ namespace PhyGen.Infrastructure.Service
                 .CountAsync(u => u.LastLogin.HasValue && u.LastLogin < startOfLastWeek);
 
             var totalBook = await _context.SubjectBooks.CountAsync();
-            var totalQuestion = await _context.Questions.CountAsync();
 
+            var totalQuestion = await _context.Questions
+                .Where(q => q.DeletedAt == null)
+                .CountAsync();
+
+            // Tổng question trước tuần trước
+            var totalQuestionLastWeek = await _context.Questions
+                .Where(q => q.DeletedAt == null && q.CreatedAt < startOfLastWeek)
+                .CountAsync();
             // Tổng trước thời điểm hiện tại
             var totalUserBeforeNow = await _context.Users
                 .CountAsync(u => u.CreatedAt < now);
@@ -72,23 +79,22 @@ namespace PhyGen.Infrastructure.Service
             double userRateNow = totalUserBeforeLastWeek > 0
                 ? Math.Round(((double)(totalUserBeforeNow - totalUserBeforeLastWeek) / totalUserBeforeLastWeek) * 100, 2)
                 : (totalUserBeforeNow > 0 ? 100 : 0);
-
-            //double loginRateBeforeLastWeek = totalUserBeforeThisWeek > 0
-            //    ? Math.Round((double)totalLoginBeforeLastWeek / totalUserBeforeThisWeek * 100, 2)
-            //    : 0;
+            double questionRateBeforeNow = totalQuestionLastWeek > 0
+                ? Math.Round((double)(totalQuestion - totalQuestionLastWeek) / totalQuestionLastWeek * 100, 2)
+                : (totalQuestion > 0 ? 100 : 0);
 
             return new AdminWeeklyResponse
             {
-                LoginThisWeek = loginThisWeek,
-                //LoginLastWeek = loginLastWeek,
-                TotalUserBeforeNow = totalUserBeforeNow,
-                TotalRevenue = totalRevenue,
-                RateRevenue = revenueRate,
-                LoginRateBeforeNow = loginRateBeforeNow,
-                TotalBook = totalBook,
-                TotalQuestion = totalQuestion,
-                //LoginRateBeforeLastWeek = loginRateBeforeLastWeek
-                UserRateNow = userRateNow
+                LoginThisWeek = loginThisWeek, // tổng số người đăng nhập trong tuần này
+                LoginLastWeek = loginLastWeek, // tổng số người đăng nhập trong tuần trước
+                TotalUserBeforeNow = totalUserBeforeNow, // tổng số lượng người dùng
+                TotalRevenue = totalRevenue, // tổng doanh thu
+                RateRevenue = revenueRate, // tỷ lệ doanh thu so với tuần trước
+                LoginRateBeforeNow = loginRateBeforeNow, // tỷ lệ người dùng đăng nhập so với tổng người dùng trước thời điểm hiện tại
+                TotalBook = totalBook, // tổng số sách
+                TotalQuestion = totalQuestion, // tổng số câu hỏi
+                QuestionRate = questionRateBeforeNow, // tỷ lệ câu hỏi so với tuần trước
+                UserRateNow = userRateNow // tỉ lệ người dùng mới so với tổng người dùng trước tuần này
             };
         }
         public async Task<InvoiceResponse> GetInvoiceStatistics()
