@@ -29,8 +29,8 @@ namespace PhyGen.Infrastructure.Specifications
         {
             Criteria = exam =>
                 (!param.ExamCategoryId.HasValue || exam.ExamCategoryId == param.ExamCategoryId) &&
-                (!param.Grade.HasValue || exam.Grade == param.Grade) &&
-                (!param.Year.HasValue || exam.Year == param.Year) &&
+                (param.Grade == null || !param.Grade.Any() || param.Grade.Contains(exam.Grade)) &&
+                (param.Year == null || !param.Year.Any() || param.Year.Contains(exam.Year)) &&
                 (string.IsNullOrEmpty(param.Search) || exam.Title.ToLower().Contains(param.Search.ToLower())) &&
                 !exam.DeletedAt.HasValue;
 

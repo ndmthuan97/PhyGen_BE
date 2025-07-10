@@ -10,8 +10,8 @@ namespace PhyGen.Domain.Specs
     {
         public Guid? ExamCategoryId { get; set; }
         public string? Title { get; set; }
-        public int? Grade { get; set; }
-        public int? Year { get; set; }
+        public List<int>? Grade { get; set; }
+        public List<int>? Year { get; set; }
         public string? Search { get; set; }
         public string? Sort { get; set; }
     }
