@@ -70,17 +70,17 @@ namespace PhyGen.Infrastructure.Service
                 .CountAsync(u => u.LastLogin.HasValue && u.LastLogin < now);
 
             double revenueRate = (double)(TotalRevenueLastWeek > 0
-                ? Math.Round((totalRevenue - TotalRevenueLastWeek) / TotalRevenueLastWeek * 100, 2)
-                : (TotalRevenueLastWeek > 0 ? 100 : 0));
+                ? Math.Round((totalRevenue - TotalRevenueLastWeek) / totalRevenue * 100, 2)
+                : (totalRevenue > 0 ? 100 : 0));
             // Tính tỷ lệ login
             double loginRateBeforeNow = totalUserBeforeNow > 0
                 ? Math.Round((double)totalLoginBeforeNow / totalUserBeforeNow * 100, 2)
                 : 0;
             double userRateNow = totalUserBeforeLastWeek > 0
-                ? Math.Round(((double)(totalUserBeforeNow - totalUserBeforeLastWeek) / totalUserBeforeLastWeek) * 100, 2)
+                ? Math.Round(((double)(totalUserBeforeNow - totalUserBeforeLastWeek) / totalUserBeforeNow) * 100, 2)
                 : (totalUserBeforeNow > 0 ? 100 : 0);
             double questionRateBeforeNow = totalQuestionLastWeek > 0
-                ? Math.Round((double)(totalQuestion - totalQuestionLastWeek) / totalQuestionLastWeek * 100, 2)
+                ? Math.Round((double)(totalQuestion - totalQuestionLastWeek) / totalQuestion * 100, 2)
                 : (totalQuestion > 0 ? 100 : 0);
 
             return new AdminWeeklyResponse
@@ -88,7 +88,7 @@ namespace PhyGen.Infrastructure.Service
                 LoginThisWeek = loginThisWeek, // tổng số người đăng nhập trong tuần này
                 LoginLastWeek = loginLastWeek, // tổng số người đăng nhập trong tuần trước
                 TotalUserBeforeNow = totalUserBeforeNow, // tổng số lượng người dùng
-                TotalRevenue = totalRevenue, // tổng doanh thu
+                TotalRevenue = totalRevenue *1000, // tổng doanh thu
                 RateRevenue = revenueRate, // tỷ lệ doanh thu so với tuần trước
                 LoginRateBeforeNow = loginRateBeforeNow, // tỷ lệ người dùng đăng nhập so với tổng người dùng trước thời điểm hiện tại
                 TotalBook = totalBook, // tổng số sách
@@ -127,6 +127,47 @@ namespace PhyGen.Infrastructure.Service
             };
 
             return response;
+        }
+        public async Task<WeeklyRevenueResponse> GetAllWeeklyRevenueAsync()
+        {
+            var payments = await _context.Payments
+                .Where(p => p.Status == PaymentStatus.Completed.ToString())
+                .ToListAsync();
+
+            if (!payments.Any())
+            {
+                return new WeeklyRevenueResponse(); // Trả về rỗng nếu không có dữ liệu
+            }
+
+            var firstPaymentDate = payments.Min(p => p.CreatedAt)!.Value.Date;
+            var currentDate = DateTime.UtcNow.Date;
+
+            // Bắt đầu từ ngày Chủ Nhật đầu tiên của tuần có payment đầu tiên
+            var startOfWeek = firstPaymentDate.AddDays(-(int)firstPaymentDate.DayOfWeek);
+
+            var weeklyRevenues = new List<WeeklyRevenueItem>();
+
+            while (startOfWeek <= currentDate)
+            {
+                var endOfWeek = startOfWeek.AddDays(7).AddSeconds(-1);
+
+                var weeklyRevenue = payments
+                    .Where(p => p.CreatedAt >= startOfWeek && p.CreatedAt <= endOfWeek)
+                    .Sum(p => p.Amount);
+
+                weeklyRevenues.Add(new WeeklyRevenueItem
+                {
+                    WeekRange = $"{startOfWeek:yyyy-MM-dd} to {endOfWeek:yyyy-MM-dd}",
+                    Revenue = weeklyRevenue
+                });
+
+                startOfWeek = startOfWeek.AddDays(7);
+            }
+
+            return new WeeklyRevenueResponse
+            {
+                WeeklyRevenues = weeklyRevenues
+            };
         }
     }
 }

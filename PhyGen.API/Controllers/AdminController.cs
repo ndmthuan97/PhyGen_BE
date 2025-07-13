@@ -36,6 +36,13 @@ namespace PhyGen.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("revenue/weekly-history")]
+        public async Task<IActionResult> GetAllWeeklyRevenue()
+        {
+            var result = await _statisticService.GetAllWeeklyRevenueAsync();
+            return Ok(result);
+        }
+
         [HttpGet("statistics")]
         [ProducesResponseType(typeof(InvoiceResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetInvoiceStatistics()
