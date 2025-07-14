@@ -55,6 +55,7 @@ namespace PhyGen.Application.Questions.Handlers
                 Answer5 = request.Answer5,
                 Answer6 = request.Answer6,
                 CorrectAnswer = request.CorrectAnswer,
+                CreatedBy = request.CreatedBy,
                 CreatedAt = DateTime.UtcNow,
             };
 
