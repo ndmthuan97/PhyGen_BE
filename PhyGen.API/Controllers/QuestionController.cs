@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhyGen.API.Mapping;
 using PhyGen.API.Models;
@@ -6,11 +7,13 @@ using PhyGen.Application.Mapping;
 using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Questions.Queries;
 using PhyGen.Application.Questions.Responses;
+using PhyGen.Application.Users.Exceptions;
 using PhyGen.Domain.Specs;
 using PhyGen.Domain.Specs.Question;
 using PhyGen.Shared;
 using PhyGen.Shared.Constants;
 using System.Net;
+using System.Security.Claims;
 
 namespace PhyGen.API.Controllers
 {
@@ -53,6 +56,7 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetQuestionsByLevelAndTypeQuery, Pagination<QuestionResponse>>(request);
         }
 
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<QuestionResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateQuestion([FromBody] CreateQuestionRequest request)
@@ -66,7 +70,15 @@ namespace PhyGen.API.Controllers
                     Errors = ["The request body does not contain required fields"]
                 });
             }
+
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateQuestionCommand>(request);
+
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(userEmail))
+                return Unauthorized(new UserNotFoundException());
+
+            command.CreatedBy = userEmail;
+
             return await ExecuteAsync<CreateQuestionCommand, QuestionResponse>(command);
         }
 
