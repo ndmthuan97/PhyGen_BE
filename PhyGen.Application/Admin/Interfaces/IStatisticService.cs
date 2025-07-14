@@ -11,5 +11,6 @@ namespace PhyGen.Application.Admin.Interfaces
     {
         Task<InvoiceResponse> GetInvoiceStatistics();
         Task<AdminWeeklyResponse> GetWeeklyStatisticsAsync();
+        Task<WeeklyRevenueResponse> GetAllWeeklyRevenueAsync();
     }
 }
