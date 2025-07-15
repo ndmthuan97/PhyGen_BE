@@ -33,7 +33,6 @@ namespace PhyGen.Infrastructure.Specifications.Questions
                 (string.IsNullOrEmpty(param.Search) || question.Content.ToLower().Contains(param.Search.ToLower())) &&
                 (!param.Level.HasValue || question.Level == param.Level.Value) &&
                 (!param.Type.HasValue || question.Type == param.Type.Value) &&
-                (!param.CreatedAt.HasValue || question.CreatedAt.HasValue && question.CreatedAt.Value.Date == param.CreatedAt.Value.Date) &&
                 !question.DeletedAt.HasValue;
 
             if (!string.IsNullOrEmpty(param.Sort))

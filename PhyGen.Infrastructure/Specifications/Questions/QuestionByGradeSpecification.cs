@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Infrastructure.Specifications.Questions
 {
-    public class QuestionSpecification : ISpecification<Question>
+    public class QuestionByGradeSpecification : ISpecification<Question>
     {
         public Expression<Func<Question, bool>> Criteria { get; private set; }
 
@@ -26,30 +26,17 @@ namespace PhyGen.Infrastructure.Specifications.Questions
 
         public int Take { get; private set; }
 
-        public QuestionSpecification(QuestionSpecParam param)
+        public QuestionByGradeSpecification(QuestionByGradeSpecParam param)
         {
             Criteria = question =>
+                question.Topic.Chapter.SubjectBook.Grade == param.Grade &&
                 (string.IsNullOrEmpty(param.Search) || question.Content.ToLower().Contains(param.Search.ToLower())) &&
-                (!param.Level.HasValue || question.Level == param.Level.Value) &&
-                (!param.Type.HasValue || question.Type == param.Type.Value) &&
                 !question.DeletedAt.HasValue;
 
             if (!string.IsNullOrEmpty(param.Sort))
             {
                 switch (param.Sort.ToLower())
                 {
-                    case "level":
-                        OrderBy = query => query.OrderBy(q => q.Level);
-                        break;
-                    case "leveldesc":
-                        OrderByDescending = query => query.OrderByDescending(q => q.Level);
-                        break;
-                    case "type":
-                        OrderBy = query => query.OrderBy(q => q.Type);
-                        break;
-                    case "typedesc":
-                        OrderByDescending = query => query.OrderByDescending(q => q.Type);
-                        break;
                     case "createdat":
                         OrderBy = query => query.OrderBy(q => q.CreatedAt);
                         break;
@@ -63,6 +50,8 @@ namespace PhyGen.Infrastructure.Specifications.Questions
             }
 
             Includes.Add(q => q.Topic);
+            Includes.Add(q => q.Topic.Chapter);
+            Includes.Add(q => q.Topic.Chapter.SubjectBook);
 
             Skip = (param.PageIndex - 1) * param.PageSize;
             Take = param.PageSize;

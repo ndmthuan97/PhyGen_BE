@@ -119,6 +119,5 @@ namespace PhyGen.Shared.Constants
 
         // Exam errors (2750–2769)
         ExamNotFound = 2750,
-        ExamAlreadyExist = 2751,
     }
 }

@@ -16,5 +16,7 @@ namespace PhyGen.Domain.Interfaces
         Task<Pagination<Question>?> GetQuestionsByTopicAsync(QuestionByTopicSpecParam param);
 
         Task<Pagination<Question>?> GetQuestionsByLevelAndTopicAsync(QuestionSpecParam questionSpecParam);
+
+        Task<Pagination<Question>?> GetQuestionsByGradeAsync(QuestionByGradeSpecParam questionGradeSpecParam);
     }
 }
