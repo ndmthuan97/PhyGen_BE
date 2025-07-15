@@ -120,6 +120,7 @@ namespace PhyGen.Infrastructure.Migrations
                     Grade = table.Column<int>(type: "integer", nullable: false),
                     Year = table.Column<int>(type: "integer", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>

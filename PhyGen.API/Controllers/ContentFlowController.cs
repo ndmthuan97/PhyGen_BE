@@ -10,6 +10,7 @@ using PhyGen.Application.Mapping;
 using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PhyGen.API.Controllers
 {
@@ -21,6 +22,7 @@ namespace PhyGen.API.Controllers
             : base(mediator, logger) { }
 
         [HttpGet("{contentFlowId}")]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<ContentFlowResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetContentFlowById(Guid contentFlowId)
         {
@@ -29,14 +31,16 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<List<ContentFlowResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetContentFlowsByCurriculumId([FromQuery] Guid curriculumId, [FromQuery] Guid subjectId)
+        public async Task<IActionResult> GetContentFlowsByCurriculumIdAndSubjectId([FromQuery] Guid curriculumId, [FromQuery] Guid subjectId)
         {
             var request = new GetContentFlowsByCurriculumIdAndSubjectIdQuery(curriculumId, subjectId);
             return await ExecuteAsync<GetContentFlowsByCurriculumIdAndSubjectIdQuery, List<ContentFlowResponse>>(request);
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<ContentFlowResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateContentFlow([FromBody] CreateContentFlowRequest request)
         {
@@ -54,6 +58,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateContentFlow([FromBody] UpdateContentFlowRequest request)
         {
@@ -71,6 +76,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteContentFlow([FromBody] DeleteContentFlowRequest request)
         {

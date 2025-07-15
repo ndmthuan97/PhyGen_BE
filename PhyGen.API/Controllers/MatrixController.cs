@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhyGen.API.Mapping;
 using PhyGen.API.Models;
@@ -6,10 +7,12 @@ using PhyGen.Application.Mapping;
 using PhyGen.Application.Matrices.Commands;
 using PhyGen.Application.Matrices.Queries;
 using PhyGen.Application.Matrices.Responses;
+using PhyGen.Application.Users.Exceptions;
 using PhyGen.Domain.Specs;
 using PhyGen.Shared;
 using PhyGen.Shared.Constants;
 using System.Net;
+using System.Security.Claims;
 
 namespace PhyGen.API.Controllers
 {
@@ -34,8 +37,9 @@ namespace PhyGen.API.Controllers
         {
             var request = new GetMatrixByIdQuery(matrixId);
             return await ExecuteAsync<GetMatrixByIdQuery, MatrixResponse>(request);
-        }        
+        }
 
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<MatrixResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateMatrix([FromBody] CreateMatrixRequest request)
@@ -51,6 +55,12 @@ namespace PhyGen.API.Controllers
             }
 
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateMatrixCommand>(request);
+
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(userEmail))
+                return Unauthorized(new UserNotFoundException());
+            command.CreatedBy = userEmail;
+
             return await ExecuteAsync<CreateMatrixCommand, MatrixResponse>(command);
         }
 

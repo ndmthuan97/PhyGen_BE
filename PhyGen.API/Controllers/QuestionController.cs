@@ -91,6 +91,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateQuestion([FromBody] UpdateQuestionRequest request)
         {
@@ -103,11 +104,17 @@ namespace PhyGen.API.Controllers
                     Errors = ["The request body does not contain required fields"]
                 });
             }
+
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateQuestionCommand>(request);
             return await ExecuteAsync<UpdateQuestionCommand, Unit>(command);
         }
 
         [HttpDelete]
+        [Authorize]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteQuestion([FromBody] DeleteQuestionRequest request)
         {
@@ -120,6 +127,11 @@ namespace PhyGen.API.Controllers
                     Errors = ["The request body does not contain required fields"]
                 });
             }
+
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<DeleteQuestionCommand>(request);
             return await ExecuteAsync<DeleteQuestionCommand, Unit>(command);
         }

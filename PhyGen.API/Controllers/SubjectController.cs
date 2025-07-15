@@ -10,6 +10,7 @@ using PhyGen.Application.Subjects.Responses;
 using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PhyGen.API.Controllers
 {
@@ -29,6 +30,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("{subjectId}")]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<SubjectResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetSubjectById(Guid subjectId)
         {
@@ -37,6 +39,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<SubjectResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateSubject([FromBody] CreateSubjectRequest request)
         {
@@ -54,6 +57,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateSubject([FromBody] UpdateSubjectRequest request)
         {

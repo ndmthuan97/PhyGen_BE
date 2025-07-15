@@ -11,6 +11,7 @@ using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
 using PhyGen.Domain.Specs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PhyGen.API.Controllers
 {
@@ -22,6 +23,7 @@ namespace PhyGen.API.Controllers
             : base(mediator, logger) { }
 
         [HttpGet("{subjectBookId}")]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<SubjectBookResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetSubjectBookById(Guid subjectBookId)
         {
@@ -30,6 +32,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("subject")]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<List<SubjectBookResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetSubjectBooksBySubjectId([FromQuery] SubjectBookSpecParam param)
         {
@@ -38,6 +41,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<SubjectBookResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateSubjectBook([FromBody] CreateSubjectBookRequest request)
         {
@@ -55,6 +59,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateSubjectBook([FromBody] UpdateSubjectBookRequest request)
         {
@@ -72,6 +77,7 @@ namespace PhyGen.API.Controllers
         }
         
         [HttpDelete]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteSubjectBook([FromBody] DeleteSubjectBookRequest request)
         {

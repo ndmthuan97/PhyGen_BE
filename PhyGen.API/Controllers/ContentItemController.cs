@@ -10,6 +10,7 @@ using PhyGen.Application.Mapping;
 using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PhyGen.API.Controllers
 {
@@ -21,6 +22,7 @@ namespace PhyGen.API.Controllers
             : base(mediator, logger) { }
 
         [HttpGet("{contentItemId}")]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<ContentItemResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetContentItemById(Guid contentItemId)
         {
@@ -29,6 +31,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("contentflow/{contentFlowId}")]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<List<ContentItemResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetContentItemsByContentFlowId(Guid contentFlowId)
         {
@@ -37,6 +40,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<ContentItemResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateContentItem([FromBody] CreateContentItemRequest request)
         {
@@ -54,6 +58,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateContentItem([FromBody] UpdateContentItemRequest request)
         {
@@ -71,6 +76,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteContentItem([FromBody] DeleteContentItemRequest request)
         {

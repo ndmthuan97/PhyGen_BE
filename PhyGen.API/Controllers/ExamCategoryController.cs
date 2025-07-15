@@ -10,6 +10,9 @@ using System.Net;
 using PhyGen.Application.ExamCategories.Responses;
 using PhyGen.Application.ExamCategories.Queries;
 using PhyGen.Application.ExamCategories.Commands;
+using PhyGen.Application.Users.Exceptions;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PhyGen.API.Controllers
 {
@@ -29,14 +32,20 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("{examCategoryId}")]
+        [Authorize]
         [ProducesResponseType(typeof(ApiResponse<ExamCategoryResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetExamCategoryById(Guid examCategoryId)
         {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
             var request = new GetExamCategoryByIdQuery(examCategoryId);
             return await ExecuteAsync<GetExamCategoryByIdQuery, ExamCategoryResponse>(request);
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<ExamCategoryResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateExamCategory([FromBody] CreateExamCategoryRequest request)
         {
@@ -54,6 +63,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateExamCategory([FromBody] UpdateExamCategoryRequest request)
         {
@@ -71,6 +81,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteExamCategory([FromBody] DeleteExamCategoryRequest request)
         {

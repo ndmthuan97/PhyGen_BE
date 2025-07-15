@@ -11,6 +11,7 @@ using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
 using PhyGen.Domain.Specs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PhyGen.API.Controllers
 {
@@ -22,6 +23,7 @@ namespace PhyGen.API.Controllers
             : base(mediator, logger) { }
 
         [HttpGet("{topicId}")]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<TopicResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetTopicById(Guid topicId)
         {
@@ -30,6 +32,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("chapter")]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<List<TopicResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetTopicsByChapterId([FromQuery] TopicSpecParam param)
         {
@@ -38,6 +41,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<TopicResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateTopic([FromBody] CreateTopicRequest request)
         {
@@ -55,6 +59,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateTopic([FromBody] UpdateTopicRequest request)
         {
@@ -72,6 +77,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteTopic([FromBody] DeleteTopicRequest request)
         {

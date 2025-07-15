@@ -11,6 +11,7 @@ using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
 using PhyGen.Domain.Specs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PhyGen.API.Controllers
 {
@@ -22,6 +23,7 @@ namespace PhyGen.API.Controllers
             : base(mediator, logger) { }
 
         [HttpGet("{chapterId}")]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<ChapterResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetChapterById(Guid chapterId)
         {
@@ -30,6 +32,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("subjectbook")]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<List<ChapterResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetChaptersBySubjectBookId([FromQuery] ChapterSpecParam chapterSpecParam)
         {
@@ -38,6 +41,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<ChapterResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateChapter([FromBody] CreateChapterRequest request)
         {
@@ -55,6 +59,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateChapter([FromBody] UpdateChapterRequest request)
         {
@@ -72,6 +77,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteChapter([FromBody] DeleteChapterRequest request)
         {

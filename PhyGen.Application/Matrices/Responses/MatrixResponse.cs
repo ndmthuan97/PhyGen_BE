@@ -16,5 +16,6 @@ namespace PhyGen.Application.Matrices.Responses
         public int TotalQuestionCount { get; set; }
         public int Grade { get; set; }
         public int Year { get; set; }
+        public string? CreatedBy { get; set; }
     }
 }

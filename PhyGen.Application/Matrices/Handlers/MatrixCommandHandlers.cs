@@ -50,7 +50,9 @@ namespace PhyGen.Application.Matrices.Handlers
                 Description = request.Description,
                 TotalQuestionCount = request.TotalQuestionCount,
                 Grade = request.Grade,
-                Year = request.Year
+                Year = request.Year,
+                CreatedBy = request.CreatedBy,
+                CreatedAt = DateTime.UtcNow,
             };
             await _matrixRepository.AddAsync(matrix);
             return AppMapper<CoreMappingProfile>.Mapper.Map<MatrixResponse>(matrix);

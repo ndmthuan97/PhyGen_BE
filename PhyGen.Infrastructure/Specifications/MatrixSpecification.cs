@@ -51,6 +51,12 @@ namespace PhyGen.Infrastructure.Specifications
                     case "examcategorydesc":
                         OrderByDescending = query => query.OrderByDescending(m => m.ExamCategory.Name);
                         break;
+                    case "createdat":
+                        OrderBy = query => query.OrderBy(m => m.CreatedAt);
+                        break;
+                    case "createdatdesc":
+                        OrderByDescending = query => query.OrderByDescending(m => m.CreatedAt);
+                        break;
                     default:
                         OrderBy = query => query.OrderBy(m => m.Year);
                         break;

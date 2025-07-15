@@ -11,6 +11,7 @@ using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
 using PhyGen.Domain.Specs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PhyGen.API.Controllers
 {
@@ -38,6 +39,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<CurriculumResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateCurriculum([FromBody] CreateCurriculumRequest request)
         {
@@ -55,6 +57,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateCurriculum([FromBody] UpdateCurriculumRequest request)
         {
@@ -72,6 +75,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteCurriculum([FromBody] DeleteCurriculumRequest request)
         {
