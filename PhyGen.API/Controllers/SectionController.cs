@@ -19,7 +19,7 @@ namespace PhyGen.API.Controllers
         public SectionController(IMediator mediator, ILogger<SectionController> logger)
             : base(mediator, logger) { }
 
-        [HttpGet("{sectionId}")]
+        [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<SectionResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetSectionById(Guid sectionId)
         {
@@ -27,7 +27,7 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetSectionByIdQuery, SectionResponse>(request);
         }
 
-        [HttpGet("exam/{examId}")]
+        [HttpGet("exam")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<SectionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetSectionsByExamId(Guid examId)
         {

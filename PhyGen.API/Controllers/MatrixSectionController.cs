@@ -19,7 +19,7 @@ namespace PhyGen.API.Controllers
         public MatrixSectionController(IMediator mediator, ILogger<MatrixSectionController> logger)
             : base(mediator, logger) { }
 
-        [HttpGet("{matrixSectionId}")]
+        [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<List<MatrixSectionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetMatrixSectionById(Guid matrixSectionId)
         {
@@ -27,7 +27,7 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetMatrixSectionByIdQuery, List<MatrixSectionResponse>>(query);
         }
 
-        [HttpGet("matrix/{matrixId}")]
+        [HttpGet("matrix")]
         [ProducesResponseType(typeof(ApiResponse<List<MatrixSectionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetByMatrixId(Guid matrixId)
         {
