@@ -18,7 +18,7 @@ namespace PhyGen.API.Controllers
         public QuestionMediaController(IMediator mediator, ILogger<QuestionMediaController> logger)
             : base(mediator, logger) { }
 
-        [HttpGet("{questionMediaId}")]
+        [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<QuestionMediaResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetQuestionMediaById(Guid questionMediaId)
         {
@@ -26,7 +26,7 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetQuestionMediaByIdQuery, QuestionMediaResponse>(request);
         }
 
-        [HttpGet("question/{questionId}")]
+        [HttpGet("question")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<QuestionMediaResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetQuestionMediasByQuestionId(Guid questionId)
         {

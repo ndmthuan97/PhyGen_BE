@@ -40,7 +40,7 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetQuestionByIdQuery, QuestionResponse>(request);
         }
 
-        [HttpGet("topic/{topicId}")]
+        [HttpGet("topic")]
         [ProducesResponseType(typeof(ApiResponse<Pagination<QuestionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetQuestionsByTopicId([FromQuery] QuestionByTopicSpecParam param)
         {
