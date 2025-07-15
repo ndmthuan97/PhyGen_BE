@@ -85,8 +85,6 @@ namespace PhyGen.API.Controllers
             return Ok(profiles);
         }
 
-
-
         [HttpPut("lock")]
         public async Task<IActionResult> LockUser([FromQuery] Guid UserId)
         {

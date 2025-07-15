@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PhyGen.Application.Admin.Dtos;
 using PhyGen.Application.Admin.Interfaces;
 using PhyGen.Application.Admin.Response;
+using PhyGen.Domain.Specs;
 using PhyGen.Infrastructure.Persistence.DbContexts;
 using PhyGen.Shared.Constants;
 using System;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PhyGen.Infrastructure.Service
 {
@@ -97,8 +100,8 @@ namespace PhyGen.Infrastructure.Service
                 UserRateNow = userRateNow // tỉ lệ người dùng mới so với tổng người dùng trước tuần này
             };
         }
-        public async Task<InvoiceResponse> GetInvoiceStatistics()
-        {
+        public async Task<InvoiceResponse> GetInvoiceStatistics(InvoiceFilter filter)
+            {
             var payments = await _context.Payments.ToListAsync();
             var users = await _context.Users.ToListAsync();
 
@@ -115,6 +118,14 @@ namespace PhyGen.Infrastructure.Service
                                     AvatarUrl = u.photoURL ?? ""
                                 }).ToList();
 
+            var totalCount = invoiceItems.Count;
+
+            var paginatedItems = invoiceItems
+                .OrderByDescending(u => u.CreatedAt)
+                .Skip((filter.PageIndex - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToList();
+
             var response = new InvoiceResponse
             {
                 TotalBill = payments.Count,
@@ -123,7 +134,7 @@ namespace PhyGen.Infrastructure.Service
                 CanceledBill = payments.Count(p =>
                     p.Status == PaymentStatus.Cancelled.ToString() ||
                     p.Status == PaymentStatus.Expired.ToString()),
-                Invoices = invoiceItems
+                Invoices = new Pagination<InvoiceItem>(filter.PageIndex, filter.PageSize, totalCount, invoiceItems)
             };
 
             return response;
