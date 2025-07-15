@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PhyGen.API.Mapping;
 using PhyGen.API.Models;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.Sections.Commands;
@@ -47,7 +48,7 @@ namespace PhyGen.API.Controllers
                     Errors = ["The request body does not contain required fields"]
                 });
             }
-            var command = AppMapper<CoreMappingProfile>.Mapper.Map<CreateSectionCommand>(request);
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateSectionCommand>(request);
             return await ExecuteAsync<CreateSectionCommand, SectionResponse>(command);
         }
 
@@ -64,7 +65,7 @@ namespace PhyGen.API.Controllers
                     Errors = ["The request body does not contain required fields or the IDs do not match"]
                 });
             }
-            var command = AppMapper<CoreMappingProfile>.Mapper.Map<UpdateSectionCommand>(request);
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateSectionCommand>(request);
             return await ExecuteAsync<UpdateSectionCommand, Unit>(command);
         }
 
@@ -81,7 +82,7 @@ namespace PhyGen.API.Controllers
                     Errors = ["The request body does not contain required fields or the IDs do not match"]
                 });
             }
-            var command = AppMapper<CoreMappingProfile>.Mapper.Map<DeleteSectionCommand>(request);
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<DeleteSectionCommand>(request);
             return await ExecuteAsync<DeleteSectionCommand, Unit>(command);
         }
     }
