@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Net.payOS;
 using Net.payOS.Types;
+using PhyGen.Application.Notification.Commands;
 using PhyGen.Application.PayOs.Config;
 using PhyGen.Application.PayOs.Interfaces;
 using PhyGen.Application.PayOs.Request;
@@ -27,14 +30,15 @@ namespace PhyGen.Infrastructure.Service
         private readonly AppDbContext _context;
         private readonly PayOSConfig _config;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public PaymentService(IOptions<PayOSConfig> config, AppDbContext context, IMapper mapper)
+        public PaymentService(IOptions<PayOSConfig> config, AppDbContext context, IMapper mapper, IMediator mediator)
         {
             _config = config.Value;
             _payOS = new PayOS(_config.ClientId, _config.ApiKey, _config.ChecksumKey);
             _context = context;
             _mapper = mapper;
-
+            _mediator = mediator;
         }
 
         public async Task<PaymentResponse> CreatePaymentLinkAsync(PaymentRequest request)
@@ -154,7 +158,37 @@ namespace PhyGen.Infrastructure.Service
 
                         Console.WriteLine($"[Webhook] Cộng {coinsToAdd} xu cho user {user.Id} từ giao dịch {payment.PaymentLinkId}");
                         await _context.SaveChangesAsync();
+
+                        // Gửi thông báo: giao dịch thành công
+                        await _mediator.Send(new CreateNotificationCommand
+                        {
+                            UserId = user.Id,
+                            Title = "Giao dịch thành công",
+                            Message = $"Bạn đã thanh toán thành công {payment.Amount} xu. Cảm ơn bạn!",
+                            CreatedAt = DateTime.UtcNow
+                        });
                     }
+                }
+                else if (payment.Status == PaymentStatus.Cancelled.ToString())
+                {
+                    // Gửi thông báo: giao dịch bị hủy
+                    await _mediator.Send(new CreateNotificationCommand
+                    {
+                        UserId = payment.UserId,
+                        Title = "Giao dịch bị hủy",
+                        Message = "Giao dịch của bạn đã bị hủy. Vui lòng thử lại.",
+                        CreatedAt = DateTime.UtcNow
+                    });
+                }
+                else if (payment.Status == PaymentStatus.Expired.ToString())
+                {
+                    await _mediator.Send(new CreateNotificationCommand
+                    {
+                        UserId = payment.UserId,
+                        Title = "Giao dịch hết hạn",
+                        Message = "Liên kết thanh toán đã hết hạn. Vui lòng tạo lại để tiếp tục.",
+                        CreatedAt = DateTime.UtcNow
+                    });
                 }
 
                 Console.WriteLine($"[Webhook] Xử lý hoàn tất cho giao dịch {payment.PaymentLinkId}, trạng thái: {payment.Status}");
