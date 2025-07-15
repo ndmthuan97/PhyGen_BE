@@ -56,6 +56,14 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetQuestionsByLevelAndTypeQuery, Pagination<QuestionResponse>>(request);
         }
 
+        [HttpGet("grade")]
+        [ProducesResponseType(typeof(ApiResponse<Pagination<QuestionResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetQuestionsByGrade([FromQuery] QuestionByGradeSpecParam questionGradeParam)
+        {
+            var request = new GetQuestionsByGradeQuery(questionGradeParam);
+            return await ExecuteAsync<GetQuestionsByGradeQuery, Pagination<QuestionResponse>>(request);
+        }
+
         [Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<QuestionResponse>), (int)HttpStatusCode.OK)]

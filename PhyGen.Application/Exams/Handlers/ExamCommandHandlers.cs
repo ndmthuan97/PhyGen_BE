@@ -31,14 +31,6 @@ namespace PhyGen.Application.Exams.Handlers
             if (category == null || category.DeletedAt.HasValue)
                 throw new ExamCategoryNotFoundException();
 
-            var isExist = await _examRepository.AlreadyExistAsync(e =>
-                e.ExamCategoryId == request.ExamCategoryId &&
-                e.Title.ToLower() == request.Title.ToLower() &&
-                e.DeletedAt == null
-            );
-            if (isExist)
-                throw new ExamAlreadyExistException();
-
             var exam = new Exam
             {
                 ExamCategoryId = request.ExamCategoryId,

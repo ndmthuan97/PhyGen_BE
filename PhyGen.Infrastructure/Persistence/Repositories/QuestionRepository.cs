@@ -34,5 +34,11 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
             var spec = new QuestionSpecification(questionSpecParam);
             return await GetWithSpecAsync(spec);
         }
+
+        public async Task<Pagination<Question>?> GetQuestionsByGradeAsync(QuestionByGradeSpecParam questionGradeSpecParam)
+        {
+            var spec = new QuestionByGradeSpecification(questionGradeSpecParam);
+            return await GetWithSpecAsync(spec);
+        }
     }
 }
