@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PhyGen.Application.Admin.Dtos;
 using PhyGen.Application.Admin.Interfaces;
 using PhyGen.Application.Admin.Response;
 using PhyGen.Application.Authentication.DTOs.Dtos;
@@ -45,9 +46,14 @@ namespace PhyGen.API.Controllers
 
         [HttpGet("statistics")]
         [ProducesResponseType(typeof(InvoiceResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetInvoiceStatistics()
+        public async Task<IActionResult> GetInvoiceStatistics([FromQuery] int pageIndex = 1)
         {
-            var result = await _statisticService.GetInvoiceStatistics();
+            var filter = new InvoiceFilter
+            {
+                PageIndex = pageIndex,
+                PageSize = 10
+            };
+            var result = await _statisticService.GetInvoiceStatistics(filter);
             return Ok(result);
         }
     }

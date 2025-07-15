@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhyGen.Domain.Specs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace PhyGen.Application.Admin.Response
         public int PendingBill { get; set; }
         public int CompletedBill { get; set; }
         public int CanceledBill { get; set; }
-        public List<InvoiceItem> Invoices { get; set; }
+        public Pagination<InvoiceItem> Invoices { get; set; }
 
     }
     public class InvoiceItem
