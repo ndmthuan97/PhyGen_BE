@@ -21,6 +21,7 @@ namespace PhyGen.API.Models
         public int TotalQuestionCount { get; set; }
         public int Grade { get; set; }
         public int Year { get; set; }
+        public string? ImgUrl { get; set; } = string.Empty;
     }
 
     public class UpdateMatrixRequest
@@ -45,6 +46,7 @@ namespace PhyGen.API.Models
         public int TotalQuestionCount { get; set; }
         public int Grade { get; set; }
         public int Year { get; set; }
+        public string? ImgUrl { get; set; } = string.Empty;
     }
 
     public class DeleteMatrixRequest

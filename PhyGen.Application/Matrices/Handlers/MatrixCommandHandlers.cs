@@ -51,6 +51,7 @@ namespace PhyGen.Application.Matrices.Handlers
                 TotalQuestionCount = request.TotalQuestionCount,
                 Grade = request.Grade,
                 Year = request.Year,
+                ImgUrl = request.ImgUrl,
                 CreatedBy = request.CreatedBy,
                 CreatedAt = DateTime.UtcNow,
             };
@@ -99,6 +100,7 @@ namespace PhyGen.Application.Matrices.Handlers
             matrix.TotalQuestionCount = request.TotalQuestionCount;
             matrix.Grade = request.Grade;
             matrix.Year = request.Year;
+            matrix.ImgUrl = request.ImgUrl;
 
             await _matrixRepository.UpdateAsync(matrix);
             return Unit.Value;

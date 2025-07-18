@@ -22,6 +22,7 @@ namespace PhyGen.API.Models
         public int? TotalQuestionCount { get; set; } = null;
         public int VersionCount { get; set; } = 1;
         public bool RandomizeQuestions { get; set; } = false;
+        public string ImgUrl { get; set; } = string.Empty;
     }
 
     public class UpdateExamRequest
@@ -47,6 +48,7 @@ namespace PhyGen.API.Models
         public int? TotalQuestionCount { get; set; } = null;
         public int VersionCount { get; set; } = 1;
         public bool RandomizeQuestions { get; set; } = false;
+        public string ImgUrl { get; set; } = string.Empty;
     }
 
     public class DeleteExamRequest

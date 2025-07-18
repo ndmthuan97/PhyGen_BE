@@ -28,11 +28,11 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("exam")]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<SectionResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetSectionsByExamId(Guid examId)
+        [ProducesResponseType(typeof(ApiResponse<List<SectionResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetSectionsByExamId([FromQuery] Guid examId)
         {
             var request = new GetSectionsByExamIdQuery(examId);
-            return await ExecuteAsync<GetSectionsByExamIdQuery, IEnumerable<SectionResponse>>(request);
+            return await ExecuteAsync<GetSectionsByExamIdQuery, List<SectionResponse>>(request);
         }
 
         [HttpPost]

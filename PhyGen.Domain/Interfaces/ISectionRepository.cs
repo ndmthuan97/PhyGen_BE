@@ -9,6 +9,6 @@ namespace PhyGen.Domain.Interfaces
 {
     public interface ISectionRepository : IAsyncRepository<Section, Guid>
     {
-        Task<Section?> GetSectionsByExamIdAsync(Guid examId);
+        Task<List<Section>> GetSectionsByExamIdAsync(Guid examId);
     }
 }

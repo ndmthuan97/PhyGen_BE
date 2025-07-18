@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PhyGen.Application.Exams.Exceptions;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.Sections.Exceptions;
 using PhyGen.Application.Sections.Queries;
@@ -37,25 +38,23 @@ namespace PhyGen.Application.Sections.Handlers
     public class GetSectionsByExamIdQueryHandler : IRequestHandler<GetSectionsByExamIdQuery, List<SectionResponse>>
     {
         private readonly ISectionRepository _sectionRepository;
-        //private readonly IExamRepository _examRepository;
+        private readonly IExamRepository _examRepository;
 
-        public GetSectionsByExamIdQueryHandler(ISectionRepository sectionRepository)
+        public GetSectionsByExamIdQueryHandler(ISectionRepository sectionRepository, IExamRepository examRepository)
         {
             _sectionRepository = sectionRepository;
+            _examRepository = examRepository;
         }
 
         public async Task<List<SectionResponse>> Handle(GetSectionsByExamIdQuery request, CancellationToken cancellationToken)
         {
             if (request.ExamId == Guid.Empty)
-            {
-                throw new Exception("Exam not found");
-            }
+                throw new ExamNotFoundException();
 
             var sections = await _sectionRepository.GetSectionsByExamIdAsync(request.ExamId);
-            if (sections == null)
-            {
+
+            if (!sections.Any())
                 throw new SectionNotFoundException();
-            }
 
             return AppMapper<CoreMappingProfile>.Mapper.Map<List<SectionResponse>>(sections);
         }

@@ -13,13 +13,15 @@ namespace PhyGen.Application.Questions.Responses
         public Guid Id { get; set; }
         public Guid TopicId { get; set; }
         public string Content { get; set; } = string.Empty;
+
         [JsonIgnore]
         public DifficultyLevel Level { get; set; }
         public string LevelName => Level.ToString();    
+
         [JsonIgnore]
         public QuestionType Type { get; set; }
         public string TypeName => Type.ToString();
-        public string? Image { get; set; }
+
         public string? Answer1 { get; set; }
         public string? Answer2 { get; set; }
         public string? Answer3 { get; set; }
