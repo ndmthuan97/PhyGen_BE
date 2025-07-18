@@ -1,4 +1,5 @@
 ﻿using PhyGen.Domain.Entities;
+using PhyGen.Domain.Specs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace PhyGen.Domain.Interfaces
 {
     public interface IMatrixSectionRepository : IAsyncRepository<MatrixSection, Guid>
     {
-        Task<List<MatrixSection>?> GetMatrixSectionsByMatrixIdAsync(Guid matrixId);
+        Task<Pagination<MatrixSection>?> GetMatrixSectionsByMatrixIdAsync(MatrixSectionSpecParam param);
     }
 }
