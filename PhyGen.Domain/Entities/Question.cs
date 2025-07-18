@@ -19,8 +19,6 @@ namespace PhyGen.Domain.Entities
         public QuestionType Type { get; set; }
         public DifficultyLevel Level { get; set; }
 
-        public string? Image { get; set; }
-
         public string? Answer1 { get; set; }
         public string? Answer2 { get; set; }
         public string? Answer3 { get; set; }

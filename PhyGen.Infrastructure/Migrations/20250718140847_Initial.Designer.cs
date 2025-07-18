@@ -12,7 +12,7 @@ using PhyGen.Infrastructure.Persistence.DbContexts;
 namespace PhyGen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250715052351_Initial")]
+    [Migration("20250718140847_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -230,6 +230,11 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<int>("Grade")
                         .HasColumnType("integer");
 
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
                     b.Property<bool>("RandomizeQuestions")
                         .HasColumnType("boolean");
 
@@ -356,6 +361,11 @@ namespace PhyGen.Infrastructure.Migrations
 
                     b.Property<int>("Grade")
                         .HasColumnType("integer");
+
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -599,10 +609,6 @@ namespace PhyGen.Infrastructure.Migrations
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Image")
-                        .IsUnicode(true)
-                        .HasColumnType("text");
 
                     b.Property<int>("Level")
                         .HasColumnType("integer");

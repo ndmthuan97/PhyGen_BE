@@ -119,6 +119,7 @@ namespace PhyGen.Infrastructure.Migrations
                     TotalQuestionCount = table.Column<int>(type: "integer", nullable: false),
                     Grade = table.Column<int>(type: "integer", nullable: false),
                     Year = table.Column<int>(type: "integer", nullable: false),
+                    ImgUrl = table.Column<string>(type: "text", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -199,6 +200,7 @@ namespace PhyGen.Infrastructure.Migrations
                     TotalQuestionCount = table.Column<int>(type: "integer", nullable: true),
                     VersionCount = table.Column<int>(type: "integer", nullable: false),
                     RandomizeQuestions = table.Column<bool>(type: "boolean", nullable: false),
+                    ImgUrl = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -511,7 +513,6 @@ namespace PhyGen.Infrastructure.Migrations
                     Content = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     Level = table.Column<int>(type: "integer", nullable: false),
-                    Image = table.Column<string>(type: "text", nullable: true),
                     Answer1 = table.Column<string>(type: "text", nullable: true),
                     Answer2 = table.Column<string>(type: "text", nullable: true),
                     Answer3 = table.Column<string>(type: "text", nullable: true),

@@ -23,6 +23,7 @@ namespace PhyGen.Domain.Entities
         public int TotalQuestionCount { get; set; }
         public int Grade { get; set; }
         public int Year { get; set; }
+        public string ImgUrl { get; set; } = string.Empty;
 
         public string? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }

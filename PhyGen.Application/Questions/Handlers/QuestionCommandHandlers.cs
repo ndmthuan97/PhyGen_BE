@@ -47,7 +47,6 @@ namespace PhyGen.Application.Questions.Handlers
                 Content = request.Content,
                 Level = request.Level,
                 Type = request.Type,
-                Image = request.Image,
                 Answer1 = request.Answer1,
                 Answer2 = request.Answer2,
                 Answer3 = request.Answer3,
@@ -100,7 +99,6 @@ namespace PhyGen.Application.Questions.Handlers
             question.Content = request.Content;
             question.Level = request.Level;
             question.Type = request.Type;
-            question.Image = request.Image;
             question.Answer1 = request.Answer1;
             question.Answer2 = request.Answer2;
             question.Answer3 = request.Answer3;

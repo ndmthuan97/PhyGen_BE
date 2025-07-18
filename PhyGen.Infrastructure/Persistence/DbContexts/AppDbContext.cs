@@ -184,7 +184,6 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.Content).IsRequired();
                 e.Property(p => p.Type);
                 e.Property(p => p.Level);
-                e.Property(p => p.Image);
                 e.Property(p => p.Answer1);
                 e.Property(p => p.Answer2);
                 e.Property(p => p.Answer3);

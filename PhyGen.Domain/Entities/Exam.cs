@@ -28,6 +28,8 @@ namespace PhyGen.Domain.Entities
         public int VersionCount { get; set; }
         public bool RandomizeQuestions { get; set; }
 
+        public string ImgUrl { get; set; } = string.Empty;
+
         public DateTime? CreatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
