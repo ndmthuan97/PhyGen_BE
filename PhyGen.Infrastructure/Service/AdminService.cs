@@ -112,7 +112,7 @@ namespace PhyGen.Infrastructure.Service
                                     InvoiceId = $"{p.PaymentLinkId}",
                                     FullName = $"{u.FirstName} {u.LastName}",
                                     CreatedAt = p.CreatedAt,
-                                    Amount = p.Amount,
+                                    Amount = p.Amount*1000,
                                     PaymentMethod = "PayOS",
                                     Status = p.Status,
                                     AvatarUrl = u.photoURL ?? ""
@@ -169,7 +169,7 @@ namespace PhyGen.Infrastructure.Service
                 weeklyRevenues.Add(new WeeklyRevenueItem
                 {
                     WeekRange = $"{startOfWeek:yyyy-MM-dd} to {endOfWeek:yyyy-MM-dd}",
-                    Revenue = weeklyRevenue
+                    Revenue = weeklyRevenue*1000
                 });
 
                 startOfWeek = startOfWeek.AddDays(7);
