@@ -6,6 +6,7 @@ using PhyGen.Application.Mapping;
 using PhyGen.Application.MatrixSections.Commands;
 using PhyGen.Application.MatrixSections.Queries;
 using PhyGen.Application.MatrixSections.Responses;
+using PhyGen.Domain.Specs;
 using PhyGen.Shared;
 using PhyGen.Shared.Constants;
 using System.Net;
@@ -28,11 +29,11 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("matrix")]
-        [ProducesResponseType(typeof(ApiResponse<List<MatrixSectionResponse>>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetByMatrixId(Guid matrixId)
+        [ProducesResponseType(typeof(ApiResponse<Pagination<MatrixSectionResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetByMatrixId([FromQuery] MatrixSectionSpecParam param)
         {
-            var query = new GetMatrixSectionsByMatrixIdQuery(matrixId);
-            return await ExecuteAsync<GetMatrixSectionsByMatrixIdQuery, List<MatrixSectionResponse>>(query);
+            var query = new GetMatrixSectionsByMatrixIdQuery(param);
+            return await ExecuteAsync<GetMatrixSectionsByMatrixIdQuery, Pagination<MatrixSectionResponse>>(query);
         }
 
         [HttpPost]

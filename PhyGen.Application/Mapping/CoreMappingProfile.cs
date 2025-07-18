@@ -95,6 +95,7 @@ namespace PhyGen.Application.Mapping
 
             // Mapping for MatrixSection
             CreateMap<MatrixSection, MatrixSectionResponse>();
+            CreateMap<Pagination<MatrixSection>, Pagination<MatrixSectionResponse>>();
 
             // Mapping for MatrixSectionDetail
             CreateMap<MatrixSectionDetail, MatrixSectionDetailResponse>();

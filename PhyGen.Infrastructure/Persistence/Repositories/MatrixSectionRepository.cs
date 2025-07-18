@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Domain.Specs;
 using PhyGen.Infrastructure.Persistence.DbContexts;
 using PhyGen.Infrastructure.Persistence.Repositories;
+using PhyGen.Infrastructure.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +19,10 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         {
         }
 
-        public async Task<List<MatrixSection>?> GetMatrixSectionsByMatrixIdAsync(Guid matrixId)
+        public async Task<Pagination<MatrixSection>?> GetMatrixSectionsByMatrixIdAsync(MatrixSectionSpecParam param)
         {
-            return await _context.MatrixSections
-                .Where(ms => ms.MatrixId == matrixId && !ms.DeletedAt.HasValue)
-                .ToListAsync();
+            var spec = new MatrixSectionSpecification(param);
+            return await GetWithSpecAsync(spec);
         }
     }
 }
