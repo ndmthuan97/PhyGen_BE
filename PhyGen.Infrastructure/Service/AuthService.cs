@@ -230,7 +230,7 @@ public class AuthService : IAuthService
 
         return new LoginResponse
         {
-            Response = new AuthenticationResponse { Email = email, FirstName = user.FirstName, LastName = user.LastName ,StatusCode = StatusCode.LoginSuccess },
+            Response = new AuthenticationResponse { Email = email, FirstName = user.FirstName, LastName = user.LastName, PhotoUrl = user.photoURL ,StatusCode = StatusCode.LoginSuccess },
             Role = user.Role,
             Token = _jwtTokenGenerator.GenerateToken(user)
         };
@@ -318,7 +318,7 @@ public class AuthService : IAuthService
 
         return new LoginResponse
         {
-            Response = new AuthenticationResponse {Email = email, FirstName = user.FirstName, LastName = user.LastName, StatusCode = StatusCode.LoginSuccess },
+            Response = new AuthenticationResponse {Email = email, FirstName = user.FirstName, LastName = user.LastName, PhotoUrl = user.photoURL, StatusCode = StatusCode.LoginSuccess },
             Token = token,
             Role = user.Role
         };
