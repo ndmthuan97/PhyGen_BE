@@ -41,10 +41,10 @@ namespace PhyGen.Infrastructure.Specifications
                     case "titledesc":
                         OrderByDescending = query => query.OrderByDescending(s => s.Title);
                         break;
-                    default:
-                        OrderBy = query => query.OrderBy(s => s.Title);
-                        break;
                 }
+            } else
+            {
+                OrderBy = query => query.OrderBy(s => s.Title);
             }
 
             Includes.Add(s => s.Matrix);
