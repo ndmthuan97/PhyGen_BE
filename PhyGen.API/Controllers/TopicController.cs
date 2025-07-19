@@ -22,6 +22,15 @@ namespace PhyGen.API.Controllers
         public TopicController(IMediator mediator, ILogger<TopicController> logger)
             : base(mediator, logger) { }
 
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<List<TopicResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetTopics()
+        {
+            var request = new GetTopicsQuery();
+            return await ExecuteAsync<GetTopicsQuery, List<TopicResponse>>(request);
+        }
+
+
         [HttpGet("{topicId}")]
         [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<TopicResponse>), (int)HttpStatusCode.OK)]

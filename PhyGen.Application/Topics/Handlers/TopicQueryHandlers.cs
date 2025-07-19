@@ -47,4 +47,23 @@ namespace PhyGen.Application.Topics.Handlers
             return AppMapper<CoreMappingProfile>.Mapper.Map<Pagination<TopicResponse>>(topics);
         }
     }
+
+    public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, List<TopicResponse>>
+    {
+        private readonly ITopicRepository _topicRepository;
+        public GetTopicsQueryHandler(ITopicRepository topicRepository)
+        {
+            _topicRepository = topicRepository;
+        }
+        public async Task<List<TopicResponse>> Handle(GetTopicsQuery request, CancellationToken cancellationToken)
+        {
+            var topics = await _topicRepository.GetAllAsync();
+            topics = topics.Where(t => !t.DeletedAt.HasValue).ToList();
+
+            if (!topics.Any())
+                throw new TopicNotFoundException();
+
+            return AppMapper<CoreMappingProfile>.Mapper.Map<List<TopicResponse>>(topics.OrderBy(t => t.Name));
+        }
+    }
 }
