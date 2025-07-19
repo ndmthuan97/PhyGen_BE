@@ -15,7 +15,6 @@ namespace PhyGen.Application.Questions.Commands
         public string Content { get; set; } = string.Empty;
         public DifficultyLevel Level { get; set; }
         public QuestionType Type { get; set; }
-        public string? Image { get; set; }
 
         public string? Answer1 { get; set; }
         public string? Answer2 { get; set; }

@@ -41,7 +41,8 @@ namespace PhyGen.Application.Exams.Handlers
                 Year = request.Year,
                 TotalQuestionCount = request.TotalQuestionCount,
                 VersionCount = request.VersionCount,
-                RandomizeQuestions = request.RandomizeQuestions
+                RandomizeQuestions = request.RandomizeQuestions,
+                ImgUrl = request.ImgUrl,
             };
 
             await _examRepository.AddAsync(exam);
@@ -78,6 +79,7 @@ namespace PhyGen.Application.Exams.Handlers
             exam.TotalQuestionCount = request.TotalQuestionCount;
             exam.VersionCount = request.VersionCount;
             exam.RandomizeQuestions = request.RandomizeQuestions;
+            exam.ImgUrl = request.ImgUrl;
 
             await _examRepository.UpdateAsync(exam);
             return Unit.Value;

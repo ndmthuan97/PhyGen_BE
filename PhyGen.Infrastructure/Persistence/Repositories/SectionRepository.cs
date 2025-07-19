@@ -17,10 +17,12 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         {
         }
 
-        public async Task<Section?> GetSectionsByExamIdAsync(Guid examId)
+        public async Task<List<Section>> GetSectionsByExamIdAsync(Guid examId)
         {
             return await _context.Sections
-                .FirstOrDefaultAsync(s => s.Id == examId && s.DeletedAt == null);
+                .Where(s => s.ExamId == examId && s.DeletedAt == null)
+                .OrderBy(s => s.DisplayOrder)
+                .ToListAsync();
         }
     }
 }
