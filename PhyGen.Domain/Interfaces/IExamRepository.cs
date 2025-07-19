@@ -11,5 +11,7 @@ namespace PhyGen.Domain.Interfaces
     public interface IExamRepository : IAsyncRepository<Exam, Guid>
     {
         Task<Pagination<Exam>?> GetExamsAsync(ExamSpecParam examSpecParam);
+        Task<Exam?> GetExamDetailAsync(Guid examId);
+
     }
 }

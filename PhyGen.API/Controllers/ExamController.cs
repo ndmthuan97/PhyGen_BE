@@ -44,6 +44,14 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetExamsQuery, Pagination<ExamResponse>>(query);
         }
 
+        [HttpGet("{examId}/detail")]
+        [ProducesResponseType(typeof(ApiResponse<ExamDetailResponse>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetExamDetail(Guid examId)
+        {
+            var query = new GetExamDetailQuery(examId);
+            return await ExecuteAsync<GetExamDetailQuery, ExamDetailResponse>(query);
+        }
+
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<ExamResponse>), (int)HttpStatusCode.OK)]

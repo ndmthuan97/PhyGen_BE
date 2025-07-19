@@ -1,4 +1,5 @@
-﻿using PhyGen.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Domain.Specs;
 using PhyGen.Infrastructure.Persistence.DbContexts;
@@ -20,5 +21,15 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
             var spec = new ExamSpecification(examSpecParam);
             return await GetWithSpecAsync(spec);
         }
+
+        public async Task<Exam?> GetExamDetailAsync(Guid examId)
+        {
+            return await _context.Exams
+                .Include(e => e.Sections)
+                    .ThenInclude(s => s.QuestionSections)
+                        .ThenInclude(qs => qs.Question)
+                .FirstOrDefaultAsync(e => e.Id == examId && e.DeletedAt == null);
+        }
+
     }
 }
