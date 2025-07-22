@@ -34,9 +34,6 @@ namespace PhyGen.API.Models
 
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid ExamCategoryId { get; set; }
-
-        [Required]
-        [StringLength(255, ErrorMessage = "Tên ma trận không được vượt quá 255 ký tự.")]
         public string Name { get; set; } = string.Empty;
 
         public string? Description { get; set; }
