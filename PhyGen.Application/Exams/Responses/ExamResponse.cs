@@ -18,5 +18,6 @@ namespace PhyGen.Application.Exams.Responses
         public int? TotalQuestionCount { get; set; }
         public int VersionCount { get; set; }
         public bool RandomizeQuestions { get; set; }
+        public string ImgUrl { get; set; } = string.Empty;
     }
 }
