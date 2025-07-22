@@ -96,7 +96,7 @@ namespace PhyGen.API.Controllers
                     loginResponse.Response.Email,
                     loginResponse.Response.FirstName,
                     loginResponse.Response.LastName,
-                    loginResponse.Response.PhotoUrl,
+                    loginResponse.Response.photoURL,
                     loginResponse.Response.StatusCode,
                     loginResponse.Response.Message,
                     Token = loginResponse.Token,
