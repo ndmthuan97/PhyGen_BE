@@ -134,7 +134,7 @@ namespace PhyGen.Infrastructure.Service
                 CanceledBill = payments.Count(p =>
                     p.Status == PaymentStatus.Cancelled.ToString() ||
                     p.Status == PaymentStatus.Expired.ToString()),
-                Invoices = new Pagination<InvoiceItem>(filter.PageIndex, filter.PageSize, totalCount, invoiceItems)
+                Invoices = new Pagination<InvoiceItem>(filter.PageIndex, filter.PageSize, totalCount, paginatedItems)
             };
 
             return response;
