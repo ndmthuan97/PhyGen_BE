@@ -26,15 +26,12 @@ namespace PhyGen.API.Models
 
     public class UpdateMatrixRequest
     {
-        [JsonRequired]
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid Id { get; set; }
 
-        [JsonRequired]
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid SubjectId { get; set; }
 
-        [JsonRequired]
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid ExamCategoryId { get; set; }
 
