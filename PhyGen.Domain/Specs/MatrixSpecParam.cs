@@ -12,6 +12,7 @@ namespace PhyGen.Domain.Specs
 
         public Guid? ExamCategoryId { get; set; }
 
+        public List<string>? ExamCategory { get; set; }
         public List<int>? Grade { get; set; }
 
         public List<int>? Year { get; set; }

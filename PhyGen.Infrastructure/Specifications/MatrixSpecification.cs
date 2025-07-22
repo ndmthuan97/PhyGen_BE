@@ -27,10 +27,16 @@ namespace PhyGen.Infrastructure.Specifications
 
         public MatrixSpecification(MatrixSpecParam param)
         {
+            var examCategory = param.ExamCategory?
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Select(n => n.Trim().ToLower())
+                .ToList() ?? new List<string>();
+
             Criteria = matrix =>
                 (string.IsNullOrEmpty(param.Search) || matrix.Name.ToLower().Contains(param.Search.ToLower())) &&                
                 (!param.SubjectId.HasValue || matrix.SubjectId == param.SubjectId) &&
                 (!param.ExamCategoryId.HasValue || matrix.ExamCategoryId == param.ExamCategoryId) &&
+                (!examCategory.Any() || examCategory.Any(n => matrix.ExamCategory.Name.Trim().ToLower().Contains(n))) &&
                 (param.Grade == null || !param.Grade.Any() || param.Grade.Contains(matrix.Grade)) &&
                 (param.Year == null || !param.Year.Any() || param.Year.Contains(matrix.Year)) &&
                 (!matrix.DeletedAt.HasValue);

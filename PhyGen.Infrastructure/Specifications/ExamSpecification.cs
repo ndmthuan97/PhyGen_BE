@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Azure.Core.HttpHeader;
 
 namespace PhyGen.Infrastructure.Specifications
 {
@@ -27,8 +28,13 @@ namespace PhyGen.Infrastructure.Specifications
 
         public ExamSpecification(ExamSpecParam param)
         {
+            var examCategory = param.ExamCategory?
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Select(n => n.Trim().ToLower())
+                .ToList() ?? new List<string>();
             Criteria = exam =>
                 (!param.ExamCategoryId.HasValue || exam.ExamCategoryId == param.ExamCategoryId) &&
+                (!examCategory.Any() || examCategory.Any(n => exam.ExamCategory.Name.Trim().ToLower().Contains(n))) &&
                 (param.Grade == null || !param.Grade.Any() || param.Grade.Contains(exam.Grade)) &&
                 (param.Year == null || !param.Year.Any() || param.Year.Contains(exam.Year)) &&
                 (string.IsNullOrEmpty(param.Search) || exam.Title.ToLower().Contains(param.Search.ToLower())) &&
