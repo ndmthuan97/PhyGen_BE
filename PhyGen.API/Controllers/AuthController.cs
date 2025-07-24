@@ -139,10 +139,10 @@ namespace PhyGen.API.Controllers
             return StatusCode(500, "Unexpected error occurred.");
         }
 
-        [HttpGet("forgetpassword")]
-        public async Task<IActionResult> ForgetPassword(string email)
+        [HttpPost("forgetpassword")]
+        public async Task<IActionResult> ForgetPassword([FromBody] ForgotPasswordRequest request)
         {
-            var data = await _authService.ForgetPassword(email);
+            var data = await _authService.ForgetPassword(request.Email);
 
             return data.StatusCode switch
             {
