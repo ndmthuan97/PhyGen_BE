@@ -64,7 +64,7 @@ namespace PhyGen.API.Controllers
                 });
             }
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateTopicCommand>(request);
-            return await ExecuteAsync<CreateTopicCommand, Guid>(command);
+            return await ExecuteAsync<CreateTopicCommand, TopicResponse>(command);
         }
 
         [HttpPut]

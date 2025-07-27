@@ -24,5 +24,16 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
             var spec = new TopicSpecification(topicSpecParam);
             return await GetWithSpecAsync(spec);
         }
+
+        public async Task<List<Topic>> GetValidTopicsAsync()
+        {
+            return await _context.Topics.Include(t => t.Chapter).ThenInclude(c => c.SubjectBook)
+                .Where(t => t.DeletedAt == null &&
+                            t.Chapter != null &&
+                            t.Chapter.DeletedAt == null &&
+                            t.Chapter.SubjectBook != null &&
+                            t.Chapter.SubjectBook.DeletedAt == null)
+                .ToListAsync();
+        }
     }
 }

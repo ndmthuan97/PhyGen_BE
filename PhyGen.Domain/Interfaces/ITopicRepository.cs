@@ -11,5 +11,6 @@ namespace PhyGen.Domain.Interfaces
     public interface ITopicRepository : IAsyncRepository<Topic, Guid>
     {
         Task<Pagination<Topic>?> GetTopicsByChapterAsync(TopicSpecParam topicSpecParam);
+        Task<List<Topic>> GetValidTopicsAsync();
     }
 }

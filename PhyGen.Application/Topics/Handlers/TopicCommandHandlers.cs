@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using PhyGen.Application.Chapters.Exceptions;
+using PhyGen.Application.Mapping;
 using PhyGen.Application.Topics.Commands;
 using PhyGen.Application.Topics.Exceptions;
+using PhyGen.Application.Topics.Responses;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Topics.Handlers
 {
-    public class CreateTopicCommandHandler : IRequestHandler<CreateTopicCommand, Guid>
+    public class CreateTopicCommandHandler : IRequestHandler<CreateTopicCommand, TopicResponse>
     {
         private readonly ITopicRepository _topicRepository;
         private readonly IChapterRepository _chapterRepository;
@@ -23,7 +25,7 @@ namespace PhyGen.Application.Topics.Handlers
             _chapterRepository = chapterRepository;
         }
 
-        public async Task<Guid> Handle(CreateTopicCommand request, CancellationToken cancellationToken)
+        public async Task<TopicResponse> Handle(CreateTopicCommand request, CancellationToken cancellationToken)
         {
             var chapter = await _chapterRepository.GetByIdAsync(request.ChapterId);
             if (chapter == null || chapter.DeletedAt.HasValue)
@@ -43,7 +45,7 @@ namespace PhyGen.Application.Topics.Handlers
             };
 
             await _topicRepository.AddAsync(topic);
-            return topic.Id;
+            return AppMapper<CoreMappingProfile>.Mapper.Map<TopicResponse>(topic);
         }
     }
 

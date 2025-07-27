@@ -57,9 +57,7 @@ namespace PhyGen.Application.Topics.Handlers
         }
         public async Task<List<TopicResponse>> Handle(GetTopicsQuery request, CancellationToken cancellationToken)
         {
-            var topics = await _topicRepository.GetAllAsync();
-            topics = topics.Where(t => !t.DeletedAt.HasValue).ToList();
-
+            var topics = await _topicRepository.GetValidTopicsAsync();
             if (!topics.Any())
                 throw new TopicNotFoundException();
 
