@@ -35,7 +35,7 @@ namespace PhyGen.Application.QuestionMedias.Handlers
         }
     }
 
-    public class GetQuestionMediasByQuestionIdQueryHandler : IRequestHandler<GetQuestionMediasByQuestionIdQuery, IEnumerable<QuestionMediaResponse>>
+    public class GetQuestionMediasByQuestionIdQueryHandler : IRequestHandler<GetQuestionMediasByQuestionIdQuery, List<QuestionMediaResponse>>
     {
         private readonly IQuestionMediaRepository _questionMediaRepository;
         private readonly IQuestionRepository _questionRepository;
@@ -46,7 +46,7 @@ namespace PhyGen.Application.QuestionMedias.Handlers
             _questionRepository = questionRepository;
         }
 
-        public async Task<IEnumerable<QuestionMediaResponse>> Handle(GetQuestionMediasByQuestionIdQuery request, CancellationToken cancellationToken)
+        public async Task<List<QuestionMediaResponse>> Handle(GetQuestionMediasByQuestionIdQuery request, CancellationToken cancellationToken)
         {
             if (await _questionRepository.GetByIdAsync(request.QuestionId) == null)
             {
@@ -60,7 +60,7 @@ namespace PhyGen.Application.QuestionMedias.Handlers
                 throw new QuestionMediaNotFoundException();
             }
 
-            return AppMapper<CoreMappingProfile>.Mapper.Map<IEnumerable<QuestionMediaResponse>>(questionMedias);
+            return AppMapper<CoreMappingProfile>.Mapper.Map<List<QuestionMediaResponse>>(questionMedias);
         }
     }
 }

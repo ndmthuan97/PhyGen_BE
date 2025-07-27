@@ -9,6 +9,6 @@ namespace PhyGen.Domain.Interfaces
 {
     public interface IQuestionMediaRepository : IAsyncRepository<QuestionMedia, Guid>
     {
-        Task<QuestionMedia?> GetQuestionMediaByQuestionIdAsync(Guid questionId);
+        Task<List<QuestionMedia>> GetQuestionMediaByQuestionIdAsync(Guid questionId);
     }
 }
