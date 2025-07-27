@@ -17,10 +17,11 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         {
         }
 
-        public async Task<QuestionMedia?> GetQuestionMediaByQuestionIdAsync(Guid questionId)
+        public async Task<List<QuestionMedia>> GetQuestionMediaByQuestionIdAsync(Guid questionId)
         {
             return await _context.QuestionMedias
-                .FirstOrDefaultAsync(qm => qm.QuestionId == questionId);
+                .Where(x => x.QuestionId == questionId)
+                .ToListAsync();
         }
     }
 }

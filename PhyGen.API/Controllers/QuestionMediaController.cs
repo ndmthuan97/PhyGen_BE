@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PhyGen.API.Mapping;
 using PhyGen.API.Models;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.QuestionMedias.Commands;
@@ -27,11 +28,11 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("question")]
-        [ProducesResponseType(typeof(ApiResponse<IEnumerable<QuestionMediaResponse>>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ApiResponse<List<QuestionMediaResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetQuestionMediasByQuestionId(Guid questionId)
         {
             var request = new GetQuestionMediasByQuestionIdQuery(questionId);
-            return await ExecuteAsync<GetQuestionMediasByQuestionIdQuery, IEnumerable<QuestionMediaResponse>>(request);
+            return await ExecuteAsync<GetQuestionMediasByQuestionIdQuery, List<QuestionMediaResponse>>(request);
         }
 
         [HttpPost]
@@ -48,13 +49,13 @@ namespace PhyGen.API.Controllers
                 });
             }
 
-            var command = AppMapper<CoreMappingProfile>.Mapper.Map<CreateQuestionMediaCommand>(request);
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateQuestionMediaCommand>(request);
             return await ExecuteAsync<CreateQuestionMediaCommand, QuestionMediaResponse>(command);
         }
 
         [HttpPut]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Update([FromBody] UpdateQuestionMediaRequest request)
+        public async Task<IActionResult> UpdateQuestionMedia([FromBody] UpdateQuestionMediaRequest request)
         {
             if (request == null)
             {
@@ -66,7 +67,7 @@ namespace PhyGen.API.Controllers
                 });
             }
 
-            var command = AppMapper<CoreMappingProfile>.Mapper.Map<UpdateQuestionMediaCommand>(request);
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateQuestionMediaCommand>(request);
             return await ExecuteAsync<UpdateQuestionMediaCommand, Unit>(command);
         }
 
@@ -84,7 +85,7 @@ namespace PhyGen.API.Controllers
                 });
             }
 
-            var command = AppMapper<CoreMappingProfile>.Mapper.Map<DeleteQuestionMediaCommand>(request);
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<DeleteQuestionMediaCommand>(request);
             return await ExecuteAsync<DeleteQuestionMediaCommand, Unit>(command);
         }
     }
