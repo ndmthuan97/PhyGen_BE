@@ -31,6 +31,7 @@ namespace PhyGen.Infrastructure.Specifications.Questions
             Criteria = question =>
                 question.Topic.Chapter.SubjectBook.Grade == param.Grade &&
                 (string.IsNullOrEmpty(param.Search) || question.Content.ToLower().Contains(param.Search.ToLower())) &&
+                (string.IsNullOrEmpty(param.CreatedBy) || question.CreatedBy == param.CreatedBy) &&
                 !question.DeletedAt.HasValue;
 
             if (!string.IsNullOrEmpty(param.Sort))

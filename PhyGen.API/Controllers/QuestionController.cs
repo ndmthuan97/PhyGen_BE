@@ -8,6 +8,7 @@ using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Questions.Queries;
 using PhyGen.Application.Questions.Responses;
 using PhyGen.Application.Users.Exceptions;
+using PhyGen.Domain.Entities;
 using PhyGen.Domain.Specs;
 using PhyGen.Domain.Specs.Question;
 using PhyGen.Shared;
@@ -28,6 +29,20 @@ namespace PhyGen.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<List<QuestionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllQuestions([FromQuery] QuestionSpecParam questionSpecParam)
         {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
+            var isAdmin = User.IsInRole(nameof(Role.Admin));
+
+            if (!isAdmin)
+            {
+                questionSpecParam.CreatedBy = user;
+            }  else
+            {
+                questionSpecParam.CreatedBy = "Admin";
+            }
+
             var query = new GetQuestionsQuery(questionSpecParam);
             return await ExecuteAsync<GetQuestionsQuery, Pagination<QuestionResponse>>(query);
         }
@@ -44,6 +59,21 @@ namespace PhyGen.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<Pagination<QuestionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetQuestionsByTopicId([FromQuery] QuestionByTopicSpecParam param)
         {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
+            var isAdmin = User.IsInRole(nameof(Role.Admin));
+
+            if (!isAdmin)
+            {
+                param.CreatedBy = user;
+            }
+            else
+            {
+                param.CreatedBy = "Admin";
+            }
+
             var request = new GetQuestionsByTopicIdQuery(param);
             return await ExecuteAsync<GetQuestionsByTopicIdQuery, Pagination<QuestionResponse>>(request);
         }
@@ -52,6 +82,20 @@ namespace PhyGen.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<Pagination<QuestionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetQuestionsByLevelAndType([FromQuery] QuestionSpecParam questionSpecParam)
         {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
+            var isAdmin = User.IsInRole(nameof(Role.Admin));
+
+            if (!isAdmin)
+            {
+                questionSpecParam.CreatedBy = user;
+            }
+            else
+            {
+                questionSpecParam.CreatedBy = "Admin";
+            }
             var request = new GetQuestionsByLevelAndTypeQuery(questionSpecParam);
             return await ExecuteAsync<GetQuestionsByLevelAndTypeQuery, Pagination<QuestionResponse>>(request);
         }
@@ -60,6 +104,21 @@ namespace PhyGen.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<Pagination<QuestionResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetQuestionsByGrade([FromQuery] QuestionByGradeSpecParam questionGradeParam)
         {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
+            var isAdmin = User.IsInRole(nameof(Role.Admin));
+
+            if (!isAdmin)
+            {
+                questionGradeParam.CreatedBy = user;
+            }
+            else
+            {
+                questionGradeParam.CreatedBy = "Admin";
+            }
+
             var request = new GetQuestionsByGradeQuery(questionGradeParam);
             return await ExecuteAsync<GetQuestionsByGradeQuery, Pagination<QuestionResponse>>(request);
         }
@@ -85,7 +144,15 @@ namespace PhyGen.API.Controllers
             if (string.IsNullOrEmpty(userEmail))
                 return Unauthorized(new UserNotFoundException());
 
-            command.CreatedBy = userEmail;
+            var isAdmin = User.IsInRole(nameof(Role.Admin));
+
+            if (!isAdmin)
+            {
+                command.CreatedBy = userEmail;
+            } else
+            {
+                command.CreatedBy = "Admin";
+            }
 
             return await ExecuteAsync<CreateQuestionCommand, QuestionResponse>(command);
         }
