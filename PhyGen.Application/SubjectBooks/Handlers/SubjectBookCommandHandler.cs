@@ -34,7 +34,8 @@ namespace PhyGen.Application.SubjectBooks.Handlers
             if (await _subjectBookRepository.AlreadyExistAsync(sb =>
                 sb.SubjectId == request.SubjectId &&
                 sb.Name.ToLower() == request.Name.ToLower() &&
-                sb.Grade == request.Grade))
+                sb.Grade == request.Grade &&
+                sb.DeletedAt == null))
             {
                 throw new SubjectBookAlreadyExistException();
             }    
@@ -72,7 +73,9 @@ namespace PhyGen.Application.SubjectBooks.Handlers
             if (await _subjectBookRepository.AlreadyExistAsync(sb =>
                 sb.SubjectId == request.SubjectId &&
                 sb.Name.ToLower() == request.Name.ToLower() &&
-                sb.Grade == request.Grade))
+                sb.Grade == request.Grade &&
+                sb.DeletedAt == null
+                ))
             {
                 throw new SubjectBookAlreadyExistException();
             }

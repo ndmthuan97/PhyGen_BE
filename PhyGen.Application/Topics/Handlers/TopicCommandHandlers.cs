@@ -34,7 +34,9 @@ namespace PhyGen.Application.Topics.Handlers
             if (await _topicRepository.AlreadyExistAsync(t =>
                 t.ChapterId == request.ChapterId &&
                 t.Name.ToLower() == request.Name.ToLower() &&
-                t.OrderNo == request.OrderNo))
+                t.OrderNo == request.OrderNo &&
+                t.DeletedAt == null
+                ))
                 throw new TopicAlreadyExistException();
 
             var topic = new Topic
@@ -70,7 +72,9 @@ namespace PhyGen.Application.Topics.Handlers
             if (await _topicRepository.AlreadyExistAsync(t =>
                 t.ChapterId == request.ChapterId &&
                 t.Name.ToLower() == request.Name.ToLower() &&
-                t.OrderNo == request.OrderNo))
+                t.OrderNo == request.OrderNo &&
+                t.DeletedAt == null
+                ))
                 throw new TopicAlreadyExistException();
 
             topic.ChapterId = request.ChapterId;
