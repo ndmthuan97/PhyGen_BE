@@ -71,6 +71,9 @@ namespace PhyGen.Infrastructure.Extensions
             services.AddScoped<ISectionRepository, SectionRepository>();
             services.AddScoped<IQuestionSectionRepository, QuestionSectionRepository>();
             services.AddScoped<IExamRepository, ExamRepository>();
+            services.AddScoped<GeminiService>();
+            services.AddHttpClient();
+            services.AddMemoryCache();
         }
     }
 }
