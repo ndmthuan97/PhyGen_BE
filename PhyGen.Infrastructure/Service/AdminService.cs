@@ -58,12 +58,12 @@ namespace PhyGen.Infrastructure.Service
             var totalBook = await _context.SubjectBooks.CountAsync();
 
             var totalQuestion = await _context.Questions
-                .Where(q => q.DeletedAt == null)
+                .Where(q => q.DeletedAt == null && q.CreatedBy == "Admin")
                 .CountAsync();
 
             // Tổng question trước tuần trước
             var totalQuestionLastWeek = await _context.Questions
-                .Where(q => q.DeletedAt == null && q.CreatedAt < startOfLastWeek)
+                .Where(q => q.DeletedAt == null && q.CreatedBy == "Admin" && q.CreatedAt < startOfLastWeek)
                 .CountAsync();
             // Tổng trước thời điểm hiện tại
             var totalUserBeforeNow = await _context.Users
