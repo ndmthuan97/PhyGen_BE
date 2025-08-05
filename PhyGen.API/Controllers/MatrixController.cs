@@ -82,6 +82,23 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateMatrixCommand, Unit>(command);
         }
 
+        [HttpPut("{matrixId}")]
+        [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdateMatrixFull([FromBody] UpdateMatrixFullCommand request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+
+            return await ExecuteAsync<UpdateMatrixFullCommand, Unit>(request);
+        }
+
         [HttpDelete]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteMatrix([FromBody] DeleteMatrixRequest request)

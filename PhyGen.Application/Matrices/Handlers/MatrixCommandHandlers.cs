@@ -4,6 +4,8 @@ using PhyGen.Application.Mapping;
 using PhyGen.Application.Matrices.Commands;
 using PhyGen.Application.Matrices.Exceptions;
 using PhyGen.Application.Matrices.Responses;
+using PhyGen.Application.MatrixSectionDetails.Exceptions;
+using PhyGen.Application.MatrixSections.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -125,6 +127,68 @@ namespace PhyGen.Application.Matrices.Handlers
             matrix.DeletedAt = DateTime.UtcNow;
 
             await _matrixRepository.UpdateAsync(matrix);
+            return Unit.Value;
+        }
+    }
+
+    public class UpdateMatrixFullCommandHandler : IRequestHandler<UpdateMatrixFullCommand, Unit>
+    {
+        private readonly IMatrixRepository _matrixRepository;
+        private readonly IMatrixSectionRepository _matrixSectionRepository;
+        private readonly IMatrixSectionDetailRepository _matrixSectionDetailRepository;
+
+        public UpdateMatrixFullCommandHandler(
+            IMatrixRepository matrixRepository,
+            IMatrixSectionRepository matrixSectionRepository,
+            IMatrixSectionDetailRepository matrixSectionDetailRepository)
+        {
+            _matrixRepository = matrixRepository;
+            _matrixSectionRepository = matrixSectionRepository;
+            _matrixSectionDetailRepository = matrixSectionDetailRepository;
+        }
+
+        public async Task<Unit> Handle(UpdateMatrixFullCommand request, CancellationToken cancellationToken)
+        {
+            var matrix = await _matrixRepository.GetByIdAsync(request.Id);
+            if (matrix == null || matrix.DeletedAt.HasValue)
+                throw new MatrixNotFoundException();
+
+            matrix.Name = request.Name;
+            matrix.Description = request.Description;
+            matrix.TotalQuestionCount = request.TotalQuestionCount;
+            matrix.Grade = request.Grade;
+            matrix.Year = request.Year;
+            matrix.ImgUrl = request.ImgUrl ?? string.Empty;
+            await _matrixRepository.UpdateAsync(matrix);
+
+            foreach (var sectionDto in request.Sections)
+            {
+                var section = await _matrixSectionRepository.GetByIdAsync(sectionDto.Id!.Value);
+                if (section == null || section.DeletedAt.HasValue)
+                    throw new MatrixSectionNotFoundException();
+
+                section.Title = sectionDto.Title;
+                section.Score = sectionDto.Score;
+                section.Description = sectionDto.Description;
+                await _matrixSectionRepository.UpdateAsync(section);
+
+                foreach (var detailDto in sectionDto.Details)
+                {
+                    var detail = await _matrixSectionDetailRepository.GetByIdAsync(detailDto.Id!.Value);
+                    if (detail == null || detail.DeletedAt.HasValue)
+                        throw new MatrixSectionDetailNotFoundException();
+
+                    detail.SectionId = detailDto.SectionId;
+                    detail.Title = detailDto.Title;
+                    detail.Description = detailDto.Description;
+                    detail.Level = detailDto.Level;
+                    detail.Type = detailDto.Type;
+                    detail.Quantity = detailDto.Quantity;
+
+                    await _matrixSectionDetailRepository.UpdateAsync(detail);
+                }
+            }
+
             return Unit.Value;
         }
     }
