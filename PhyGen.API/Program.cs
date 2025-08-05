@@ -10,6 +10,7 @@ using PhyGen.Infrastructure.Persistence.DbContexts;
 using PhyGen.Infrastructure.Persistence.Repositories;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +61,33 @@ builder.Services.AddAuthentication(options =>
 
         NameClaimType = ClaimTypes.Name,
         RoleClaimType = ClaimTypes.Role
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnChallenge = context =>
+        {
+            context.HandleResponse();
+
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            context.Response.ContentType = "application/json";
+            var result = JsonSerializer.Serialize(new
+            {
+                StatusCode = 401,
+                Message = "Bạn chưa đăng nhập hoặc token không hợp lệ."
+            });
+            return context.Response.WriteAsync(result);
+        },
+        OnForbidden = context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            context.Response.ContentType = "application/json";
+            var result = JsonSerializer.Serialize(new
+            {
+                StatusCode = 403,
+                Message = "Bạn không có quyền truy cập."
+            });
+            return context.Response.WriteAsync(result);
+        }
     };
 });
 

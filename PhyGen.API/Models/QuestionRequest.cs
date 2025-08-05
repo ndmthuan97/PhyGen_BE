@@ -6,8 +6,6 @@ namespace PhyGen.API.Models
 {
     public class CreateQuestionRequest
     {
-        [JsonRequired]
-        [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid TopicId { get; set; }
 
         [Required]
@@ -25,13 +23,11 @@ namespace PhyGen.API.Models
         public string? Answer5 { get; set; }
         public string? Answer6 { get; set; }
 
-        public string? CorrectAnswer { get; set; }
+        public int? Grade { get; set; }
     }
 
     public class UpdateQuestionRequest
     {
-        [JsonRequired]
-        [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid Id { get; set; }
 
         [JsonRequired]
@@ -53,7 +49,7 @@ namespace PhyGen.API.Models
         public string? Answer5 { get; set; }
         public string? Answer6 { get; set; }
 
-        public string? CorrectAnswer { get; set; }
+        public int? Grade { get; set; }
     }
 
     public class DeleteQuestionRequest

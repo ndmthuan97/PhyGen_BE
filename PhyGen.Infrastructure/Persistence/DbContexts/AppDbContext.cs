@@ -180,7 +180,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
 
             modelBuilder.Entity<Question>(e =>
             {
-                e.Property(p => p.TopicId).IsRequired();
+                e.Property(p => p.TopicId);
                 e.Property(p => p.Content).IsRequired();
                 e.Property(p => p.Type);
                 e.Property(p => p.Level);
@@ -190,7 +190,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.Answer4);
                 e.Property(p => p.Answer5);
                 e.Property(p => p.Answer6);
-                e.Property(p => p.CorrectAnswer);
+                e.Property(p => p.Grade);
             });
 
             modelBuilder.Entity<QuestionMedia>(e =>

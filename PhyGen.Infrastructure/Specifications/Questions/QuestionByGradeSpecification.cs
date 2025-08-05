@@ -29,8 +29,8 @@ namespace PhyGen.Infrastructure.Specifications.Questions
         public QuestionByGradeSpecification(QuestionByGradeSpecParam param)
         {
             Criteria = question =>
-                question.Topic.Chapter.SubjectBook.Grade == param.Grade &&
                 (string.IsNullOrEmpty(param.Search) || question.Content.ToLower().Contains(param.Search.ToLower())) &&
+                (param.Grade == null || question.Grade == param.Grade) &&
                 (string.IsNullOrEmpty(param.CreatedBy) || question.CreatedBy == param.CreatedBy) &&
                 !question.DeletedAt.HasValue;
 

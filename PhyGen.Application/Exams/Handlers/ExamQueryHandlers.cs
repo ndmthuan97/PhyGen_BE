@@ -88,7 +88,6 @@ namespace PhyGen.Application.Exams.Handlers
                             Answer2 = qs.Question.Answer2,
                             Answer3 = qs.Question.Answer3,
                             Answer4 = qs.Question.Answer4,
-                            CorrectAnswer = qs.Question.CorrectAnswer,
                             Score = qs.Score
                         }).ToList()
                     }).ToList()

@@ -519,7 +519,7 @@ namespace PhyGen.Infrastructure.Migrations
                     Answer4 = table.Column<string>(type: "text", nullable: true),
                     Answer5 = table.Column<string>(type: "text", nullable: true),
                     Answer6 = table.Column<string>(type: "text", nullable: true),
-                    CorrectAnswer = table.Column<string>(type: "text", nullable: true),
+                    Grade = table.Column<int>(type: "integer", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)

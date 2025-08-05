@@ -8,7 +8,6 @@ using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Questions.Queries;
 using PhyGen.Application.Questions.Responses;
 using PhyGen.Application.Users.Exceptions;
-using PhyGen.Domain.Entities;
 using PhyGen.Domain.Specs;
 using PhyGen.Domain.Specs.Question;
 using PhyGen.Shared;
@@ -123,7 +122,7 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetQuestionsByGradeQuery, Pagination<QuestionResponse>>(request);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<QuestionResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateQuestion([FromBody] CreateQuestionRequest request)

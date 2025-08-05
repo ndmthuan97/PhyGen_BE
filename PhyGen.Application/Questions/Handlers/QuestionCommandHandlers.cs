@@ -41,6 +41,11 @@ namespace PhyGen.Application.Questions.Handlers
             if (isExist)
                 throw new QuestionAlreadyExistException();
 
+            if (request.TopicId != null)
+            {
+                request.Grade = await _topicRepository.GetGradeByTopicIdAsync(request.TopicId);
+            }
+
             var question = new Question
             {
                 TopicId = request.TopicId,
@@ -53,7 +58,7 @@ namespace PhyGen.Application.Questions.Handlers
                 Answer4 = request.Answer4,
                 Answer5 = request.Answer5,
                 Answer6 = request.Answer6,
-                CorrectAnswer = request.CorrectAnswer,
+                Grade = request.Grade,
                 CreatedBy = request.CreatedBy,
                 CreatedAt = DateTime.UtcNow,
             };
@@ -105,7 +110,7 @@ namespace PhyGen.Application.Questions.Handlers
             question.Answer4 = request.Answer4;
             question.Answer5 = request.Answer5;
             question.Answer6 = request.Answer6;
-            question.CorrectAnswer = request.CorrectAnswer;
+            question.Grade = request.Grade;
 
             await _questionRepository.UpdateAsync(question);
             return Unit.Value;

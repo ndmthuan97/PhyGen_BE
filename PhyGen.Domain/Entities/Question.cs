@@ -10,7 +10,6 @@ namespace PhyGen.Domain.Entities
 {
     public class Question : EntityBase<Guid>
     {
-        [Required]
         public Guid TopicId { get; set; }
 
         [Required]
@@ -26,7 +25,7 @@ namespace PhyGen.Domain.Entities
         public string? Answer5 { get; set; }
         public string? Answer6 { get; set; }
 
-        public string? CorrectAnswer { get; set; }
+        public int Grade { get; set; }
 
         public string? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }

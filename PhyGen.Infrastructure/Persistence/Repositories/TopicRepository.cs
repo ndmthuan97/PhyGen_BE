@@ -35,5 +35,13 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
                             t.Chapter.SubjectBook.DeletedAt == null)
                 .ToListAsync();
         }
+
+        public async Task<int> GetGradeByTopicIdAsync(Guid id)
+        {
+            return await _context.Topics.Include(t => t.Chapter).ThenInclude(c => c.SubjectBook)
+                .Where(t => t.Id == id && t.DeletedAt == null)
+                .Select(t => t.Chapter.SubjectBook.Grade)
+                .FirstOrDefaultAsync();
+        }
     }
 }

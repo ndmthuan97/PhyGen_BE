@@ -22,6 +22,6 @@ namespace PhyGen.Application.Questions.Commands
         public string? Answer4 { get; set; }
         public string? Answer5 { get; set; }
         public string? Answer6 { get; set; }
-        public string? CorrectAnswer { get; set; }
+        public int Grade { get; set; }
     }
 }

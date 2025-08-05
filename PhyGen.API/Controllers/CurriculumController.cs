@@ -12,6 +12,8 @@ using PhyGen.Shared;
 using System.Net;
 using PhyGen.Domain.Specs;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using PhyGen.Application.Users.Exceptions;
 
 namespace PhyGen.API.Controllers
 {
