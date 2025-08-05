@@ -23,7 +23,9 @@ namespace PhyGen.API.Models
         public string? Answer5 { get; set; }
         public string? Answer6 { get; set; }
 
-        public int? Grade { get; set; }
+        [Required(ErrorMessage = "Trường này không được để trống.")]
+        [Range(10, 12, ErrorMessage = "Lớp học phải nằm trong khoảng 10 đến 12.")]
+        public int Grade { get; set; }
     }
 
     public class UpdateQuestionRequest
@@ -49,7 +51,9 @@ namespace PhyGen.API.Models
         public string? Answer5 { get; set; }
         public string? Answer6 { get; set; }
 
-        public int? Grade { get; set; }
+        [Required(ErrorMessage = "Trường này không được để trống.")]
+        [Range(10, 12, ErrorMessage = "Lớp học phải nằm trong khoảng 10 đến 12.")]
+        public int Grade { get; set; }
     }
 
     public class DeleteQuestionRequest

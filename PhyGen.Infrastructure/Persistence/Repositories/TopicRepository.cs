@@ -36,7 +36,7 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
                 .ToListAsync();
         }
 
-        public async Task<int> GetGradeByTopicIdAsync(Guid id)
+        public async Task<int?> GetGradeByTopicIdAsync(Guid id)
         {
             return await _context.Topics.Include(t => t.Chapter).ThenInclude(c => c.SubjectBook)
                 .Where(t => t.Id == id && t.DeletedAt == null)

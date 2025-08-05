@@ -13,6 +13,6 @@ namespace PhyGen.Domain.Interfaces
         Task<Pagination<Topic>?> GetTopicsByChapterAsync(TopicSpecParam topicSpecParam);
         Task<List<Topic>> GetValidTopicsAsync();
 
-        Task<int> GetGradeByTopicIdAsync(Guid id);
+        Task<int?> GetGradeByTopicIdAsync(Guid id);
     }
 }

@@ -41,11 +41,6 @@ namespace PhyGen.Application.Questions.Handlers
             if (isExist)
                 throw new QuestionAlreadyExistException();
 
-            if (request.TopicId != null)
-            {
-                request.Grade = await _topicRepository.GetGradeByTopicIdAsync(request.TopicId);
-            }
-
             var question = new Question
             {
                 TopicId = request.TopicId,

@@ -64,4 +64,18 @@ namespace PhyGen.Application.Topics.Handlers
             return AppMapper<CoreMappingProfile>.Mapper.Map<List<TopicResponse>>(topics.OrderBy(t => t.Name));
         }
     }
+
+    public class GetGradeByTopicIdQueryHandler : IRequestHandler<GetGradeByTopicId, int?>
+    {
+        private readonly ITopicRepository _topicRepository;
+        public GetGradeByTopicIdQueryHandler(ITopicRepository topicRepository)
+        {
+            _topicRepository = topicRepository;
+        }
+        public async Task<int?> Handle(GetGradeByTopicId request, CancellationToken cancellationToken)
+        {
+            var grade = await _topicRepository.GetGradeByTopicIdAsync(request.TopicId) ?? throw new Exception("Không tìm thấy lớp bởi mã cung cấp.");
+            return grade;
+        }
+    }
 }

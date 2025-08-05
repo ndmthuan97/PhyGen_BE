@@ -11,6 +11,8 @@ using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using PhyGen.Application.Users.Exceptions;
+using System.Security.Claims;
 
 namespace PhyGen.API.Controllers
 {
@@ -22,19 +24,25 @@ namespace PhyGen.API.Controllers
             : base(mediator, logger) { }
 
         [HttpGet("{contentItemId}")]
-        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<ContentItemResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetContentItemById(Guid contentItemId)
         {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
             var request = new GetContentItemByIdQuery(contentItemId);
             return await ExecuteAsync<GetContentItemByIdQuery, ContentItemResponse>(request);
         }
 
         [HttpGet("contentflow/{contentFlowId}")]
-        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<List<ContentItemResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetContentItemsByContentFlowId(Guid contentFlowId)
         {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
             var request = new GetContentItemsByContentFlowIdQuery(contentFlowId);
             return await ExecuteAsync<GetContentItemsByContentFlowIdQuery, List<ContentItemResponse>>(request);
         }

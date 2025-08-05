@@ -11,6 +11,8 @@ using PhyGen.Shared.Constants;
 using PhyGen.Shared;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using PhyGen.Application.Users.Exceptions;
+using System.Security.Claims;
 
 namespace PhyGen.API.Controllers
 {
@@ -22,19 +24,25 @@ namespace PhyGen.API.Controllers
             : base(mediator, logger) { }
 
         [HttpGet("{contentFlowId}")]
-        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<ContentFlowResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetContentFlowById(Guid contentFlowId)
         {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
             var request = new GetContentFlowByIdQuery(contentFlowId);
             return await ExecuteAsync<GetContentFlowByIdQuery, ContentFlowResponse>(request);
         }
 
         [HttpGet]
-        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<List<ContentFlowResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetContentFlowsByCurriculumIdAndSubjectId([FromQuery] Guid curriculumId, [FromQuery] Guid subjectId)
         {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
             var request = new GetContentFlowsByCurriculumIdAndSubjectIdQuery(curriculumId, subjectId);
             return await ExecuteAsync<GetContentFlowsByCurriculumIdAndSubjectIdQuery, List<ContentFlowResponse>>(request);
         }
