@@ -31,7 +31,10 @@ namespace PhyGen.Infrastructure.Specifications.Topics
             Criteria = topic =>
                 (string.IsNullOrEmpty(param.Search) || topic.Name.ToLower().Contains(param.Search.ToLower())) &&
                 (topic.Chapter.SubjectBook.Grade == param.Grade) &&
-                !topic.DeletedAt.HasValue;
+                !topic.DeletedAt.HasValue &&
+                !topic.Chapter.DeletedAt.HasValue &&
+                !topic.Chapter.SubjectBook.DeletedAt.HasValue;
+
             if (!string.IsNullOrEmpty(param.Sort))
             {
                 switch (param.Sort.ToLower())
