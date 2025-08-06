@@ -30,10 +30,10 @@ namespace PhyGen.Infrastructure.Specifications.Questions
         {
             Criteria = question =>
                 (string.IsNullOrEmpty(param.Search) || question.Content.ToLower().Contains(param.Search.ToLower())) &&
-                (string.IsNullOrEmpty(param.CreatedBy) || question.CreatedBy == param.CreatedBy) &&
                 (!param.Level.HasValue || question.Level == param.Level.Value) &&
                 (!param.Grade.HasValue || question.Grade == param.Grade.Value) &&
                 (!param.Type.HasValue || question.Type == param.Type.Value) &&
+                (param.CreatedByList == null || param.CreatedByList.Contains(question.CreatedBy)) &&
                 !question.DeletedAt.HasValue;
 
             if (!string.IsNullOrEmpty(param.Sort))
