@@ -12,6 +12,7 @@ using PhyGen.Shared;
 using System.Net;
 using PhyGen.Domain.Specs;
 using Microsoft.AspNetCore.Authorization;
+using PhyGen.Domain.Specs.Topic;
 
 namespace PhyGen.API.Controllers
 {
@@ -40,12 +41,12 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetTopicByIdQuery, TopicResponse>(request);
         }
 
-        [HttpGet("grade/{topicId}")]
-        [ProducesResponseType(typeof(ApiResponse<int?>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetGradeByTopicId(Guid topicId)
+        [HttpGet("grade")]
+        [ProducesResponseType(typeof(ApiResponse<List<TopicResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetTopicsByGrade([FromQuery] TopicByGradeSpecParam param)
         {
-            var request = new GetGradeByTopicId(topicId);
-            return await ExecuteAsync<GetGradeByTopicId, int?>(request);
+            var request = new GetTopicsByGradeQuery(param);
+            return await ExecuteAsync<GetTopicsByGradeQuery, List<TopicResponse>>(request);
         }
 
         [HttpGet("chapter")]

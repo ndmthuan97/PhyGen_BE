@@ -1,5 +1,6 @@
 ﻿using PhyGen.Domain.Entities;
 using PhyGen.Domain.Specs;
+using PhyGen.Domain.Specs.Topic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,9 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhyGen.Infrastructure.Specifications
+namespace PhyGen.Infrastructure.Specifications.Topics
 {
-    public class TopicSpecification : ISpecification<Topic>
+    public class TopicByGradeSpecification : ISpecification<Topic>
     {
         public Expression<Func<Topic, bool>> Criteria { get; private set; }
 
@@ -25,12 +26,12 @@ namespace PhyGen.Infrastructure.Specifications
 
         public int Take { get; private set; }
 
-        public TopicSpecification(TopicSpecParam param)
+        public TopicByGradeSpecification(TopicByGradeSpecParam param)
         {
             Criteria = topic =>
-                topic.ChapterId == param.ChapterId &&
-                (string.IsNullOrEmpty(param.Search) || topic.Name.ToLower().Contains(param.Search.ToLower()))
-                && !topic.DeletedAt.HasValue;
+                (string.IsNullOrEmpty(param.Search) || topic.Name.ToLower().Contains(param.Search.ToLower())) &&
+                (topic.Chapter.SubjectBook.Grade == param.Grade) &&
+                !topic.DeletedAt.HasValue;
             if (!string.IsNullOrEmpty(param.Sort))
             {
                 switch (param.Sort.ToLower())

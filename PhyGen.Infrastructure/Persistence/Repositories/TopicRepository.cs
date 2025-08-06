@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PhyGen.Domain.Specs.Topic;
+using PhyGen.Infrastructure.Specifications.Topics;
 
 namespace PhyGen.Infrastructure.Persistence.Repositories
 {
@@ -42,6 +44,12 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
                 .Where(t => t.Id == id && t.DeletedAt == null)
                 .Select(t => t.Chapter.SubjectBook.Grade)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Topic>> GetTopicsByGradeAsync(TopicByGradeSpecParam topicByGradeSpecParam)
+        {
+            var spec = new TopicByGradeSpecification(topicByGradeSpecParam);
+            return await ListWithSpecAsync(spec);
         }
     }
 }

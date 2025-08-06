@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PhyGen.Domain.Specs
+namespace PhyGen.Domain.Specs.Topic
 {
     public class TopicSpecParam : BaseSpecParam
     {

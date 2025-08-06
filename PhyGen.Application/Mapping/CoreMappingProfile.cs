@@ -69,6 +69,7 @@ namespace PhyGen.Application.Mapping
             // Mapping for Topic
             CreateMap<Topic, TopicResponse>();
             CreateMap<Pagination<Topic>, Pagination<TopicResponse>>();
+            //CreateMap<List<Topic>, List<TopicResponse>>();
 
             // Mapping for ContentFlow
             CreateMap<ContentFlow, ContentFlowResponse>();

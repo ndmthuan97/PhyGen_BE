@@ -1,5 +1,6 @@
 ﻿using PhyGen.Domain.Entities;
 using PhyGen.Domain.Specs;
+using PhyGen.Domain.Specs.Topic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace PhyGen.Domain.Interfaces
         Task<List<Topic>> GetValidTopicsAsync();
 
         Task<int?> GetGradeByTopicIdAsync(Guid id);
+        Task<List<Topic>> GetTopicsByGradeAsync(TopicByGradeSpecParam topicByGradeSpecParam);
     }
 }

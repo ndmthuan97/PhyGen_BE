@@ -57,6 +57,37 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
             return new Pagination<TEntity>(spec.Skip / spec.Take + 1, spec.Take, count, data);
         }
 
+        public async Task<List<TEntity>> ListWithSpecAsync<TSpec>(TSpec spec) where TSpec : ISpecification<TEntity>
+        {
+            var query = _context.Set<TEntity>().AsQueryable();
+
+            if (spec.Criteria != null)
+            {
+                query = query.Where(spec.Criteria);
+            }
+
+            foreach (var includeExpression in spec.Includes)
+            {
+                query = query.Include(includeExpression);
+            }
+
+            if (spec.OrderBy != null)
+            {
+                query = spec.OrderBy(query);
+            }
+            else if (spec.OrderByDescending != null)
+            {
+                query = spec.OrderByDescending(query);
+            }
+
+            if (spec.Selector != null)
+            {
+                query = spec.Selector(query);
+            }
+
+            return await query.AsNoTracking().ToListAsync();
+        }
+
         public async Task<IReadOnlyList<TEntity>> GetAllAsync()
         {
             return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
