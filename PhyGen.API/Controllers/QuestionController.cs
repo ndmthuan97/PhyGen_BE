@@ -36,10 +36,11 @@ namespace PhyGen.API.Controllers
 
             if (!isAdmin)
             {
-                questionSpecParam.CreatedBy = user;
-            }  else
+                questionSpecParam.CreatedByList = new List<string> { user, "Admin" };
+            }
+            else
             {
-                questionSpecParam.CreatedBy = "Admin";
+                questionSpecParam.CreatedByList = new List<string> { "Admin" };
             }
 
             var query = new GetQuestionsQuery(questionSpecParam);
@@ -66,11 +67,11 @@ namespace PhyGen.API.Controllers
 
             if (!isAdmin)
             {
-                param.CreatedBy = user;
+                param.CreatedByList = new List<string> { user, "Admin" };
             }
             else
             {
-                param.CreatedBy = "Admin";
+                param.CreatedByList = new List<string> { "Admin" };
             }
 
             var request = new GetQuestionsByTopicIdQuery(param);
@@ -89,12 +90,13 @@ namespace PhyGen.API.Controllers
 
             if (!isAdmin)
             {
-                questionSpecParam.CreatedBy = user;
+                questionSpecParam.CreatedByList = new List<string> { user, "Admin" };
             }
             else
             {
-                questionSpecParam.CreatedBy = "Admin";
+                questionSpecParam.CreatedByList = new List<string> { "Admin" };
             }
+
             var request = new GetQuestionsByLevelAndTypeQuery(questionSpecParam);
             return await ExecuteAsync<GetQuestionsByLevelAndTypeQuery, Pagination<QuestionResponse>>(request);
         }
@@ -111,11 +113,11 @@ namespace PhyGen.API.Controllers
 
             if (!isAdmin)
             {
-                questionGradeParam.CreatedBy = user;
+                questionGradeParam.CreatedByList = new List<string> { user, "Admin" };
             }
             else
             {
-                questionGradeParam.CreatedBy = "Admin";
+                questionGradeParam.CreatedByList = new List<string> { "Admin" };
             }
 
             var request = new GetQuestionsByGradeQuery(questionGradeParam);

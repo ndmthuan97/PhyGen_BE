@@ -15,7 +15,7 @@ namespace PhyGen.Domain.Specs.Question
 
         public int? Grade { get; set; }
 
-        public string? CreatedBy { get; set; }
+        public List<string>? CreatedByList { get; set; }
 
         public string? Search { get; set; }
 

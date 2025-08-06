@@ -15,7 +15,7 @@ namespace PhyGen.Domain.Specs.Question
 
         public QuestionType? Type { get; set; }
 
-        public string? CreatedBy { get; set; }
+        public List<string>? CreatedByList { get; set; }
 
         public string? Search { get; set; }
 
