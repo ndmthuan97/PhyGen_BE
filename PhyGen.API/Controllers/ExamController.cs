@@ -13,12 +13,13 @@ using PhyGen.Domain.Specs;
 using PhyGen.Infrastructure.Service;
 using PhyGen.Shared;
 using PhyGen.Shared.Constants;
+using System.Diagnostics;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes; // Add this
-
+using System.Text.Json.Nodes;
+using System.Diagnostics;
 
 namespace PhyGen.API.Controllers
 {
@@ -28,15 +29,19 @@ namespace PhyGen.API.Controllers
     {
         private readonly ChatGptService _chatGptService;
         private readonly IWebHostEnvironment _env;
+        private readonly CloudinaryService _cloudinaryService;
+
         public ExamController(
              IMediator mediator,
              ILogger<ExamController> logger,
              ChatGptService chatGptService,
-             IWebHostEnvironment env)
+             IWebHostEnvironment env,
+            CloudinaryService cloudinaryService)
              : base(mediator, logger)
         {
             _chatGptService = chatGptService;
             _env = env;
+            _cloudinaryService = cloudinaryService;
         }
 
         [HttpGet("{examId}")]
@@ -137,45 +142,33 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<DeleteExamCommand, Unit>(command);
         }
         [HttpPost("generate")]
-        public async Task<IActionResult> GenerateExam([FromForm] GenerateExamRequest request)
+        public async Task<IActionResult> GenerateExam([FromBody] GenerateExamRequest request)
         {
-            if (request.MatrixFile == null || request.MatrixFile.Length == 0)
-                return BadRequest("File ma trận đề không được để trống.");
-
-            string matrixContent = "";
-            using (var ms = new MemoryStream())
-            {
-                await request.MatrixFile.CopyToAsync(ms);
-                ms.Position = 0;
-                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(ms, false))
-                {
-                    matrixContent = ConvertWordToText(wordDoc);
-                }
-            }
-
             string prompt = $@"
             Bạn là giáo viên vật lý. Đọc ma trận hãy tạo nội dung đề thi dựa theo ma trận bên dưới, gồm đầy đủ các phần có trong ma trận đề thi:
 
             Thông tin đề thi:
-            - Tiêu đề: {request.Title}
             - Loại kỳ thi: {request.ExamType}
             - Khối lớp: {request.Grade}
             - Năm học: {request.Year}
-
+            - Tổng qua ma trận: {request.Description}
             Ma trận đề thi chi tiết:
-            {matrixContent}
+            {request.Matrix}
 
             Yêu cầu:
-            - Cái quan trọng nhất là phải sinh ra đúng số lượng câu hỏi dựa trên ma trận (đan xen giữa lý thuyết và bài tập tính toán)
+            - Cái quan trọng nhất là phải sinh ra đúng số lượng câu hỏi dựa trên ma trận và tổng qua ma trận(kết hợp nhiều bài tập tính toán)
             - Câu hỏi bám sát kiến thức và mức độ theo ma trận.(những câu ở mức độ càng cao thì ra câu hỏi càng khó, những câu mức độ khó là những câu bài tập tính toán)
             - Chỉ trả về câu hỏi, không trả lời, không giải thích thêm.
             - Trả về kết quả dưới dạng JSON chuẩn với các trường: multiple_choice, true_false, short_answer, essay. Không trả về văn bản, không ghi chú gì ngoài JSON.
             - phần multiple_choice sinh ra question và các options (ở opstions không cần a,b,c,d);
             - Ở phần true_false:
-                + Mỗi câu là một nhóm gồm nhiều ý nhỏ (mỗi ý là một nhận định hoặc kết quả), mỗi ý này là một câu trắc nghiệm đúng/sai riêng biệt.
-                + Trả về mỗi câu dưới dạng một object có trường `content` (mô tả nội dung câu hỏi chung), trường `options` (mảng các nhận định, mỗi nhận định là một câu hỏi nhỏ đúng/sai).            
-            - Phần short_answer và essay thì chỉ có content thôi";
-            
+                Mỗi câu hỏi là một object gồm hai trường:
+                content: Nhận định hoặc câu hỏi tính toán chung cho cả câu hỏi.(ưu tiên kết hợp cả tính toán vào)
+                options: Một mảng 4 đáp án cho câu hỏi(mỗi phát biểu có thể đúng/sai, lấy theo thứ tự từ ma trận), không cần chú thích đúng sai sau câu trả lời
+                ví dụ có 8 câu truefalse là gồm 2 object 1 content và 4 options từ đó linh hoạt cho các trường hợp khác
+            - Phần short_answer và essay thì chỉ có content thôi
+            - Với 2-3 câu hỏi, thêm trường imagePrompt mô tả ngắn hình minh họa vật lý phù hợp cho câu hỏi đó (nếu phù hợp).";
+
             var chatGptResponse = await _chatGptService.CallChatGptAsync(prompt);
 
             if (string.IsNullOrEmpty(chatGptResponse))
@@ -195,7 +188,7 @@ namespace PhyGen.API.Controllers
 
                 var questionsNode = JsonNode.Parse(cleanJson);
 
-                // Multiple choice (giữ nguyên như cũ)
+                // Multiple choice
                 if (questionsNode?["multiple_choice"] is JsonArray mcArr)
                 {
                     foreach (var item in mcArr)
@@ -208,6 +201,9 @@ namespace PhyGen.API.Controllers
                             item["option4"] = optionsArr.Count > 3 ? optionsArr[3]?.ToString() : "";
                             item.AsObject().Remove("options");
                         }
+
+                        // Xử lý ảnh minh họa nếu có imagePrompt
+                       // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -216,7 +212,6 @@ namespace PhyGen.API.Controllers
                 {
                     foreach (var item in tfArr)
                     {
-                        // Đổi statement/question => content
                         if (item?["statement"] != null)
                         {
                             item["content"] = item["statement"]?.ToString();
@@ -228,7 +223,6 @@ namespace PhyGen.API.Controllers
                             item.AsObject().Remove("question");
                         }
 
-                        // options
                         if (item?["options"] is JsonArray optionsArr)
                         {
                             for (int i = 0; i < optionsArr.Count; i++)
@@ -238,7 +232,6 @@ namespace PhyGen.API.Controllers
                             item.AsObject().Remove("options");
                         }
 
-                        // statements
                         if (item?["statements"] is JsonArray statementsArr)
                         {
                             for (int i = 0; i < statementsArr.Count; i++)
@@ -251,6 +244,9 @@ namespace PhyGen.API.Controllers
                             }
                             item.AsObject().Remove("statements");
                         }
+
+                        // Xử lý ảnh minh họa nếu có imagePrompt
+                       // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -269,6 +265,9 @@ namespace PhyGen.API.Controllers
                             item["content"] = item["statement"]?.ToString();
                             item.AsObject().Remove("statement");
                         }
+
+                        // Xử lý ảnh minh họa nếu có imagePrompt
+                      //  await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -287,6 +286,9 @@ namespace PhyGen.API.Controllers
                             item["content"] = item["statement"]?.ToString();
                             item.AsObject().Remove("statement");
                         }
+
+                        // Xử lý ảnh minh họa nếu có imagePrompt
+                    //    await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -297,18 +299,80 @@ namespace PhyGen.API.Controllers
                 // Nếu lỗi parse, trả về raw string để debug
                 return Ok(new { raw = chatGptResponse, error = ex.Message });
             }
-
         }
-        // Hàm chuyển file Word sang text
-        private string ConvertWordToText(WordprocessingDocument doc)
+        private async Task HandleManimImageForItemAsync(JsonNode item, ChatGptService chatGptService, CloudinaryService cloudinaryService)
         {
-            var sb = new StringBuilder();
-            var body = doc.MainDocumentPart.Document.Body;
-            foreach (var para in body.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>())
+            var imgPromptProp = item?["imagePrompt"];
+            if (imgPromptProp == null || string.IsNullOrWhiteSpace(imgPromptProp.ToString()))
+                return;
+
+            string imagePrompt = imgPromptProp.ToString();
+
+            // 1. Gọi ChatGPT để sinh code manim
+            string manimCode = await chatGptService.GenerateManimCodeFromPrompt(imagePrompt);
+            if (string.IsNullOrEmpty(manimCode))
+                return;
+
+            // 2. Chạy Python render manim thành PNG
+            string imagePath = await RunManimPythonAndGetImagePath(manimCode);
+            if (string.IsNullOrEmpty(imagePath) || !System.IO.File.Exists(imagePath))
+                return;
+
+            // 3. Upload Cloudinary
+            using (var stream = new FileStream(imagePath, FileMode.Open, FileAccess.Read))
             {
-                sb.AppendLine(para.InnerText);
+                string imgUrl = await cloudinaryService.UploadImageAsync(stream, Path.GetFileName(imagePath));
+                if (!string.IsNullOrEmpty(imgUrl))
+                {
+                    item["imgUrl"] = imgUrl;
+                }
             }
-            return sb.ToString();
         }
+
+        private async Task<string> RunManimPythonAndGetImagePath(string manimCode)
+    {
+        // 1. Lưu code ra file tạm
+        string sceneName = FindSceneNameFromManimCode(manimCode) ?? "AutoScene";
+        string pyFile = $"auto_manim_{Guid.NewGuid().ToString("N").Substring(0, 8)}.py";
+        await System.IO.File.WriteAllTextAsync(pyFile, manimCode, Encoding.UTF8);
+
+        // 2. Gọi manim subprocess
+        string arguments = $"-pql {pyFile} {sceneName} -s";
+        var psi = new ProcessStartInfo
+        {
+            FileName = "manim",
+            Arguments = arguments,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        };
+        var process = Process.Start(psi);
+        string stdout = await process.StandardOutput.ReadToEndAsync();
+        string stderr = await process.StandardError.ReadToEndAsync();
+        process.WaitForExit();
+
+        // 3. Tìm file ảnh đã sinh ra
+        string outDir = $"media/images/{System.IO.Path.GetFileNameWithoutExtension(pyFile)}/480p15/";
+        string imagePath = $"{outDir}{sceneName}_0000.png";
+        if (System.IO.File.Exists(imagePath)) return imagePath;
+
+        // Hoặc scan thư mục để lấy file PNG
+        if (System.IO.Directory.Exists(outDir))
+        {
+            var files = System.IO.Directory.GetFiles(outDir, "*.png");
+            if (files.Any()) return files.First();
+        }
+        return null;
+    }
+
+    // Helper: tìm tên scene trong code manim
+    private string FindSceneNameFromManimCode(string code)
+    {
+        var match = System.Text.RegularExpressions.Regex.Match(code, @"class\s+(\w+)\s*\(\s*Scene\s*\)");
+        if (match.Success) return match.Groups[1].Value;
+        return null;
+    }
+
     }
 }
