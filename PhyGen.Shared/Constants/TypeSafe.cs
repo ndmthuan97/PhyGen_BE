@@ -14,9 +14,9 @@ namespace PhyGen.Shared.Constants
 
     public enum DifficultyLevel
     {
-        NhậnBiết,
-        ThôngHiểu,
-        VậnDụng
+        Easy,
+        Medium,
+        Hard
     }
 
     public enum QuestionType
