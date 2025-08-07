@@ -34,6 +34,7 @@ namespace PhyGen.Infrastructure.Extensions
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(applicationAssemblies));
             services.AddAutoMapper(applicationAssemblies);
+            services.AddHttpContextAccessor();
 
 
             CommonInfrastrucutre(services, configuration);

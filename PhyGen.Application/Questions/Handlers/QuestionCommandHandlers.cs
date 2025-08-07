@@ -30,9 +30,12 @@ namespace PhyGen.Application.Questions.Handlers
 
         public async Task<QuestionResponse> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
         {
-            var topic = await _topicRepository.GetByIdAsync(request.TopicId);
-            if (topic == null || topic.DeletedAt.HasValue)
-                throw new TopicNotFoundException();
+            if (request.TopicId.HasValue)
+            {
+                var topic = await _topicRepository.GetByIdAsync(request.TopicId.Value);
+                if (topic == null || topic.DeletedAt.HasValue)
+                    throw new TopicNotFoundException();
+            }
 
             var isExist = await _questionRepository.AlreadyExistAsync(q =>
                 q.TopicId == request.TopicId &&
@@ -88,9 +91,12 @@ namespace PhyGen.Application.Questions.Handlers
             if (question == null || question.DeletedAt.HasValue)
                 throw new QuestionNotFoundException();
 
-            var topic = await _topicRepository.GetByIdAsync(request.TopicId);
-            if (topic == null || topic.DeletedAt.HasValue)
-                throw new TopicNotFoundException();
+            if (request.TopicId.HasValue)
+            {
+                var topic = await _topicRepository.GetByIdAsync(request.TopicId.Value);
+                if (topic == null || topic.DeletedAt.HasValue)
+                    throw new TopicNotFoundException();
+            }
 
             var currentUser = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
             var isAdmin = _httpContextAccessor.HttpContext?.User?.IsInRole(nameof(Role.Admin)) ?? false;

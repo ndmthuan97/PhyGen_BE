@@ -609,7 +609,7 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<int>("Level")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("TopicId")
+                    b.Property<Guid?>("TopicId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Type")
@@ -1060,8 +1060,7 @@ namespace PhyGen.Infrastructure.Migrations
                     b.HasOne("PhyGen.Domain.Entities.Topic", "Topic")
                         .WithMany("Questions")
                         .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Topic");
                 });

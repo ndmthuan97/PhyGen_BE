@@ -10,7 +10,7 @@ namespace PhyGen.Domain.Entities
 {
     public class Question : EntityBase<Guid>
     {
-        public Guid TopicId { get; set; }
+        public Guid? TopicId { get; set; }
 
         [Required]
         public string Content { get; set; } = string.Empty;

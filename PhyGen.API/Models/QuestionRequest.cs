@@ -6,7 +6,23 @@ namespace PhyGen.API.Models
 {
     public class CreateQuestionRequest
     {
-        public Guid TopicId { get; set; }
+        [JsonPropertyName("topicId")]
+        public string? TopicIdRaw { get; set; }
+
+        [JsonIgnore]
+        public Guid? TopicId
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(TopicIdRaw))
+                    return null;
+
+                if (Guid.TryParse(TopicIdRaw, out var parsed))
+                    return parsed;
+
+                throw new ValidationException("TopicId không hợp lệ.");
+            }
+        }
 
         [Required]
         [StringLength(1000, ErrorMessage = "Nội dung câu hỏi không được vượt quá 1000 ký tự.")]
@@ -30,11 +46,25 @@ namespace PhyGen.API.Models
 
     public class UpdateQuestionRequest
     {
-        public Guid Id { get; set; }
-
         [JsonRequired]
-        [Required(ErrorMessage = "Trường này không được để trống.")]
-        public Guid TopicId { get; set; }
+        public Guid Id { get; set; }
+        [JsonPropertyName("topicId")]
+        public string? TopicIdRaw { get; set; }
+
+        [JsonIgnore]
+        public Guid? TopicId
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(TopicIdRaw))
+                    return null;
+
+                if (Guid.TryParse(TopicIdRaw, out var parsed))
+                    return parsed;
+
+                throw new ValidationException("TopicId không hợp lệ.");
+            }
+        }
 
         [Required]
         [StringLength(1000, ErrorMessage = "Nội dung câu hỏi không được vượt quá 1000 ký tự.")]

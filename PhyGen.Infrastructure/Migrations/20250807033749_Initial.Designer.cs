@@ -12,7 +12,7 @@ using PhyGen.Infrastructure.Persistence.DbContexts;
 namespace PhyGen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250805042723_Initial")]
+    [Migration("20250807033749_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -612,7 +612,7 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<int>("Level")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("TopicId")
+                    b.Property<Guid?>("TopicId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Type")
@@ -1063,8 +1063,7 @@ namespace PhyGen.Infrastructure.Migrations
                     b.HasOne("PhyGen.Domain.Entities.Topic", "Topic")
                         .WithMany("Questions")
                         .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Topic");
                 });
