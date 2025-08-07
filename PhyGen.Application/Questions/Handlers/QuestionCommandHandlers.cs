@@ -6,6 +6,9 @@ using PhyGen.Application.Questions.Responses;
 using PhyGen.Application.Topics.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Shared.Constants;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,11 +70,16 @@ namespace PhyGen.Application.Questions.Handlers
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly ITopicRepository _topicRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UpdateQuestionCommandHandler(IQuestionRepository questionRepository, ITopicRepository topicRepository)
+        public UpdateQuestionCommandHandler(
+            IQuestionRepository questionRepository,
+            ITopicRepository topicRepository,
+            IHttpContextAccessor httpContextAccessor)
         {
             _questionRepository = questionRepository;
             _topicRepository = topicRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Unit> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
@@ -83,6 +91,12 @@ namespace PhyGen.Application.Questions.Handlers
             var topic = await _topicRepository.GetByIdAsync(request.TopicId);
             if (topic == null || topic.DeletedAt.HasValue)
                 throw new TopicNotFoundException();
+
+            var currentUser = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
+            var isAdmin = _httpContextAccessor.HttpContext?.User?.IsInRole(nameof(Role.Admin)) ?? false;
+
+            if (!isAdmin && !string.Equals(question.CreatedBy, currentUser, StringComparison.OrdinalIgnoreCase))
+                throw new UnauthorizedAccessException("You are not allowed to edit this question.");
 
             var isExist = await _questionRepository.AlreadyExistAsync(q =>
                 q.Id != request.Id &&
@@ -115,10 +129,14 @@ namespace PhyGen.Application.Questions.Handlers
     public class DeleteQuestionCommandHandler : IRequestHandler<DeleteQuestionCommand, Unit>
     {
         private readonly IQuestionRepository _questionRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DeleteQuestionCommandHandler(IQuestionRepository questionRepository)
+        public DeleteQuestionCommandHandler(
+            IQuestionRepository questionRepository,
+            IHttpContextAccessor httpContextAccessor)
         {
             _questionRepository = questionRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Unit> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
@@ -126,6 +144,12 @@ namespace PhyGen.Application.Questions.Handlers
             var question = await _questionRepository.GetByIdAsync(request.Id);
             if (question == null || question.DeletedAt.HasValue)
                 throw new QuestionNotFoundException();
+
+            var currentUser = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
+            var isAdmin = _httpContextAccessor.HttpContext?.User?.IsInRole(nameof(Role.Admin)) ?? false;
+
+            if (!isAdmin && !string.Equals(question.CreatedBy, currentUser, StringComparison.OrdinalIgnoreCase))
+                throw new UnauthorizedAccessException("You are not allowed to delete this question.");
 
             question.DeletedAt = DateTime.UtcNow;
 
