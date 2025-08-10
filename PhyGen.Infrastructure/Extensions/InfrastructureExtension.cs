@@ -76,6 +76,8 @@ namespace PhyGen.Infrastructure.Extensions
             services.AddScoped<ChatGptService>();
             services.AddScoped<GeminiService>();
             services.AddMemoryCache();
+            services.AddSingleton<CloudinaryService>();
+            services.AddScoped<TopicService>();
         }
     }
 }
