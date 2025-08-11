@@ -1,23 +1,26 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Azure;
+using DocumentFormat.OpenXml.Spreadsheet;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 using PhyGen.Application.Authentication.DTOs.Dtos;
+using PhyGen.Application.Authentication.DTOs.Responses;
 using PhyGen.Application.Authentication.Interface;
+using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Authentication.Responses;
+using PhyGen.Application.Notification.Commands;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Exceptions;
-using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Infrastructure.Persistence.DbContexts;
-using PhyGen.Shared.Constants;
 using PhyGen.Shared;
-using Microsoft.EntityFrameworkCore;
-using Azure;
-using Newtonsoft.Json.Linq;
-using PhyGen.Application.Authentication.DTOs.Responses;
-using AutoMapper;
-using System.Text.RegularExpressions;
-using System.Text.Json;
+using PhyGen.Shared.Constants;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace PhyGen.Infrastructure.Service;
 
@@ -26,12 +29,14 @@ public class AuthService : IAuthService
     private readonly AppDbContext _context;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IEmailService _emailService;
+    private readonly IMediator _mediator;
 
-    public AuthService(AppDbContext context, IJwtTokenGenerator jwtTokenGenerator, IEmailService emailService)
+    public AuthService(AppDbContext context, IJwtTokenGenerator jwtTokenGenerator, IEmailService emailService, IMediator mediator)
     {
         _context = context;
         _jwtTokenGenerator = jwtTokenGenerator;
         _emailService = emailService;
+        _mediator = mediator;
     }
 
     public async Task<AuthenticationResponse> RegisterAsync(RegisterDto dto)
@@ -224,7 +229,17 @@ public class AuthService : IAuthService
         {
             return new AuthenticationResponse { Email = email, StatusCode = StatusCode.MustLoginWithEmailPassword };
         }
-
+        if(user.LastLogin == null)
+        {
+            user.Coin = 15;
+            await _mediator.Send(new CreateNotificationCommand
+            {
+                UserId = user.Id,
+                Title = "Chào mừng",
+                Message = "Bạn đã được tặng 15 xu cho đăng nhập lần đầu vào website của chúng tôi!",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
         user.LastLogin = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
@@ -254,10 +269,22 @@ public class AuthService : IAuthService
             isConfirm = true,
             IsActive = true,
             Role = "User",
-            LastLogin = DateTime.UtcNow
+            Coin = 0,
+            LastLogin = null
         };
 
         _context.Users.Add(newUser);
+        await _context.SaveChangesAsync();
+
+        await _mediator.Send(new CreateNotificationCommand
+        {
+            UserId = newUser.Id,
+            Title = "Chào mừng",
+            Message = "Tài khoản đã được tạo. Bạn được tặng 15 xu khi đăng nhập lần đầu!",
+            CreatedAt = DateTime.UtcNow
+        });
+        // set LastLogin sau khi tặng & gửi
+        newUser.LastLogin = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
         return new LoginResponse
@@ -311,6 +338,17 @@ public class AuthService : IAuthService
             return new AuthenticationResponse { Email = email, StatusCode = StatusCode.AccountNotConfirmed };
         }
 
+        if (user.LastLogin == null)
+        {
+            user.Coin = 15;
+            await _mediator.Send(new CreateNotificationCommand
+            {
+                UserId = user.Id,
+                Title = "Chào mừng",
+                Message = "Bạn đã được tặng 15 xu cho đăng nhập lần đầu vào website của chúng tôi!",
+                CreatedAt = DateTime.UtcNow
+            });
+        }
         user.LastLogin = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 

@@ -101,43 +101,82 @@ namespace PhyGen.Infrastructure.Service
             };
         }
         public async Task<InvoiceResponse> GetInvoiceStatistics(InvoiceFilter filter)
+        {
+            // Base query JOIN ngay trên DB
+            var q = from p in _context.Payments
+                    join u in _context.Users on p.UserId equals u.Id
+                    select new
+                    {
+                        p.PaymentLinkId,
+                        p.CreatedAt,
+                        p.Amount,
+                        p.Status,
+                        u.FirstName,
+                        u.LastName,
+                        u.photoURL
+                    };
+
+            if (!string.IsNullOrWhiteSpace(filter.FullName))
             {
-            var payments = await _context.Payments.ToListAsync();
-            var users = await _context.Users.ToListAsync();
+                var terms = filter.FullName
+                    .Trim()
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-            var invoiceItems = (from p in payments
-                                join u in users on p.UserId equals u.Id
-                                select new InvoiceItem
-                                {
-                                    InvoiceId = $"{p.PaymentLinkId}",
-                                    FullName = $"{u.FirstName} {u.LastName}",
-                                    CreatedAt = p.CreatedAt,
-                                    Amount = p.Amount*1000,
-                                    PaymentMethod = "PayOS",
-                                    Status = p.Status,
-                                    AvatarUrl = u.photoURL ?? ""
-                                }).ToList();
+                foreach (var t in terms)
+                {
+                    var like = $"%{t}%";
+                    q = q.Where(x =>
+                        EF.Functions.ILike(((x.FirstName ?? "") + " " + (x.LastName ?? "")), like) ||
+                        EF.Functions.ILike(x.FirstName ?? "", like) ||
+                        EF.Functions.ILike(x.LastName ?? "", like)
+                    );
+                }
+            }
 
-            var totalCount = invoiceItems.Count;
+            if (!string.IsNullOrWhiteSpace(filter.Status))
+            {
+                var status = filter.Status.Trim();
+                q = q.Where(x => x.Status == status);
+            }
 
-            var paginatedItems = invoiceItems
-                .OrderByDescending(u => u.CreatedAt)
+            if (filter.MinAmount.HasValue && filter.MinAmount.Value > 0)
+            {
+                var min = filter.MinAmount.Value / 1000m;
+                q = q.Where(x => x.Amount >= min);
+            }
+
+            var totalCount = await q.CountAsync();
+
+            var items = await q
+                .OrderByDescending(x => x.CreatedAt)
                 .Skip((filter.PageIndex - 1) * filter.PageSize)
                 .Take(filter.PageSize)
-                .ToList();
+                .Select(x => new InvoiceItem
+                {
+                    InvoiceId = x.PaymentLinkId.ToString(),
+                    FullName = ((x.FirstName ?? "") + " " + (x.LastName ?? "")).Trim(),
+                    CreatedAt = x.CreatedAt,
+                    Amount = x.Amount * 1000,
+                    PaymentMethod = "PayOS",
+                    Status = x.Status,
+                    AvatarUrl = x.photoURL ?? ""
+                })
+                .ToListAsync();
 
-            var response = new InvoiceResponse
+            var totalBill = await _context.Payments.CountAsync();
+            var pending = await _context.Payments.CountAsync(p => p.Status == PaymentStatus.Pending.ToString());
+            var completed = await _context.Payments.CountAsync(p => p.Status == PaymentStatus.Completed.ToString());
+            var canceled = await _context.Payments.CountAsync(p =>
+                p.Status == PaymentStatus.Cancelled.ToString() || p.Status == PaymentStatus.Expired.ToString());
+
+            return new InvoiceResponse
             {
-                TotalBill = payments.Count,
-                PendingBill = payments.Count(p => p.Status == PaymentStatus.Pending.ToString()),
-                CompletedBill = payments.Count(p => p.Status == PaymentStatus.Completed.ToString()),
-                CanceledBill = payments.Count(p =>
-                    p.Status == PaymentStatus.Cancelled.ToString() ||
-                    p.Status == PaymentStatus.Expired.ToString()),
-                Invoices = new Pagination<InvoiceItem>(filter.PageIndex, filter.PageSize, totalCount, paginatedItems)
+                TotalBill = totalBill,
+                PendingBill = pending,
+                CompletedBill = completed,
+                CanceledBill = canceled,
+                Invoices = new Pagination<InvoiceItem>(filter.PageIndex, filter.PageSize, totalCount, items)
             };
-
-            return response;
         }
         public async Task<WeeklyRevenueResponse> GetAllWeeklyRevenueAsync()
         {

@@ -46,13 +46,20 @@ namespace PhyGen.API.Controllers
 
         [HttpGet("statistics")]
         [ProducesResponseType(typeof(InvoiceResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetInvoiceStatistics([FromQuery] int pageIndex = 1)
+        public async Task<IActionResult> GetInvoiceStatistics(
+        [FromQuery] int pageIndex = 1,
+        [FromQuery] string? fullName = null,
+        [FromQuery] string? status = null,
+        [FromQuery] decimal? minAmount = null)
         {
             var filter = new InvoiceFilter
             {
                 PageIndex = pageIndex,
-                PageSize = 10
+                FullName = fullName,
+                Status = status,
+                MinAmount = minAmount
             };
+
             var result = await _statisticService.GetInvoiceStatistics(filter);
             return Ok(result);
         }

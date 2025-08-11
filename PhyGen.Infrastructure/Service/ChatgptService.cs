@@ -15,6 +15,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PhyGen.Infrastructure.Service
@@ -66,59 +67,21 @@ namespace PhyGen.Infrastructure.Service
         public async Task<string> GenerateManimCodeFromPrompt(string imagePrompt)
         {
             string prompt = $@"
-                Bạn là chuyên gia Python, vẽ vật lý bằng manim.
-                Viết code Python dùng thư viện manim để vẽ hình minh họa cho mô tả sau: {imagePrompt}
-                Yêu cầu:
-                - Một class duy nhất kế thừa Scene, tên tùy chọn.
-                - Không giải thích, chỉ trả về code python bắt đầu bằng 'from manim import *'.
-                ";
+        Bạn là chuyên gia Python, vẽ vật lý bằng manim.
+        Viết code Python dùng thư viện manim để vẽ hình minh họa cho câu hỏi vật lý theo mô tả sau: {imagePrompt}
+        Yêu cầu:
+        - vẽ hình mô tả cho câu hỏi vật lý
+        - Một class duy nhất kế thừa Scene, tên tùy chọn.
+        - Không giải thích, chỉ trả về code python bắt đầu bằng 'from manim import *'.";
             var code = await CallChatGptAsync(prompt);
-            // Cắt bỏ các markdown, chỉ lấy phần code
+            // Cắt bỏ markdown
             if (!string.IsNullOrEmpty(code))
             {
-                code = code.Trim();
-                if (code.StartsWith("```python")) code = code.Substring(9);
-                if (code.StartsWith("```")) code = code.Substring(3);
-                if (code.EndsWith("```")) code = code.Substring(0, code.Length - 3);
+                var match = Regex.Match(code, @"```(?:python)?\s*([\s\S]+?)\s*```", RegexOptions.IgnoreCase);
+                if (match.Success) code = match.Groups[1].Value.Trim();
+                else code = code.Trim();
             }
-            return code?.Trim();
-        }
-
-        public async Task<string> RunManimPythonAndGetImagePath(string manimCode)
-        {
-            // 1. Lưu code ra file tạm
-            string sceneName = FindSceneNameFromManimCode(manimCode) ?? "AutoScene";
-            string pyFile = $"auto_manim_{Guid.NewGuid().ToString("N").Substring(0, 8)}.py";
-            await System.IO.File.WriteAllTextAsync(pyFile, manimCode, Encoding.UTF8);
-
-            // 2. Gọi manim subprocess
-            string arguments = $"-pql {pyFile} {sceneName} -s";
-            var psi = new ProcessStartInfo
-            {
-                FileName = "manim",
-                Arguments = arguments,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            };
-            var process = Process.Start(psi);
-            string stdout = await process.StandardOutput.ReadToEndAsync();
-            string stderr = await process.StandardError.ReadToEndAsync();
-            process.WaitForExit();
-
-            // 3. Tìm file ảnh đã sinh ra
-            string outDir = $"media/images/{System.IO.Path.GetFileNameWithoutExtension(pyFile)}/480p15/";
-            string imagePath = $"{outDir}{sceneName}_0000.png";
-            if (System.IO.File.Exists(imagePath)) return imagePath;
-
-            // Hoặc scan thư mục để lấy file PNG
-            if (System.IO.Directory.Exists(outDir))
-            {
-                var files = System.IO.Directory.GetFiles(outDir, "*.png");
-                if (files.Any()) return files.First();
-            }
-            return null;
+            return code;
         }
 
         // Helper: tìm tên scene trong code manim
@@ -201,6 +164,85 @@ namespace PhyGen.Infrastructure.Service
                 Converters = { new JsonStringEnumConverter() }
             });
             return questions;
+        }
+
+        public async Task<bool> IsPhysicsExamAsync(string fileName, string fullText, CancellationToken ct = default)
+        {
+            // Prompt rất ngắn, chỉ yêu cầu 1 object JSON có đúng 1 khóa isPhysicsExam
+            var prompt = $@"
+            Bạn là giáo viên Vật lý. Hãy đọc nội dung sau và CHỈ trả về một JSON object hợp lệ có duy nhất khóa:
+            - isPhysicsExam: boolean
+
+            Định nghĩa: isPhysicsExam=true nếu nội dung chủ yếu là các câu hỏi/đề mục thuộc môn Vật lý (cơ học, nhiệt học, điện, quang, hạt nhân, v.v.), có cấu trúc đề (nhiều câu hỏi, A/B/C/D, đúng-sai, tự luận, công thức/ký hiệu vật lý, đơn vị SI).
+
+            Ví dụ đầu ra hợp lệ:
+            {{""isPhysicsExam"": true}}
+
+            Nếu không phải đề Vật lý:
+            {{""isPhysicsExam"": false}}
+
+            Nội dung cần kiểm tra:
+            ---
+            FileName: {fileName}
+            {fullText}
+            ---";
+
+            var http = _httpClientFactory.CreateClient();
+            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _apiKey);
+
+            // Dùng response_format=json_object để buộc trả JSON object
+            var payload = new
+            {
+                model = "gpt-4.1",
+                response_format = new { type = "json_object" },
+                messages = new[]
+                {
+                new { role = "system", content = "Chỉ trả về JSON object hợp lệ. Không thêm văn bản khác." },
+                new { role = "user", content = prompt }
+            }
+            };
+
+            using var req = new HttpRequestMessage(HttpMethod.Post, "https://api.openai.com/v1/chat/completions")
+            {
+                Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json")
+            };
+
+            using var resp = await http.SendAsync(req, ct);
+            if (!resp.IsSuccessStatusCode)
+            {
+                // Mọi lỗi coi như không phải đề Vật lý
+                return false;
+            }
+
+            // Đọc raw text rồi parse JSON object (response_format đảm bảo là JSON)
+            var raw = await resp.Content.ReadAsStringAsync(ct);
+            try
+            {
+                using var doc = JsonDocument.Parse(raw);
+                var content = doc.RootElement
+                    .GetProperty("choices")[0]
+                    .GetProperty("message")
+                    .GetProperty("content")
+                    .GetString();
+
+                if (string.IsNullOrWhiteSpace(content)) return false;
+
+                using var doc2 = JsonDocument.Parse(content);
+                if (doc2.RootElement.TryGetProperty("isPhysicsExam", out var prop))
+                {
+                    // chấp nhận true/false; mọi trường hợp khác -> false
+                    return prop.ValueKind == JsonValueKind.True
+                        ? true
+                        : prop.ValueKind == JsonValueKind.False ? false : false;
+                }
+            }
+            catch
+            {
+                // Nếu parse lỗi → fail-safe
+                return false;
+            }
+
+            return false;
         }
 
         public class ChatGptResponse
