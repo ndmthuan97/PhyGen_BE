@@ -239,7 +239,7 @@ namespace PhyGen.API.Controllers
 
         [HttpPost("extract-from-file")]
         [Authorize]
-        public async Task<IActionResult> ExtractQuestionsFromFile([FromForm] FileUploadRequest request)
+        public async Task<ActionResult<List<ExtractedQuestionDto>>> ExtractQuestionsFromFile([FromForm] FileUploadRequest request)
         {
             if (request.File == null || request.File.Length == 0)
                 return BadRequest("File rỗng.");
@@ -251,97 +251,35 @@ namespace PhyGen.API.Controllers
                 ms.Position = 0;
                 using (var wordDoc = WordprocessingDocument.Open(ms, false))
                 {
-                    questionsWithImages = ExtractQuestionsWithImages(wordDoc);
+                    questionsWithImages = ExtractQuestionsWithImages(wordDoc); // bạn đã có sẵn hàm này
                 }
             }
 
-            // Gọi AI extract các câu hỏi (dựa vào text) -> có thể truyền toàn bộ text hoặc từng câu một tùy cách bạn muốn (ở đây truyền toàn bộ)
             string fullText = string.Join("\n\n", questionsWithImages.Select(q => q.Content));
-            List<ExtractedQuestionDto> questions = await _chatGptService.ExtractQuestionsFromTextAsync(fullText, request.File.FileName, request.Grade);
 
-            int savedCount = 0;
-            for (int i = 0; i < questions.Count; i++)
+            var questions = await _chatGptService.ExtractQuestionsFromTextAsync(
+                fullText,
+                request.File.FileName,
+                request.Grade
+            );
+
+            // 4) (Tùy chọn) nếu muốn gắn ảnh từ file vào MediaBase64 cho từng câu
+            //    Quy ước: lấy ảnh đầu tiên của mỗi câu trong file (nếu AI chưa điền MediaBase64)
+            int n = Math.Min(questions.Count, questionsWithImages.Count);
+            for (int i = 0; i < n; i++)
             {
                 var q = questions[i];
-                var topicId = await _topicService.GetTopicIdByNameAsync(q.TopicName);
-                if (topicId == null)
-                    return BadRequest($"Không tìm thấy chủ đề: {q.TopicName}");
-
-                var question = new Question
+                if (string.IsNullOrWhiteSpace(q.MediaBase64))
                 {
-                    TopicId = (Guid)topicId,
-                    Content = q.Content,
-                    Type = q.Type,
-                    Level = q.Level,
-                    Answer1 = q.Answer1,
-                    Answer2 = q.Answer2,
-                    Answer3 = q.Answer3,
-                    Answer4 = q.Answer4,
-                    Answer5 = q.Answer5,
-                    Answer6 = q.Answer6,
-                    Grade = q.Grade,
-                    CreatedAt = DateTime.UtcNow,
-                    CreatedBy = "User"
-                };
-                _dbContext.Questions.Add(question);
-                await _dbContext.SaveChangesAsync();
-
-                if (i < questionsWithImages.Count)
-                {
-                    foreach (var imgBytes in questionsWithImages[i].Images)
+                    var imgs = questionsWithImages[i].Images; // List<byte[]>
+                    if (imgs != null && imgs.Count > 0)
                     {
-                        string url = await _cloudinaryService.UploadImageAsync(new MemoryStream(imgBytes), $"{Guid.NewGuid()}.png");
-                        if (url == null)
-                        {
-                            Console.WriteLine("Lỗi upload ảnh lên Cloudinary! Không lưu QuestionMedia.");
-                            continue;
-                        }
-                        Console.WriteLine("Ảnh upload thành công: " + url);
-
-                        var questionMedia = new QuestionMedia
-                        {
-                            QuestionId = question.Id,
-                            Url = url
-                        };
-                        _dbContext.QuestionMedias.Add(questionMedia);
-                        await _dbContext.SaveChangesAsync();
-                    }
-
-                }
-
-                // Nếu vẫn muốn check MediaBase64 từ AI (nâng cao):
-                if (!string.IsNullOrWhiteSpace(q.MediaBase64))
-                {
-                    var imageBytes = Convert.FromBase64String(q.MediaBase64);
-                    using (var imgStream = new MemoryStream(imageBytes))
-                    {
-                        string imageUrl = await _cloudinaryService.UploadImageAsync(imgStream, $"{Guid.NewGuid()}.png");
-                        var questionMedia = new QuestionMedia
-                        {
-                            QuestionId = question.Id,
-                            Url = imageUrl
-                        };
-                        _dbContext.QuestionMedias.Add(questionMedia);
-                        await _dbContext.SaveChangesAsync();
+                        // lấy ảnh đầu tiên
+                        q.MediaBase64 = Convert.ToBase64String(imgs[0]);
                     }
                 }
-                savedCount++;
             }
-
-            var result = new { Message = $"Đã lưu {savedCount} câu hỏi." };
-
-            // Tạo notification
-            await _mediator.Send(new CreateNotificationCommand
-            {
-                UserId = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var guid)
-                ? guid
-                : throw new UnauthorizedAccessException("UserId trong token không hợp lệ."),
-                Title = "Tạo câu hỏi thành công",
-                Message = $"Bạn đã lưu thành công {savedCount} câu hỏi.",
-                CreatedAt = DateTime.UtcNow
-            });
-
-            return Ok(result);
+            return Ok(questions);
         }
 
         private class QuestionWithImages

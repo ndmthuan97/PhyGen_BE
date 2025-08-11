@@ -96,8 +96,7 @@ namespace PhyGen.Infrastructure.Service
         {
             var param = new TopicByGradeSpecParam { Grade = grade };
             var query = new GetTopicsByGradeQuery(param);
-            var topicResponses = await _mediator.Send(query); 
-
+            var topicResponses = await _mediator.Send(query);
             var topicNames = topicResponses.Select(x => x.Name).ToList();
 
             string prompt = $@"
@@ -111,8 +110,8 @@ namespace PhyGen.Infrastructure.Service
                 ""Content"": Nội dung câu hỏi,
                 ""Type"": Loại câu hỏi (MultipleChoice/TrueFalse/ShortAnswer/Essay),
                 ""Level"": ""Easy"" hoặc ""Medium"" hoặc ""Hard"" (chính xác, không dấu cách, không tiếng Việt, không viết hoa hết, không thừa khoảng trắng)
-                ""TopicName"": Tên chủ đề (chọn từ danh sách sao cho phù hợp với câu hỏi từ list chủ đề :{topicNames}), chỉ chọn 1 và  không thay đổi nội dung chủ đề,
-                ""Answer1"": ..., ""Answer2"": ..., // Các đáp án, thường là có 4 đáp án
+                ""TopicName"": Tên chủ đề (chọn từ danh sách sao cho phù hợp với câu hỏi từ list chủ đề :{string.Join(", ", topicNames)}), chỉ chọn 1 và không thay đổi nội dung chủ đề,
+                ""Answer1"": ..., ""Answer2"": ...,
                 ""Grade"": Lớp, //Grade phải là số nguyên. Không để trong dấu nháy
                 ""MediaBase64"": Base64 hình minh họa (nếu có), null nếu không có hình.
               }}
@@ -122,7 +121,6 @@ namespace PhyGen.Infrastructure.Service
             - Không trả lại bất cứ văn bản hay giải thích nào ngoài JSON!
             ";
 
-            // --- Gọi OpenAI API trực tiếp ---
             var httpClient = _httpClientFactory.CreateClient();
             httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", _apiKey);
@@ -142,17 +140,15 @@ namespace PhyGen.Infrastructure.Service
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("OpenAI API Error: " + error);
                 throw new Exception("OpenAI API call failed: " + error);
             }
 
             var result = await response.Content.ReadFromJsonAsync<ChatGptResponse>();
             var resultText = result?.choices?.FirstOrDefault()?.message?.content;
-
             if (string.IsNullOrWhiteSpace(resultText))
                 throw new Exception("Không nhận được dữ liệu từ ChatGPT!");
 
-            // Có thể có markdown code block, cần lọc ra
+            // Lọc code block nếu có
             var jsonStart = resultText.IndexOf('[');
             var jsonEnd = resultText.LastIndexOf(']');
             if (jsonStart >= 0 && jsonEnd > jsonStart)
@@ -163,7 +159,8 @@ namespace PhyGen.Infrastructure.Service
                 PropertyNameCaseInsensitive = true,
                 Converters = { new JsonStringEnumConverter() }
             });
-            return questions;
+
+            return questions ?? new List<ExtractedQuestionDto>();
         }
 
         public async Task<bool> IsPhysicsExamAsync(string fileName, string fullText, CancellationToken ct = default)
