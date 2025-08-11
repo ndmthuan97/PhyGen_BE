@@ -2,24 +2,27 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PhyGen.API.Mapping;
 using PhyGen.API.Models;
 using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Exams.Queries;
 using PhyGen.Application.Exams.Responses;
 using PhyGen.Application.Mapping;
+using PhyGen.Application.Notification.Commands;
 using PhyGen.Application.Users.Exceptions;
 using PhyGen.Domain.Specs;
+using PhyGen.Infrastructure.Persistence.DbContexts;
 using PhyGen.Infrastructure.Service;
 using PhyGen.Shared;
 using PhyGen.Shared.Constants;
+using System.Diagnostics;
 using System.Diagnostics;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Diagnostics;
 
 namespace PhyGen.API.Controllers
 {
@@ -30,17 +33,19 @@ namespace PhyGen.API.Controllers
         private readonly ChatGptService _chatGptService;
         private readonly IWebHostEnvironment _env;
         private readonly CloudinaryService _cloudinaryService;
+        private readonly AppDbContext _context;
 
         public ExamController(
              IMediator mediator,
              ILogger<ExamController> logger,
              ChatGptService chatGptService,
              IWebHostEnvironment env,
-            CloudinaryService cloudinaryService)
+            CloudinaryService cloudinaryService, AppDbContext context)
              : base(mediator, logger)
         {
             _chatGptService = chatGptService;
             _env = env;
+            _context = context;
             _cloudinaryService = cloudinaryService;
         }
 
@@ -141,6 +146,7 @@ namespace PhyGen.API.Controllers
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<DeleteExamCommand>(request);
             return await ExecuteAsync<DeleteExamCommand, Unit>(command);
         }
+
         [HttpPost("generate")]
         public async Task<IActionResult> GenerateExam([FromBody] GenerateExamRequest request)
         {
@@ -167,7 +173,7 @@ namespace PhyGen.API.Controllers
                 options: Một mảng 4 đáp án cho câu hỏi(mỗi phát biểu có thể đúng/sai, lấy theo thứ tự từ ma trận), không cần chú thích đúng sai sau câu trả lời
                 ví dụ có 8 câu truefalse là gồm 2 object 1 content và 4 options từ đó linh hoạt cho các trường hợp khác
             - Phần short_answer và essay thì chỉ có content thôi
-            - Với 2-3 câu hỏi, thêm trường imagePrompt mô tả ngắn hình minh họa vật lý phù hợp cho câu hỏi đó (nếu phù hợp).";
+            - Với 2-3 câu hỏi, thêm trường imagePrompt mô tả chi tiết hình ảnh minh họa cho câu hỏi (nếu phù hợp), phải phù hợp với môn vật lý.";
 
             var chatGptResponse = await _chatGptService.CallChatGptAsync(prompt);
 
@@ -203,7 +209,7 @@ namespace PhyGen.API.Controllers
                         }
 
                         // Xử lý ảnh minh họa nếu có imagePrompt
-                       // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
+                        // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -246,7 +252,7 @@ namespace PhyGen.API.Controllers
                         }
 
                         // Xử lý ảnh minh họa nếu có imagePrompt
-                       // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
+                        // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -267,7 +273,7 @@ namespace PhyGen.API.Controllers
                         }
 
                         // Xử lý ảnh minh họa nếu có imagePrompt
-                      //  await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
+                        // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -288,10 +294,41 @@ namespace PhyGen.API.Controllers
                         }
 
                         // Xử lý ảnh minh họa nếu có imagePrompt
-                    //    await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
+                        // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
+                var userIdStr = User.FindFirst("sub")?.Value
+                ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                ?? User.FindFirst("userId")?.Value;
+
+                if (string.IsNullOrWhiteSpace(userIdStr))
+                    return Unauthorized("Không xác định được người dùng.");
+
+                    using (var tx = await _context.Database.BeginTransactionAsync())
+                    {
+                        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userIdStr);
+                        if (user == null) return Unauthorized("Không tìm thấy người dùng.");
+
+                        if (user.Coin < 5)
+                        {
+                            await tx.RollbackAsync();
+                            return BadRequest("Số dư xu không đủ (cần 5 xu).");
+                        }
+
+                        user.Coin -= 5;
+                        await _context.SaveChangesAsync();
+
+                        await _mediator.Send(new CreateNotificationCommand
+                        {
+                            UserId = user.Id,
+                            Title = "Giao dịch thành công",
+                            Message = $"Bạn đã thanh toán thành công 5 xu để tạo đề thi. Số dư còn: {user.Coin} xu.",
+                            CreatedAt = DateTime.UtcNow
+                        });
+
+                    await tx.CommitAsync();
+                }
                 return Ok(questionsNode);
             }
             catch (Exception ex)
@@ -330,49 +367,50 @@ namespace PhyGen.API.Controllers
         }
 
         private async Task<string> RunManimPythonAndGetImagePath(string manimCode)
-    {
-        // 1. Lưu code ra file tạm
-        string sceneName = FindSceneNameFromManimCode(manimCode) ?? "AutoScene";
-        string pyFile = $"auto_manim_{Guid.NewGuid().ToString("N").Substring(0, 8)}.py";
-        await System.IO.File.WriteAllTextAsync(pyFile, manimCode, Encoding.UTF8);
-
-        // 2. Gọi manim subprocess
-        string arguments = $"-pql {pyFile} {sceneName} -s";
-        var psi = new ProcessStartInfo
         {
-            FileName = "manim",
-            Arguments = arguments,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
-        var process = Process.Start(psi);
-        string stdout = await process.StandardOutput.ReadToEndAsync();
-        string stderr = await process.StandardError.ReadToEndAsync();
-        process.WaitForExit();
+            // 1. Lưu code ra file tạm
+            string sceneName = FindSceneNameFromManimCode(manimCode) ?? "AutoScene";
+            string pyFile = $"auto_manim_{Guid.NewGuid().ToString("N").Substring(0, 8)}.py";
+            await System.IO.File.WriteAllTextAsync(pyFile, manimCode, Encoding.UTF8);
 
-        // 3. Tìm file ảnh đã sinh ra
-        string outDir = $"media/images/{System.IO.Path.GetFileNameWithoutExtension(pyFile)}/480p15/";
-        string imagePath = $"{outDir}{sceneName}_0000.png";
-        if (System.IO.File.Exists(imagePath)) return imagePath;
+            // 2. Gọi manim subprocess
+            string arguments = $"-pql {pyFile} {sceneName} -s";
+            string manimPath = @"C:\Users\nguye\manimations\.venv\Scripts\manim.exe";
+            var psi = new ProcessStartInfo
+            {
+                FileName = manimPath,
+                Arguments = arguments,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+            var process = Process.Start(psi);
+            string stdout = await process.StandardOutput.ReadToEndAsync();
+            string stderr = await process.StandardError.ReadToEndAsync();
+            process.WaitForExit();
 
-        // Hoặc scan thư mục để lấy file PNG
-        if (System.IO.Directory.Exists(outDir))
-        {
-            var files = System.IO.Directory.GetFiles(outDir, "*.png");
-            if (files.Any()) return files.First();
+            // 3. Tìm file ảnh đã sinh ra
+            string outDir = $"media/images/{System.IO.Path.GetFileNameWithoutExtension(pyFile)}/480p15/";
+            string imagePath = $"{outDir}{sceneName}_0000.png";
+            if (System.IO.File.Exists(imagePath)) return imagePath;
+
+            // Hoặc scan thư mục để lấy file PNG
+            if (System.IO.Directory.Exists(outDir))
+            {
+                var files = System.IO.Directory.GetFiles(outDir, "*.png");
+                if (files.Any()) return files.First();
+            }
+            return null;
         }
-        return null;
-    }
 
     // Helper: tìm tên scene trong code manim
-    private string FindSceneNameFromManimCode(string code)
-    {
-        var match = System.Text.RegularExpressions.Regex.Match(code, @"class\s+(\w+)\s*\(\s*Scene\s*\)");
-        if (match.Success) return match.Groups[1].Value;
-        return null;
-    }
+        private string FindSceneNameFromManimCode(string code)
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(code, @"class\s+(\w+)\s*\(\s*Scene\s*\)");
+            if (match.Success) return match.Groups[1].Value;
+            return null;
+        }
 
     }
 }

@@ -1,10 +1,13 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PhyGen.API.Mapping;
 using PhyGen.API.Models;
 using PhyGen.Application.Mapping;
+using PhyGen.Application.Notification.Commands;
 using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Questions.Dtos;
 using PhyGen.Application.Questions.Queries;
@@ -32,6 +35,8 @@ namespace PhyGen.API.Controllers
         private readonly AppDbContext _dbContext;
         private readonly ChatGptService _chatGptService;
         private readonly TopicService _topicService;
+        private readonly IMediator _mediator;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public QuestionController(
             IMediator mediator,
@@ -39,13 +44,16 @@ namespace PhyGen.API.Controllers
             TopicService topicService,
             CloudinaryService cloudinaryService,
             AppDbContext dbContext,
-            ChatGptService chatGptService
+            ChatGptService chatGptService, IHttpContextAccessor httpContextAccessor
         ) : base(mediator, logger)
         {
             _topicService = topicService;
             _cloudinaryService = cloudinaryService;
             _dbContext = dbContext;
             _chatGptService = chatGptService;
+            _mediator = mediator;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         [HttpGet]
@@ -174,7 +182,8 @@ namespace PhyGen.API.Controllers
             if (!isAdmin)
             {
                 command.CreatedBy = userEmail;
-            } else
+            }
+            else
             {
                 command.CreatedBy = "Admin";
             }
@@ -229,6 +238,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPost("extract-from-file")]
+        [Authorize]
         public async Task<IActionResult> ExtractQuestionsFromFile([FromForm] FileUploadRequest request)
         {
             if (request.File == null || request.File.Length == 0)
@@ -318,8 +328,20 @@ namespace PhyGen.API.Controllers
                 savedCount++;
             }
 
-            return Ok(new { Message = $"Đã lưu {savedCount} câu hỏi." });
-        
+            var result = new { Message = $"Đã lưu {savedCount} câu hỏi." };
+
+            // Tạo notification
+            await _mediator.Send(new CreateNotificationCommand
+            {
+                UserId = Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var guid)
+                ? guid
+                : throw new UnauthorizedAccessException("UserId trong token không hợp lệ."),
+                Title = "Tạo câu hỏi thành công",
+                Message = $"Bạn đã lưu thành công {savedCount} câu hỏi.",
+                CreatedAt = DateTime.UtcNow
+            });
+
+            return Ok(result);
         }
 
         private class QuestionWithImages
@@ -381,6 +403,37 @@ namespace PhyGen.API.Controllers
                 }
             }
             return result;
+        }
+
+        [HttpPost("check-file")]
+        public async Task<IActionResult> CheckFileQuestion([FromForm] FileUploadRequest request)
+        {
+            if (request.File == null || request.File.Length == 0)
+                return BadRequest("File rỗng.");
+
+            List<QuestionWithImages> questionsWithImages;
+            using (var ms = new MemoryStream())
+            {
+                await request.File.CopyToAsync(ms);
+                ms.Position = 0;
+                using (var wordDoc = WordprocessingDocument.Open(ms, false))
+                {
+                    questionsWithImages = ExtractQuestionsWithImages(wordDoc);
+                }
+            }
+
+            var fullText = string.Join("\n\n", questionsWithImages
+                .Select(q => q.Content)
+                .Where(s => !string.IsNullOrWhiteSpace(s)));
+
+            // Không cần dùng request.Grade ở đây
+            var isPhysicsExam = await _chatGptService.IsPhysicsExamAsync(
+                request.File.FileName,
+                fullText,
+                HttpContext.RequestAborted
+            );
+
+            return Ok(new { isPhysicsExam });
         }
     }
 }
