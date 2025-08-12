@@ -33,7 +33,7 @@ namespace PhyGen.API.Controllers
         }
 
         [Authorize] 
-        [HttpPost("chatbox")]
+        [HttpPost()]
         public async Task<IActionResult> Chat([FromBody] GeminiService.MessageRequest newMessage)
         {
             string userId = GetUserId();

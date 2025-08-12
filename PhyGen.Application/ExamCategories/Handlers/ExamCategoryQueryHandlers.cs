@@ -25,6 +25,8 @@ namespace PhyGen.Application.ExamCategories.Handlers
         {
             var examCategories = await _examCategoryRepository.GetAllAsync();
 
+            examCategories = examCategories.Where(ec => !ec.DeletedAt.HasValue).ToList();
+
             if (examCategories == null || !examCategories.Any())
                 throw new ExamCategoryNotFoundException();
 
@@ -43,7 +45,10 @@ namespace PhyGen.Application.ExamCategories.Handlers
 
         public async Task<ExamCategoryResponse> Handle(GetExamCategoryByIdQuery request, CancellationToken cancellationToken)
         {
-            var examCategory = await _examCategoryRepository.GetByIdAsync(request.Id) ?? throw new ExamCategoryNotFoundException();
+            var examCategory = await _examCategoryRepository.GetByIdAsync(request.Id);
+
+            if (examCategory == null || examCategory.DeletedAt.HasValue)
+                throw new ExamCategoryNotFoundException();
 
             return AppMapper<CoreMappingProfile>.Mapper.Map<ExamCategoryResponse>(examCategory);
         }
