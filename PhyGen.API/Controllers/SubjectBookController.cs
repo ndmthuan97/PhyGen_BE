@@ -40,6 +40,14 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetSubjectBooksBySubjectIdQuery, Pagination<SubjectBookResponse>>(request);
         }
 
+        [HttpGet("grade/{grade}")]
+        [ProducesResponseType(typeof(ApiResponse<List<SubjectBookResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetSubjectBooksByGrade(int grade)
+        {
+            var request = new GetSubjectBookByGrade(grade);
+            return await ExecuteAsync<GetSubjectBookByGrade, List<SubjectBookResponse>>(request);
+        }
+
         [HttpPost]
         [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<SubjectBookResponse>), (int)HttpStatusCode.OK)]

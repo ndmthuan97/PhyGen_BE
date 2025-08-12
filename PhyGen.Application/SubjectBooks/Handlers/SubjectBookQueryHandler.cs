@@ -26,7 +26,7 @@ namespace PhyGen.Application.SubjectBooks.Handlers
         public async Task<SubjectBookResponse> Handle(GetSubjectBookByIdQuery request, CancellationToken cancellationToken)
         {
             var subjectBook = await _subjectBookRepository.GetByIdAsync(request.Id) ?? throw new SubjectBookNotFoundException();
-            
+
             return AppMapper<CoreMappingProfile>.Mapper.Map<SubjectBookResponse>(subjectBook);
         }
     }
@@ -47,6 +47,25 @@ namespace PhyGen.Application.SubjectBooks.Handlers
             var subjectBooks = await _subjectBookRepository.GetSubjectBooksBySubjectWithSpecAsync(request.SubjectBookSpecParam);
 
             return AppMapper<CoreMappingProfile>.Mapper.Map<Pagination<SubjectBookResponse>>(subjectBooks);
+        }
+    }
+
+    public class GetSubjectBookByGradeQueryHandler : IRequestHandler<GetSubjectBookByGrade, List<SubjectBookResponse>>
+    {
+        private readonly ISubjectBookRepository _subjectBookRepository;
+        public GetSubjectBookByGradeQueryHandler(ISubjectBookRepository subjectBookRepository)
+        {
+            _subjectBookRepository = subjectBookRepository;
+        }
+        public async Task<List<SubjectBookResponse>> Handle(GetSubjectBookByGrade request, CancellationToken cancellationToken)
+        {
+            var subjectBooks = await _subjectBookRepository.GetSubjectBooksByGradeAsync(request.Grade);
+            subjectBooks = subjectBooks?.Where(sb => !sb.DeletedAt.HasValue).ToList();
+            if (subjectBooks == null || !subjectBooks.Any())
+            {
+                throw new SubjectBookNotFoundException();
+            }
+            return AppMapper<CoreMappingProfile>.Mapper.Map<List<SubjectBookResponse>>(subjectBooks);
         }
     }
 }
