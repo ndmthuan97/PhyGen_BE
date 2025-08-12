@@ -24,5 +24,12 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
             var spec = new SubjectBookSpecification(subjectBookSpecParam);
             return await GetWithSpecAsync(spec);
         }
+
+        public async Task<List<SubjectBook>> GetSubjectBooksByGradeAsync(int grade)
+        {
+            return await _context.SubjectBooks
+                .Where(sb => sb.Grade == grade)
+                .ToListAsync();
+        }
     }
 }
