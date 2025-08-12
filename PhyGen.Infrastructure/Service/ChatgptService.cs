@@ -118,7 +118,7 @@ namespace PhyGen.Infrastructure.Service
             - Trả về danh sách [ {{...}}, ... ].
             - Phần MultipleChoice trả ra các đáp án ko cần A., B., C., D. ở đầu
             - Phần TrueFalse/ShortAnswer/Essay lưu hết vào content, phần Answer để null (Phần TrueFalse 1 câu chỉ trả ra 1 lần)
-            - Câu nào có công thức giúp tôi viết bằng LaTex theo thư viện better-react-mathjax để hiển thị cho FE có thể hanlde không bị lỗi.
+            - Câu nào có công thức giúp tôi viết bằng LaTex theo thư viện better-react-mathjax để hiển thị cho FE có thể hanlde không bị lỗi(theo dạng $...$)
             - Không trả lại bất cứ văn bản hay giải thích nào ngoài JSON!
             ";
 
