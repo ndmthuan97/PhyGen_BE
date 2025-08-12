@@ -96,8 +96,7 @@ namespace PhyGen.Infrastructure.Service
         {
             var param = new TopicByGradeSpecParam { Grade = grade };
             var query = new GetTopicsByGradeQuery(param);
-            var topicResponses = await _mediator.Send(query); 
-
+            var topicResponses = await _mediator.Send(query);
             var topicNames = topicResponses.Select(x => x.Name).ToList();
 
             string prompt = $@"
@@ -108,21 +107,21 @@ namespace PhyGen.Infrastructure.Service
             - Hãy tách riêng từng câu hỏi trong đề (bỏ số thứ tự).
             - Đối với mỗi câu hỏi, trả về dạng JSON:
               {{
-                ""Content"": Nội dung câu hỏi,
+                ""Content"": Nội dung câu hỏi, không chứa các đáp án trừ loại TrueFalse
                 ""Type"": Loại câu hỏi (MultipleChoice/TrueFalse/ShortAnswer/Essay),
                 ""Level"": ""Easy"" hoặc ""Medium"" hoặc ""Hard"" (chính xác, không dấu cách, không tiếng Việt, không viết hoa hết, không thừa khoảng trắng)
-                ""TopicName"": Tên chủ đề (chọn từ danh sách sao cho phù hợp với câu hỏi từ list chủ đề :{topicNames}), chỉ chọn 1 và  không thay đổi nội dung chủ đề,
-                ""Answer1"": ..., ""Answer2"": ..., // Các đáp án, thường là có 4 đáp án
+                ""TopicName"": Tên chủ đề (chọn từ danh sách sao cho phù hợp với câu hỏi từ list chủ đề :{string.Join(", ", topicNames)}), chỉ chọn 1 và không thay đổi nội dung chủ đề,
+                ""Answer1"": ..., ""Answer2"": ...,
                 ""Grade"": Lớp, //Grade phải là số nguyên. Không để trong dấu nháy
                 ""MediaBase64"": Base64 hình minh họa (nếu có), null nếu không có hình.
               }}
             - Trả về danh sách [ {{...}}, ... ].
             - Phần MultipleChoice trả ra các đáp án ko cần A., B., C., D. ở đầu
             - Phần TrueFalse/ShortAnswer/Essay lưu hết vào content, phần Answer để null (Phần TrueFalse 1 câu chỉ trả ra 1 lần)
+            - Câu nào có công thức giúp tôi viết bằng LaTex theo thư viện better-react-mathjax để hiển thị cho FE có thể hanlde không bị lỗi.
             - Không trả lại bất cứ văn bản hay giải thích nào ngoài JSON!
             ";
 
-            // --- Gọi OpenAI API trực tiếp ---
             var httpClient = _httpClientFactory.CreateClient();
             httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", _apiKey);
@@ -142,17 +141,15 @@ namespace PhyGen.Infrastructure.Service
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("OpenAI API Error: " + error);
                 throw new Exception("OpenAI API call failed: " + error);
             }
 
             var result = await response.Content.ReadFromJsonAsync<ChatGptResponse>();
             var resultText = result?.choices?.FirstOrDefault()?.message?.content;
-
             if (string.IsNullOrWhiteSpace(resultText))
                 throw new Exception("Không nhận được dữ liệu từ ChatGPT!");
 
-            // Có thể có markdown code block, cần lọc ra
+            // Lọc code block nếu có
             var jsonStart = resultText.IndexOf('[');
             var jsonEnd = resultText.LastIndexOf(']');
             if (jsonStart >= 0 && jsonEnd > jsonStart)
@@ -163,7 +160,8 @@ namespace PhyGen.Infrastructure.Service
                 PropertyNameCaseInsensitive = true,
                 Converters = { new JsonStringEnumConverter() }
             });
-            return questions;
+
+            return questions ?? new List<ExtractedQuestionDto>();
         }
 
         public async Task<bool> IsPhysicsExamAsync(string fileName, string fullText, CancellationToken ct = default)
@@ -173,7 +171,8 @@ namespace PhyGen.Infrastructure.Service
             Bạn là giáo viên Vật lý. Hãy đọc nội dung sau và CHỈ trả về một JSON object hợp lệ có duy nhất khóa:
             - isPhysicsExam: boolean
 
-            Định nghĩa: isPhysicsExam=true nếu nội dung chủ yếu là các câu hỏi/đề mục thuộc môn Vật lý (cơ học, nhiệt học, điện, quang, hạt nhân, v.v.), có cấu trúc đề (nhiều câu hỏi, A/B/C/D, đúng-sai, tự luận, công thức/ký hiệu vật lý, đơn vị SI).
+            Định nghĩa: isPhysicsExam=true nếu nội dung chủ yếu là các câu hỏi/đề mục thuộc môn Vật lý (cơ học, nhiệt học, điện, quang, hạt nhân, v.v.), có cấu trúc đề (nhiều câu hỏi, A/B/C/D, đúng-sai, tự luận, công thức/ký hiệu vật lý, đơn vị SI)
+            Chỉ có list câu hỏi vật lý mới được coi là danh sách câu hỏi Vật lý, những thứ khác liên quan tới Vật lý nhưng không phải đề (ví dụ:lý thuyết, công thức, ma trận) thì không được coi là đề Vật lý thì sẽ trả về false.
 
             Ví dụ đầu ra hợp lệ:
             {{""isPhysicsExam"": true}}
