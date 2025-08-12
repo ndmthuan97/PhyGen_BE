@@ -113,7 +113,6 @@ namespace PhyGen.Infrastructure.Service
                 ""TopicName"": Tên chủ đề (chọn từ danh sách sao cho phù hợp với câu hỏi từ list chủ đề :{string.Join(", ", topicNames)}), chỉ chọn 1 và không thay đổi nội dung chủ đề,
                 ""Answer1"": ..., ""Answer2"": ...,
                 ""Grade"": Lớp, //Grade phải là số nguyên. Không để trong dấu nháy
-                ""MediaBase64"": null,
               }}
             - Trả về danh sách [ {{...}}, ... ].
             - Phần MultipleChoice trả ra các đáp án ko cần A., B., C., D. ở đầu

@@ -20,7 +20,6 @@ namespace PhyGen.Application.Questions.Dtos
         public string? Answer6 { get; set; }
         public int Grade { get; set; }
         public string TopicName { get; set; }
-        public string? MediaBase64 { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
     }

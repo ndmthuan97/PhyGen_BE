@@ -265,20 +265,7 @@ namespace PhyGen.API.Controllers
 
             // 4) (Tùy chọn) nếu muốn gắn ảnh từ file vào MediaBase64 cho từng câu
             //    Quy ước: lấy ảnh đầu tiên của mỗi câu trong file (nếu AI chưa điền MediaBase64)
-            int n = Math.Min(questions.Count, questionsWithImages.Count);
-            for (int i = 0; i < n; i++)
-            {
-                var q = questions[i];
-                if (string.IsNullOrWhiteSpace(q.MediaBase64))
-                {
-                    var imgs = questionsWithImages[i].Images; // List<byte[]>
-                    if (imgs != null && imgs.Count > 0)
-                    {
-                        // lấy ảnh đầu tiên
-                        q.MediaBase64 = Convert.ToBase64String(imgs[0]);
-                    }
-                }
-            }
+           
             return Ok(questions);
         }
 
