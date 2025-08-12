@@ -229,7 +229,9 @@ public class AuthService : IAuthService
         {
             return new AuthenticationResponse { Email = email, StatusCode = StatusCode.MustLoginWithEmailPassword };
         }
-        if(user.LastLogin == null)
+        var now = DateTime.UtcNow;
+
+        if (user.LastLogin == null)
         {
             user.Coin = 15;
             await _mediator.Send(new CreateNotificationCommand
@@ -237,10 +239,16 @@ public class AuthService : IAuthService
                 UserId = user.Id,
                 Title = "Chào mừng",
                 Message = "Bạn đã được tặng 15 xu cho đăng nhập lần đầu vào website của chúng tôi!",
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = now
             });
         }
-        user.LastLogin = DateTime.UtcNow;
+        else if (IsFirstLoginToday(user.LastLogin, now))
+        {
+            // Thưởng điểm danh ngày mới
+            await AwardDailyLoginBonusAsync(user);
+        }
+
+        user.LastLogin = now;
         await _context.SaveChangesAsync();
 
         return new LoginResponse
@@ -258,6 +266,7 @@ public class AuthService : IAuthService
         var avatarUrl = metadata?.avatar_url;
 
         var (firstName, lastName) = ParseFullName(fullName);
+        var now = DateTime.UtcNow;
 
         var newUser = new User
         {
@@ -269,10 +278,9 @@ public class AuthService : IAuthService
             isConfirm = true,
             IsActive = true,
             Role = "User",
-            Coin = 0,
-            LastLogin = null
+            Coin = 15,
+            LastLogin = now
         };
-
         _context.Users.Add(newUser);
         await _context.SaveChangesAsync();
 
@@ -280,11 +288,10 @@ public class AuthService : IAuthService
         {
             UserId = newUser.Id,
             Title = "Chào mừng",
-            Message = "Tài khoản đã được tạo. Bạn được tặng 15 xu khi đăng nhập lần đầu!",
-            CreatedAt = DateTime.UtcNow
+            Message = "Bạn đã được tặng 15 xu cho đăng nhập lần đầu vào website của chúng tôi!",
+            CreatedAt = now
         });
-        // set LastLogin sau khi tặng & gửi
-        newUser.LastLogin = DateTime.UtcNow;
+
         await _context.SaveChangesAsync();
 
         return new LoginResponse
@@ -338,6 +345,8 @@ public class AuthService : IAuthService
             return new AuthenticationResponse { Email = email, StatusCode = StatusCode.AccountNotConfirmed };
         }
 
+        var now = DateTime.UtcNow;
+
         if (user.LastLogin == null)
         {
             user.Coin = 15;
@@ -349,7 +358,13 @@ public class AuthService : IAuthService
                 CreatedAt = DateTime.UtcNow
             });
         }
-        user.LastLogin = DateTime.UtcNow;
+        else if (IsFirstLoginToday(user.LastLogin, now))
+        {
+            // Thưởng điểm danh ngày mới
+            await AwardDailyLoginBonusAsync(user);
+        }
+
+        user.LastLogin = now;
         await _context.SaveChangesAsync();
 
         var token = _jwtTokenGenerator.GenerateToken(user);
@@ -583,6 +598,23 @@ public class AuthService : IAuthService
         }
 
         await _emailService.SendEmailAsync(mailrequest);
+    }
+    private static bool IsFirstLoginToday(DateTime? lastLoginUtc, DateTime nowUtc)
+    {
+        if (lastLoginUtc == null) return false; // lần đầu ever sẽ xử lý riêng
+        return lastLoginUtc.Value.Date < nowUtc.Date;
+    }
+
+    private async Task AwardDailyLoginBonusAsync(User user)
+    {
+        user.Coin += 1;
+        await _mediator.Send(new CreateNotificationCommand
+        {
+            UserId = user.Id,
+            Title = "Điểm danh",
+            Message = "Bạn nhận 1 xu cho lần đăng nhập đầu tiên hôm nay!",
+            CreatedAt = DateTime.UtcNow
+        });
     }
     public class UserMetadata
     {
