@@ -36,7 +36,6 @@ namespace PhyGen.Domain.Entities
         // --- Navigation Properties ---
         public virtual Subject Subject { get; set; } = null!;
         public virtual ExamCategory ExamCategory { get; set; } = null!;
-        public virtual ICollection<MatrixContentItem> MatrixContentItems { get; set; } = new List<MatrixContentItem>();
         public virtual ICollection<MatrixSection> MatrixSections { get; set; } = new List<MatrixSection>();
     }
 }

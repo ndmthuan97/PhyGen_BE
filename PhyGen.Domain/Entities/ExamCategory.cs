@@ -17,7 +17,5 @@ namespace PhyGen.Domain.Entities
         // Navigation Properties
         public virtual ICollection<Matrix> Matrices { get; set; } = new List<Matrix>();
         public virtual ICollection<Exam> Exams { get; set; } = new List<Exam>();
-        public virtual ICollection<ExamCategoryChapter> ExamCategoryChapters { get; set; } = new List<ExamCategoryChapter>();
-        public virtual ICollection<ContentItemExamCategory> ContentItemExamCategories { get; set; } = new List<ContentItemExamCategory>();
     }
 }

@@ -405,81 +405,6 @@ namespace PhyGen.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContentItemExamCategories",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ContentItemId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExamCategoryId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContentItemExamCategories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ContentItemExamCategories_ContentItems_ContentItemId",
-                        column: x => x.ContentItemId,
-                        principalTable: "ContentItems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ContentItemExamCategories_ExamCategories_ExamCategoryId",
-                        column: x => x.ExamCategoryId,
-                        principalTable: "ExamCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MatrixContentItems",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    MatrixId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ContentItemId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MatrixContentItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MatrixContentItems_ContentItems_ContentItemId",
-                        column: x => x.ContentItemId,
-                        principalTable: "ContentItems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MatrixContentItems_Matrices_MatrixId",
-                        column: x => x.MatrixId,
-                        principalTable: "Matrices",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ExamCategoryChapters",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExamCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ChapterId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExamCategoryChapters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ExamCategoryChapters_Chapters_ChapterId",
-                        column: x => x.ChapterId,
-                        principalTable: "Chapters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ExamCategoryChapters_ExamCategories_ExamCategoryId",
-                        column: x => x.ExamCategoryId,
-                        principalTable: "ExamCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Topics",
                 columns: table => new
                 {
@@ -507,6 +432,7 @@ namespace PhyGen.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     MatrixSectionId = table.Column<Guid>(type: "uuid", nullable: false),
                     SectionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ContentItemId = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Level = table.Column<int>(type: "integer", nullable: false),
@@ -517,6 +443,12 @@ namespace PhyGen.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MatrixSectionDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MatrixSectionDetails_ContentItems_ContentItemId",
+                        column: x => x.ContentItemId,
+                        principalTable: "ContentItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MatrixSectionDetails_MatrixSections_MatrixSectionId",
                         column: x => x.MatrixSectionId,
@@ -627,16 +559,6 @@ namespace PhyGen.Infrastructure.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContentItemExamCategories_ContentItemId",
-                table: "ContentItemExamCategories",
-                column: "ContentItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ContentItemExamCategories_ExamCategoryId",
-                table: "ContentItemExamCategories",
-                column: "ExamCategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ContentItems_ContentFlowId",
                 table: "ContentItems",
                 column: "ContentFlowId");
@@ -645,16 +567,6 @@ namespace PhyGen.Infrastructure.Migrations
                 name: "IX_EmailOtpManagers_UserId",
                 table: "EmailOtpManagers",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExamCategoryChapters_ChapterId",
-                table: "ExamCategoryChapters",
-                column: "ChapterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExamCategoryChapters_ExamCategoryId",
-                table: "ExamCategoryChapters",
-                column: "ExamCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Exams_ExamCategoryId",
@@ -682,14 +594,9 @@ namespace PhyGen.Infrastructure.Migrations
                 column: "SubjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MatrixContentItems_ContentItemId",
-                table: "MatrixContentItems",
+                name: "IX_MatrixSectionDetails_ContentItemId",
+                table: "MatrixSectionDetails",
                 column: "ContentItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MatrixContentItems_MatrixId",
-                table: "MatrixContentItems",
-                column: "MatrixId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MatrixSectionDetails_MatrixSectionId",
@@ -761,19 +668,10 @@ namespace PhyGen.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ContentItemExamCategories");
-
-            migrationBuilder.DropTable(
                 name: "EmailOtpManagers");
 
             migrationBuilder.DropTable(
-                name: "ExamCategoryChapters");
-
-            migrationBuilder.DropTable(
                 name: "ExamVersions");
-
-            migrationBuilder.DropTable(
-                name: "MatrixContentItems");
 
             migrationBuilder.DropTable(
                 name: "MatrixSectionDetails");

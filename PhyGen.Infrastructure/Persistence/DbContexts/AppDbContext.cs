@@ -18,15 +18,12 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<ContentFlow> ContentFlows { get; set; }
         public DbSet<ContentItem> ContentItems { get; set; }
-        public DbSet<ContentItemExamCategory> ContentItemExamCategories { get; set; }
         public DbSet<Curriculum> Curriculums { get; set; }
         public DbSet<EmailOtpManager> EmailOtpManagers { get; set; }
         public DbSet<Exam> Exams { get; set; }
         public DbSet<ExamCategory> ExamCategories { get; set; }
-        public DbSet<ExamCategoryChapter> ExamCategoryChapters { get; set; }
         public DbSet<ExamVersion> ExamVersions { get; set; }
         public DbSet<Matrix> Matrices { get; set; }
-        public DbSet<MatrixContentItem> MatrixContentItems { get; set; }
         public DbSet<MatrixSection> MatrixSections { get; set; }
         public DbSet<MatrixSectionDetail> MatrixSectionDetails { get; set; }
         public DbSet<Notification> Notifications { get; set; }
@@ -76,12 +73,6 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.Name).IsRequired();
             });
 
-            modelBuilder.Entity<ContentItemExamCategory>(e =>
-            {
-                e.Property(p => p.ContentItemId).IsRequired();
-                e.Property(p => p.ExamCategoryId).IsRequired();
-            });
-
             modelBuilder.Entity<Curriculum>(e =>
             {
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
@@ -111,12 +102,6 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.Name).IsRequired();
             });
 
-            modelBuilder.Entity<ExamCategoryChapter>(e =>
-            {
-                e.Property(p => p.ExamCategoryId).IsRequired();
-                e.Property(p => p.ChapterId).IsRequired();
-            });
-
             modelBuilder.Entity<ExamVersion>(e =>
             {
                 e.Property(p => p.ExamId).IsRequired();
@@ -127,12 +112,6 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.SubjectId).IsRequired();
                 e.Property(p => p.ExamCategoryId).IsRequired();
-            });
-
-            modelBuilder.Entity<MatrixContentItem>(e =>
-            {
-                e.Property(p => p.MatrixId).IsRequired();
-                e.Property(p => p.ContentItemId).IsRequired();
             });
 
             modelBuilder.Entity<MatrixSection>(e =>
@@ -146,6 +125,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.MatrixSectionId).IsRequired();
                 e.Property(p => p.SectionId).IsRequired();
+                e.Property(p => p.ContentItemId).IsRequired();
                 e.Property(p => p.Title).IsRequired();
                 e.Property(p => p.Description).HasColumnType("text");
             });

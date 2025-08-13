@@ -4,14 +4,11 @@ using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Chapters.Commands;
 using PhyGen.Application.ContentFlows.Commands;
-using PhyGen.Application.ContentItemExamCategories.Commands;
 using PhyGen.Application.ContentItems.Commands;
 using PhyGen.Application.Curriculums.Commands;
 using PhyGen.Application.ExamCategories.Commands;
-using PhyGen.Application.ExamCategoryChapters.Commands;
 using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Matrices.Commands;
-using PhyGen.Application.MatrixContentItems.Commands;
 using PhyGen.Application.MatrixSectionDetails.Commands;
 using PhyGen.Application.MatrixSections.Commands;
 using PhyGen.Application.Notification.Commands;
@@ -95,14 +92,6 @@ namespace PhyGen.API.Mapping
             CreateMap<UpdateExamCategoryRequest, UpdateExamCategoryCommand>();
             CreateMap<DeleteExamCategoryRequest, DeleteExamCategoryCommand>();
 
-            // Mapping for ContentItemExamCaterory
-            CreateMap<CreateContentItemExamCategoryRequest, CreateContentItemExamCategoryCommand>();
-            CreateMap<UpdateContentItemExamCategoryRequest, UpdateContentItemExamCategoryCommand>();
-
-            // Mapping for ExamCategoryChapter
-            CreateMap<CreateExamCategoryChapterRequest, CreateExamCategoryChapterCommand>();
-            CreateMap<UpdateExamCategoryChapterRequest, UpdateExamCategoryChapterCommand>();
-
             // Mapping for Question
             CreateMap<CreateQuestionRequest, CreateQuestionCommand>();
             CreateMap<UpdateQuestionRequest, UpdateQuestionCommand>();
@@ -122,10 +111,6 @@ namespace PhyGen.API.Mapping
             CreateMap<CreateMatrixSectionDetailRequest, CreateMatrixSectionDetailCommand>();
             CreateMap<UpdateMatrixSectionDetailRequest, UpdateMatrixSectionDetailCommand>();
             CreateMap<DeleteMatrixSectionDetailRequest, DeleteMatrixSectionDetailCommand>();
-
-            // Mapping for MatrixContentItem
-            CreateMap<CreateMatrixContentItemRequest, CreateMatrixContentItemCommand>();
-            CreateMap<UpdateMatrixContentItemRequest, UpdateMatrixContentItemCommand>();
 
             // Mapping for QuestionMedia
             CreateMap<CreateQuestionMediaRequest, CreateQuestionMediaCommand>();

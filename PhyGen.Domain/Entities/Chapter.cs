@@ -21,6 +21,5 @@ namespace PhyGen.Domain.Entities
         // Navigation Properties
         public virtual SubjectBook SubjectBook { get; set; } = null!;
         public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
-        public virtual ICollection<ExamCategoryChapter> ExamCategoryChapters { get; set; } = new List<ExamCategoryChapter>();
     }
 }

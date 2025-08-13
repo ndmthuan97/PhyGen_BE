@@ -12,7 +12,7 @@ using PhyGen.Infrastructure.Persistence.DbContexts;
 namespace PhyGen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250813075534_Initial")]
+    [Migration("20250813083452_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -125,27 +125,6 @@ namespace PhyGen.Infrastructure.Migrations
                     b.HasIndex("ContentFlowId");
 
                     b.ToTable("ContentItems");
-                });
-
-            modelBuilder.Entity("PhyGen.Domain.Entities.ContentItemExamCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ContentItemId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ExamCategoryId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContentItemId");
-
-                    b.HasIndex("ExamCategoryId");
-
-                    b.ToTable("ContentItemExamCategories");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Curriculum", b =>
@@ -291,27 +270,6 @@ namespace PhyGen.Infrastructure.Migrations
                     b.ToTable("ExamCategories");
                 });
 
-            modelBuilder.Entity("PhyGen.Domain.Entities.ExamCategoryChapter", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ChapterId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ExamCategoryId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChapterId");
-
-                    b.HasIndex("ExamCategoryId");
-
-                    b.ToTable("ExamCategoryChapters");
-                });
-
             modelBuilder.Entity("PhyGen.Domain.Entities.ExamVersion", b =>
                 {
                     b.Property<Guid>("Id")
@@ -399,27 +357,6 @@ namespace PhyGen.Infrastructure.Migrations
                     b.ToTable("Matrices");
                 });
 
-            modelBuilder.Entity("PhyGen.Domain.Entities.MatrixContentItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ContentItemId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("MatrixId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContentItemId");
-
-                    b.HasIndex("MatrixId");
-
-                    b.ToTable("MatrixContentItems");
-                });
-
             modelBuilder.Entity("PhyGen.Domain.Entities.MatrixSection", b =>
                 {
                     b.Property<Guid>("Id")
@@ -458,6 +395,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("ContentItemId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -487,6 +427,8 @@ namespace PhyGen.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ContentItemId");
 
                     b.HasIndex("MatrixSectionId");
 
@@ -951,25 +893,6 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Navigation("ContentFlow");
                 });
 
-            modelBuilder.Entity("PhyGen.Domain.Entities.ContentItemExamCategory", b =>
-                {
-                    b.HasOne("PhyGen.Domain.Entities.ContentItem", "ContentItem")
-                        .WithMany("ContentItemExamCategories")
-                        .HasForeignKey("ContentItemId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PhyGen.Domain.Entities.ExamCategory", "ExamCategory")
-                        .WithMany("ContentItemExamCategories")
-                        .HasForeignKey("ExamCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ContentItem");
-
-                    b.Navigation("ExamCategory");
-                });
-
             modelBuilder.Entity("PhyGen.Domain.Entities.EmailOtpManager", b =>
                 {
                     b.HasOne("PhyGen.Domain.Entities.User", null)
@@ -995,25 +918,6 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Navigation("ExamCategory");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PhyGen.Domain.Entities.ExamCategoryChapter", b =>
-                {
-                    b.HasOne("PhyGen.Domain.Entities.Chapter", "Chapter")
-                        .WithMany("ExamCategoryChapters")
-                        .HasForeignKey("ChapterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PhyGen.Domain.Entities.ExamCategory", "ExamCategory")
-                        .WithMany("ExamCategoryChapters")
-                        .HasForeignKey("ExamCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Chapter");
-
-                    b.Navigation("ExamCategory");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.ExamVersion", b =>
@@ -1046,25 +950,6 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("PhyGen.Domain.Entities.MatrixContentItem", b =>
-                {
-                    b.HasOne("PhyGen.Domain.Entities.ContentItem", "ContentItem")
-                        .WithMany("MatrixContentItems")
-                        .HasForeignKey("ContentItemId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PhyGen.Domain.Entities.Matrix", "Matrix")
-                        .WithMany("MatrixContentItems")
-                        .HasForeignKey("MatrixId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ContentItem");
-
-                    b.Navigation("Matrix");
-                });
-
             modelBuilder.Entity("PhyGen.Domain.Entities.MatrixSection", b =>
                 {
                     b.HasOne("PhyGen.Domain.Entities.Matrix", "Matrix")
@@ -1078,6 +963,12 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.MatrixSectionDetail", b =>
                 {
+                    b.HasOne("PhyGen.Domain.Entities.ContentItem", "ContentItem")
+                        .WithMany("MatrixSectionDetails")
+                        .HasForeignKey("ContentItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("PhyGen.Domain.Entities.MatrixSection", "MatrixSection")
                         .WithMany("MatrixSectionDetails")
                         .HasForeignKey("MatrixSectionId")
@@ -1089,6 +980,8 @@ namespace PhyGen.Infrastructure.Migrations
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("ContentItem");
 
                     b.Navigation("MatrixSection");
 
@@ -1198,8 +1091,6 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Chapter", b =>
                 {
-                    b.Navigation("ExamCategoryChapters");
-
                     b.Navigation("Topics");
                 });
 
@@ -1210,9 +1101,7 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.ContentItem", b =>
                 {
-                    b.Navigation("ContentItemExamCategories");
-
-                    b.Navigation("MatrixContentItems");
+                    b.Navigation("MatrixSectionDetails");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Curriculum", b =>
@@ -1229,10 +1118,6 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.ExamCategory", b =>
                 {
-                    b.Navigation("ContentItemExamCategories");
-
-                    b.Navigation("ExamCategoryChapters");
-
                     b.Navigation("Exams");
 
                     b.Navigation("Matrices");
@@ -1240,8 +1125,6 @@ namespace PhyGen.Infrastructure.Migrations
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Matrix", b =>
                 {
-                    b.Navigation("MatrixContentItems");
-
                     b.Navigation("MatrixSections");
                 });
 

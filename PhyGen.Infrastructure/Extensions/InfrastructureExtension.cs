@@ -53,8 +53,6 @@ namespace PhyGen.Infrastructure.Extensions
             services.AddScoped<IContentFlowRepository, ContentFlowRepository>();
             services.AddScoped<IContentItemRepository, ContentItemRepository>();
             services.AddScoped<IExamCategoryRepository, ExamCategoryRepository>();
-            services.AddScoped<IContentItemExamCategoryRepository, ContentItemExamCategoryRepository>();
-            services.AddScoped<IExamCategoryChapterRepository, ExamCategoryChapterRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAuthService, AuthService>();
@@ -67,7 +65,6 @@ namespace PhyGen.Infrastructure.Extensions
             services.AddScoped<IMatrixRepository, MatrixRepository>();
             services.AddScoped<IMatrixSectionRepository, MatrixSectionRepository>();
             services.AddScoped<IMatrixSectionDetailRepository, MatrixSectionDetailRepository>();
-            services.AddScoped<IMatrixContentItemRepository, MatrixContentItemRepository>();
             services.AddScoped<IQuestionMediaRepository, QuestionMediaRepository>();
             services.AddScoped<ISectionRepository, SectionRepository>();
             services.AddScoped<IQuestionSectionRepository, QuestionSectionRepository>();

@@ -15,8 +15,7 @@ namespace PhyGen.Domain.Entities
         public DateTime? DeletedAt { get; set; }
 
         public virtual ContentFlow ContentFlow { get; set; } = null!;
-        public virtual ICollection<MatrixContentItem> MatrixContentItems { get; set; } = new List<MatrixContentItem>();
-        public virtual ICollection<ContentItemExamCategory> ContentItemExamCategories { get; set; } = new List<ContentItemExamCategory>();
+        public virtual ICollection<MatrixSectionDetail> MatrixSectionDetails { get; set; } = new List<MatrixSectionDetail>();
 
     }
 }
