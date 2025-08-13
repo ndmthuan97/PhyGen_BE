@@ -26,4 +26,12 @@ namespace PhyGen.Shared.Constants
         ShortAnswer,
         Essay
     }
+
+    public enum StatusQEM
+    {
+        Approved,
+        Draft,
+        AIDraft,
+        Removed,
+    }
 }

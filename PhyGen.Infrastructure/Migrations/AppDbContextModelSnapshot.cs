@@ -28,6 +28,11 @@ namespace PhyGen.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ChapterCode")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -36,9 +41,6 @@ namespace PhyGen.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .IsUnicode(true)
                         .HasColumnType("character varying(255)");
-
-                    b.Property<int>("OrderNo")
-                        .HasColumnType("integer");
 
                     b.Property<Guid>("SubjectBookId")
                         .HasColumnType("uuid");
@@ -235,6 +237,9 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<bool>("RandomizeQuestions")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .IsUnicode(true)
@@ -369,6 +374,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("character varying(200)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");
@@ -609,6 +617,9 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<int>("Level")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<Guid?>("TopicId")
                         .HasColumnType("uuid");
 
@@ -776,14 +787,52 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsUnicode(true)
                         .HasColumnType("text");
 
-                    b.Property<int?>("OrderNo")
-                        .HasColumnType("integer");
+                    b.Property<string>("TopicCode")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChapterId");
 
                     b.ToTable("Topics");
+                });
+
+            modelBuilder.Entity("PhyGen.Domain.Entities.Transaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CoinAfter")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CoinBefore")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CoinChange")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("PaymentlinkID")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TypeChange")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.User", b =>
@@ -839,6 +888,11 @@ namespace PhyGen.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Role")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserCode")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("text");
 
@@ -1126,6 +1180,17 @@ namespace PhyGen.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Chapter");
+                });
+
+            modelBuilder.Entity("PhyGen.Domain.Entities.Transaction", b =>
+                {
+                    b.HasOne("PhyGen.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Chapter", b =>

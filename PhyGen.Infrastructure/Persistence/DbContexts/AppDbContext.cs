@@ -39,6 +39,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
         public DbSet<Topic> Topics { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Domain.Entities.Transaction> Transactions { get; set; } 
 
 
         // Configure entities and table mappings, set constraints and properties for columns
@@ -61,24 +62,18 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
                 e.Property(p => p.SubjectBookId).IsRequired();
-                e.Property(p => p.OrderNo);
             });
             modelBuilder.Entity<ContentFlow>(e =>
             {
                 e.Property(p => p.CurriculumId).IsRequired();
                 e.Property(p => p.SubjectId).IsRequired();
                 e.Property(p => p.Name).IsRequired();
-                e.Property(p => p.Description);
-                e.Property(p => p.OrderNo);
-                e.Property(p => p.Grade);
             });
 
             modelBuilder.Entity<ContentItem>(e =>
             {
                 e.Property(p => p.ContentFlowId).IsRequired();
                 e.Property(p => p.Name).IsRequired();
-                e.Property(p => p.LearningOutcome);
-                e.Property(p => p.OrderNo);
             });
 
             modelBuilder.Entity<ContentItemExamCategory>(e =>
@@ -90,7 +85,6 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             modelBuilder.Entity<Curriculum>(e =>
             {
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
-                e.Property(p => p.Year);
             });
 
             modelBuilder.Entity<EmailOtpManager>(e =>
@@ -99,7 +93,6 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.Otptext).IsRequired();
                 e.Property(p => p.Otptype).HasMaxLength(50);
                 e.Property(p => p.Expiration).IsRequired();
-                e.Property(p => p.Createddate);
             });
             modelBuilder.Entity<Exam>(e =>
             {
@@ -116,7 +109,6 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             modelBuilder.Entity<ExamCategory>(e =>
             {
                 e.Property(p => p.Name).IsRequired();
-                e.Property(P => P.OrderNo);
             });
 
             modelBuilder.Entity<ExamCategoryChapter>(e =>
@@ -129,18 +121,12 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.ExamId).IsRequired();
                 e.Property(p => p.Code).IsRequired();
-                e.Property(p => p.QuestionOrder);
             });
 
             modelBuilder.Entity<Matrix>(e =>
             {
                 e.Property(p => p.SubjectId).IsRequired();
                 e.Property(p => p.ExamCategoryId).IsRequired();
-                e.Property(p => p.Name);
-                e.Property(p => p.Description);
-                e.Property(p => p.TotalQuestionCount);
-                e.Property(p => p.Grade);
-                e.Property(p => p.Year);
             });
 
             modelBuilder.Entity<MatrixContentItem>(e =>
@@ -162,35 +148,18 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.SectionId).IsRequired();
                 e.Property(p => p.Title).IsRequired();
                 e.Property(p => p.Description).HasColumnType("text");
-                e.Property(p => p.Quantity);
-                e.Property(p => p.Level);
             });
 
             modelBuilder.Entity<Notification>(e => e.Property(p => p.IsRead).HasDefaultValue(false));
             modelBuilder.Entity<Payment>(e =>
             {
                 e.Property(p => p.UserId).IsRequired();
-                e.Property(p => p.Amount);
-                e.Property(p => p.PaymentLinkId);
-                e.Property(p => p.Description);
-                e.Property(p => p.Status);
-                e.Property(p => p.CreatedAt);
-                e.Property(p => p.ValidUntil);
             });
 
             modelBuilder.Entity<Question>(e =>
             {
                 e.Property(p => p.TopicId);
                 e.Property(p => p.Content).IsRequired();
-                e.Property(p => p.Type);
-                e.Property(p => p.Level);
-                e.Property(p => p.Answer1);
-                e.Property(p => p.Answer2);
-                e.Property(p => p.Answer3);
-                e.Property(p => p.Answer4);
-                e.Property(p => p.Answer5);
-                e.Property(p => p.Answer6);
-                e.Property(p => p.Grade);
             });
 
             modelBuilder.Entity<QuestionMedia>(e =>
@@ -204,7 +173,6 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.QuestionId).IsRequired();
                 e.Property(p => p.SectionId).IsRequired();
-                e.Property(p => p.Score);
             });
 
             modelBuilder.Entity<Section>(e =>
@@ -212,8 +180,6 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.ExamId).IsRequired();
                 e.Property(p => p.Title).IsRequired();
                 e.Property(p => p.Description).HasColumnType("text");
-                e.Property(p => p.SectionType);
-                e.Property(p => p.DisplayOrder);
             });
 
             modelBuilder.Entity<Subject>(e =>
@@ -232,7 +198,11 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.ChapterId).IsRequired();
                 e.Property(p => p.Name).IsRequired();
-                e.Property(p => p.OrderNo);
+            });
+
+            modelBuilder.Entity<Domain.Entities.Transaction>(e =>
+            {
+                e.Property(p => p.UserId).IsRequired();
             });
 
             modelBuilder.Entity<User>(e =>
@@ -241,19 +211,9 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.LastName).HasMaxLength(50).IsRequired();
                 e.Property(p => p.Email).IsRequired();
                 e.Property(p => p.Password).IsRequired();
-                e.Property(p => p.Gender);
-                e.Property(p => p.photoURL);
-                e.Property(p => p.Role);
-                e.Property(p => p.Phone);
-                e.Property(p => p.DateOfBirth);
                 e.Property(p => p.isConfirm).IsRequired();
-                e.Property(p => p.IsActive);
-                e.Property(p => p.Coin);
-                e.Property(p => p.CreatedAt);
-                e.Property(p => p.LastLogin);
             });
 
-            // Gọi cấu hình delete và soft delete
             ConfigureCascadeDelete(modelBuilder);
         }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhyGen.Shared.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,6 +21,8 @@ namespace PhyGen.Domain.Entities
 
         [Column(TypeName = "text")]
         public string? Description { get; set; }
+
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
 
         public int Grade { get; set; }
         public int Year { get; set; }

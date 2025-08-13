@@ -36,20 +36,20 @@ namespace PhyGen.Infrastructure.Specifications.Topics
             {
                 switch (param.Sort.ToLower())
                 {
-                    case "orderno":
-                        OrderBy = query => query.OrderBy(t => t.OrderNo);
-                        break;
-                    case "ordernodesc":
-                        OrderByDescending = query => query.OrderByDescending(t => t.OrderNo);
-                        break;
-                    default:
-                        OrderBy = query => query.OrderBy(t => t.OrderNo);
-                        break;
+                    //case "orderno":
+                    //    OrderBy = query => query.OrderBy(t => t.OrderNo);
+                    //    break;
+                    //case "ordernodesc":
+                    //    OrderByDescending = query => query.OrderByDescending(t => t.OrderNo);
+                    //    break;
+                    //default:
+                    //    OrderBy = query => query.OrderBy(t => t.OrderNo);
+                    //    break;
                 }
             }
             else
             {
-                OrderBy = query => query.OrderBy(t => t.OrderNo);
+                //OrderBy = query => query.OrderBy(t => t.OrderNo);
             }
             Skip = (param.PageIndex - 1) * param.PageSize;
             Take = param.PageSize;

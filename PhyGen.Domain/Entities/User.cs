@@ -9,6 +9,8 @@ namespace PhyGen.Domain.Entities
 {
     public class User : EntityBase<Guid>
     {
+        [Required]
+        public string UserCode { get; set; } = string.Empty;
         [MaxLength(50)]
         public string FirstName { get; set; } = string.Empty;
 

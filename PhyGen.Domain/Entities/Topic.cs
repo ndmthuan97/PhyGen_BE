@@ -16,7 +16,7 @@ namespace PhyGen.Domain.Entities
         [Required]
         public string Name { get; set; } = string.Empty;
 
-        public int? OrderNo { get; set; }
+        public string TopicCode { get; set; } = string.Empty;
 
         public DateTime? DeletedAt { get; set; }
 

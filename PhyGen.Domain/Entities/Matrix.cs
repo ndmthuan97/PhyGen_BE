@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhyGen.Shared.Constants;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace PhyGen.Domain.Entities
         [Required]
         [MaxLength(200)]
         public string Name { get; set; } = string.Empty;
+
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
 
         public string? Description { get; set; }
         public int TotalQuestionCount { get; set; }

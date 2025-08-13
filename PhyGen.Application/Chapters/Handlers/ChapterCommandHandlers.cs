@@ -34,7 +34,6 @@ namespace PhyGen.Application.Chapters.Handlers
             if (await _chapterRepository.AlreadyExistAsync(c => 
             c.SubjectBookId == request.SubjectBookId &&
             c.Name.ToLower() == request.Name.ToLower() &&
-            c.OrderNo == request.OrderNo &&
             c.DeletedAt == null
             ))
                 throw new ChapterAlreadyExistException();
@@ -43,7 +42,6 @@ namespace PhyGen.Application.Chapters.Handlers
             {
                 SubjectBookId = request.SubjectBookId,
                 Name = request.Name,
-                OrderNo = request.OrderNo
             };
 
             await _chapterRepository.AddAsync(chapter);
@@ -71,14 +69,12 @@ namespace PhyGen.Application.Chapters.Handlers
             if (await _chapterRepository.AlreadyExistAsync(c =>
                 c.SubjectBookId == request.SubjectBookId &&
                 c.Name.ToLower() == request.Name.ToLower() &&
-                c.OrderNo == request.OrderNo &&
                 c.DeletedAt == null
                 ))
                 throw new ChapterAlreadyExistException();
 
             chapter.SubjectBookId = request.SubjectBookId;
             chapter.Name = request.Name;
-            chapter.OrderNo = request.OrderNo;
 
             await _chapterRepository.UpdateAsync(chapter);
             return Unit.Value;

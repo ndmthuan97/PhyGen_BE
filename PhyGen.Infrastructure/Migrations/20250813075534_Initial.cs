@@ -57,6 +57,7 @@ namespace PhyGen.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserCode = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
@@ -115,6 +116,7 @@ namespace PhyGen.Infrastructure.Migrations
                     SubjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     ExamCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     TotalQuestionCount = table.Column<int>(type: "integer", nullable: false),
                     Grade = table.Column<int>(type: "integer", nullable: false),
@@ -195,6 +197,7 @@ namespace PhyGen.Infrastructure.Migrations
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     Grade = table.Column<int>(type: "integer", nullable: false),
                     Year = table.Column<int>(type: "integer", nullable: false),
                     TotalQuestionCount = table.Column<int>(type: "integer", nullable: true),
@@ -269,6 +272,30 @@ namespace PhyGen.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PaymentlinkID = table.Column<long>(type: "bigint", nullable: true),
+                    CoinChange = table.Column<int>(type: "integer", nullable: false),
+                    CoinBefore = table.Column<int>(type: "integer", nullable: false),
+                    CoinAfter = table.Column<int>(type: "integer", nullable: false),
+                    TypeChange = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ContentItems",
                 columns: table => new
                 {
@@ -319,7 +346,7 @@ namespace PhyGen.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     SubjectBookId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    OrderNo = table.Column<int>(type: "integer", nullable: false),
+                    ChapterCode = table.Column<string>(type: "text", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -459,7 +486,7 @@ namespace PhyGen.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ChapterId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    OrderNo = table.Column<int>(type: "integer", nullable: true),
+                    TopicCode = table.Column<string>(type: "text", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
@@ -520,6 +547,7 @@ namespace PhyGen.Infrastructure.Migrations
                     Answer5 = table.Column<string>(type: "text", nullable: true),
                     Answer6 = table.Column<string>(type: "text", nullable: true),
                     Grade = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -722,6 +750,11 @@ namespace PhyGen.Infrastructure.Migrations
                 name: "IX_Topics_ChapterId",
                 table: "Topics",
                 column: "ChapterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_UserId",
+                table: "Transactions",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -756,6 +789,9 @@ namespace PhyGen.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "QuestionSections");
+
+            migrationBuilder.DropTable(
+                name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "ContentItems");
