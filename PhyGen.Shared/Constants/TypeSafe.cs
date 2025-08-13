@@ -28,10 +28,10 @@ namespace PhyGen.Shared.Constants
     }
 
     public enum StatusQEM
-    {
-        Approved,
+    {        
         Draft,
         AIDraft,
+        Approved,
         Removed,
     }
 }
