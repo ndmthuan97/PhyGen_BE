@@ -113,12 +113,11 @@ namespace PhyGen.Infrastructure.Service
                 ""TopicName"": Tên chủ đề (chọn từ danh sách sao cho phù hợp với câu hỏi từ list chủ đề :{string.Join(", ", topicNames)}), chỉ chọn 1 và không thay đổi nội dung chủ đề,
                 ""Answer1"": ..., ""Answer2"": ...,
                 ""Grade"": Lớp, //Grade phải là số nguyên. Không để trong dấu nháy
-                ""MediaBase64"": Base64 hình minh họa (nếu có), null nếu không có hình.
               }}
             - Trả về danh sách [ {{...}}, ... ].
             - Phần MultipleChoice trả ra các đáp án ko cần A., B., C., D. ở đầu
             - Phần TrueFalse/ShortAnswer/Essay lưu hết vào content, phần Answer để null (Phần TrueFalse 1 câu chỉ trả ra 1 lần)
-            - Câu nào có công thức giúp tôi viết bằng LaTex theo thư viện better-react-mathjax để hiển thị cho FE có thể hanlde không bị lỗi.
+            - Câu nào có công thức giúp tôi viết bằng LaTex theo thư viện better-react-mathjax để hiển thị cho FE có thể hanlde không bị lỗi(theo dạng $...$)
             - Không trả lại bất cứ văn bản hay giải thích nào ngoài JSON!
             ";
 
