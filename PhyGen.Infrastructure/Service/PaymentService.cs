@@ -10,6 +10,7 @@ using PhyGen.Application.PayOs.Config;
 using PhyGen.Application.PayOs.Interfaces;
 using PhyGen.Application.PayOs.Request;
 using PhyGen.Application.PayOs.Response;
+using PhyGen.Application.Users.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Specs;
 using PhyGen.Infrastructure.Persistence.DbContexts;
@@ -66,7 +67,7 @@ namespace PhyGen.Infrastructure.Service
             var paymentData = new PaymentData(
                 orderCode: orderCode,
                 amount: (int)(request.Amount * 1000), // Chuyển đổi sang VNĐ
-                description: $"Thanh toán",
+                description: $"Thanh toán {user.UserCode}",
                 items: items,
                 returnUrl: request.ReturnUrl,
                 cancelUrl: request.CancelUrl
@@ -80,7 +81,7 @@ namespace PhyGen.Infrastructure.Service
             {
                 Id = Guid.NewGuid(),
                 UserId = request.UserId,
-                Amount = request.Amount,
+                Amount = request.Amount * 1000,
                 PaymentLinkId = result.orderCode,
                 Status = PaymentStatus.Pending.ToString(),
                 CreatedAt = DateTime.UtcNow,
@@ -157,8 +158,21 @@ namespace PhyGen.Infrastructure.Service
                         user.Coin += coinsToAdd;
 
                         Console.WriteLine($"[Webhook] Cộng {coinsToAdd} xu cho user {user.Id} từ giao dịch {payment.PaymentLinkId}");
-                        await _context.SaveChangesAsync();
 
+                        var transaction = new PhyGen.Domain.Entities.Transaction
+                        {
+                            Id = Guid.NewGuid(),
+                            UserId = user.Id,
+                            CoinAfter = user.Coin,
+                            CoinBefore = user.Coin - coinsToAdd,
+                            CoinChange = +coinsToAdd,
+                            TypeChange = "PayOS",
+                            PaymentlinkID = payment.PaymentLinkId,
+                            CreatedAt = DateTime.UtcNow
+                        };
+                        _context.Transactions.Add(transaction);
+                        await _context.SaveChangesAsync();
+               
                         // Gửi thông báo: giao dịch thành công
                         await _mediator.Send(new CreateNotificationCommand
                         {
@@ -167,6 +181,10 @@ namespace PhyGen.Infrastructure.Service
                             Message = $"Bạn đã thanh toán thành công {payment.Amount} xu. Cảm ơn bạn!",
                             CreatedAt = DateTime.UtcNow
                         });
+                    }
+                    else
+                    {
+                        throw new UserNotFoundException();
                     }
                 }
                 else if (payment.Status == PaymentStatus.Cancelled.ToString())
