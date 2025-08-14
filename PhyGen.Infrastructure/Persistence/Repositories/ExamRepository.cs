@@ -31,5 +31,24 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
                 .FirstOrDefaultAsync(e => e.Id == examId && e.DeletedAt == null);
         }
 
+        public async Task<string> GenerateExamCodeAsync()
+        {
+            var last = await _context.Exams
+                .Where(e => !string.IsNullOrEmpty(e.ExamCode) && e.ExamCode.StartsWith("E"))
+                .OrderByDescending(e => e.CreatedAt)
+                .Select(e => e.ExamCode)
+                .FirstOrDefaultAsync();
+
+            int next = 1;
+            if (!string.IsNullOrEmpty(last))
+            {
+                var digits = last.Substring(1);
+                if (int.TryParse(digits, out var n))
+                    next = n + 1;
+            }
+
+            return $"E{next:D3}";
+        }
+
     }
 }
