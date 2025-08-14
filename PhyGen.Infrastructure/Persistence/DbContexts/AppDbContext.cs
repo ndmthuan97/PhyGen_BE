@@ -59,6 +59,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.Name).HasMaxLength(255).IsRequired();
                 e.Property(p => p.SubjectBookId).IsRequired();
+                e.HasIndex(p => p.ChapterCode).IsUnique();
             });
             modelBuilder.Entity<ContentFlow>(e =>
             {
@@ -94,6 +95,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.Grade).IsRequired();
                 e.Property(p => p.VersionCount).IsRequired();
                 e.Property(p => p.RandomizeQuestions).IsRequired();
+                e.HasIndex(p => p.ExamCode).IsUnique();
 
             });
 
@@ -112,6 +114,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.SubjectId).IsRequired();
                 e.Property(p => p.ExamCategoryId).IsRequired();
+                e.HasIndex(p => p.MatrixCode).IsUnique();
             });
 
             modelBuilder.Entity<MatrixSection>(e =>
@@ -140,6 +143,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.TopicId);
                 e.Property(p => p.Content).IsRequired();
+                e.HasIndex(p => p.QuestionCode).IsUnique();
             });
 
             modelBuilder.Entity<QuestionMedia>(e =>
@@ -178,6 +182,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             {
                 e.Property(p => p.ChapterId).IsRequired();
                 e.Property(p => p.Name).IsRequired();
+                e.HasIndex(p => p.TopicCode).IsUnique();
             });
 
             modelBuilder.Entity<Domain.Entities.Transaction>(e =>
@@ -192,6 +197,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
                 e.Property(p => p.Email).IsRequired();
                 e.Property(p => p.Password).IsRequired();
                 e.Property(p => p.isConfirm).IsRequired();
+                e.HasIndex(p => p.UserCode).IsUnique();
             });
 
             ConfigureCascadeDelete(modelBuilder);

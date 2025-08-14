@@ -47,6 +47,9 @@ namespace PhyGen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ChapterCode")
+                        .IsUnique();
+
                     b.HasIndex("SubjectBookId");
 
                     b.ToTable("Chapters");
@@ -245,6 +248,9 @@ namespace PhyGen.Infrastructure.Migrations
 
                     b.HasIndex("ExamCategoryId");
 
+                    b.HasIndex("ExamCode")
+                        .IsUnique();
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Exams");
@@ -358,6 +364,9 @@ namespace PhyGen.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ExamCategoryId");
+
+                    b.HasIndex("MatrixCode")
+                        .IsUnique();
 
                     b.HasIndex("SubjectId");
 
@@ -585,6 +594,9 @@ namespace PhyGen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("QuestionCode")
+                        .IsUnique();
+
                     b.HasIndex("TopicId");
 
                     b.ToTable("Questions");
@@ -753,6 +765,9 @@ namespace PhyGen.Infrastructure.Migrations
 
                     b.HasIndex("ChapterId");
 
+                    b.HasIndex("TopicCode")
+                        .IsUnique();
+
                     b.ToTable("Topics");
                 });
 
@@ -862,6 +877,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserCode")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
