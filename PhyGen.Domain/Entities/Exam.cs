@@ -23,6 +23,7 @@ namespace PhyGen.Domain.Entities
         public string? Description { get; set; }
 
         public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public string ExamCode { get; set; } = string.Empty;
 
         public int Grade { get; set; }
         public int Year { get; set; }

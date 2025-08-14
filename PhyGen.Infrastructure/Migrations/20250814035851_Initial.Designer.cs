@@ -12,7 +12,7 @@ using PhyGen.Infrastructure.Persistence.DbContexts;
 namespace PhyGen.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250813083452_Initial")]
+    [Migration("20250814035851_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -208,6 +208,11 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<Guid>("ExamCategoryId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ExamCode")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
                     b.Property<int>("Grade")
                         .HasColumnType("integer");
 
@@ -326,6 +331,11 @@ namespace PhyGen.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
+                    b.Property<string>("MatrixCode")
                         .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("text");
@@ -561,6 +571,11 @@ namespace PhyGen.Infrastructure.Migrations
 
                     b.Property<int>("Level")
                         .HasColumnType("integer");
+
+                    b.Property<string>("QuestionCode")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("text");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");

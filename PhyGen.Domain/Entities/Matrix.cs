@@ -21,6 +21,7 @@ namespace PhyGen.Domain.Entities
         public string Name { get; set; } = string.Empty;
 
         public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public string MatrixCode { get; set; } = string.Empty;
 
         public string? Description { get; set; }
         public int TotalQuestionCount { get; set; }

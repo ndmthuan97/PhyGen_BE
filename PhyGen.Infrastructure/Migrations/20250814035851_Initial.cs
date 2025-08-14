@@ -117,6 +117,7 @@ namespace PhyGen.Infrastructure.Migrations
                     ExamCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
+                    MatrixCode = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     TotalQuestionCount = table.Column<int>(type: "integer", nullable: false),
                     Grade = table.Column<int>(type: "integer", nullable: false),
@@ -198,6 +199,7 @@ namespace PhyGen.Infrastructure.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Status = table.Column<int>(type: "integer", nullable: false),
+                    ExamCode = table.Column<string>(type: "text", nullable: false),
                     Grade = table.Column<int>(type: "integer", nullable: false),
                     Year = table.Column<int>(type: "integer", nullable: false),
                     TotalQuestionCount = table.Column<int>(type: "integer", nullable: true),
@@ -480,6 +482,7 @@ namespace PhyGen.Infrastructure.Migrations
                     Answer6 = table.Column<string>(type: "text", nullable: true),
                     Grade = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
+                    QuestionCode = table.Column<string>(type: "text", nullable: false),
                     CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
