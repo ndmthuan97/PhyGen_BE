@@ -29,6 +29,13 @@ namespace PhyGen.Application.Questions.Responses
         public string? Answer5 { get; set; }
         public string? Answer6 { get; set; }
         public int Grade { get; set; }
+
+        [JsonIgnore]
+        public StatusQEM Status { get; set; }
+        public string StatusName => Status.ToString();
+
+        public string QuestionCode { get; set; } = string.Empty;
+
         public string? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
     }

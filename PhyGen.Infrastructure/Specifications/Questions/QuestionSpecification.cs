@@ -34,6 +34,8 @@ namespace PhyGen.Infrastructure.Specifications.Questions
                 (!param.Grade.HasValue || question.Grade == param.Grade.Value) &&
                 (!param.Type.HasValue || question.Type == param.Type.Value) &&
                 (param.CreatedByList == null || param.CreatedByList.Contains(question.CreatedBy)) &&
+                (param.Status == null || question.Status == param.Status.Value) &&
+                (string.IsNullOrEmpty(param.QuestionCode) || question.QuestionCode.Contains(param.QuestionCode)) &&
                 !question.DeletedAt.HasValue;
 
             if (!string.IsNullOrEmpty(param.Sort))
