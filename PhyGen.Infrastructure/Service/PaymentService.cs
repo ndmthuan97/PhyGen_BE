@@ -10,6 +10,7 @@ using PhyGen.Application.PayOs.Config;
 using PhyGen.Application.PayOs.Interfaces;
 using PhyGen.Application.PayOs.Request;
 using PhyGen.Application.PayOs.Response;
+using PhyGen.Application.Users.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Specs;
 using PhyGen.Infrastructure.Persistence.DbContexts;
@@ -66,7 +67,7 @@ namespace PhyGen.Infrastructure.Service
             var paymentData = new PaymentData(
                 orderCode: orderCode,
                 amount: (int)(request.Amount * 1000), // Chuyển đổi sang VNĐ
-                description: $"Thanh toán",
+                description: $"Thanh toán {user.UserCode}",
                 items: items,
                 returnUrl: request.ReturnUrl,
                 cancelUrl: request.CancelUrl
@@ -80,7 +81,7 @@ namespace PhyGen.Infrastructure.Service
             {
                 Id = Guid.NewGuid(),
                 UserId = request.UserId,
-                Amount = request.Amount,
+                Amount = request.Amount * 1000,
                 PaymentLinkId = result.orderCode,
                 Status = PaymentStatus.Pending.ToString(),
                 CreatedAt = DateTime.UtcNow,
@@ -153,12 +154,25 @@ namespace PhyGen.Infrastructure.Service
                     var user = await _context.Users.FindAsync(payment.UserId);
                     if (user != null)
                     {
-                        int coinsToAdd = (int)payment.Amount;
+                        int coinsToAdd = (int)payment.Amount/1000;
                         user.Coin += coinsToAdd;
 
                         Console.WriteLine($"[Webhook] Cộng {coinsToAdd} xu cho user {user.Id} từ giao dịch {payment.PaymentLinkId}");
-                        await _context.SaveChangesAsync();
 
+                        var transaction = new PhyGen.Domain.Entities.Transaction
+                        {
+                            Id = Guid.NewGuid(),
+                            UserId = user.Id,
+                            CoinAfter = user.Coin,
+                            CoinBefore = user.Coin - coinsToAdd,
+                            CoinChange = +coinsToAdd,
+                            TypeChange = "PayOS",
+                            PaymentlinkID = payment.PaymentLinkId,
+                            CreatedAt = DateTime.UtcNow
+                        };
+                        _context.Transactions.Add(transaction);
+                        await _context.SaveChangesAsync();
+               
                         // Gửi thông báo: giao dịch thành công
                         await _mediator.Send(new CreateNotificationCommand
                         {
@@ -167,6 +181,10 @@ namespace PhyGen.Infrastructure.Service
                             Message = $"Bạn đã thanh toán thành công {payment.Amount} xu. Cảm ơn bạn!",
                             CreatedAt = DateTime.UtcNow
                         });
+                    }
+                    else
+                    {
+                        throw new UserNotFoundException();
                     }
                 }
                 else if (payment.Status == PaymentStatus.Cancelled.ToString())
@@ -246,5 +264,43 @@ namespace PhyGen.Infrastructure.Service
                 data
             );
         }
+
+        public async Task<Pagination<SearchTransactionResponse>> SearchTransactionAsync(SearchTransactionRequest request)
+        {
+            var query = _context.Transactions.AsQueryable();
+
+            query = query.Where(p => p.UserId == request.UserId);
+
+            if (request.FromDate.HasValue)
+                query = query.Where(p => p.CreatedAt >= request.FromDate.Value);
+
+            if (request.ToDate.HasValue)
+                query = query.Where(p => p.CreatedAt <= request.ToDate.Value);
+
+            if (!string.IsNullOrWhiteSpace(request.Type))
+            {
+                var typeNormalized = request.Type.Trim().ToUpperInvariant();
+                query = query.Where(p => p.TypeChange.ToUpper() == typeNormalized);
+            }
+
+            query = query.OrderByDescending(p => p.CreatedAt);
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync();
+
+            var data = _mapper.Map<List<SearchTransactionResponse>>(items);
+
+            return new Pagination<SearchTransactionResponse>(
+                request.PageIndex,
+                request.PageSize,
+                totalItems,
+                data
+            );
+        }
+
     }
 }

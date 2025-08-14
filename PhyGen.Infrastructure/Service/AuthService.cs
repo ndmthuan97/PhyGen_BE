@@ -233,7 +233,22 @@ public class AuthService : IAuthService
 
         if (user.LastLogin == null)
         {
-            user.Coin = 15;
+            user.Coin += 15;
+
+            var transaction = new PhyGen.Domain.Entities.Transaction
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id,
+                CoinAfter = user.Coin,
+                CoinBefore = user.Coin - 15,
+                CoinChange = +15,
+                TypeChange = "Register",
+                PaymentlinkID = null,
+                CreatedAt = DateTime.UtcNow
+            };
+            _context.Transactions.Add(transaction);
+            await _context.SaveChangesAsync();
+
             await _mediator.Send(new CreateNotificationCommand
             {
                 UserId = user.Id,
@@ -270,6 +285,7 @@ public class AuthService : IAuthService
 
         var newUser = new User
         {
+            Id = Guid.NewGuid(),
             Email = email,
             FirstName = firstName,
             LastName = lastName,
@@ -282,6 +298,20 @@ public class AuthService : IAuthService
             LastLogin = now
         };
         _context.Users.Add(newUser);
+
+        var transaction = new PhyGen.Domain.Entities.Transaction
+        {
+            Id = Guid.NewGuid(),
+            UserId = newUser.Id,
+            CoinAfter = newUser.Coin,
+            CoinBefore = newUser.Coin - 15,
+            CoinChange = +15,
+            TypeChange = "Register",
+            PaymentlinkID = null,
+            CreatedAt = DateTime.UtcNow
+        };
+        _context.Transactions.Add(transaction);
+
         await _context.SaveChangesAsync();
 
         await _mediator.Send(new CreateNotificationCommand
@@ -349,7 +379,21 @@ public class AuthService : IAuthService
 
         if (user.LastLogin == null)
         {
-            user.Coin = 15;
+            user.Coin += 15;
+            var transaction = new PhyGen.Domain.Entities.Transaction
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id,
+                CoinAfter = user.Coin,
+                CoinBefore = user.Coin - 15,
+                CoinChange = +15,
+                TypeChange = "Register",
+                PaymentlinkID = null,
+                CreatedAt = DateTime.UtcNow
+            };
+            _context.Transactions.Add(transaction);
+            await _context.SaveChangesAsync();
+
             await _mediator.Send(new CreateNotificationCommand
             {
                 UserId = user.Id,
@@ -608,6 +652,20 @@ public class AuthService : IAuthService
     private async Task AwardDailyLoginBonusAsync(User user)
     {
         user.Coin += 1;
+        var transaction = new PhyGen.Domain.Entities.Transaction
+        {
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            CoinAfter = user.Coin,
+            CoinBefore = user.Coin - 1,
+            CoinChange = +1,
+            TypeChange = "Login",
+            PaymentlinkID = null,
+            CreatedAt = DateTime.UtcNow
+        };
+        _context.Transactions.Add(transaction);
+        await _context.SaveChangesAsync();
+
         await _mediator.Send(new CreateNotificationCommand
         {
             UserId = user.Id,

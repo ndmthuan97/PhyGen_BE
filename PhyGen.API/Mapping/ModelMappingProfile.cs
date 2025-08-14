@@ -46,6 +46,8 @@ namespace PhyGen.API.Mapping
 
             //Mapping for Payments
             CreateMap<Payment, SearchPaymentResponse>();
+            CreateMap<Transaction, SearchTransactionResponse>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.TypeChange.Trim()));
 
             // Mapping for Notification
             CreateMap<Notification, NotificationResponse>();
