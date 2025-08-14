@@ -81,7 +81,7 @@ namespace PhyGen.Infrastructure.Service
             {
                 Id = Guid.NewGuid(),
                 UserId = request.UserId,
-                Amount = request.Amount * 1000,
+                Amount = request.Amount,
                 PaymentLinkId = result.orderCode,
                 Status = PaymentStatus.Pending.ToString(),
                 CreatedAt = DateTime.UtcNow,
@@ -154,7 +154,7 @@ namespace PhyGen.Infrastructure.Service
                     var user = await _context.Users.FindAsync(payment.UserId);
                     if (user != null)
                     {
-                        int coinsToAdd = (int)payment.Amount/1000;
+                        int coinsToAdd = (int)payment.Amount;
                         user.Coin += coinsToAdd;
 
                         Console.WriteLine($"[Webhook] Cộng {coinsToAdd} xu cho user {user.Id} từ giao dịch {payment.PaymentLinkId}");
