@@ -1,10 +1,11 @@
-﻿using PhyGen.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Domain.Specs;
 using PhyGen.Domain.Specs.Question;
-using PhyGen.Infrastructure.Specifications.Questions;
 using PhyGen.Infrastructure.Persistence.DbContexts;
 using PhyGen.Infrastructure.Persistence.Repositories;
+using PhyGen.Infrastructure.Specifications.Questions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,25 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         {
             var spec = new QuestionByGradeSpecification(questionGradeSpecParam);
             return await GetWithSpecAsync(spec);
+        }
+
+        public async Task<string> GenerateQuestionCodeAsync()
+        {
+            var last = await _context.Questions
+                .Where(q => !string.IsNullOrEmpty(q.QuestionCode) && q.QuestionCode.StartsWith("Q"))
+                .OrderByDescending(q => q.CreatedAt)
+                .Select(q => q.QuestionCode)
+                .FirstOrDefaultAsync();
+
+            int next = 1;
+            if (!string.IsNullOrEmpty(last))
+            {
+                var digits = last.Substring(1);
+                if (int.TryParse(digits, out var n))
+                    next = n + 1;
+            }
+
+            return $"Q{next:D4}";
         }
     }
 }
