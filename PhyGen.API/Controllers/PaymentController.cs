@@ -90,5 +90,26 @@ namespace PhyGen.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("searchTransaction")]
+        public async Task<IActionResult> SearchTransactionCoin(
+        [FromQuery] Guid UserId,
+        [FromQuery] DateTime? FromDate,
+        [FromQuery] DateTime? ToDate,
+        [FromQuery] string? Type,
+        [FromQuery] int pageIndex = 1)
+        {
+            var request = new SearchTransactionRequest
+            {
+                UserId = UserId,
+                FromDate = FromDate,
+                ToDate = ToDate,
+                Type = Type,
+                PageIndex = pageIndex,
+                PageSize = 10
+            };
+
+            var result = await _paymentService.SearchTransactionAsync(request);
+            return Ok(result);
+        }
     }
 }

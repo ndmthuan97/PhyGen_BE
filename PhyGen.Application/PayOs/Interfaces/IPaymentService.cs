@@ -17,6 +17,6 @@ namespace PhyGen.Application.PayOs.Interfaces
         Task<Payment> GetPaymentStatusAsync(long paymentLinkId);
         Task<WebhookResult> HandleWebhookByTransactionIdAsync(long paymentLinkId);
         Task<Pagination<SearchPaymentResponse>> SearchPaymentsAsync(PaymentSearchRequest request);
-
+        Task<Pagination<SearchTransactionResponse>> SearchTransactionAsync(SearchTransactionRequest request);
     }
 }

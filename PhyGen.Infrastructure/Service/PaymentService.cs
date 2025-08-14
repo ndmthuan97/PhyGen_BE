@@ -264,5 +264,43 @@ namespace PhyGen.Infrastructure.Service
                 data
             );
         }
+
+        public async Task<Pagination<SearchTransactionResponse>> SearchTransactionAsync(SearchTransactionRequest request)
+        {
+            var query = _context.Transactions.AsQueryable();
+
+            query = query.Where(p => p.UserId == request.UserId);
+
+            if (request.FromDate.HasValue)
+                query = query.Where(p => p.CreatedAt >= request.FromDate.Value);
+
+            if (request.ToDate.HasValue)
+                query = query.Where(p => p.CreatedAt <= request.ToDate.Value);
+
+            if (!string.IsNullOrWhiteSpace(request.Type))
+            {
+                var typeNormalized = request.Type.Trim().ToUpperInvariant();
+                query = query.Where(p => p.TypeChange.ToUpper() == typeNormalized);
+            }
+
+            query = query.OrderByDescending(p => p.CreatedAt);
+
+            var totalItems = await query.CountAsync();
+
+            var items = await query
+                .Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ToListAsync();
+
+            var data = _mapper.Map<List<SearchTransactionResponse>>(items);
+
+            return new Pagination<SearchTransactionResponse>(
+                request.PageIndex,
+                request.PageSize,
+                totalItems,
+                data
+            );
+        }
+
     }
 }
