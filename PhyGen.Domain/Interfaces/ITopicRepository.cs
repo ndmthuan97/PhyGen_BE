@@ -16,5 +16,6 @@ namespace PhyGen.Domain.Interfaces
 
         Task<int?> GetGradeByTopicIdAsync(Guid id);
         Task<List<Topic>> GetTopicsByGradeAsync(TopicByGradeSpecParam topicByGradeSpecParam);
+        Task<string> GetTopicCodeAsync();
     }
 }

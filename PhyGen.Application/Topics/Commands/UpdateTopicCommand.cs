@@ -12,6 +12,5 @@ namespace PhyGen.Application.Topics.Commands
         public Guid Id { get; set; }
         public Guid ChapterId { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int OrderNo { get; set; }
     }
 }

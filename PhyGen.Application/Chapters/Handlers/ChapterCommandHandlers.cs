@@ -42,6 +42,7 @@ namespace PhyGen.Application.Chapters.Handlers
             {
                 SubjectBookId = request.SubjectBookId,
                 Name = request.Name,
+                ChapterCode = await _chapterRepository.GetChapterCodeAsync()
             };
 
             await _chapterRepository.AddAsync(chapter);
