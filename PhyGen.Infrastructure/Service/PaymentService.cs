@@ -154,7 +154,7 @@ namespace PhyGen.Infrastructure.Service
                     var user = await _context.Users.FindAsync(payment.UserId);
                     if (user != null)
                     {
-                        int coinsToAdd = (int)payment.Amount;
+                        int coinsToAdd = (int)payment.Amount/1000;
                         user.Coin += coinsToAdd;
 
                         Console.WriteLine($"[Webhook] Cộng {coinsToAdd} xu cho user {user.Id} từ giao dịch {payment.PaymentLinkId}");

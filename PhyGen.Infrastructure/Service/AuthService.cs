@@ -652,6 +652,20 @@ public class AuthService : IAuthService
     private async Task AwardDailyLoginBonusAsync(User user)
     {
         user.Coin += 1;
+        var transaction = new PhyGen.Domain.Entities.Transaction
+        {
+            Id = Guid.NewGuid(),
+            UserId = user.Id,
+            CoinAfter = user.Coin,
+            CoinBefore = user.Coin - 1,
+            CoinChange = +1,
+            TypeChange = "Login",
+            PaymentlinkID = null,
+            CreatedAt = DateTime.UtcNow
+        };
+        _context.Transactions.Add(transaction);
+        await _context.SaveChangesAsync();
+
         await _mediator.Send(new CreateNotificationCommand
         {
             UserId = user.Id,
