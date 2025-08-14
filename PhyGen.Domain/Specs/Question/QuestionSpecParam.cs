@@ -17,6 +17,9 @@ namespace PhyGen.Domain.Specs.Question
 
         public List<string>? CreatedByList { get; set; }
 
+        public StatusQEM? Status { get; set; }
+        public string? QuestionCode { get; set; }
+
         public string? Search { get; set; }
 
         public string? Sort { get; set; }

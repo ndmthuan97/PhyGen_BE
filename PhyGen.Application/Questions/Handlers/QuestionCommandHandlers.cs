@@ -60,6 +60,10 @@ namespace PhyGen.Application.Questions.Handlers
                 Answer5 = request.Answer5,
                 Answer6 = request.Answer6,
                 Grade = request.Grade,
+                Status = request.Status,
+                QuestionCode = string.IsNullOrWhiteSpace(request.QuestionCode)
+                ? await _questionRepository.GenerateQuestionCodeAsync()
+                : request.QuestionCode,
                 CreatedBy = request.CreatedBy,
                 CreatedAt = DateTime.UtcNow,
             };
@@ -126,6 +130,7 @@ namespace PhyGen.Application.Questions.Handlers
             question.Answer5 = request.Answer5;
             question.Answer6 = request.Answer6;
             question.Grade = request.Grade;
+            question.Status = request.Status;
 
             await _questionRepository.UpdateAsync(question);
             return Unit.Value;
