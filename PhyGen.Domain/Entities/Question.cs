@@ -28,6 +28,7 @@ namespace PhyGen.Domain.Entities
         public int Grade { get; set; }
 
         public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public string QuestionCode { get; set; } = string.Empty;    
 
         public string? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
