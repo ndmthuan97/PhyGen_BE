@@ -547,6 +547,12 @@ namespace PhyGen.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Chapters_ChapterCode",
+                table: "Chapters",
+                column: "ChapterCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Chapters_SubjectBookId",
                 table: "Chapters",
                 column: "SubjectBookId");
@@ -577,6 +583,12 @@ namespace PhyGen.Infrastructure.Migrations
                 column: "ExamCategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Exams_ExamCode",
+                table: "Exams",
+                column: "ExamCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Exams_UserId",
                 table: "Exams",
                 column: "UserId");
@@ -590,6 +602,12 @@ namespace PhyGen.Infrastructure.Migrations
                 name: "IX_Matrices_ExamCategoryId",
                 table: "Matrices",
                 column: "ExamCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Matrices_MatrixCode",
+                table: "Matrices",
+                column: "MatrixCode",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Matrices_SubjectId",
@@ -632,6 +650,12 @@ namespace PhyGen.Infrastructure.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Questions_QuestionCode",
+                table: "Questions",
+                column: "QuestionCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Questions_TopicId",
                 table: "Questions",
                 column: "TopicId");
@@ -662,9 +686,21 @@ namespace PhyGen.Infrastructure.Migrations
                 column: "ChapterId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Topics_TopicCode",
+                table: "Topics",
+                column: "TopicCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transactions_UserId",
                 table: "Transactions",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_UserCode",
+                table: "Users",
+                column: "UserCode",
+                unique: true);
         }
 
         /// <inheritdoc />
