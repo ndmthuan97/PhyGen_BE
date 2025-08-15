@@ -121,6 +121,34 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         {
             return await _context.Set<TEntity>().AnyAsync(predicate);
         }
+
+        public async Task<string> GenerateCodeAsync<TEntity>(string key, Expression<Func<TEntity, string>> predicate) where TEntity : class
+        {
+            var lastEntity = await _context.Set<TEntity>()
+                .OrderByDescending(predicate)
+                .FirstOrDefaultAsync();
+
+            string lastCode = null;
+
+            if (lastEntity != null)
+            {
+                var compiledSelector = predicate.Compile();
+                lastCode = compiledSelector(lastEntity);
+            }
+
+            if (string.IsNullOrEmpty(lastCode) || !lastCode.StartsWith(key))
+            {
+                return $"{key}0001";
+            }
+
+            if (!int.TryParse(lastCode.Substring(key.Length), out int lastNumber))
+            {
+                lastNumber = 0;
+            }
+
+            int newNumber = lastNumber + 1;
+            return $"{key}{newNumber:D4}";
+        }
     }
 
 }

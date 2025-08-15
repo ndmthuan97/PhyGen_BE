@@ -17,6 +17,7 @@ namespace PhyGen.Domain.Interfaces
         Task<TEntity> AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
-        Task<bool> AlreadyExistAsync(Expression<Func<TEntity, bool>> predicate); 
+        Task<bool> AlreadyExistAsync(Expression<Func<TEntity, bool>> predicate);
+        Task<string> GenerateCodeAsync<TEntity>(string key, Expression<Func<TEntity, string>> predicate) where TEntity : class;
     }
 }

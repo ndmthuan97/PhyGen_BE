@@ -51,22 +51,5 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
             var spec = new TopicByGradeSpecification(topicByGradeSpecParam);
             return await ListWithSpecAsync(spec);
         }
-
-        public async Task<string> GetTopicCodeAsync()
-        {
-            var lastTopic = await _context.Topics
-                .OrderByDescending(t => t.TopicCode)
-                .FirstOrDefaultAsync();
-            if (lastTopic == null || string.IsNullOrEmpty(lastTopic.TopicCode))
-            {
-                return "T0001";
-            }
-            if (!int.TryParse(lastTopic.TopicCode.Substring(1), out int lastNumber))
-            {
-                lastNumber = 0;
-            }
-            int newNumber = lastNumber + 1;
-            return $"T{newNumber:D4}";
-        }
     }
 }

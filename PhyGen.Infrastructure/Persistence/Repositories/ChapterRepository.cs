@@ -24,25 +24,5 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
             var spec = new ChapterSpecification(chapterSpecParam);
             return await GetWithSpecAsync(spec);
         }
-
-        public async Task<string> GetChapterCodeAsync()
-        {
-            var lastChapter = await _context.Chapters
-                .OrderByDescending(c => c.ChapterCode)
-                .FirstOrDefaultAsync();
-
-            if (lastChapter == null || string.IsNullOrEmpty(lastChapter.ChapterCode))
-            {
-                return "C0001";
-            }
-
-            if (!int.TryParse(lastChapter.ChapterCode.Substring(1), out int lastNumber))
-            {
-                lastNumber = 0;
-            }
-
-            int newNumber = lastNumber + 1;
-            return $"C{newNumber:D4}";
-        }
     }
 }

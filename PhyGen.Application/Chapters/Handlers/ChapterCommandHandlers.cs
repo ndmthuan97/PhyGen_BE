@@ -42,7 +42,7 @@ namespace PhyGen.Application.Chapters.Handlers
             {
                 SubjectBookId = request.SubjectBookId,
                 Name = request.Name,
-                ChapterCode = await _chapterRepository.GetChapterCodeAsync()
+                ChapterCode = await _chapterRepository.GenerateCodeAsync<Chapter>("C", c => c.ChapterCode),
             };
 
             await _chapterRepository.AddAsync(chapter);

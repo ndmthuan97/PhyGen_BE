@@ -42,7 +42,7 @@ namespace PhyGen.Application.Topics.Handlers
             {
                 ChapterId = request.ChapterId,
                 Name = request.Name,
-                TopicCode = await _topicRepository.GetTopicCodeAsync()
+                TopicCode = await _topicRepository.GenerateCodeAsync<Topic>("T", t => t.TopicCode),
             };
 
             await _topicRepository.AddAsync(topic);
