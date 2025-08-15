@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhyGen.Shared.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,8 @@ namespace PhyGen.Domain.Specs
         public List<int>? Grade { get; set; }
 
         public List<int>? Year { get; set; }
+        public StatusQEM? Status { get; set; }
+        public string? MatrixCode { get; set; }
 
         public string? Search { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PhyGen.Shared.Constants;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace PhyGen.API.Models
@@ -23,6 +24,8 @@ namespace PhyGen.API.Models
         public int VersionCount { get; set; } = 1;
         public bool RandomizeQuestions { get; set; } = false;
         public string ImgUrl { get; set; } = string.Empty;
+        public string? ExamCode { get; set; } = string.Empty;
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
     }
 
     public class UpdateExamRequest
@@ -49,6 +52,8 @@ namespace PhyGen.API.Models
         public int VersionCount { get; set; } = 1;
         public bool RandomizeQuestions { get; set; } = false;
         public string ImgUrl { get; set; } = string.Empty;
+        public string? ExamCode { get; set; } = string.Empty;
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
     }
 
     public class DeleteExamRequest

@@ -12,6 +12,8 @@ namespace PhyGen.Application.Matrices.Commands
         public int Grade { get; set; }
         public int Year { get; set; }
         public string? ImgUrl { get; set; }
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public string? MatrixCode { get; set; } = string.Empty;
 
         public List<MatrixSectionDto> Sections { get; set; } = new();
     }
@@ -29,6 +31,7 @@ namespace PhyGen.Application.Matrices.Commands
     {
         public Guid? Id { get; set; }
         public Guid SectionId { get; set; }
+        public Guid ContentItemId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
         public DifficultyLevel Level { get; set; }

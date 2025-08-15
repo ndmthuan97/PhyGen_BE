@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhyGen.Shared.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +19,8 @@ namespace PhyGen.Application.Matrices.Responses
         public int Year { get; set; }
         public string ImgUrl { get; set; } = string.Empty;
         public string? CreatedBy { get; set; }
+
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public string? MatrixCode { get; set; } = string.Empty;
     }
 }

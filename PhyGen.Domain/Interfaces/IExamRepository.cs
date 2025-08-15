@@ -12,6 +12,7 @@ namespace PhyGen.Domain.Interfaces
     {
         Task<Pagination<Exam>?> GetExamsAsync(ExamSpecParam examSpecParam);
         Task<Exam?> GetExamDetailAsync(Guid examId);
+        Task<string> GenerateExamCodeAsync();
 
     }
 }
