@@ -1,4 +1,5 @@
-﻿using PhyGen.Domain.Entities;
+﻿using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
+using PhyGen.Domain.Entities;
 using PhyGen.Domain.Specs;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,8 @@ namespace PhyGen.Infrastructure.Specifications
                 (!examCategory.Any() || examCategory.Any(n => exam.ExamCategory.Name.Trim().ToLower().Contains(n))) &&
                 (param.Grade == null || !param.Grade.Any() || param.Grade.Contains(exam.Grade)) &&
                 (param.Year == null || !param.Year.Any() || param.Year.Contains(exam.Year)) &&
+                (param.Status == null || exam.Status == param.Status.Value) &&
+                (string.IsNullOrEmpty(param.ExamCode) || exam.ExamCode.Contains(param.ExamCode)) &&
                 (string.IsNullOrEmpty(param.Search) || exam.Title.ToLower().Contains(param.Search.ToLower())) &&
                 !exam.DeletedAt.HasValue;
 

@@ -43,6 +43,10 @@ namespace PhyGen.Application.Exams.Handlers
                 VersionCount = request.VersionCount,
                 RandomizeQuestions = request.RandomizeQuestions,
                 ImgUrl = request.ImgUrl,
+                Status = request.Status,
+                ExamCode = string.IsNullOrWhiteSpace(request.ExamCode)
+                ? await _examRepository.GenerateExamCodeAsync()
+                : request.ExamCode,
             };
 
             await _examRepository.AddAsync(exam);
@@ -80,6 +84,7 @@ namespace PhyGen.Application.Exams.Handlers
             exam.VersionCount = request.VersionCount;
             exam.RandomizeQuestions = request.RandomizeQuestions;
             exam.ImgUrl = request.ImgUrl;
+            exam.Status = request.Status;
 
             await _examRepository.UpdateAsync(exam);
             return Unit.Value;

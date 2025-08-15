@@ -14,6 +14,10 @@ namespace PhyGen.API.Models
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid SectionId { get; set; }
 
+        [JsonRequired]
+        [Required(ErrorMessage = "Trường này không được để trống.")]
+        public Guid ContentItemId { get; set; }
+
         [Required]
         [StringLength(255, ErrorMessage = "Tiêu đề không được vượt quá 255 ký tự.")]
         public string Title { get; set; } = string.Empty;
@@ -37,6 +41,10 @@ namespace PhyGen.API.Models
         [JsonRequired]
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid SectionId { get; set; }
+
+        [JsonRequired]
+        [Required(ErrorMessage = "Trường này không được để trống.")]
+        public Guid ContentItemId { get; set; }
 
         [Required]
         [StringLength(255, ErrorMessage = "Tiêu đề không được vượt quá 255 ký tự.")]

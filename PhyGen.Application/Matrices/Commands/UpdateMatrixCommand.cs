@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PhyGen.Shared.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +19,7 @@ namespace PhyGen.Application.Matrices.Commands
         public int Grade { get; set; }
         public int Year { get; set; }
         public string ImgUrl { get; set; } = string.Empty;
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public string? MatrixCode { get; set; } = string.Empty;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhyGen.Shared.Constants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,8 @@ namespace PhyGen.Application.Exams.Responses
         public int Grade { get; set; }
         public int Year { get; set; }
         public string ImgUrl { get; set; } = string.Empty;
+        public string? ExamCode { get; set; } = string.Empty;
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
 
         public List<SectionDetailResponse> Sections { get; set; } = new();
     }

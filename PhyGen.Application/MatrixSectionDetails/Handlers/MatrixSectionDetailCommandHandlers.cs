@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using DocumentFormat.OpenXml.Office.Word;
+using MediatR;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.MatrixSectionDetails.Commands;
 using PhyGen.Application.MatrixSectionDetails.Exceptions;
@@ -48,6 +49,7 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
             var isExist = await _matrixSectionDetailRepository.AlreadyExistAsync(msd =>
                 msd.MatrixSectionId == request.MatrixSectionId &&
                 msd.SectionId == request.SectionId &&
+                msd.ContentItemId == request.ContentItemId &&
                 msd.Title.ToLower() == request.Title.ToLower() &&
                 msd.Level == request.Level &&
                 msd.Type == request.Type &&
@@ -112,6 +114,7 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
             var isExist = await _matrixSectionDetailRepository.AlreadyExistAsync(msd =>
                 msd.MatrixSectionId == request.MatrixSectionId &&
                 msd.SectionId == request.SectionId &&
+                msd.ContentItemId == request.ContentItemId &&
                 msd.Title.ToLower() == request.Title.ToLower() &&
                 msd.Level == request.Level &&
                 msd.Type == request.Type &&
@@ -124,6 +127,7 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
 
             matrixSectionDetail.MatrixSectionId = request.MatrixSectionId;
             matrixSectionDetail.SectionId = request.SectionId;
+            matrixSectionDetail.ContentItemId = request.ContentItemId;
             matrixSectionDetail.Title = request.Title;
             matrixSectionDetail.Description = request.Description;
             matrixSectionDetail.Level = request.Level;

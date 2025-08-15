@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using PhyGen.Shared.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,7 @@ namespace PhyGen.Application.Exams.Commands
         public int VersionCount { get; set; } = 1;
         public bool RandomizeQuestions { get; set; } = false;
         public string ImgUrl { get; set; } = string.Empty;
+        public string? ExamCode { get; set; } = string.Empty;
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
     }
 }

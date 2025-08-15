@@ -18,7 +18,6 @@ using PhyGen.Infrastructure.Service;
 using PhyGen.Shared;
 using PhyGen.Shared.Constants;
 using System.Diagnostics;
-using System.Diagnostics;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
