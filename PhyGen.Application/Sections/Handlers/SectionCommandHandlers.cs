@@ -36,6 +36,7 @@ namespace PhyGen.Application.Sections.Handlers
             var section = new Section
             {
                 ExamId = request.ExamId,
+                MatrixSectionId = request.MatrixSectionId,
                 Title = request.Title,
                 Description = request.Description,
                 SectionType = request.SectionType,
@@ -70,7 +71,8 @@ namespace PhyGen.Application.Sections.Handlers
             {
                 throw new SectionNotFoundException();
             }
-
+            section.ExamId = request.ExamId;
+            section.MatrixSectionId = request.MatrixSectionId;
             section.Title = request.Title;
             section.Description = request.Description;
             section.SectionType = request.SectionType;

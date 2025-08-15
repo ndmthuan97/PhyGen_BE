@@ -11,6 +11,7 @@ namespace PhyGen.Application.Sections.Commands
     {
         public Guid Id { get; set; }
         public Guid ExamId { get; set; }
+        public Guid MatrixSectionId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
         public string SectionType { get; set; } = string.Empty;

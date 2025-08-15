@@ -66,7 +66,7 @@ namespace PhyGen.Infrastructure.Specifications
                         OrderByDescending = query => query.OrderByDescending(m => m.CreatedAt);
                         break;
                     default:
-                        OrderBy = query => query.OrderBy(m => m.Year);
+                        OrderByDescending = query => query.OrderByDescending(m => m.CreatedAt);
                         break;
                 }
             }
