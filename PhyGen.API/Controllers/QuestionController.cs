@@ -156,7 +156,7 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetQuestionsByGradeQuery, Pagination<QuestionResponse>>(request);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<QuestionResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateQuestion([FromBody] CreateQuestionRequest request)

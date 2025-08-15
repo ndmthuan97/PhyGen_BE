@@ -44,6 +44,9 @@ namespace PhyGen.Application.Matrices.Handlers
             if (isExist)
                 throw new MatrixAlreadyExistException();
 
+            if (request.Year < 2018 || request.Year > DateTime.Now.Year)
+                throw new Exception("Năm phải nằm trong khoảng từ 2018 đến hiện tại.");
+
             var matrix = new Matrix
             {
                 SubjectId = request.SubjectId,
@@ -55,9 +58,7 @@ namespace PhyGen.Application.Matrices.Handlers
                 Year = request.Year,
                 ImgUrl = request.ImgUrl,
                 Status = request.Status,
-                MatrixCode = string.IsNullOrWhiteSpace(request.MatrixCode)
-                ? await _matrixRepository.GenerateMatrixCodeAsync()
-                : request.MatrixCode,
+                MatrixCode = await _matrixRepository.GenerateCodeAsync<Matrix>("M", m => m.MatrixCode),
                 CreatedBy = request.CreatedBy,
                 CreatedAt = DateTime.UtcNow,
             };
@@ -98,6 +99,9 @@ namespace PhyGen.Application.Matrices.Handlers
             );
             if (isExist)
                 throw new MatrixAlreadyExistException();
+
+            if (request.Year < 2018 || request.Year > DateTime.Now.Year)
+                throw new Exception("Năm phải nằm trong khoảng từ 2018 đến hiện tại.");
 
             matrix.SubjectId = request.SubjectId;
             matrix.ExamCategoryId = request.ExamCategoryId;
@@ -184,7 +188,6 @@ namespace PhyGen.Application.Matrices.Handlers
                     if (detail == null || detail.DeletedAt.HasValue)
                         throw new MatrixSectionDetailNotFoundException();
 
-                    detail.SectionId = detailDto.SectionId;
                     detail.ContentItemId = detailDto.ContentItemId;
                     detail.Title = detailDto.Title;
                     detail.Description = detailDto.Description;

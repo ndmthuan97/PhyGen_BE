@@ -20,12 +20,12 @@ namespace PhyGen.API.Models
 
         public string? Description { get; set; }
         public int TotalQuestionCount { get; set; }
+
+        [Required(ErrorMessage = "Trường này không được để trống.")]
+        [Range(10, 12, ErrorMessage = "Lớp học phải nằm trong khoảng 10 đến 12.")]
         public int Grade { get; set; }
         public int Year { get; set; }
         public string? ImgUrl { get; set; } = string.Empty;
-
-        public StatusQEM Status { get; set; } = StatusQEM.Draft;
-        public string? MatrixCode { get; set; } = string.Empty;
     }
 
     public class UpdateMatrixRequest
@@ -42,12 +42,14 @@ namespace PhyGen.API.Models
 
         public string? Description { get; set; }
         public int TotalQuestionCount { get; set; }
+
+        [Required(ErrorMessage = "Trường này không được để trống.")]
+        [Range(10, 12, ErrorMessage = "Lớp học phải nằm trong khoảng 10 đến 12.")]
         public int Grade { get; set; }
         public int Year { get; set; }
         public string? ImgUrl { get; set; } = string.Empty;
 
         public StatusQEM Status { get; set; } = StatusQEM.Draft;
-        public string? MatrixCode { get; set; } = string.Empty;
     }
 
     public class DeleteMatrixRequest

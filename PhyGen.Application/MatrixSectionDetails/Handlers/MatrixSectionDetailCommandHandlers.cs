@@ -48,7 +48,6 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
 
             var isExist = await _matrixSectionDetailRepository.AlreadyExistAsync(msd =>
                 msd.MatrixSectionId == request.MatrixSectionId &&
-                msd.SectionId == request.SectionId &&
                 msd.ContentItemId == request.ContentItemId &&
                 msd.Title.ToLower() == request.Title.ToLower() &&
                 msd.Level == request.Level &&
@@ -62,7 +61,6 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
             var matrixSectionDetail = new MatrixSectionDetail
             {
                 MatrixSectionId = request.MatrixSectionId,
-                SectionId = request.SectionId,
                 Title = request.Title,
                 Description = request.Description,
                 Level = request.Level,
@@ -113,7 +111,6 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
 
             var isExist = await _matrixSectionDetailRepository.AlreadyExistAsync(msd =>
                 msd.MatrixSectionId == request.MatrixSectionId &&
-                msd.SectionId == request.SectionId &&
                 msd.ContentItemId == request.ContentItemId &&
                 msd.Title.ToLower() == request.Title.ToLower() &&
                 msd.Level == request.Level &&
@@ -126,7 +123,6 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
                 throw new MatrixSectionDetailAlreadyExistException();
 
             matrixSectionDetail.MatrixSectionId = request.MatrixSectionId;
-            matrixSectionDetail.SectionId = request.SectionId;
             matrixSectionDetail.ContentItemId = request.ContentItemId;
             matrixSectionDetail.Title = request.Title;
             matrixSectionDetail.Description = request.Description;

@@ -206,6 +206,7 @@ namespace PhyGen.Infrastructure.Migrations
                     VersionCount = table.Column<int>(type: "integer", nullable: false),
                     RandomizeQuestions = table.Column<bool>(type: "boolean", nullable: false),
                     ImgUrl = table.Column<string>(type: "text", nullable: false),
+                    CreatedBy = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -384,56 +385,11 @@ namespace PhyGen.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sections",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ExamId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    SectionType = table.Column<string>(type: "text", nullable: false),
-                    DisplayOrder = table.Column<int>(type: "integer", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sections", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Sections_Exams_ExamId",
-                        column: x => x.ExamId,
-                        principalTable: "Exams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Topics",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ChapterId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    TopicCode = table.Column<string>(type: "text", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Topics", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Topics_Chapters_ChapterId",
-                        column: x => x.ChapterId,
-                        principalTable: "Chapters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MatrixSectionDetails",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     MatrixSectionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SectionId = table.Column<Guid>(type: "uuid", nullable: false),
                     ContentItemId = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
@@ -457,10 +413,55 @@ namespace PhyGen.Infrastructure.Migrations
                         principalTable: "MatrixSections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sections",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ExamId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MatrixSectionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    SectionType = table.Column<string>(type: "text", nullable: false),
+                    DisplayOrder = table.Column<int>(type: "integer", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sections", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MatrixSectionDetails_Sections_SectionId",
-                        column: x => x.SectionId,
-                        principalTable: "Sections",
+                        name: "FK_Sections_Exams_ExamId",
+                        column: x => x.ExamId,
+                        principalTable: "Exams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Sections_MatrixSections_MatrixSectionId",
+                        column: x => x.MatrixSectionId,
+                        principalTable: "MatrixSections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Topics",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ChapterId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    TopicCode = table.Column<string>(type: "text", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Topics", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Topics_Chapters_ChapterId",
+                        column: x => x.ChapterId,
+                        principalTable: "Chapters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -625,11 +626,6 @@ namespace PhyGen.Infrastructure.Migrations
                 column: "MatrixSectionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MatrixSectionDetails_SectionId",
-                table: "MatrixSectionDetails",
-                column: "SectionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MatrixSections_MatrixId",
                 table: "MatrixSections",
                 column: "MatrixId");
@@ -674,6 +670,11 @@ namespace PhyGen.Infrastructure.Migrations
                 name: "IX_Sections_ExamId",
                 table: "Sections",
                 column: "ExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sections_MatrixSectionId",
+                table: "Sections",
+                column: "MatrixSectionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubjectBooks_SubjectId",
@@ -734,9 +735,6 @@ namespace PhyGen.Infrastructure.Migrations
                 name: "ContentItems");
 
             migrationBuilder.DropTable(
-                name: "MatrixSections");
-
-            migrationBuilder.DropTable(
                 name: "Questions");
 
             migrationBuilder.DropTable(
@@ -746,13 +744,13 @@ namespace PhyGen.Infrastructure.Migrations
                 name: "ContentFlows");
 
             migrationBuilder.DropTable(
-                name: "Matrices");
-
-            migrationBuilder.DropTable(
                 name: "Topics");
 
             migrationBuilder.DropTable(
                 name: "Exams");
+
+            migrationBuilder.DropTable(
+                name: "MatrixSections");
 
             migrationBuilder.DropTable(
                 name: "Curriculums");
@@ -761,13 +759,16 @@ namespace PhyGen.Infrastructure.Migrations
                 name: "Chapters");
 
             migrationBuilder.DropTable(
-                name: "ExamCategories");
-
-            migrationBuilder.DropTable(
                 name: "Users");
 
             migrationBuilder.DropTable(
+                name: "Matrices");
+
+            migrationBuilder.DropTable(
                 name: "SubjectBooks");
+
+            migrationBuilder.DropTable(
+                name: "ExamCategories");
 
             migrationBuilder.DropTable(
                 name: "Subjects");

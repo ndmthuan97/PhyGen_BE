@@ -18,14 +18,14 @@ namespace PhyGen.API.Models
         public string Title { get; set; } = string.Empty;
 
         public string? Description { get; set; }
+        [Required(ErrorMessage = "Trường này không được để trống.")]
+        [Range(10, 12, ErrorMessage = "Lớp học phải nằm trong khoảng 10 đến 12.")]
         public int Grade { get; set; } = 0;
         public int Year { get; set; } = 0;
         public int? TotalQuestionCount { get; set; } = null;
         public int VersionCount { get; set; } = 1;
         public bool RandomizeQuestions { get; set; } = false;
         public string ImgUrl { get; set; } = string.Empty;
-        public string? ExamCode { get; set; } = string.Empty;
-        public StatusQEM Status { get; set; } = StatusQEM.Draft;
     }
 
     public class UpdateExamRequest
@@ -46,14 +46,15 @@ namespace PhyGen.API.Models
         public string Title { get; set; } = string.Empty;
 
         public string? Description { get; set; }
-        public int Grade { get; set; } = 0;
-        public int Year { get; set; } = 0;
+        [Required(ErrorMessage = "Trường này không được để trống.")]
+        [Range(10, 12, ErrorMessage = "Lớp học phải nằm trong khoảng 10 đến 12.")]
+        public int Grade { get; set; }
+        public int Year { get; set; }
         public int? TotalQuestionCount { get; set; } = null;
         public int VersionCount { get; set; } = 1;
         public bool RandomizeQuestions { get; set; } = false;
         public string ImgUrl { get; set; } = string.Empty;
-        public string? ExamCode { get; set; } = string.Empty;
-        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public StatusQEM Status { get; set; }
     }
 
     public class DeleteExamRequest

@@ -12,6 +12,8 @@ namespace PhyGen.Domain.Entities
     {
         [Required]
         public Guid ExamId { get; set; }
+        [Required]
+        public Guid MatrixSectionId { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -26,6 +28,7 @@ namespace PhyGen.Domain.Entities
 
         // --- Navigation Properties ---
         public virtual Exam Exam { get; set; } = null!;
+        public virtual MatrixSection MatrixSection { get; set; } = null!;
         public virtual ICollection<QuestionSection> QuestionSections { get; set; } = new List<QuestionSection>();
     }
 }

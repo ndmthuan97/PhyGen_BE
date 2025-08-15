@@ -15,9 +15,6 @@ namespace PhyGen.Domain.Entities
         public Guid MatrixSectionId { get; set; }
 
         [Required]
-        public Guid SectionId { get; set; }
-
-        [Required]
         public Guid ContentItemId { get; set; }
 
         [Required]
@@ -37,7 +34,6 @@ namespace PhyGen.Domain.Entities
 
         // --- Navigation Properties ---
         public virtual MatrixSection MatrixSection { get; set; } = null!;
-        public virtual Section Section { get; set; } = null!;
         public virtual ContentItem ContentItem { get; set; } = null!;
     }
 }

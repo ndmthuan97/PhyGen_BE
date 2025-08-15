@@ -31,6 +31,9 @@ namespace PhyGen.Application.Exams.Handlers
             if (category == null || category.DeletedAt.HasValue)
                 throw new ExamCategoryNotFoundException();
 
+            if (request.Year < 2018 || request.Year > DateTime.Now.Year)
+                throw new Exception("Năm phải nằm trong khoảng từ 2018 đến hiện tại.");
+
             var exam = new Exam
             {
                 ExamCategoryId = request.ExamCategoryId,
@@ -44,9 +47,7 @@ namespace PhyGen.Application.Exams.Handlers
                 RandomizeQuestions = request.RandomizeQuestions,
                 ImgUrl = request.ImgUrl,
                 Status = request.Status,
-                ExamCode = string.IsNullOrWhiteSpace(request.ExamCode)
-                ? await _examRepository.GenerateExamCodeAsync()
-                : request.ExamCode,
+                ExamCode = await _examRepository.GenerateCodeAsync<Exam>("E", e => e.ExamCode),
             };
 
             await _examRepository.AddAsync(exam);
@@ -74,6 +75,9 @@ namespace PhyGen.Application.Exams.Handlers
             var category = await _examCategoryRepository.GetByIdAsync(request.ExamCategoryId);
             if (category == null || category.DeletedAt.HasValue)
                 throw new ExamCategoryNotFoundException();
+
+            if (request.Year < 2018 || request.Year > DateTime.Now.Year)
+                throw new Exception("Năm phải nằm trong khoảng từ 2018 đến hiện tại.");
 
             exam.ExamCategoryId = request.ExamCategoryId;
             exam.Title = request.Title;

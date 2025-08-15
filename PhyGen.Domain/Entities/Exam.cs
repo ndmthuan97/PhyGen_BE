@@ -33,7 +33,7 @@ namespace PhyGen.Domain.Entities
         public bool RandomizeQuestions { get; set; }
 
         public string ImgUrl { get; set; } = string.Empty;
-
+        public string? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 

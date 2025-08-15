@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PhyGen.Application.Exams.Responses
@@ -20,7 +21,9 @@ namespace PhyGen.Application.Exams.Responses
         public int VersionCount { get; set; }
         public bool RandomizeQuestions { get; set; }
         public string ImgUrl { get; set; } = string.Empty;
-        public string? ExamCode { get; set; } = string.Empty;
-        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public string ExamCode { get; set; } = string.Empty;
+        [JsonIgnore]
+        public StatusQEM Status { get; set; }
+        public string StatusName => Status.ToString();
     }
 }

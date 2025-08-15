@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PhyGen.Application.Matrices.Responses
@@ -19,8 +20,9 @@ namespace PhyGen.Application.Matrices.Responses
         public int Year { get; set; }
         public string ImgUrl { get; set; } = string.Empty;
         public string? CreatedBy { get; set; }
-
-        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        [JsonIgnore]
+        public StatusQEM Status { get; set; }
+        public string StatusName => Status.ToString();
         public string? MatrixCode { get; set; } = string.Empty;
     }
 }

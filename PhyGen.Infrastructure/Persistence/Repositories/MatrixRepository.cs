@@ -21,24 +21,5 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
             var spec = new MatrixSpecification(matrixSpecParam);
             return await GetWithSpecAsync(spec);
         }
-
-        public async Task<string> GenerateMatrixCodeAsync()
-        {
-            var last = await _context.Matrices
-                .Where(m => !string.IsNullOrEmpty(m.MatrixCode) && m.MatrixCode.StartsWith("M"))
-                .OrderByDescending(m => m.CreatedAt)
-                .Select(m => m.MatrixCode)
-                .FirstOrDefaultAsync();
-
-            int next = 1;
-            if (!string.IsNullOrEmpty(last))
-            {
-                var digits = last.Substring(1);
-                if (int.TryParse(digits, out var n))
-                    next = n + 1;
-            }
-
-            return $"M{next:D3}";
-        }
     }
 }

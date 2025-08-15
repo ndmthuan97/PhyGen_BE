@@ -41,24 +41,5 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
             var spec = new QuestionByGradeSpecification(questionGradeSpecParam);
             return await GetWithSpecAsync(spec);
         }
-
-        public async Task<string> GenerateQuestionCodeAsync()
-        {
-            var last = await _context.Questions
-                .Where(q => !string.IsNullOrEmpty(q.QuestionCode) && q.QuestionCode.StartsWith("Q"))
-                .OrderByDescending(q => q.CreatedAt)
-                .Select(q => q.QuestionCode)
-                .FirstOrDefaultAsync();
-
-            int next = 1;
-            if (!string.IsNullOrEmpty(last))
-            {
-                var digits = last.Substring(1);
-                if (int.TryParse(digits, out var n))
-                    next = n + 1;
-            }
-
-            return $"Q{next:D4}";
-        }
     }
 }

@@ -198,6 +198,10 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CreatedBy")
+                        .IsUnicode(true)
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -430,9 +434,6 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -447,8 +448,6 @@ namespace PhyGen.Infrastructure.Migrations
                     b.HasIndex("ContentItemId");
 
                     b.HasIndex("MatrixSectionId");
-
-                    b.HasIndex("SectionId");
 
                     b.ToTable("MatrixSectionDetails");
                 });
@@ -678,6 +677,9 @@ namespace PhyGen.Infrastructure.Migrations
                     b.Property<Guid>("ExamId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("MatrixSectionId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("SectionType")
                         .IsRequired()
                         .IsUnicode(true)
@@ -692,6 +694,8 @@ namespace PhyGen.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ExamId");
+
+                    b.HasIndex("MatrixSectionId");
 
                     b.ToTable("Sections");
                 });
@@ -1005,17 +1009,9 @@ namespace PhyGen.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PhyGen.Domain.Entities.Section", "Section")
-                        .WithMany()
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("ContentItem");
 
                     b.Navigation("MatrixSection");
-
-                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.Notification", b =>
@@ -1083,7 +1079,15 @@ namespace PhyGen.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("PhyGen.Domain.Entities.MatrixSection", "MatrixSection")
+                        .WithMany()
+                        .HasForeignKey("MatrixSectionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Exam");
+
+                    b.Navigation("MatrixSection");
                 });
 
             modelBuilder.Entity("PhyGen.Domain.Entities.SubjectBook", b =>

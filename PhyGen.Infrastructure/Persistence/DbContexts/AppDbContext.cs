@@ -127,7 +127,6 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             modelBuilder.Entity<MatrixSectionDetail>(e =>
             {
                 e.Property(p => p.MatrixSectionId).IsRequired();
-                e.Property(p => p.SectionId).IsRequired();
                 e.Property(p => p.ContentItemId).IsRequired();
                 e.Property(p => p.Title).IsRequired();
                 e.Property(p => p.Description).HasColumnType("text");
@@ -162,6 +161,7 @@ namespace PhyGen.Infrastructure.Persistence.DbContexts
             modelBuilder.Entity<Section>(e =>
             {
                 e.Property(p => p.ExamId).IsRequired();
+                e.Property(p => p.MatrixSectionId).IsRequired();
                 e.Property(p => p.Title).IsRequired();
                 e.Property(p => p.Description).HasColumnType("text");
             });

@@ -61,9 +61,7 @@ namespace PhyGen.Application.Questions.Handlers
                 Answer6 = request.Answer6,
                 Grade = request.Grade,
                 Status = request.Status,
-                QuestionCode = string.IsNullOrWhiteSpace(request.QuestionCode)
-                ? await _questionRepository.GenerateQuestionCodeAsync()
-                : request.QuestionCode,
+                QuestionCode = await _questionRepository.GenerateCodeAsync<Question>("Q", q => q.QuestionCode),
                 CreatedBy = request.CreatedBy,
                 CreatedAt = DateTime.UtcNow,
             };

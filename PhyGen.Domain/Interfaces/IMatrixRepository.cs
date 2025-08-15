@@ -11,6 +11,5 @@ namespace PhyGen.Domain.Interfaces
     public interface IMatrixRepository : IAsyncRepository<Matrix, Guid>
     {
         Task<Pagination<Matrix>?> GetMatricesAsync(MatrixSpecParam matrixSpecParam);
-        Task<string> GenerateMatrixCodeAsync();
     }
 }
