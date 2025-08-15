@@ -63,18 +63,6 @@ namespace PhyGen.API.Controllers
             var user = User.FindFirstValue(ClaimTypes.Email);
             if (string.IsNullOrEmpty(user))
                 return Unauthorized(new UserNotFoundException());
-
-            var isAdmin = User.IsInRole(nameof(Role.Admin));
-
-            if (!isAdmin)
-            {
-                questionSpecParam.CreatedByList = new List<string> { user, "Admin" };
-            }
-            else
-            {
-                questionSpecParam.CreatedByList = new List<string> { "Admin" };
-            }
-
             var query = new GetQuestionsQuery(questionSpecParam);
             return await ExecuteAsync<GetQuestionsQuery, Pagination<QuestionResponse>>(query);
         }
@@ -94,18 +82,6 @@ namespace PhyGen.API.Controllers
             var user = User.FindFirstValue(ClaimTypes.Email);
             if (string.IsNullOrEmpty(user))
                 return Unauthorized(new UserNotFoundException());
-
-            var isAdmin = User.IsInRole(nameof(Role.Admin));
-
-            if (!isAdmin)
-            {
-                param.CreatedByList = new List<string> { user, "Admin" };
-            }
-            else
-            {
-                param.CreatedByList = new List<string> { "Admin" };
-            }
-
             var request = new GetQuestionsByTopicIdQuery(param);
             return await ExecuteAsync<GetQuestionsByTopicIdQuery, Pagination<QuestionResponse>>(request);
         }
@@ -117,18 +93,6 @@ namespace PhyGen.API.Controllers
             var user = User.FindFirstValue(ClaimTypes.Email);
             if (string.IsNullOrEmpty(user))
                 return Unauthorized(new UserNotFoundException());
-
-            var isAdmin = User.IsInRole(nameof(Role.Admin));
-
-            if (!isAdmin)
-            {
-                questionSpecParam.CreatedByList = new List<string> { user, "Admin" };
-            }
-            else
-            {
-                questionSpecParam.CreatedByList = new List<string> { "Admin" };
-            }
-
             var request = new GetQuestionsByLevelAndTypeQuery(questionSpecParam);
             return await ExecuteAsync<GetQuestionsByLevelAndTypeQuery, Pagination<QuestionResponse>>(request);
         }
@@ -140,18 +104,6 @@ namespace PhyGen.API.Controllers
             var user = User.FindFirstValue(ClaimTypes.Email);
             if (string.IsNullOrEmpty(user))
                 return Unauthorized(new UserNotFoundException());
-
-            var isAdmin = User.IsInRole(nameof(Role.Admin));
-
-            if (!isAdmin)
-            {
-                questionGradeParam.CreatedByList = new List<string> { user, "Admin" };
-            }
-            else
-            {
-                questionGradeParam.CreatedByList = new List<string> { "Admin" };
-            }
-
             var request = new GetQuestionsByGradeQuery(questionGradeParam);
             return await ExecuteAsync<GetQuestionsByGradeQuery, Pagination<QuestionResponse>>(request);
         }
