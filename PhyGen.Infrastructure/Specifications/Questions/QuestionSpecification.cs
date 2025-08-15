@@ -61,7 +61,7 @@ namespace PhyGen.Infrastructure.Specifications.Questions
                         OrderByDescending = query => query.OrderByDescending(q => q.CreatedAt);
                         break;
                     default:
-                        OrderBy = query => query.OrderBy(q => q.CreatedAt);
+                        OrderByDescending = query => query.OrderByDescending(q => q.CreatedAt);
                         break;
                 }
             }
