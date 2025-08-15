@@ -13,6 +13,7 @@ namespace PhyGen.Application.MatrixSectionDetails.Commands
     {
         public Guid MatrixSectionId { get; set; }
         public Guid SectionId { get; set; }
+        public Guid ContentItemId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
         public DifficultyLevel Level { get; set; } 

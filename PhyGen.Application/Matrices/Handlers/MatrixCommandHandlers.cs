@@ -54,6 +54,10 @@ namespace PhyGen.Application.Matrices.Handlers
                 Grade = request.Grade,
                 Year = request.Year,
                 ImgUrl = request.ImgUrl,
+                Status = request.Status,
+                MatrixCode = string.IsNullOrWhiteSpace(request.MatrixCode)
+                ? await _matrixRepository.GenerateMatrixCodeAsync()
+                : request.MatrixCode,
                 CreatedBy = request.CreatedBy,
                 CreatedAt = DateTime.UtcNow,
             };
@@ -102,6 +106,7 @@ namespace PhyGen.Application.Matrices.Handlers
             matrix.TotalQuestionCount = request.TotalQuestionCount;
             matrix.Grade = request.Grade;
             matrix.Year = request.Year;
+            matrix.Status = request.Status;
             matrix.ImgUrl = request.ImgUrl;
 
             await _matrixRepository.UpdateAsync(matrix);
@@ -159,6 +164,7 @@ namespace PhyGen.Application.Matrices.Handlers
             matrix.Grade = request.Grade;
             matrix.Year = request.Year;
             matrix.ImgUrl = request.ImgUrl ?? string.Empty;
+            matrix.Status = request.Status;
             await _matrixRepository.UpdateAsync(matrix);
 
             foreach (var sectionDto in request.Sections)
@@ -179,6 +185,7 @@ namespace PhyGen.Application.Matrices.Handlers
                         throw new MatrixSectionDetailNotFoundException();
 
                     detail.SectionId = detailDto.SectionId;
+                    detail.ContentItemId = detailDto.ContentItemId;
                     detail.Title = detailDto.Title;
                     detail.Description = detailDto.Description;
                     detail.Level = detailDto.Level;

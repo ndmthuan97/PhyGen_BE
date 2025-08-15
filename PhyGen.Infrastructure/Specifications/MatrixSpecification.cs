@@ -39,6 +39,8 @@ namespace PhyGen.Infrastructure.Specifications
                 (!examCategory.Any() || examCategory.Any(n => matrix.ExamCategory.Name.Trim().ToLower().Contains(n))) &&
                 (param.Grade == null || !param.Grade.Any() || param.Grade.Contains(matrix.Grade)) &&
                 (param.Year == null || !param.Year.Any() || param.Year.Contains(matrix.Year)) &&
+                (param.Status == null || matrix.Status == param.Status.Value) &&
+                (string.IsNullOrEmpty(param.MatrixCode) || matrix.MatrixCode.Contains(param.MatrixCode)) &&
                 (!matrix.DeletedAt.HasValue);
 
             if (!string.IsNullOrEmpty(param.Sort))

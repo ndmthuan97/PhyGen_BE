@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PhyGen.Shared.Constants;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace PhyGen.API.Models
@@ -22,6 +23,9 @@ namespace PhyGen.API.Models
         public int Grade { get; set; }
         public int Year { get; set; }
         public string? ImgUrl { get; set; } = string.Empty;
+
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public string? MatrixCode { get; set; } = string.Empty;
     }
 
     public class UpdateMatrixRequest
@@ -41,6 +45,9 @@ namespace PhyGen.API.Models
         public int Grade { get; set; }
         public int Year { get; set; }
         public string? ImgUrl { get; set; } = string.Empty;
+
+        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public string? MatrixCode { get; set; } = string.Empty;
     }
 
     public class DeleteMatrixRequest
