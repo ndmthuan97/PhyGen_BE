@@ -6,6 +6,7 @@ using PhyGen.Application.Exams.Responses;
 using PhyGen.Application.Mapping;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Shared.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -111,6 +112,8 @@ namespace PhyGen.Application.Exams.Handlers
                 throw new ExamNotFoundException();
 
             exam.DeletedAt = DateTime.UtcNow;
+            exam.Status = StatusQEM.Removed;
+
             await _examRepository.UpdateAsync(exam);
             return Unit.Value;
         }
