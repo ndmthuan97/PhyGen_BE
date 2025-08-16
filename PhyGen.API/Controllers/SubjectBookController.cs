@@ -31,6 +31,15 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetSubjectBookByIdQuery, SubjectBookResponse>(request);
         }
 
+        [HttpGet("topic/{topicId}")]
+        [ProducesResponseType(typeof(ApiResponse<object>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetNamesByTopicId(Guid topicId)
+        {
+            var request = new GetNamesByTopicIdQuery(topicId);
+            return await ExecuteAsync<GetNamesByTopicIdQuery, object>(request);
+        }
+
+
         [HttpGet("subject")]
         [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<List<SubjectBookResponse>>), (int)HttpStatusCode.OK)]

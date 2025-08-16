@@ -29,8 +29,7 @@ namespace PhyGen.Infrastructure.Specifications
         {
             Criteria = section =>
                 (string.IsNullOrEmpty(param.Search) || section.Title.ToLower().Contains(param.Search.ToLower())) &&
-                (!param.MatrixId.HasValue || section.MatrixId == param.MatrixId) &&
-                (!section.DeletedAt.HasValue);
+                (!param.MatrixId.HasValue || section.MatrixId == param.MatrixId);
             if (!string.IsNullOrEmpty(param.Sort))
             {
                 switch (param.Sort.ToLower())

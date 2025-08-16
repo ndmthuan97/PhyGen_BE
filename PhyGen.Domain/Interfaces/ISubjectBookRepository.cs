@@ -12,5 +12,6 @@ namespace PhyGen.Domain.Interfaces
     {
         Task<Pagination<SubjectBook>?> GetSubjectBooksBySubjectWithSpecAsync(SubjectBookSpecParam subjectBookSpecParam);
         Task<List<SubjectBook>> GetSubjectBooksByGradeAsync(int grade);
+        Task<object?> GetNamesByTopicIdAsync(Guid topicId);
     }
 }

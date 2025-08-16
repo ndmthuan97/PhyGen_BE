@@ -31,5 +31,21 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
                 .Where(sb => sb.Grade == grade)
                 .ToListAsync();
         }
+
+        public async Task<object?> GetNamesByTopicIdAsync(Guid topicId)
+        {
+            return await _context.Topics
+                .Where(t => t.Id == topicId &&
+                            t.DeletedAt == null &&
+                            t.Chapter != null && t.Chapter.DeletedAt == null &&
+                            t.Chapter.SubjectBook != null && t.Chapter.SubjectBook.DeletedAt == null)
+                .Select(t => new
+                {
+                    TopicName = t.Name,
+                    ChapterName = t.Chapter.Name,
+                    SubjectBookName = t.Chapter.SubjectBook.Name
+                })
+                .FirstOrDefaultAsync();
+        }
     }
 }

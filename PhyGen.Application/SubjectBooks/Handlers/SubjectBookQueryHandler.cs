@@ -68,4 +68,22 @@ namespace PhyGen.Application.SubjectBooks.Handlers
             return AppMapper<CoreMappingProfile>.Mapper.Map<List<SubjectBookResponse>>(subjectBooks);
         }
     }
+
+    public class GetNamesByTopicIdQueryHandler : IRequestHandler<GetNamesByTopicIdQuery, object>
+    {
+        private readonly ISubjectBookRepository _subjectBookRepository;
+        public GetNamesByTopicIdQueryHandler(ISubjectBookRepository subjectBookRepository)
+        {
+            _subjectBookRepository = subjectBookRepository;
+        }
+        public async Task<object> Handle(GetNamesByTopicIdQuery request, CancellationToken cancellationToken)
+        {
+            var names = await _subjectBookRepository.GetNamesByTopicIdAsync(request.TopicId);
+            if (names == null)
+            {
+                throw new SubjectNotFoundException();
+            }
+            return names;
+        }
+    }
 }

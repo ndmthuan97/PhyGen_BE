@@ -33,7 +33,6 @@ namespace PhyGen.API.Controllers
 
 
         [HttpGet("{topicId}")]
-        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<TopicResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetTopicById(Guid topicId)
         {
@@ -50,7 +49,6 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("chapter")]
-        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<List<TopicResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetTopicsByChapterId([FromQuery] TopicSpecParam param)
         {

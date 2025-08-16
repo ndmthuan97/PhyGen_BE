@@ -39,8 +39,7 @@ namespace PhyGen.Application.Matrices.Handlers
             var isExist = await _matrixRepository.AlreadyExistAsync(m =>
                 m.SubjectId == request.SubjectId &&
                 m.ExamCategoryId == request.ExamCategoryId &&
-                m.Name.ToLower() == request.Name.ToLower() &&
-                m.DeletedAt == null
+                m.Name.ToLower() == request.Name.ToLower()
             );
             if (isExist)
                 throw new MatrixAlreadyExistException();
@@ -84,7 +83,7 @@ namespace PhyGen.Application.Matrices.Handlers
         public async Task<Unit> Handle(UpdateMatrixCommand request, CancellationToken cancellationToken)
         {
             var matrix = await _matrixRepository.GetByIdAsync(request.Id);
-            if (matrix == null || matrix.DeletedAt.HasValue)
+            if (matrix == null)
                 throw new MatrixNotFoundException();
 
             var category = await _examCategoryRepository.GetByIdAsync(request.ExamCategoryId);
@@ -95,14 +94,16 @@ namespace PhyGen.Application.Matrices.Handlers
                 m.Id != request.Id &&
                 m.SubjectId == request.SubjectId &&
                 m.ExamCategoryId == request.ExamCategoryId &&
-                m.Name.ToLower() == request.Name.ToLower() &&
-                m.DeletedAt == null
+                m.Name.ToLower() == request.Name.ToLower()
             );
             if (isExist)
                 throw new MatrixAlreadyExistException();
 
             if (request.Year < 2018 || request.Year > DateTime.Now.Year)
                 throw new Exception("Năm phải nằm trong khoảng từ 2018 đến hiện tại.");
+
+            if (matrix.Status == StatusQEM.Removed && request.Status != StatusQEM.Removed)
+                matrix.DeletedAt = null;
 
             matrix.SubjectId = request.SubjectId;
             matrix.ExamCategoryId = request.ExamCategoryId;
@@ -131,7 +132,7 @@ namespace PhyGen.Application.Matrices.Handlers
         public async Task<Unit> Handle(DeleteMatrixCommand request, CancellationToken cancellationToken)
         {
             var matrix = await _matrixRepository.GetByIdAsync(request.Id);
-            if (matrix == null || matrix.DeletedAt.HasValue)
+            if (matrix == null)
                 throw new MatrixNotFoundException();
 
             matrix.DeletedAt = DateTime.UtcNow;
@@ -161,7 +162,7 @@ namespace PhyGen.Application.Matrices.Handlers
         public async Task<Unit> Handle(UpdateMatrixFullCommand request, CancellationToken cancellationToken)
         {
             var matrix = await _matrixRepository.GetByIdAsync(request.Id);
-            if (matrix == null || matrix.DeletedAt.HasValue)
+            if (matrix == null)
                 throw new MatrixNotFoundException();
 
             matrix.Name = request.Name;

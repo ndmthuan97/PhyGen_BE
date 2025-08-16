@@ -40,8 +40,7 @@ namespace PhyGen.Infrastructure.Specifications
                 (param.Year == null || !param.Year.Any() || param.Year.Contains(exam.Year)) &&
                 (param.Status == null || exam.Status == param.Status.Value) &&
                 (string.IsNullOrEmpty(param.ExamCode) || exam.ExamCode.Contains(param.ExamCode)) &&
-                (string.IsNullOrEmpty(param.Search) || exam.Title.ToLower().Contains(param.Search.ToLower())) &&
-                !exam.DeletedAt.HasValue;
+                (string.IsNullOrEmpty(param.Search) || exam.Title.ToLower().Contains(param.Search.ToLower()));
 
             if (!string.IsNullOrEmpty(param.Sort))
             {

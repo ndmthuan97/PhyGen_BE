@@ -90,7 +90,7 @@ namespace PhyGen.Application.Questions.Handlers
         public async Task<Unit> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
         {
             var question = await _questionRepository.GetByIdAsync(request.Id);
-            if (question == null || question.DeletedAt.HasValue)
+            if (question == null)
                 throw new QuestionNotFoundException();
 
             if (request.TopicId.HasValue)
@@ -116,6 +116,9 @@ namespace PhyGen.Application.Questions.Handlers
             );
             if (isExist)
                 throw new QuestionAlreadyExistException();
+
+            if (question.Status == StatusQEM.Removed && request.Status != StatusQEM.Removed)
+                question.DeletedAt = null;
 
             question.TopicId = request.TopicId;
             question.Content = request.Content;

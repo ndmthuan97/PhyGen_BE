@@ -24,7 +24,7 @@ namespace PhyGen.Application.Questions.Commands
         public string? Answer6 { get; set; }
         public int Grade { get; set; }
 
-        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public StatusQEM Status { get; set; }
         public string? QuestionCode { get; set; } = string.Empty;
     }
 }

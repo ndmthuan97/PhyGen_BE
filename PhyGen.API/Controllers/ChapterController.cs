@@ -23,7 +23,6 @@ namespace PhyGen.API.Controllers
             : base(mediator, logger) { }
 
         [HttpGet("{chapterId}")]
-        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<ChapterResponse>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetChapterById(Guid chapterId)
         {
@@ -32,7 +31,6 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpGet("subjectbook")]
-        [Authorize(Roles = nameof(Role.Admin))]
         [ProducesResponseType(typeof(ApiResponse<List<ChapterResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetChaptersBySubjectBookId([FromQuery] ChapterSpecParam chapterSpecParam)
         {

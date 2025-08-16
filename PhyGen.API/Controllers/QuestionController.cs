@@ -144,7 +144,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        //[Authorize]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateQuestion([FromBody] UpdateQuestionRequest request)
         {
@@ -167,7 +167,7 @@ namespace PhyGen.API.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        //[Authorize]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteQuestion([FromBody] DeleteQuestionRequest request)
         {

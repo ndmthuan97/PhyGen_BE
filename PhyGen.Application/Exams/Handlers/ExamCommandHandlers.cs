@@ -70,7 +70,7 @@ namespace PhyGen.Application.Exams.Handlers
         public async Task<Unit> Handle(UpdateExamCommand request, CancellationToken cancellationToken)
         {
             var exam = await _examRepository.GetByIdAsync(request.Id);
-            if (exam == null || exam.DeletedAt.HasValue)
+            if (exam == null)
                 throw new ExamNotFoundException();
 
             var category = await _examCategoryRepository.GetByIdAsync(request.ExamCategoryId);
