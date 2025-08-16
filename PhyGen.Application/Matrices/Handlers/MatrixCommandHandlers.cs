@@ -8,6 +8,7 @@ using PhyGen.Application.MatrixSectionDetails.Exceptions;
 using PhyGen.Application.MatrixSections.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
+using PhyGen.Shared.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -134,6 +135,7 @@ namespace PhyGen.Application.Matrices.Handlers
                 throw new MatrixNotFoundException();
 
             matrix.DeletedAt = DateTime.UtcNow;
+            matrix.Status = StatusQEM.Removed;
 
             await _matrixRepository.UpdateAsync(matrix);
             return Unit.Value;

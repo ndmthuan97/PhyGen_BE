@@ -161,6 +161,7 @@ namespace PhyGen.Application.Questions.Handlers
                 throw new UnauthorizedAccessException("You are not allowed to delete this question.");
 
             question.DeletedAt = DateTime.UtcNow;
+            question.Status = StatusQEM.Removed;
 
             await _questionRepository.UpdateAsync(question);
             return Unit.Value;
