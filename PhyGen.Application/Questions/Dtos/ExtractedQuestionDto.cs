@@ -22,5 +22,6 @@ namespace PhyGen.Application.Questions.Dtos
         public string TopicName { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
+        public List<string> MediaUrls { get; set; } = new();
     }
 }

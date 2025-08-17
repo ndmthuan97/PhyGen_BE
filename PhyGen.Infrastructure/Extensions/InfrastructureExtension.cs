@@ -9,11 +9,12 @@ using PhyGen.Application.Authentication.Interface;
 using PhyGen.Application.Authentication.Models.Requests;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.PayOs.Interfaces;
+using PhyGen.Application.Questions.Interfaces;
 using PhyGen.Domain.Interfaces;
-using PhyGen.Infrastructure.Persistence.Repositories;
-using PhyGen.Infrastructure.Service;
 using PhyGen.Infrastructure.BackgroundServices;
 using PhyGen.Infrastructure.Persistence.Repositories;
+using PhyGen.Infrastructure.Persistence.Repositories;
+using PhyGen.Infrastructure.Service;
 using PhyGen.Infrastructure.Service;
 using System;
 using System.Collections.Generic;
@@ -73,8 +74,8 @@ namespace PhyGen.Infrastructure.Extensions
             services.AddScoped<ChatGptService>();
             services.AddScoped<GeminiService>();
             services.AddMemoryCache();
-            services.AddSingleton<CloudinaryService>();
             services.AddScoped<TopicService>();
+            services.AddSingleton<IImageStorage, CloudinaryImageStorage>();
         }
     }
 }

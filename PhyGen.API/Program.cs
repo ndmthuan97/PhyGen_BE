@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using CloudinaryDotNet;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PhyGen.API.Mapping;
@@ -37,7 +38,12 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 var secretKey = Encoding.UTF8.GetBytes(jwtSettings.Secret);
-
+builder.Services.AddSingleton(sp =>
+{
+    var cfg = builder.Configuration.GetSection("Cloudinary");
+    var account = new Account(cfg["CloudName"], cfg["ApiKey"], cfg["ApiSecret"]);
+    return new Cloudinary(account) { Api = { Secure = true } };
+});
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

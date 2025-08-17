@@ -32,7 +32,6 @@ namespace PhyGen.API.Controllers
     {
         private readonly ChatGptService _chatGptService;
         private readonly IWebHostEnvironment _env;
-        private readonly CloudinaryService _cloudinaryService;
         private readonly AppDbContext _context;
 
         public ExamController(
@@ -40,13 +39,12 @@ namespace PhyGen.API.Controllers
              ILogger<ExamController> logger,
              ChatGptService chatGptService,
              IWebHostEnvironment env,
-            CloudinaryService cloudinaryService, AppDbContext context)
+             AppDbContext context)
              : base(mediator, logger)
         {
             _chatGptService = chatGptService;
             _env = env;
             _context = context;
-            _cloudinaryService = cloudinaryService;
         }
 
         [HttpGet("{examId}")]
@@ -207,9 +205,6 @@ namespace PhyGen.API.Controllers
                             item["option4"] = optionsArr.Count > 3 ? optionsArr[3]?.ToString() : "";
                             item.AsObject().Remove("options");
                         }
-
-                        // Xử lý ảnh minh họa nếu có imagePrompt
-                        // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -250,9 +245,6 @@ namespace PhyGen.API.Controllers
                             }
                             item.AsObject().Remove("statements");
                         }
-
-                        // Xử lý ảnh minh họa nếu có imagePrompt
-                        // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -271,9 +263,6 @@ namespace PhyGen.API.Controllers
                             item["content"] = item["statement"]?.ToString();
                             item.AsObject().Remove("statement");
                         }
-
-                        // Xử lý ảnh minh họa nếu có imagePrompt
-                        // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -292,9 +281,6 @@ namespace PhyGen.API.Controllers
                             item["content"] = item["statement"]?.ToString();
                             item.AsObject().Remove("statement");
                         }
-
-                        // Xử lý ảnh minh họa nếu có imagePrompt
-                        // await HandleManimImageForItemAsync(item, _chatGptService, _cloudinaryService);
                     }
                 }
 
@@ -350,80 +336,5 @@ namespace PhyGen.API.Controllers
                 return Ok(new { raw = chatGptResponse, error = ex.Message });
             }
         }
-        //private async Task HandleManimImageForItemAsync(JsonNode item, ChatGptService chatGptService, CloudinaryService cloudinaryService)
-        //{
-        //    var imgPromptProp = item?["imagePrompt"];
-        //    if (imgPromptProp == null || string.IsNullOrWhiteSpace(imgPromptProp.ToString()))
-        //        return;
-
-        //    string imagePrompt = imgPromptProp.ToString();
-
-        //    // 1. Gọi ChatGPT để sinh code manim
-        //    string manimCode = await chatGptService.GenerateManimCodeFromPrompt(imagePrompt);
-        //    if (string.IsNullOrEmpty(manimCode))
-        //        return;
-
-        //    // 2. Chạy Python render manim thành PNG
-        //    string imagePath = await RunManimPythonAndGetImagePath(manimCode);
-        //    if (string.IsNullOrEmpty(imagePath) || !System.IO.File.Exists(imagePath))
-        //        return;
-
-        //    // 3. Upload Cloudinary
-        //    using (var stream = new FileStream(imagePath, FileMode.Open, FileAccess.Read))
-        //    {
-        //        string imgUrl = await cloudinaryService.UploadImageAsync(stream, Path.GetFileName(imagePath));
-        //        if (!string.IsNullOrEmpty(imgUrl))
-        //        {
-        //            item["imgUrl"] = imgUrl;
-        //        }
-        //    }
-        //}
-
-        //private async Task<string> RunManimPythonAndGetImagePath(string manimCode)
-        //{
-        //    // 1. Lưu code ra file tạm
-        //    string sceneName = FindSceneNameFromManimCode(manimCode) ?? "AutoScene";
-        //    string pyFile = $"auto_manim_{Guid.NewGuid().ToString("N").Substring(0, 8)}.py";
-        //    await System.IO.File.WriteAllTextAsync(pyFile, manimCode, Encoding.UTF8);
-
-        //    // 2. Gọi manim subprocess
-        //    string arguments = $"-pql {pyFile} {sceneName} -s";
-        //    string manimPath = @"C:\Users\nguye\manimations\.venv\Scripts\manim.exe";
-        //    var psi = new ProcessStartInfo
-        //    {
-        //        FileName = manimPath,
-        //        Arguments = arguments,
-        //        RedirectStandardOutput = true,
-        //        RedirectStandardError = true,
-        //        UseShellExecute = false,
-        //        CreateNoWindow = true,
-        //    };
-        //    var process = Process.Start(psi);
-        //    string stdout = await process.StandardOutput.ReadToEndAsync();
-        //    string stderr = await process.StandardError.ReadToEndAsync();
-        //    process.WaitForExit();
-
-        //    // 3. Tìm file ảnh đã sinh ra
-        //    string outDir = $"media/images/{System.IO.Path.GetFileNameWithoutExtension(pyFile)}/480p15/";
-        //    string imagePath = $"{outDir}{sceneName}_0000.png";
-        //    if (System.IO.File.Exists(imagePath)) return imagePath;
-
-        //    // Hoặc scan thư mục để lấy file PNG
-        //    if (System.IO.Directory.Exists(outDir))
-        //    {
-        //        var files = System.IO.Directory.GetFiles(outDir, "*.png");
-        //        if (files.Any()) return files.First();
-        //    }
-        //    return null;
-        //}
-
-    // Helper: tìm tên scene trong code manim
-        //private string FindSceneNameFromManimCode(string code)
-        //{
-        //    var match = System.Text.RegularExpressions.Regex.Match(code, @"class\s+(\w+)\s*\(\s*Scene\s*\)");
-        //    if (match.Success) return match.Groups[1].Value;
-        //    return null;
-        //}
-
     }
 }
