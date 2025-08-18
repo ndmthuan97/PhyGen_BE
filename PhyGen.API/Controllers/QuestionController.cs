@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PhyGen.API.Mapping;
 using PhyGen.API.Models;
+using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.Notification.Commands;
 using PhyGen.Application.Questions.Commands;
@@ -157,6 +158,23 @@ namespace PhyGen.API.Controllers
 
             var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateQuestionCommand>(request);
             return await ExecuteAsync<UpdateQuestionCommand, Unit>(command);
+        }
+
+        [HttpPatch("status")]
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateQuestionStatusRequest request)
+        {
+            if (request == null || request.Ids == null || !request.Ids.Any())
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateQuestionStatusCommand>(request);
+            return await ExecuteAsync<UpdateQuestionStatusCommand, Unit>(command);
         }
 
         [HttpDelete]

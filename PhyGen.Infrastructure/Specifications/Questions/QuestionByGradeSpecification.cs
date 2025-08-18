@@ -43,8 +43,14 @@ namespace PhyGen.Infrastructure.Specifications.Questions
                     case "createdatdesc":
                         OrderByDescending = query => query.OrderByDescending(q => q.CreatedAt);
                         break;
+                    case "code":
+                        OrderBy = query => query.OrderBy(q => q.QuestionCode);
+                        break;
+                    case "codedesc":
+                        OrderByDescending = query => query.OrderByDescending(q => q.QuestionCode);
+                        break;
                     default:
-                        OrderByDescending = query => query.OrderByDescending(q => q.CreatedAt);
+                        OrderByDescending = query => query.OrderByDescending(q => q.QuestionCode);
                         break;
                 }
             }

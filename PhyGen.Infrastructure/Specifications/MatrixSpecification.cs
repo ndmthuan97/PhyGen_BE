@@ -64,8 +64,14 @@ namespace PhyGen.Infrastructure.Specifications
                     case "createdatdesc":
                         OrderByDescending = query => query.OrderByDescending(m => m.CreatedAt);
                         break;
+                    case "code":
+                        OrderBy = query => query.OrderBy(m => m.MatrixCode);
+                        break;
+                    case "codedesc":
+                        OrderByDescending = query => query.OrderByDescending(m => m.MatrixCode);
+                        break;
                     default:
-                        OrderByDescending = query => query.OrderByDescending(m => m.CreatedAt);
+                        OrderByDescending = query => query.OrderByDescending(m => m.MatrixCode);
                         break;
                 }
             }

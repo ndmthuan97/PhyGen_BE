@@ -70,8 +70,14 @@ namespace PhyGen.Infrastructure.Specifications
                     case "examcategorydesc":
                         OrderByDescending = query => query.OrderByDescending(e => e.ExamCategory.Name);
                         break;
+                    case "code":
+                        OrderBy = query => query.OrderBy(e => e.ExamCode);
+                        break;
+                    case "codedesc":
+                        OrderByDescending = query => query.OrderByDescending(e => e.ExamCode);
+                        break;
                     default:
-                        OrderByDescending = query => query.OrderByDescending(e => e.CreatedAt);
+                        OrderByDescending = query => query.OrderByDescending(e => e.ExamCode);
                         break;
                 }
             }

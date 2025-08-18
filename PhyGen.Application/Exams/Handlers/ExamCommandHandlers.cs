@@ -4,6 +4,9 @@ using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Exams.Exceptions;
 using PhyGen.Application.Exams.Responses;
 using PhyGen.Application.Mapping;
+using PhyGen.Application.Matrices.Commands;
+using PhyGen.Application.Matrices.Exceptions;
+using PhyGen.Application.Status;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Shared.Constants;
@@ -107,14 +110,30 @@ namespace PhyGen.Application.Exams.Handlers
 
         public async Task<Unit> Handle(UpdateExamStatusCommand request, CancellationToken cancellationToken)
         {
-            var exam = await _examRepository.GetByIdAsync(request.Id);
+            var exams = new List<Exam>();
 
-            if (exam == null)
-                throw new ExamNotFoundException();
+            foreach (var id in request.Ids)
+            {
+                var exam = await _examRepository.GetByIdAsync(id);
+                if (exam == null)
+                    throw new ExamNotFoundException();
 
-            exam.Status = request.Status;
+                if (!CheckCanChangeStatus.CanChangeStatus(exam.Status, request.Status))
+                {
+                    throw new InvalidOperationException(
+                        $"Không thể chuyển đề thi: {exam.Title} từ {exam.Status} sang {request.Status}"
+                    );
+                }
 
-            await _examRepository.UpdateAsync(exam);
+                exams.Add(exam);
+            }
+
+            foreach (var exam in exams)
+            {
+                exam.Status = request.Status;
+                await _examRepository.UpdateAsync(exam);
+            }
+
             return Unit.Value;
         }
     }

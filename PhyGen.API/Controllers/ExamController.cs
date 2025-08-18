@@ -122,10 +122,10 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateExamCommand, Unit>(command);
         }
 
-        [HttpPatch("{id}/status")]
-        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateExamStatusRequest request)
+        [HttpPatch("status")]
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateExamStatusRequest request)
         {
-            if (request == null)
+            if (request == null || request.Ids == null || !request.Ids.Any())
             {
                 return BadRequest(new ApiResponse<object>
                 {

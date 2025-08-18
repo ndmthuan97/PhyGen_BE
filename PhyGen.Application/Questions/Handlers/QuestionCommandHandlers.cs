@@ -1,17 +1,22 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
+using PhyGen.Application.Exams.Commands;
+using PhyGen.Application.Exams.Exceptions;
 using PhyGen.Application.Mapping;
+using PhyGen.Application.Matrices.Commands;
+using PhyGen.Application.Matrices.Exceptions;
 using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Questions.Exceptions;
 using PhyGen.Application.Questions.Responses;
+using PhyGen.Application.Status;
 using PhyGen.Application.Topics.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Shared.Constants;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -134,6 +139,45 @@ namespace PhyGen.Application.Questions.Handlers
             question.Status = request.Status;
 
             await _questionRepository.UpdateAsync(question);
+            return Unit.Value;
+        }
+    }
+
+    public class UpdateQuestionStatusCommandHandler : IRequestHandler<UpdateQuestionStatusCommand, Unit>
+    {
+        private readonly IQuestionRepository _questionRepository;
+
+        public UpdateQuestionStatusCommandHandler(IQuestionRepository questionRepository)
+        {
+            _questionRepository = questionRepository;
+        }
+
+        public async Task<Unit> Handle(UpdateQuestionStatusCommand request, CancellationToken cancellationToken)
+        {
+            var questions = new List<Question>();
+
+            foreach (var id in request.Ids)
+            {
+                var question = await _questionRepository.GetByIdAsync(id);
+                if (question == null)
+                    throw new QuestionNotFoundException();
+
+                if (!CheckCanChangeStatus.CanChangeStatus(question.Status, request.Status))
+                {
+                    throw new InvalidOperationException(
+                        $"Không thể chuyển câu hỏi {question.QuestionCode} từ {question.Status} sang {request.Status}"
+                    );
+                }
+
+                questions.Add(question);
+            }
+
+            foreach (var question in questions)
+            {
+                question.Status = request.Status;
+                await _questionRepository.UpdateAsync(question);
+            }
+
             return Unit.Value;
         }
     }
