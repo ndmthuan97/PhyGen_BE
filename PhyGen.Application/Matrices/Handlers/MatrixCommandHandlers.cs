@@ -6,6 +6,7 @@ using PhyGen.Application.Matrices.Exceptions;
 using PhyGen.Application.Matrices.Responses;
 using PhyGen.Application.MatrixSectionDetails.Exceptions;
 using PhyGen.Application.MatrixSections.Exceptions;
+using PhyGen.Application.Status;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Shared.Constants;
@@ -218,19 +219,32 @@ namespace PhyGen.Application.Matrices.Handlers
 
         public async Task<Unit> Handle(UpdateMatrixStatusCommand request, CancellationToken cancellationToken)
         {
+            var matrices = new List<Matrix>();
+
             foreach (var id in request.Ids)
             {
                 var matrix = await _matrixRepository.GetByIdAsync(id);
-
                 if (matrix == null)
                     throw new MatrixNotFoundException();
 
-                matrix.Status = request.Status;
+                if (!CheckCanChangeStatus.CanChangeStatus(matrix.Status, request.Status))
+                {
+                    throw new InvalidOperationException(
+                        $"Không thể chuyển ma trận: {matrix.Name} từ {matrix.Status} sang {request.Status}"
+                    );
+                }
 
+                matrices.Add(matrix);
+            }
+
+            foreach (var matrix in matrices)
+            {
+                matrix.Status = request.Status;
                 await _matrixRepository.UpdateAsync(matrix);
             }
 
             return Unit.Value;
         }
     }
+
 }
