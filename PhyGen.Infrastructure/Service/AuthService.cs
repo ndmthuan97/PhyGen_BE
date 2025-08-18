@@ -78,6 +78,7 @@ public class AuthService : IAuthService
         var user = new User
         {
             Id = Guid.NewGuid(),
+            UserCode = await GenerateUserCodeAsync(),
             Email = email,
             Password = hashedPassword,
             FirstName = dto.FirstName,
@@ -103,7 +104,27 @@ public class AuthService : IAuthService
             StatusCode = StatusCode.RegisterSuccess
         };
     }
+    private async Task<string> GenerateUserCodeAsync()
+    {
+        // Lấy UserCode cao nhất trong DB
+        var lastCode = await _context.Users
+            .OrderByDescending(u => u.UserCode).Where(u => u.Role == "User")
+            .Select(u => u.UserCode)
+            .FirstOrDefaultAsync();
 
+        int nextNumber = 1; // Nếu chưa có user nào
+        if (!string.IsNullOrEmpty(lastCode))
+        {
+            // Bỏ prefix "U" rồi parse số
+            var numberPart = lastCode.Substring(1);
+            if (int.TryParse(numberPart, out int parsed))
+            {
+                nextNumber = parsed + 1;
+            }
+        }
+        // Format thành 4 chữ số, thêm tiền tố "U"
+        return $"U{nextNumber.ToString().PadLeft(4, '0')}";
+    }
     public async Task<AuthenticationResponse> ConfirmRegister(string email, string otptext)
     {
         email = email.ToLower();
@@ -286,6 +307,7 @@ public class AuthService : IAuthService
         var newUser = new User
         {
             Id = Guid.NewGuid(),
+            UserCode = await GenerateUserCodeAsync(),
             Email = email,
             FirstName = firstName,
             LastName = lastName,
