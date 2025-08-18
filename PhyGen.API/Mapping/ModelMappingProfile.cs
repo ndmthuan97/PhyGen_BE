@@ -102,6 +102,7 @@ namespace PhyGen.API.Mapping
             // Mapping for Matrix
             CreateMap<CreateMatrixRequest, CreateMatrixCommand>();
             CreateMap<UpdateMatrixRequest, UpdateMatrixCommand>();
+            CreateMap<UpdateMatrixStatusRequest, UpdateMatrixStatusCommand>();
             CreateMap<DeleteMatrixRequest, DeleteMatrixCommand>();
 
             // Mapping for MatrixSection
@@ -131,6 +132,7 @@ namespace PhyGen.API.Mapping
             // Mapping for Exam
             CreateMap<CreateExamRequest, CreateExamCommand>();
             CreateMap<UpdateExamRequest, UpdateExamCommand>();
+            CreateMap<UpdateExamStatusRequest, UpdateExamStatusCommand>();
             CreateMap<DeleteExamRequest, DeleteExamCommand>();
         }
     }

@@ -26,6 +26,8 @@ namespace PhyGen.API.Models
         public int Grade { get; set; }
         public int Year { get; set; }
         public string? ImgUrl { get; set; } = string.Empty;
+
+        public StatusQEM Status { get; set; }
     }
 
     public class UpdateMatrixRequest
@@ -49,7 +51,7 @@ namespace PhyGen.API.Models
         public int Year { get; set; }
         public string? ImgUrl { get; set; } = string.Empty;
 
-        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public StatusQEM Status { get; set; }
     }
 
     public class DeleteMatrixRequest
@@ -57,5 +59,14 @@ namespace PhyGen.API.Models
         [JsonRequired]
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid Id { get; set; }
+    }
+
+    public class UpdateMatrixStatusRequest
+    {
+        [JsonRequired]
+        [Required(ErrorMessage = "Trường này không được để trống.")]
+        public Guid Id { get; set; }
+
+        public StatusQEM Status { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PhyGen.API.Mapping;
 using PhyGen.API.Models;
+using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.Matrices.Commands;
 using PhyGen.Application.Matrices.Queries;
@@ -97,6 +98,23 @@ namespace PhyGen.API.Controllers
             }
 
             return await ExecuteAsync<UpdateMatrixFullCommand, Unit>(request);
+        }
+
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateMatrixStatusRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateMatrixStatusCommand>(request);
+            return await ExecuteAsync<UpdateMatrixStatusCommand, Unit>(command);
         }
 
         [HttpDelete]
