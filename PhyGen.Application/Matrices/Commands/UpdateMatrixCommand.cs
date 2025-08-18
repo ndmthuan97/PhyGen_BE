@@ -19,7 +19,13 @@ namespace PhyGen.Application.Matrices.Commands
         public int Grade { get; set; }
         public int Year { get; set; }
         public string ImgUrl { get; set; } = string.Empty;
-        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public StatusQEM Status { get; set; }
         public string? MatrixCode { get; set; } = string.Empty;
     }
+
+    public class  UpdateMatrixStatusCommand : IRequest<Unit>
+    {
+        public Guid Id { get; set; }
+        public StatusQEM Status { get; set; }
+        }
 }

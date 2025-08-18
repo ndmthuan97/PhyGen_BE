@@ -122,6 +122,23 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateExamCommand, Unit>(command);
         }
 
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateExamStatusRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateExamStatusCommand>(request);
+            return await ExecuteAsync<UpdateExamStatusCommand, Unit>(command);
+        }
+
         [HttpDelete]
         [Authorize]
         [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]

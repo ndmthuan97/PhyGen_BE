@@ -22,6 +22,12 @@ namespace PhyGen.Application.Exams.Commands
         public bool RandomizeQuestions { get; set; } = false;
         public string ImgUrl { get; set; } = string.Empty;
         public string? ExamCode { get; set; } = string.Empty;
-        public StatusQEM Status { get; set; } = StatusQEM.Draft;
+        public StatusQEM Status { get; set; }
+    }
+
+    public class UpdateExamStatusCommand : IRequest<Unit>
+    {
+        public Guid Id { get; set; }
+        public StatusQEM Status { get; set; }
     }
 }

@@ -191,6 +191,7 @@ namespace PhyGen.Application.Matrices.Handlers
                     if (detail == null || detail.DeletedAt.HasValue)
                         throw new MatrixSectionDetailNotFoundException();
 
+                    detail.MatrixSectionId = detailDto.MatrixSectionId;
                     detail.ContentItemId = detailDto.ContentItemId;
                     detail.Title = detailDto.Title;
                     detail.Description = detailDto.Description;
@@ -202,6 +203,29 @@ namespace PhyGen.Application.Matrices.Handlers
                 }
             }
 
+            return Unit.Value;
+        }
+    }
+
+    public class UpdateMatrixStatusCommandHandler : IRequestHandler<UpdateMatrixStatusCommand, Unit>
+    {
+        private readonly IMatrixRepository _matrixRepository;
+
+        public UpdateMatrixStatusCommandHandler(IMatrixRepository matrixRepository)
+        {
+            _matrixRepository = matrixRepository;
+        }
+
+        public async Task<Unit> Handle(UpdateMatrixStatusCommand request, CancellationToken cancellationToken)
+        {
+            var matrix = await _matrixRepository.GetByIdAsync(request.Id);
+
+            if (matrix == null)
+                throw new MatrixNotFoundException();
+
+            matrix.Status = request.Status;
+
+            await _matrixRepository.UpdateAsync(matrix);
             return Unit.Value;
         }
     }

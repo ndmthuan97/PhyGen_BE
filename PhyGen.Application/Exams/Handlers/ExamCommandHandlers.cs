@@ -96,6 +96,29 @@ namespace PhyGen.Application.Exams.Handlers
         }
     }
 
+    public class UpdateExamStatusCommandHandler : IRequestHandler<UpdateExamStatusCommand, Unit>
+    {
+        private readonly IExamRepository _examRepository;
+
+        public UpdateExamStatusCommandHandler(IExamRepository examRepository)
+        {
+            _examRepository = examRepository;
+        }
+
+        public async Task<Unit> Handle(UpdateExamStatusCommand request, CancellationToken cancellationToken)
+        {
+            var exam = await _examRepository.GetByIdAsync(request.Id);
+
+            if (exam == null)
+                throw new ExamNotFoundException();
+
+            exam.Status = request.Status;
+
+            await _examRepository.UpdateAsync(exam);
+            return Unit.Value;
+        }
+    }
+
     public class DeleteExamCommandHandler : IRequestHandler<DeleteExamCommand, Unit>
     {
         private readonly IExamRepository _examRepository;
