@@ -4,6 +4,7 @@ using PhyGen.Application.Exams.Commands;
 using PhyGen.Application.Exams.Exceptions;
 using PhyGen.Application.Exams.Responses;
 using PhyGen.Application.Mapping;
+using PhyGen.Application.Matrices.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Shared.Constants;
@@ -107,14 +108,18 @@ namespace PhyGen.Application.Exams.Handlers
 
         public async Task<Unit> Handle(UpdateExamStatusCommand request, CancellationToken cancellationToken)
         {
-            var exam = await _examRepository.GetByIdAsync(request.Id);
+            foreach (var id in request.Ids)
+            {
+                var exam = await _examRepository.GetByIdAsync(id);
 
-            if (exam == null)
-                throw new ExamNotFoundException();
+                if (exam == null)
+                    throw new ExamNotFoundException();
 
-            exam.Status = request.Status;
+                exam.Status = request.Status;
 
-            await _examRepository.UpdateAsync(exam);
+                await _examRepository.UpdateAsync(exam);
+            }
+
             return Unit.Value;
         }
     }

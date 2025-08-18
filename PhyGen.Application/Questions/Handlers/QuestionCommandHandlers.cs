@@ -1,4 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
+using PhyGen.Application.Exams.Commands;
+using PhyGen.Application.Exams.Exceptions;
 using PhyGen.Application.Mapping;
 using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Questions.Exceptions;
@@ -7,11 +10,10 @@ using PhyGen.Application.Topics.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Shared.Constants;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -134,6 +136,33 @@ namespace PhyGen.Application.Questions.Handlers
             question.Status = request.Status;
 
             await _questionRepository.UpdateAsync(question);
+            return Unit.Value;
+        }
+    }
+
+    public class UpdateQuestionStatusCommandHandler : IRequestHandler<UpdateQuestionStatusCommand, Unit>
+    {
+        private readonly IQuestionRepository _questionRepository;
+
+        public UpdateQuestionStatusCommandHandler(IQuestionRepository questionRepository)
+        {
+            _questionRepository = questionRepository;
+        }
+
+        public async Task<Unit> Handle(UpdateQuestionStatusCommand request, CancellationToken cancellationToken)
+        {
+            foreach (var id in request.Ids)
+            {
+                var question = await _questionRepository.GetByIdAsync(id);
+
+                if (question == null)
+                    throw new QuestionNotFoundException();
+
+                question.Status = request.Status;
+
+                await _questionRepository.UpdateAsync(question);
+            }
+
             return Unit.Value;
         }
     }

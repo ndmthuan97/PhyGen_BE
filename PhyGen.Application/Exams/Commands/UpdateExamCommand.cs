@@ -27,7 +27,7 @@ namespace PhyGen.Application.Exams.Commands
 
     public class UpdateExamStatusCommand : IRequest<Unit>
     {
-        public Guid Id { get; set; }
+        public List<Guid> Ids { get; set; }
         public StatusQEM Status { get; set; }
     }
 }

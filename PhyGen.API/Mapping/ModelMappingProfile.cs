@@ -97,6 +97,7 @@ namespace PhyGen.API.Mapping
             // Mapping for Question
             CreateMap<CreateQuestionRequest, CreateQuestionCommand>();
             CreateMap<UpdateQuestionRequest, UpdateQuestionCommand>();
+            CreateMap<UpdateQuestionStatusRequest, UpdateQuestionStatusCommand>();
             CreateMap<DeleteQuestionRequest, DeleteQuestionCommand>();
 
             // Mapping for Matrix

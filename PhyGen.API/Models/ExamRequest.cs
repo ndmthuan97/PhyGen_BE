@@ -71,7 +71,7 @@ namespace PhyGen.API.Models
     {
         [JsonRequired]
         [Required(ErrorMessage = "Trường này không được để trống.")]
-        public Guid Id { get; set; }
+        public List<Guid> Ids { get; set; }
 
         public StatusQEM Status { get; set; }
     }

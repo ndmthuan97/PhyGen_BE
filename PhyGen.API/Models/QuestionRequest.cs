@@ -27,11 +27,11 @@ namespace PhyGen.API.Models
         [Required]
         [StringLength(1000, ErrorMessage = "Nội dung câu hỏi không được vượt quá 1000 ký tự.")]
         public string Content { get; set; } = string.Empty;
-        
+
         public DifficultyLevel Level { get; set; }
-        
+
         public QuestionType Type { get; set; }
-        
+
         public string? Answer1 { get; set; }
         public string? Answer2 { get; set; }
         public string? Answer3 { get; set; }
@@ -95,5 +95,14 @@ namespace PhyGen.API.Models
         [JsonRequired]
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid Id { get; set; }
+    }
+
+    public class UpdateQuestionStatusRequest
+    {
+        [JsonRequired]
+        [Required(ErrorMessage = "Trường này không được để trống.")]
+        public List<Guid> Ids { get; set; }
+
+        public StatusQEM Status { get; set; }
     }
 }

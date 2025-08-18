@@ -100,10 +100,10 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<UpdateMatrixFullCommand, Unit>(request);
         }
 
-        [HttpPatch("{id}/status")]
-        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateMatrixStatusRequest request)
+        [HttpPatch("status")]
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateMatrixStatusRequest request)
         {
-            if (request == null)
+            if (request == null || request.Ids == null || !request.Ids.Any())
             {
                 return BadRequest(new ApiResponse<object>
                 {

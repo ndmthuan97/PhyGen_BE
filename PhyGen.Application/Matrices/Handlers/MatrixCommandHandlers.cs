@@ -218,14 +218,18 @@ namespace PhyGen.Application.Matrices.Handlers
 
         public async Task<Unit> Handle(UpdateMatrixStatusCommand request, CancellationToken cancellationToken)
         {
-            var matrix = await _matrixRepository.GetByIdAsync(request.Id);
+            foreach (var id in request.Ids)
+            {
+                var matrix = await _matrixRepository.GetByIdAsync(id);
 
-            if (matrix == null)
-                throw new MatrixNotFoundException();
+                if (matrix == null)
+                    throw new MatrixNotFoundException();
 
-            matrix.Status = request.Status;
+                matrix.Status = request.Status;
 
-            await _matrixRepository.UpdateAsync(matrix);
+                await _matrixRepository.UpdateAsync(matrix);
+            }
+
             return Unit.Value;
         }
     }

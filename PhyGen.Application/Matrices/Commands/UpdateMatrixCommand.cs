@@ -25,7 +25,7 @@ namespace PhyGen.Application.Matrices.Commands
 
     public class  UpdateMatrixStatusCommand : IRequest<Unit>
     {
-        public Guid Id { get; set; }
+        public List<Guid> Ids { get; set; }
         public StatusQEM Status { get; set; }
         }
 }

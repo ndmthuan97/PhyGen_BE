@@ -27,4 +27,10 @@ namespace PhyGen.Application.Questions.Commands
         public StatusQEM Status { get; set; }
         public string? QuestionCode { get; set; } = string.Empty;
     }
+
+    public class UpdateQuestionStatusCommand : IRequest<Unit>
+    {
+        public List<Guid> Ids { get; set; }
+        public StatusQEM Status { get; set; }
+    }
 }
