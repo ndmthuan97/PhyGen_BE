@@ -13,7 +13,6 @@ namespace PhyGen.Application.MatrixSectionDetails.Responses
     {
         public Guid Id { get; set; }
         public Guid MatrixSectionId { get; set; }
-        public Guid SectionId { get; set; }
         public Guid ContentItemId { get; set; }
         public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }

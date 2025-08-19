@@ -12,10 +12,6 @@ namespace PhyGen.API.Models
 
         [JsonRequired]
         [Required(ErrorMessage = "Trường này không được để trống.")]
-        public Guid SectionId { get; set; }
-
-        [JsonRequired]
-        [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid ContentItemId { get; set; }
 
         [Required]
@@ -37,10 +33,6 @@ namespace PhyGen.API.Models
         [JsonRequired]
         [Required(ErrorMessage = "Trường này không được để trống.")]
         public Guid MatrixSectionId { get; set; }
-
-        [JsonRequired]
-        [Required(ErrorMessage = "Trường này không được để trống.")]
-        public Guid SectionId { get; set; }
 
         [JsonRequired]
         [Required(ErrorMessage = "Trường này không được để trống.")]
