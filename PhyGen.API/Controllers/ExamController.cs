@@ -182,11 +182,9 @@ namespace PhyGen.API.Controllers
             - Chỉ trả về câu hỏi, không trả lời, không giải thích thêm.
             - Trả về kết quả dưới dạng JSON chuẩn với các trường: multiple_choice, true_false, short_answer, essay. Không trả về văn bản, không ghi chú gì ngoài JSON.
             - phần multiple_choice sinh ra question và các options (ở opstions không cần a,b,c,d);
-            - Ở phần true_false:
-                Mỗi câu hỏi là một object gồm hai trường:
-                content: Nhận định hoặc câu hỏi tính toán chung cho cả câu hỏi.(ưu tiên kết hợp cả tính toán vào)
-                options: Một mảng 4 đáp án cho câu hỏi(mỗi phát biểu có thể đúng/sai, lấy theo thứ tự từ ma trận), không cần chú thích đúng sai sau câu trả lời
-                ví dụ có 8 câu truefalse là gồm 2 object 1 content và 4 options từ đó linh hoạt cho các trường hợp khác
+            - Ở phần true_false: 
+                - Nếu là câu hỏi thì có trường question và options (options là mảng gồm 2 phần tử: đúng và sai)
+                - Nếu là câu statement thì có trường statement và options (options là mảng gồm 2 phần tử: đúng và sai)
             - Phần short_answer và essay thì chỉ có content thôi
             - Với 2-3 câu hỏi, thêm trường imagePrompt mô tả chi tiết hình ảnh minh họa cho câu hỏi (nếu phù hợp), phải phù hợp với môn vật lý.";
 
@@ -312,37 +310,38 @@ namespace PhyGen.API.Controllers
                     {
                         var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userIdStr);
                         if (user == null) return Unauthorized("Không tìm thấy người dùng.");
-
-                        if (user.Coin < 5)
+                        if (user.Role == "User")
                         {
-                            await tx.RollbackAsync();
-                            return BadRequest("Số dư xu không đủ (cần 5 xu).");
+                            if (user.Coin < 5)
+                            {
+                                await tx.RollbackAsync();
+                                return BadRequest("Số dư xu không đủ (cần 5 xu).");
+                            }
+
+                            user.Coin -= 5;
+
+                            var transaction = new PhyGen.Domain.Entities.Transaction
+                            {
+                                Id = Guid.NewGuid(),
+                                UserId = user.Id,
+                                CoinAfter = user.Coin,
+                                CoinBefore = user.Coin + 5,
+                                CoinChange = -5,
+                                TypeChange = "Generate",
+                                PaymentlinkID = null,
+                                CreatedAt = DateTime.UtcNow
+                            };
+                            _context.Transactions.Add(transaction);
+                            await _context.SaveChangesAsync();
+
+                            await _mediator.Send(new CreateNotificationCommand
+                            {
+                                UserId = user.Id,
+                                Title = "Giao dịch thành công",
+                                Message = $"Bạn đã thanh toán thành công 5 xu để tạo đề thi. Số dư còn: {user.Coin} xu.",
+                                CreatedAt = DateTime.UtcNow
+                            });
                         }
-
-                        user.Coin -= 5;
-
-                        var transaction = new PhyGen.Domain.Entities.Transaction
-                        {
-                            Id = Guid.NewGuid(),
-                            UserId = user.Id,
-                            CoinAfter = user.Coin,
-                            CoinBefore = user.Coin + 5,
-                            CoinChange = -5,
-                            TypeChange = "Generate",
-                            PaymentlinkID = null,
-                            CreatedAt = DateTime.UtcNow
-                        };
-                        _context.Transactions.Add(transaction);
-                        await _context.SaveChangesAsync();
-
-                        await _mediator.Send(new CreateNotificationCommand
-                        {
-                            UserId = user.Id,
-                            Title = "Giao dịch thành công",
-                            Message = $"Bạn đã thanh toán thành công 5 xu để tạo đề thi. Số dư còn: {user.Coin} xu.",
-                            CreatedAt = DateTime.UtcNow
-                        });
-
                     await tx.CommitAsync();
                 }
                 return Ok(questionsNode);
