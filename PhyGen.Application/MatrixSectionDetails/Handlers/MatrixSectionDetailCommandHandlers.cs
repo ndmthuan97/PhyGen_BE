@@ -5,7 +5,6 @@ using PhyGen.Application.MatrixSectionDetails.Commands;
 using PhyGen.Application.MatrixSectionDetails.Exceptions;
 using PhyGen.Application.MatrixSectionDetails.Responses;
 using PhyGen.Application.MatrixSections.Exceptions;
-using PhyGen.Application.Sections.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using System;
@@ -20,16 +19,13 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
     {
         private readonly IMatrixSectionDetailRepository _matrixSectionDetailRepository;
         private readonly IMatrixSectionRepository _matrixSectionRepository;
-        private readonly ISectionRepository _sectionRepository;
 
         public CreateMatrixSectionDetailCommandHandler(
             IMatrixSectionDetailRepository matrixSectionDetailRepository,
-            ISectionRepository sectionRepository,
             IMatrixSectionRepository matrixSectionRepository)
         {
             _matrixSectionDetailRepository = matrixSectionDetailRepository;
             _matrixSectionRepository = matrixSectionRepository;
-            _sectionRepository = sectionRepository;
         }
 
         public async Task<MatrixSectionDetailResponse> Handle(CreateMatrixSectionDetailCommand request, CancellationToken cancellationToken)
@@ -38,12 +34,6 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
             if (matrixSection == null || matrixSection.DeletedAt.HasValue)
             {
                 throw new MatrixSectionNotFoundException();
-            }
-
-            var section = await _sectionRepository.GetByIdAsync(request.SectionId);
-            if (section == null || section.DeletedAt.HasValue)
-            {
-                throw new SectionNotFoundException();
             }
 
             var isExist = await _matrixSectionDetailRepository.AlreadyExistAsync(msd =>
@@ -61,6 +51,7 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
             var matrixSectionDetail = new MatrixSectionDetail
             {
                 MatrixSectionId = request.MatrixSectionId,
+                ContentItemId = request.ContentItemId,
                 Title = request.Title,
                 Description = request.Description,
                 Level = request.Level,
@@ -77,16 +68,13 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
     {
         private readonly IMatrixSectionDetailRepository _matrixSectionDetailRepository;
         private readonly IMatrixSectionRepository _matrixSectionRepository;
-        private readonly ISectionRepository _sectionRepository;
 
         public UpdateMatrixSectionDetailCommandHandler(
             IMatrixSectionDetailRepository matrixSectionDetailRepository,
-            ISectionRepository sectionRepository,
             IMatrixSectionRepository matrixSectionRepository)
         {
             _matrixSectionDetailRepository = matrixSectionDetailRepository;
             _matrixSectionRepository = matrixSectionRepository;
-            _sectionRepository = sectionRepository;
         }
 
         public async Task<Unit> Handle(UpdateMatrixSectionDetailCommand request, CancellationToken cancellationToken)
@@ -101,12 +89,6 @@ namespace PhyGen.Application.MatrixSectionDetails.Handlers
             if (matrixSection == null || matrixSection.DeletedAt.HasValue)
             {
                 throw new MatrixSectionNotFoundException();
-            }
-
-            var section = await _sectionRepository.GetByIdAsync(request.SectionId);
-            if (section == null || section.DeletedAt.HasValue)
-            {
-                throw new SectionNotFoundException();
             }
 
             var isExist = await _matrixSectionDetailRepository.AlreadyExistAsync(msd =>
