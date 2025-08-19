@@ -325,8 +325,8 @@ namespace PhyGen.API.Controllers
                         {
                             Id = Guid.NewGuid(),
                             UserId = user.Id,
-                            CoinAfter = user.Coin - 5,
-                            CoinBefore = user.Coin,
+                            CoinAfter = user.Coin,
+                            CoinBefore = user.Coin + 5,
                             CoinChange = -5,
                             TypeChange = "Generate",
                             PaymentlinkID = null,
