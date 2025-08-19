@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhyGen.Application.Admin.Dtos
 {
-    public class InvoiceFilter : BaseSpecParam
+    public class InvoiceExportFilter 
     {
         public string? FullName { get; set; }
         public string? Status { get; set; }

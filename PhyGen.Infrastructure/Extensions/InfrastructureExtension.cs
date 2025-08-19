@@ -76,6 +76,7 @@ namespace PhyGen.Infrastructure.Extensions
             services.AddMemoryCache();
             services.AddScoped<TopicService>();
             services.AddSingleton<IImageStorage, CloudinaryImageStorage>();
+            services.AddScoped<IInvoiceExcelExporter, InvoiceExcelExporter>();
         }
     }
 }
