@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Spreadsheet;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +26,12 @@ namespace PhyGen.API.Controllers
     public class StatisticController : ControllerBase
     {
         private readonly IStatisticService _statisticService;
+        private readonly IInvoiceExcelExporter _exporter;
 
-        public StatisticController(IStatisticService statisticService)
+        public StatisticController(IStatisticService statisticService, IInvoiceExcelExporter exporter)
         {
             _statisticService = statisticService;
+            _exporter = exporter;
         }
 
         [HttpGet("weekly")]
@@ -50,18 +54,44 @@ namespace PhyGen.API.Controllers
         [FromQuery] int pageIndex = 1,
         [FromQuery] string? fullName = null,
         [FromQuery] string? status = null,
-        [FromQuery] decimal? minAmount = null)
+        [FromQuery] decimal? minAmount = null,
+        [FromQuery] DateTime? fromDate = null,
+        [FromQuery] DateTime? toDate = null)
         {
             var filter = new InvoiceFilter
             {
                 PageIndex = pageIndex,
                 FullName = fullName,
                 Status = status,
-                MinAmount = minAmount
+                MinAmount = minAmount,
+                FromDate = fromDate,
+                ToDate = toDate
             };
 
             var result = await _statisticService.GetInvoiceStatistics(filter);
             return Ok(result);
+        }
+
+        [HttpGet("export")]
+        public async Task<IActionResult> ExportExcel(
+        [FromQuery] string? fullName,
+        [FromQuery] string? status,
+        [FromQuery] decimal? minAmount,
+        [FromQuery] DateTime? fromDate,
+        [FromQuery] DateTime? toDate, CancellationToken ct)
+        {
+            var filter = new InvoiceExportFilter
+            {
+                FullName = fullName,
+                Status = status,
+                MinAmount = minAmount,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            var bytes = await _exporter.ExportAsync(filter, ct);
+            var fileName = $"BaoCaoHoaDon_{DateTime.Now:yyyyMMdd_HHmm}.xlsx";
+            const string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            return File(bytes, contentType, fileName);
         }
     }
 }

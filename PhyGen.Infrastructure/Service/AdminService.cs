@@ -145,6 +145,14 @@ namespace PhyGen.Infrastructure.Service
                 q = q.Where(x => x.Amount >= min);
             }
 
+            if (filter.FromDate.HasValue && filter.ToDate.HasValue)
+            {
+                var from = filter.FromDate.Value.Date;
+                var to = filter.ToDate.Value.Date.AddDays(1).AddTicks(-1);
+
+                q = q.Where(x => x.CreatedAt >= from && x.CreatedAt <= to);
+            }
+
             var totalCount = await q.CountAsync();
 
             var items = await q
