@@ -23,5 +23,13 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
                 .Where(ci => ci.ContentFlowId == contentFlowId)
                 .ToListAsync();
         }
+
+        public async Task<int> GetMaxOrderNoByContentFlowIdAsync(Guid contentFlowId)
+        {
+            return await _context.ContentItems
+                .Where(ci => ci.ContentFlowId == contentFlowId && ci.DeletedAt == null)
+                .Select(ci => (int?)ci.OrderNo)
+                .MaxAsync() ?? 0;
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace PhyGen.Application.ContentItems.Handlers
                 ContentFlowId = request.ContentFlowId,
                 Name = request.Name,
                 LearningOutcome = request.LearningOutcome,
-                OrderNo = request.OrderNo,
+                OrderNo = await _contentItemRepository.GetMaxOrderNoByContentFlowIdAsync(request.ContentFlowId) + 1,
             };
             await _contentItemRepository.AddAsync(contentItem);
             return AppMapper<CoreMappingProfile>.Mapper.Map<ContentItemResponse>(contentItem);
@@ -85,7 +85,6 @@ namespace PhyGen.Application.ContentItems.Handlers
 
             contentItem.Name = request.Name;
             contentItem.LearningOutcome = request.LearningOutcome;
-            contentItem.OrderNo = request.OrderNo;
 
             await _contentItemRepository.UpdateAsync(contentItem);
             return Unit.Value;

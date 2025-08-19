@@ -60,4 +60,21 @@ namespace PhyGen.Application.ContentItems.Handlers
             return AppMapper<CoreMappingProfile>.Mapper.Map<List<ContentItemResponse>>(contentItems.OrderBy(ci => ci.OrderNo));
         }
     }
+
+    public class GetContentItemsQueryHandler : IRequestHandler<GetContentItemsQuery, List<ContentItemResponse>>
+    {
+        private readonly IContentItemRepository _contentItemRepository;
+        public GetContentItemsQueryHandler(IContentItemRepository contentItemRepository)
+        {
+            _contentItemRepository = contentItemRepository;
+        }
+        public async Task<List<ContentItemResponse>> Handle(GetContentItemsQuery request, CancellationToken cancellationToken)
+        {
+            var contentItems = await _contentItemRepository.GetAllAsync();
+            contentItems = contentItems?.Where(ci => !ci.DeletedAt.HasValue).ToList();
+            if (contentItems == null || !contentItems.Any())
+                throw new ContentItemNotFoundException();
+            return AppMapper<CoreMappingProfile>.Mapper.Map<List<ContentItemResponse>>(contentItems.OrderBy(ci => ci.OrderNo));
+        }
+    }
 }

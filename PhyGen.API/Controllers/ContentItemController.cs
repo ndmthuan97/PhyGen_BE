@@ -35,6 +35,14 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetContentItemByIdQuery, ContentItemResponse>(request);
         }
 
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<List<ContentItemResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetContentItems()
+        {
+            var request = new GetContentItemsQuery();
+            return await ExecuteAsync<GetContentItemsQuery, List<ContentItemResponse>>(request);
+        }
+
         [HttpGet("contentflow/{contentFlowId}")]
         [ProducesResponseType(typeof(ApiResponse<List<ContentItemResponse>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetContentItemsByContentFlowId(Guid contentFlowId)

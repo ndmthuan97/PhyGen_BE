@@ -10,5 +10,6 @@ namespace PhyGen.Domain.Interfaces
     public interface IContentItemRepository : IAsyncRepository<ContentItem, Guid>
     {
         Task<List<ContentItem>> GetContentItemsByContentFlowIdAsync(Guid contentFlowId);
+        Task<int> GetMaxOrderNoByContentFlowIdAsync(Guid contentFlowId);
     }
 }

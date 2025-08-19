@@ -10,5 +10,6 @@ namespace PhyGen.Domain.Interfaces
     public interface IContentFlowRepository : IAsyncRepository<ContentFlow, Guid>
     {
         Task<List<ContentFlow>> GetContentFlowsByCurriculumIdAndSubjectIdAsync(Guid curriculumId, Guid subjectId);
+        Task<int> GetMaxOrderNoByCurriculumIdAndSubjectIdAsync(Guid curriculumId, Guid subjectId, int grade);
     }
 }

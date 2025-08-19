@@ -54,7 +54,7 @@ namespace PhyGen.Application.ContentFlows.Handlers
                 SubjectId = request.SubjectId,
                 Name = request.Name,
                 Description = request.Description,
-                OrderNo = request.OrderNo,
+                OrderNo = await _repository.GetMaxOrderNoByCurriculumIdAndSubjectIdAsync(request.CurriculumId, request.SubjectId, request.Grade) + 1,
                 Grade = request.Grade
             };
 
@@ -102,7 +102,6 @@ namespace PhyGen.Application.ContentFlows.Handlers
             contentFlow.SubjectId = request.SubjectId;
             contentFlow.Name = request.Name;
             contentFlow.Description = request.Description;
-            contentFlow.OrderNo = request.OrderNo;
             contentFlow.Grade = request.Grade;
 
             await _repository.UpdateAsync(contentFlow);
