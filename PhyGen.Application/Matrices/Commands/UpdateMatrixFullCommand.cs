@@ -22,7 +22,7 @@ namespace PhyGen.Application.Matrices.Commands
     {
         public Guid? Id { get; set; }
         public string Title { get; set; } = string.Empty;
-        public double? Score { get; set; }
+        public float? Score { get; set; }
         public string? Description { get; set; }
         public List<MatrixSectionDetailDto> Details { get; set; } = new();
     }
