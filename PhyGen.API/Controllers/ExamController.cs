@@ -185,8 +185,8 @@ namespace PhyGen.API.Controllers
             - Ở phần true_false: 
                 - Nếu là câu hỏi thì có trường question và options (options là mảng gồm 2 phần tử: đúng và sai)
                 - Nếu là câu statement thì có trường statement và options (options là mảng gồm 2 phần tử: đúng và sai)
-            - Phần short_answer và essay thì chỉ có content thôi
-            - Với 2-3 câu hỏi, thêm trường imagePrompt mô tả chi tiết hình ảnh minh họa cho câu hỏi (nếu phù hợp), phải phù hợp với môn vật lý.";
+            - Phần short_answer và essay thì chỉ có content thôi,
+            - QUAN TRỌNG: trả về JSON để ko bị lỗi khi parse bằng System.Text.Json ngôn ngữ C# ASP.NET";
 
             var chatGptResponse = await _chatGptService.CallChatGptAsync(prompt);
 
