@@ -17,7 +17,7 @@ namespace PhyGen.Domain.Entities
         [MaxLength(100)]
         public string Title { get; set; } = string.Empty;
 
-        public double? Score { get; set; }
+        public float? Score { get; set; }
 
         [Column(TypeName = "text")]
         public string? Description { get; set; }

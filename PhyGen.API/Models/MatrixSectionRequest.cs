@@ -13,7 +13,7 @@ namespace PhyGen.API.Models
         [StringLength(255, ErrorMessage = "Tên phần ma trận không được vượt quá 255 ký tự.")]
         public string Title { get; set; } = string.Empty;
 
-        public double? Score { get; set; }
+        public float? Score { get; set; }
         public string? Description { get; set; }
     }
 
@@ -31,7 +31,7 @@ namespace PhyGen.API.Models
         [StringLength(255, ErrorMessage = "Tên phần ma trận không được vượt quá 255 ký tự.")]
         public string Title { get; set; } = string.Empty;
 
-        public double? Score { get; set; }
+        public float? Score { get; set; }
         public string? Description { get; set; }
     }
 

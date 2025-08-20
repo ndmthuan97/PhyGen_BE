@@ -10,6 +10,7 @@ namespace PhyGen.Domain.Specs
     public class ExamSpecParam : BaseSpecParam
     {
         public Guid? ExamCategoryId { get; set; }
+        public Guid UserId { get; set; }
         public string? Title { get; set; }
         public List<string>? ExamCategory { get; set; }
         public List<int>? Grade { get; set; }
