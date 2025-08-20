@@ -300,29 +300,26 @@ namespace PhyGen.API.Controllers
             }
             return Ok(questions);
         }
-       
+
         [HttpPost("check-file")]
         public async Task<IActionResult> CheckFileQuestion([FromForm] FileUploadRequest request)
         {
             if (request.File == null || request.File.Length == 0)
                 return BadRequest("File rỗng.");
 
-            List<QuestionWithImages> questionsWithImages;
+            string fullText;
             using (var ms = new MemoryStream())
             {
                 await request.File.CopyToAsync(ms);
                 ms.Position = 0;
+
                 using (var wordDoc = WordprocessingDocument.Open(ms, false))
                 {
-                    questionsWithImages = ExtractQuestionsWithImages(wordDoc);
+                    fullText = DocxReader.ReadFullText(wordDoc);
                 }
             }
 
-            var fullText = string.Join("\n\n", questionsWithImages
-                .Select(q => q.Content)
-                .Where(s => !string.IsNullOrWhiteSpace(s)));
-
-            // Không cần dùng request.Grade ở đây
+            // Gọi ChatGPT để kiểm tra có phải đề Vật lý không
             var isPhysicsExam = await _chatGptService.IsPhysicsExamAsync(
                 request.File.FileName,
                 fullText,

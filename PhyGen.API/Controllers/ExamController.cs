@@ -172,7 +172,7 @@ namespace PhyGen.API.Controllers
             - Loại kỳ thi: {request.ExamType}
             - Khối lớp: {request.Grade}
             - Năm học: {request.Year}
-            - Tổng qua ma trận: {request.Description}
+            - Tổng quan ma trận: {request.Description}
             Ma trận đề thi chi tiết:
             {request.Matrix}
 
@@ -185,8 +185,8 @@ namespace PhyGen.API.Controllers
             - Ở phần true_false: 
                 - Nếu là câu hỏi thì có trường question và options (options là mảng gồm 2 phần tử: đúng và sai)
                 - Nếu là câu statement thì có trường statement và options (options là mảng gồm 2 phần tử: đúng và sai)
-            - Phần short_answer và essay thì chỉ có content thôi
-            - Với 2-3 câu hỏi, thêm trường imagePrompt mô tả chi tiết hình ảnh minh họa cho câu hỏi (nếu phù hợp), phải phù hợp với môn vật lý.";
+            - Phần short_answer và essay thì chỉ có content thôi,
+            - QUAN TRỌNG: trả về JSON để ko bị lỗi khi parse bằng System.Text.Json ngôn ngữ C# ASP.NET";
 
             var chatGptResponse = await _chatGptService.CallChatGptAsync(prompt);
 
@@ -195,162 +195,232 @@ namespace PhyGen.API.Controllers
 
             try
             {
-                string cleanJson = chatGptResponse.Trim();
-                if (cleanJson.StartsWith("```json"))
-                {
-                    cleanJson = cleanJson.Substring(7);
-                }
-                if (cleanJson.EndsWith("```"))
-                {
-                    cleanJson = cleanJson.Substring(0, cleanJson.Length - 3);
-                }
+                // 3) Làm sạch code fence TỐI ƯU (index-based, hạn chế copy chuỗi)
+                string cleanJson = CleanJsonFences(chatGptResponse);
 
+                // 4) Parse JSON (giữ JsonNode như cũ để không đổi kết cấu)
                 var questionsNode = JsonNode.Parse(cleanJson);
 
-                // Multiple choice
-                if (questionsNode?["multiple_choice"] is JsonArray mcArr)
-                {
-                    foreach (var item in mcArr)
-                    {
-                        if (item?["options"] is JsonArray optionsArr)
-                        {
-                            item["option1"] = optionsArr.Count > 0 ? optionsArr[0]?.ToString() : "";
-                            item["option2"] = optionsArr.Count > 1 ? optionsArr[1]?.ToString() : "";
-                            item["option3"] = optionsArr.Count > 2 ? optionsArr[2]?.ToString() : "";
-                            item["option4"] = optionsArr.Count > 3 ? optionsArr[3]?.ToString() : "";
-                            item.AsObject().Remove("options");
-                        }
-                    }
-                }
+                // 5) Chuẩn hoá schema (tối ưu duyệt & gán)
+                NormalizeQuestionsNode(questionsNode);
 
-                // True/False
-                if (questionsNode?["true_false"] is JsonArray tfArr)
-                {
-                    foreach (var item in tfArr)
-                    {
-                        if (item?["statement"] != null)
-                        {
-                            item["content"] = item["statement"]?.ToString();
-                            item.AsObject().Remove("statement");
-                        }
-                        else if (item?["question"] != null)
-                        {
-                            item["content"] = item["question"]?.ToString();
-                            item.AsObject().Remove("question");
-                        }
-
-                        if (item?["options"] is JsonArray optionsArr)
-                        {
-                            for (int i = 0; i < optionsArr.Count; i++)
-                            {
-                                item[$"option{i + 1}"] = optionsArr[i]?.ToString();
-                            }
-                            item.AsObject().Remove("options");
-                        }
-
-                        if (item?["statements"] is JsonArray statementsArr)
-                        {
-                            for (int i = 0; i < statementsArr.Count; i++)
-                            {
-                                var statement = statementsArr[i];
-                                if (statement?["statement"] != null)
-                                    item[$"option{i + 1}"] = statement["statement"]?.ToString();
-                                else
-                                    item[$"option{i + 1}"] = statement?.ToString();
-                            }
-                            item.AsObject().Remove("statements");
-                        }
-                    }
-                }
-
-                // Short Answer
-                if (questionsNode?["short_answer"] is JsonArray saArr)
-                {
-                    foreach (var item in saArr)
-                    {
-                        if (item?["question"] != null)
-                        {
-                            item["content"] = item["question"]?.ToString();
-                            item.AsObject().Remove("question");
-                        }
-                        else if (item?["statement"] != null)
-                        {
-                            item["content"] = item["statement"]?.ToString();
-                            item.AsObject().Remove("statement");
-                        }
-                    }
-                }
-
-                // Essay
-                if (questionsNode?["essay"] is JsonArray essayArr)
-                {
-                    foreach (var item in essayArr)
-                    {
-                        if (item?["question"] != null)
-                        {
-                            item["content"] = item["question"]?.ToString();
-                            item.AsObject().Remove("question");
-                        }
-                        else if (item?["statement"] != null)
-                        {
-                            item["content"] = item["statement"]?.ToString();
-                            item.AsObject().Remove("statement");
-                        }
-                    }
-                }
-
-                var userIdStr = User.FindFirst("sub")?.Value
-                ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
-                ?? User.FindFirst("userId")?.Value;
+                // 6) Xác định userId
+                var userIdStr =
+                    User.FindFirst("sub")?.Value
+                    ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                    ?? User.FindFirst("userId")?.Value;
 
                 if (string.IsNullOrWhiteSpace(userIdStr))
                     return Unauthorized("Không xác định được người dùng.");
 
+                // 7) Chỉ mở transaction khi thật sự cần trừ xu (User role)
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userIdStr);
+                if (user == null) return Unauthorized("Không tìm thấy người dùng.");
+
+                if (string.Equals(user.Role, "User", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (user.Coin < 5)
+                        return BadRequest("Số dư xu không đủ (cần 5 xu).");
+
                     using (var tx = await _context.Database.BeginTransactionAsync())
                     {
-                        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id.ToString() == userIdStr);
-                        if (user == null) return Unauthorized("Không tìm thấy người dùng.");
-                        if (user.Role == "User")
+                        var before = user.Coin;
+                        user.Coin = before - 5;
+
+                        var transaction = new PhyGen.Domain.Entities.Transaction
                         {
-                            if (user.Coin < 5)
-                            {
-                                await tx.RollbackAsync();
-                                return BadRequest("Số dư xu không đủ (cần 5 xu).");
-                            }
+                            Id = Guid.NewGuid(),
+                            UserId = user.Id,
+                            CoinAfter = user.Coin,
+                            CoinBefore = before,
+                            CoinChange = -5,
+                            TypeChange = "Generate",
+                            PaymentlinkID = null,
+                            CreatedAt = DateTime.UtcNow
+                        };
 
-                            user.Coin -= 5;
+                        _context.Transactions.Add(transaction);
+                        await _context.SaveChangesAsync();
 
-                            var transaction = new PhyGen.Domain.Entities.Transaction
-                            {
-                                Id = Guid.NewGuid(),
-                                UserId = user.Id,
-                                CoinAfter = user.Coin,
-                                CoinBefore = user.Coin + 5,
-                                CoinChange = -5,
-                                TypeChange = "Generate",
-                                PaymentlinkID = null,
-                                CreatedAt = DateTime.UtcNow
-                            };
-                            _context.Transactions.Add(transaction);
-                            await _context.SaveChangesAsync();
+                        await _mediator.Send(new CreateNotificationCommand
+                        {
+                            UserId = user.Id,
+                            Title = "Giao dịch thành công",
+                            Message = $"Bạn đã thanh toán thành công 5 xu để tạo đề thi. Số dư còn: {user.Coin} xu.",
+                            CreatedAt = DateTime.UtcNow
+                        });
 
-                            await _mediator.Send(new CreateNotificationCommand
-                            {
-                                UserId = user.Id,
-                                Title = "Giao dịch thành công",
-                                Message = $"Bạn đã thanh toán thành công 5 xu để tạo đề thi. Số dư còn: {user.Coin} xu.",
-                                CreatedAt = DateTime.UtcNow
-                            });
-                        }
-                    await tx.CommitAsync();
+                        await tx.CommitAsync();
+                    }
                 }
+
+                // 8) Trả kết quả (giữ nguyên kiểu trả)
                 return Ok(questionsNode);
             }
             catch (Exception ex)
             {
-                // Nếu lỗi parse, trả về raw string để debug
+                // Nếu lỗi parse, trả về raw string để debug (giữ nguyên)
                 return Ok(new { raw = chatGptResponse, error = ex.Message });
             }
         }
+        /// <summary>
+        /// Làm sạch code fence và cắt đúng vùng JSON một lần (ít copy chuỗi).
+        /// Hỗ trợ cả block ```json ... ``` hoặc dư văn bản ngoài.
+        /// </summary>
+        private static string CleanJsonFences(string raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw)) return string.Empty;
+
+            ReadOnlySpan<char> span = raw.AsSpan().Trim();
+
+            // Cắt ```json ... ``` ở đầu nếu có
+            const string fenceJson = "```json";
+            if (span.StartsWith(fenceJson.AsSpan(), StringComparison.OrdinalIgnoreCase))
+            {
+                span = span.Slice(fenceJson.Length).TrimStart(); // bỏ tiền tố ```json
+            }
+
+            // Cắt ``` ở cuối nếu có
+            const string fence = "```";
+            if (span.EndsWith(fence.AsSpan(), StringComparison.Ordinal))
+            {
+                span = span.Slice(0, span.Length - fence.Length).TrimEnd();
+            }
+
+            // Nếu vẫn còn văn bản ngoài JSON -> ưu tiên object { ... } nếu có
+            int objStart = span.IndexOf('{');
+            int objEnd = span.LastIndexOf('}');
+            if (objStart >= 0 && objEnd > objStart)
+            {
+                return span.Slice(objStart, objEnd - objStart + 1).ToString();
+            }
+
+            // Hoặc mảng [ ... ]
+            int arrStart = span.IndexOf('[');
+            int arrEnd = span.LastIndexOf(']');
+            if (arrStart >= 0 && arrEnd > arrStart)
+            {
+                return span.Slice(arrStart, arrEnd - arrStart + 1).ToString();
+            }
+
+            // Không tìm thấy -> trả về phần đã trim (giữ nguyên hành vi)
+            return span.ToString();
+        }
+
+        /// <summary>
+        /// Chuẩn hoá schema JSON in-place (giữ logic cũ, tối ưu truy cập JsonNode)
+        /// </summary>
+        private static void NormalizeQuestionsNode(JsonNode? root)
+        {
+            if (root is null) return;
+
+            // multiple_choice: options[] -> option1..4
+            if (root["multiple_choice"] is JsonArray mcArr)
+            {
+                foreach (var node in mcArr)
+                {
+                    if (node is not JsonObject obj) continue;
+
+                    if (obj["options"] is JsonArray options)
+                    {
+                        for (int i = 0; i < options.Count; i++)
+                        {
+                            if (options[i] is JsonValue v && v.TryGetValue<string>(out var s))
+                                obj[$"option{i + 1}"] = s;
+                            else
+                                obj[$"option{i + 1}"] = options[i]?.ToJsonString() ?? "";
+                        }
+                        obj.Remove("options");
+                    }
+                }
+            }
+
+            // true_false: statement|question -> content; options[]/statements[] -> option1..n
+            if (root["true_false"] is JsonArray tfArr)
+            {
+                foreach (var node in tfArr)
+                {
+                    if (node is not JsonObject obj) continue;
+
+                    if (obj.ContainsKey("statement"))
+                    {
+                        obj["content"] = obj["statement"]?.GetValue<string>();
+                        obj.Remove("statement");
+                    }
+                    else if (obj.ContainsKey("question"))
+                    {
+                        obj["content"] = obj["question"]?.GetValue<string>();
+                        obj.Remove("question");
+                    }
+
+                    if (obj["options"] is JsonArray options)
+                    {
+                        for (int i = 0; i < options.Count; i++)
+                        {
+                            if (options[i] is JsonValue v && v.TryGetValue<string>(out var s))
+                                obj[$"option{i + 1}"] = s;
+                            else
+                                obj[$"option{i + 1}"] = options[i]?.ToJsonString();
+                        }
+                        obj.Remove("options");
+                    }
+
+                    if (obj["statements"] is JsonArray statements)
+                    {
+                        for (int i = 0; i < statements.Count; i++)
+                        {
+                            string? text = null;
+                            if (statements[i] is JsonObject so && so["statement"] is JsonNode stVal)
+                                text = stVal.GetValue<string>();
+                            else if (statements[i] is JsonValue sv && sv.TryGetValue<string>(out var s2))
+                                text = s2;
+                            else
+                                text = statements[i]?.ToJsonString();
+
+                            obj[$"option{i + 1}"] = text;
+                        }
+                        obj.Remove("statements");
+                    }
+                }
+            }
+
+            // short_answer: question|statement -> content
+            if (root["short_answer"] is JsonArray saArr)
+            {
+                foreach (var node in saArr)
+                {
+                    if (node is not JsonObject obj) continue;
+                    if (obj.ContainsKey("question"))
+                    {
+                        obj["content"] = obj["question"]?.GetValue<string>();
+                        obj.Remove("question");
+                    }
+                    else if (obj.ContainsKey("statement"))
+                    {
+                        obj["content"] = obj["statement"]?.GetValue<string>();
+                        obj.Remove("statement");
+                    }
+                }
+            }
+
+            // essay: question|statement -> content
+            if (root["essay"] is JsonArray essayArr)
+            {
+                foreach (var node in essayArr)
+                {
+                    if (node is not JsonObject obj) continue;
+                    if (obj.ContainsKey("question"))
+                    {
+                        obj["content"] = obj["question"]?.GetValue<string>();
+                        obj.Remove("question");
+                    }
+                    else if (obj.ContainsKey("statement"))
+                    {
+                        obj["content"] = obj["statement"]?.GetValue<string>();
+                        obj.Remove("statement");
+                    }
+                }
+            }
+        } 
     }
 }
