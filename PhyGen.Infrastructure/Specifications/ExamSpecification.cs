@@ -35,6 +35,7 @@ namespace PhyGen.Infrastructure.Specifications
                 .ToList() ?? new List<string>();
             Criteria = exam =>
                 (!param.ExamCategoryId.HasValue || exam.ExamCategoryId == param.ExamCategoryId) &&
+                (exam.UserId == param.UserId || exam.User.Role == "Admin" ) &&
                 (!examCategory.Any() || examCategory.Any(n => exam.ExamCategory.Name.Trim().ToLower().Contains(n))) &&
                 (param.Grade == null || !param.Grade.Any() || param.Grade.Contains(exam.Grade)) &&
                 (param.Year == null || !param.Year.Any() || param.Year.Contains(exam.Year)) &&

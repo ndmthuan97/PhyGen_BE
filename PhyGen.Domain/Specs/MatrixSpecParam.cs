@@ -20,6 +20,8 @@ namespace PhyGen.Domain.Specs
         public StatusQEM? Status { get; set; }
         public string? MatrixCode { get; set; }
 
+        public List<string>? CreatedByList { get; set; }
+
         public string? Search { get; set; }
 
         public string? Sort { get; set; }

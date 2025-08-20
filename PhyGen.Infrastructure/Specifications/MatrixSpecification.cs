@@ -1,4 +1,5 @@
-﻿using PhyGen.Domain.Entities;
+﻿using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
+using PhyGen.Domain.Entities;
 using PhyGen.Domain.Specs;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,7 @@ namespace PhyGen.Infrastructure.Specifications
                 (param.Grade == null || !param.Grade.Any() || param.Grade.Contains(matrix.Grade)) &&
                 (param.Year == null || !param.Year.Any() || param.Year.Contains(matrix.Year)) &&
                 (param.Status == null || matrix.Status == param.Status.Value) &&
+                (param.CreatedByList == null || param.CreatedByList.Contains(matrix.CreatedBy)) &&
                 (string.IsNullOrEmpty(param.MatrixCode) || matrix.MatrixCode.Contains(param.MatrixCode));
 
             if (!string.IsNullOrEmpty(param.Sort))

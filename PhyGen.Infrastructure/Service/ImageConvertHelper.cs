@@ -21,7 +21,7 @@ public static class ImageConvertHelper
     };
 
     public static byte[] ToCloudinaryFriendlyPngIfNeeded(
-        byte[] data, string contentType, out string outContentType, out string outExt)
+    byte[] data, string contentType, out string outContentType, out string outExt)
     {
         // Nếu là định dạng Cloudinary hay gặp (jpeg/png/webp/gif) thì giữ nguyên
         if (!NeedsConvertToPng.Contains(contentType))
@@ -38,17 +38,23 @@ public static class ImageConvertHelper
             return data;
         }
 
-        // Convert sang PNG
+        // Convert sang PNG (tối ưu web)
         using var img = new MagickImage(data);
-        img.Format = MagickFormat.Png;
-        // Tùy chọn tối ưu web:
+        img.Strip(); // bỏ metadata
+        img.Format = MagickFormat.Png8; // PNG8 đủ tốt cho sơ đồ/scan -> nhỏ hơn
         img.Quality = 90;
-        var converted = img.ToByteArray();
 
+        // (tuỳ chọn) resize trần cho ảnh quá to để giảm dung lượng
+        const int maxW = 2500, maxH = 2500;
+        if (img.Width > maxW || img.Height > maxH)
+            img.Resize(new MagickGeometry(maxW, maxH) { IgnoreAspectRatio = false });
+
+        var converted = img.ToByteArray();
         outContentType = "image/png";
         outExt = ".png";
         return converted;
     }
+
     // ====== Regex & helpers nhận diện đầu câu ======
     private static readonly Regex CauBaiRegex = new Regex(
         @"^\s*(?:Câu(?:\s*hỏi)?|Bài)\s*\d+\s*[:\.\)\-]?",
@@ -134,111 +140,91 @@ public static class ImageConvertHelper
             if (current == null) pendingImages.Add(img); else current.Images.Add(img);
         }
 
-        // Duyệt THEO THỨ TỰ XUẤT HIỆN trong Body:
-        // - Nếu gặp Paragraph: xử lý text + (ảnh con nếu có)
-        // - Nếu gặp Blip/VML ImageData "độc lập" ở nơi khác: vẫn bắt và gắn vào current
-        var body = doc.MainDocumentPart.Document.Body;
-
-        foreach (var node in body.Descendants())
+        // Helper: đọc bytes từ ImagePart (an toàn)
+        byte[]? ReadImageBytes(OpenXmlPartContainer owner, string relId, out string? ct)
         {
-            switch (node)
+            ct = null;
+            if (string.IsNullOrWhiteSpace(relId)) return null;
+
+            var part = TryGetImagePart(owner, relId);
+            if (part == null) return null;
+
+            ct = part.ContentType;
+            using var s = part.GetStream();              // FileAccess.Read
+            using var ms = new MemoryStream();
+            s.CopyTo(ms);
+            return ms.ToArray();
+        }
+
+        // ====== DUYỆT CHÍNH: chỉ Paragraph ở top-level (nhanh hơn body.Descendants()) ======
+        var body = doc.MainDocumentPart!.Document.Body!;
+        foreach (var p in body.Elements<Paragraph>())
+        {
+            var text = Normalize(p.InnerText);
+
+            if (IsQuestionStart(p, text))
             {
-                case Paragraph p:
-                    {
-                        var text = Normalize(p.InnerText);
+                // Bắt đầu câu hỏi mới
+                current = new QuestionWithImages { Content = text };
+                result.Add(current);
 
-                        if (IsQuestionStart(p, text))
-                        {
-                            // Bắt đầu câu hỏi mới
-                            current = new QuestionWithImages { Content = text };
-                            result.Add(current);
-
-                            // Dồn ảnh pending (ảnh xuất hiện trước câu đầu tiên)
-                            if (pendingImages.Count > 0)
-                            {
-                                current.Images.AddRange(pendingImages);
-                                pendingImages.Clear();
-                            }
-                        }
-                        else
-                        {
-                            if (!string.IsNullOrEmpty(text))
-                            {
-                                EnsureCurrent();
-                                if (current!.Content.Length > 0) current.Content += "\n";
-                                current.Content += text;
-                            }
-                        }
-
-                        // Ảnh là con của paragraph này (inline/anchor/vml) → gắn vào current
-                        // DrawingML
-                        foreach (var blip in p.Descendants<D.Blip>())
-                        {
-                            var relId = blip.Embed?.Value ?? blip.Link?.Value; // Link nếu ảnh liên kết ngoài
-                            if (string.IsNullOrEmpty(relId)) continue;
-
-                            var owner = GetOwnerPart(blip, doc);
-                            var part = TryGetImagePart(owner, relId);
-                            if (part == null) continue;
-
-                            using var s = part.GetStream();
-                            using var ms = new MemoryStream();
-                            s.CopyTo(ms);
-                            AttachImage(ms.ToArray(), part.ContentType);
-                        }
-
-                        // VML (định dạng cũ / textbox)
-                        foreach (var vml in p.Descendants<DocumentFormat.OpenXml.Vml.ImageData>())
-                        {
-                            var relId = vml.RelationshipId;
-                            if (string.IsNullOrEmpty(relId)) continue;
-
-                            var owner = GetOwnerPart(vml, doc);
-                            var part = TryGetImagePart(owner, relId);
-                            if (part == null) continue;
-
-                            using var s = part.GetStream();
-                            using var ms = new MemoryStream();
-                            s.CopyTo(ms);
-                            AttachImage(ms.ToArray(), part.ContentType);
-                        }
-
-                        break;
-                    }
-
-                // Trường hợp hiếm: blip xuất hiện trong container KHÔNG phải con của Paragraph
-                case D.Blip blipStandalone:
-                    {
-                        var relId = blipStandalone.Embed?.Value ?? blipStandalone.Link?.Value;
-                        if (string.IsNullOrEmpty(relId)) break;
-
-                        var owner = GetOwnerPart(blipStandalone, doc);
-                        var part = TryGetImagePart(owner, relId);
-                        if (part == null) break;
-
-                        using var s = part.GetStream();
-                        using var ms = new MemoryStream();
-                        s.CopyTo(ms);
-                        AttachImage(ms.ToArray(), part.ContentType);
-                        break;
-                    }
-
-                case DocumentFormat.OpenXml.Vml.ImageData vmlStandalone:
-                    {
-                        var relId = vmlStandalone.RelationshipId;
-                        if (string.IsNullOrEmpty(relId)) break;
-
-                        var owner = GetOwnerPart(vmlStandalone, doc);
-                        var part = TryGetImagePart(owner, relId);
-                        if (part == null) break;
-
-                        using var s = part.GetStream();
-                        using var ms = new MemoryStream();
-                        s.CopyTo(ms);
-                        AttachImage(ms.ToArray(), part.ContentType);
-                        break;
-                    }
+                // Dồn ảnh pending (ảnh xuất hiện trước câu đầu tiên)
+                if (pendingImages.Count > 0)
+                {
+                    current.Images.AddRange(pendingImages);
+                    pendingImages.Clear();
+                }
             }
+            else
+            {
+                if (!string.IsNullOrEmpty(text))
+                {
+                    EnsureCurrent();
+                    if (current!.Content.Length > 0) current.Content += "\n";
+                    current.Content += text;
+                }
+            }
+
+            // Ảnh con của Paragraph này → gắn vào current theo đúng thứ tự xuất hiện trong p
+            // DrawingML
+            foreach (var blip in p.Descendants<D.Blip>())
+            {
+                var relId = blip.Embed?.Value ?? blip.Link?.Value;
+                var owner = GetOwnerPart(blip, doc);
+                var bytes = ReadImageBytes(owner, relId, out var ct);
+                if (bytes != null && ct != null) AttachImage(bytes, ct);
+            }
+
+            // VML (định dạng cũ / textbox)
+            foreach (var vml in p.Descendants<DocumentFormat.OpenXml.Vml.ImageData>())
+            {
+                var relId = vml.RelationshipId;
+                var owner = GetOwnerPart(vml, doc);
+                var bytes = ReadImageBytes(owner, relId, out var ct);
+                if (bytes != null && ct != null) AttachImage(bytes, ct);
+            }
+        }
+
+        // ====== FALLBACK (hiếm): ảnh không nằm trong Paragraph ======
+        // Nếu tài liệu có Blip/VML ở container khác, ta vẫn bắt và gắn vào current.
+        // Ảnh fallback sẽ đứng sau phần đã duyệt (thường vẫn đúng ý).
+        foreach (var blipStandalone in body.Descendants<D.Blip>()
+                 .Where(b => b.Ancestors<Paragraph>().FirstOrDefault() is null))
+        {
+            var relId = blipStandalone.Embed?.Value ?? blipStandalone.Link?.Value;
+            var owner = GetOwnerPart(blipStandalone, doc);
+            var bytes = ReadImageBytes(owner, relId, out var ct);
+            if (bytes != null && ct != null) AttachImage(bytes, ct);
+        }
+
+        foreach (var vmlStandalone in body
+                 .Descendants<DocumentFormat.OpenXml.Vml.ImageData>()
+                 .Where(v => v.Ancestors<Paragraph>().FirstOrDefault() is null))
+        {
+            var relId = vmlStandalone.RelationshipId;
+            var owner = GetOwnerPart(vmlStandalone, doc);
+            var bytes = ReadImageBytes(owner, relId, out var ct);
+            if (bytes != null && ct != null) AttachImage(bytes, ct);
         }
 
         // Ảnh còn pending mà chưa có câu → dồn vào câu hiện tại (nếu có)
