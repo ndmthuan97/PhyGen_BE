@@ -63,34 +63,7 @@ namespace PhyGen.Infrastructure.Service
 
             var result = await response.Content.ReadFromJsonAsync<ChatGptResponse>();
             return result?.choices?.FirstOrDefault()?.message?.content;
-        }
-        public async Task<string> GenerateManimCodeFromPrompt(string imagePrompt)
-        {
-            string prompt = $@"
-        Bạn là chuyên gia Python, vẽ vật lý bằng manim.
-        Viết code Python dùng thư viện manim để vẽ hình minh họa cho câu hỏi vật lý theo mô tả sau: {imagePrompt}
-        Yêu cầu:
-        - vẽ hình mô tả cho câu hỏi vật lý
-        - Một class duy nhất kế thừa Scene, tên tùy chọn.
-        - Không giải thích, chỉ trả về code python bắt đầu bằng 'from manim import *'.";
-            var code = await CallChatGptAsync(prompt);
-            // Cắt bỏ markdown
-            if (!string.IsNullOrEmpty(code))
-            {
-                var match = Regex.Match(code, @"```(?:python)?\s*([\s\S]+?)\s*```", RegexOptions.IgnoreCase);
-                if (match.Success) code = match.Groups[1].Value.Trim();
-                else code = code.Trim();
-            }
-            return code;
-        }
-
-        // Helper: tìm tên scene trong code manim
-        public string FindSceneNameFromManimCode(string code)
-        {
-            var match = System.Text.RegularExpressions.Regex.Match(code, @"class\s+(\w+)\s*\(\s*Scene\s*\)");
-            if (match.Success) return match.Groups[1].Value;
-            return null;
-        }
+        }    
 
         public async Task<List<ExtractedQuestionDto>> ExtractQuestionsFromTextAsync(string questionContent, string fileName, int grade)
         {
@@ -99,7 +72,7 @@ namespace PhyGen.Infrastructure.Service
             var topicResponses = await _mediator.Send(query);
             var topicNames = topicResponses.Select(x => x.Name).ToList();
 
-            string prompt = $@"
+            string prompt = $@"Hãy đóng vai giáo viên vật lý, lập trình viên
             Đây là nội dung đề kiểm tra vật lý lấy từ file {fileName}:
             ---
             {questionContent}
@@ -111,14 +84,14 @@ namespace PhyGen.Infrastructure.Service
                 ""Type"": Loại câu hỏi (MultipleChoice/TrueFalse/ShortAnswer/Essay),
                 ""Level"": ""Easy"" hoặc ""Medium"" hoặc ""Hard"" (chính xác, không dấu cách, không tiếng Việt, không viết hoa hết, không thừa khoảng trắng)
                 ""TopicName"": Tên chủ đề (chọn từ danh sách sao cho phù hợp với câu hỏi từ list chủ đề :{string.Join(", ", topicNames)}), chỉ chọn 1 và không thay đổi nội dung chủ đề,
-                ""Answer1"": ..., ""Answer2"": ...,
+                ""Answer1"": ..., ""Answer2"": ..., và các câu trả lời khác tùy từng câu
                 ""Grade"": Lớp, //Grade phải là số nguyên. Không để trong dấu nháy
               }}
             - Trả về danh sách [ {{...}}, ... ].
             - Phần MultipleChoice trả ra các đáp án ko cần A., B., C., D. ở đầu
             - Phần TrueFalse/ShortAnswer/Essay lưu hết vào content, phần Answer để null (Phần TrueFalse 1 câu chỉ trả ra 1 lần)
-            - Câu nào có công thức giúp tôi viết bằng LaTex theo thư viện better-react-mathjax để hiển thị cho FE có thể hanlde không bị lỗi(theo dạng $...$)
-            - **QUAN TRỌNG: trong JSON, mọi ký tự '\' phải được ghi thành '\\\\'. Ví dụ: \alpha -> \\\\alpha, \frac -> \\\\frac**
+            - Câu nào có công thức giúp tôi viết bằng LaTex theo thư viện better-react-mathjax để hiển thị cho FE có thể hanlde không bị lỗi (trả ra theo dạng $...$)
+            - **QUAN TRỌNG: trong JSON, mọi ký tự '\' phải được ghi thành '\\\\'. Ví dụ: \alpha -> \\\\alpha, \frac -> \\\\frac**, trả về JSON để ko bị lỗi khi parse bằng System.Text.Json ngôn ngữ C# ASP.NET
             - Không trả lại bất cứ văn bản hay giải thích nào ngoài JSON!
             ";
 
