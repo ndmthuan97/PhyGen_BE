@@ -1,0 +1,154 @@
+﻿using Microsoft.EntityFrameworkCore;
+using PhyGen.Domain.Entities;
+using PhyGen.Domain.Interfaces;
+using PhyGen.Domain.Specs;
+using PhyGen.Infrastructure.Persistence.DbContexts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PhyGen.Infrastructure.Persistence.Repositories
+{
+    public class RepositoryBase<TEntity, TKey> : IAsyncRepository<TEntity, TKey> where TEntity : EntityBase<TKey>
+    {
+        protected readonly AppDbContext _context;
+
+        public RepositoryBase(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<Pagination<TEntity>> GetWithSpecAsync<TSpec>(TSpec spec) where TSpec : ISpecification<TEntity>
+        {
+            var query = _context.Set<TEntity>().AsQueryable();
+
+            if (spec.Criteria != null)
+            {
+                query = query.Where(spec.Criteria);
+            }
+
+            foreach (var includeExpression in spec.Includes)
+            {
+                query = query.Include(includeExpression);
+            }
+
+            if (spec.OrderBy != null)
+            {
+                query = spec.OrderBy(query);
+            }
+
+            else if (spec.OrderByDescending != null)
+            {
+                query = spec.OrderByDescending(query);
+            }
+
+            if (spec.Selector != null)
+            {
+                query = spec.Selector(query);
+            }
+
+            var count = await query.CountAsync();
+
+            var data = await query.Skip(spec.Skip).Take(spec.Take).AsNoTracking().ToListAsync();
+
+            return new Pagination<TEntity>(spec.Skip / spec.Take + 1, spec.Take, count, data);
+        }
+
+        public async Task<List<TEntity>> ListWithSpecAsync<TSpec>(TSpec spec) where TSpec : ISpecification<TEntity>
+        {
+            var query = _context.Set<TEntity>().AsQueryable();
+
+            if (spec.Criteria != null)
+            {
+                query = query.Where(spec.Criteria);
+            }
+
+            foreach (var includeExpression in spec.Includes)
+            {
+                query = query.Include(includeExpression);
+            }
+
+            if (spec.OrderBy != null)
+            {
+                query = spec.OrderBy(query);
+            }
+            else if (spec.OrderByDescending != null)
+            {
+                query = spec.OrderByDescending(query);
+            }
+
+            if (spec.Selector != null)
+            {
+                query = spec.Selector(query);
+            }
+
+            return await query.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<TEntity>> GetAllAsync()
+        {
+            return await _context.Set<TEntity>().AsNoTracking().ToListAsync();
+        }
+
+        public async Task<TEntity?> GetByIdAsync(TKey id)
+        {
+            return await _context.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task<TEntity> AddAsync(TEntity entity)
+        {
+            _context.Set<TEntity>().Add(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task DeleteAsync(TEntity entity)
+        {
+            _context.Set<TEntity>().Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public Task UpdateAsync(TEntity entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            return _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> AlreadyExistAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await _context.Set<TEntity>().AnyAsync(predicate);
+        }
+
+        public async Task<string> GenerateCodeAsync<TEntity>(string key, Expression<Func<TEntity, string>> predicate) where TEntity : class
+        {
+            var lastEntity = await _context.Set<TEntity>()
+                .OrderByDescending(predicate)
+                .FirstOrDefaultAsync();
+
+            string lastCode = null;
+
+            if (lastEntity != null)
+            {
+                var compiledSelector = predicate.Compile();
+                lastCode = compiledSelector(lastEntity);
+            }
+
+            if (string.IsNullOrEmpty(lastCode) || !lastCode.StartsWith(key))
+            {
+                return $"{key}0001";
+            }
+
+            if (!int.TryParse(lastCode.Substring(key.Length), out int lastNumber))
+            {
+                lastNumber = 0;
+            }
+
+            int newNumber = lastNumber + 1;
+            return $"{key}{newNumber:D4}";
+        }
+    }
+
+}

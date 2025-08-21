@@ -1,0 +1,97 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using PhyGen.API.Mapping;
+using PhyGen.API.Models;
+using PhyGen.Application.Curriculums.Commands;
+using PhyGen.Application.Curriculums.Queries;
+using PhyGen.Application.Curriculums.Response;
+using PhyGen.Application.Mapping;
+using PhyGen.Shared.Constants;
+using PhyGen.Shared;
+using System.Net;
+using PhyGen.Domain.Specs;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using PhyGen.Application.Users.Exceptions;
+
+namespace PhyGen.API.Controllers
+{
+    [Route("api/curriculums")]
+    [ApiController]
+    public class CurriculumController : BaseController<CurriculumController>
+    {
+        public CurriculumController(IMediator mediator, ILogger<CurriculumController> logger)
+            : base(mediator, logger) { }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(ApiResponse<List<CurriculumResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAllCurriculums([FromQuery] CurriculumSpecParam curriculumSpecParam)
+        {
+            var query = new GetCurriculumsQuery(curriculumSpecParam);
+            return await ExecuteAsync<GetCurriculumsQuery, Pagination<CurriculumResponse>>(query);
+        }
+
+        [HttpGet("{curriculumId}")]
+        [ProducesResponseType(typeof(ApiResponse<CurriculumResponse>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetCurriculumById(Guid curriculumId)
+        {
+            var request = new GetCurriculumByIdQuery(curriculumId);
+            return await ExecuteAsync<GetCurriculumByIdQuery, CurriculumResponse>(request);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = nameof(Role.Admin))]
+        [ProducesResponseType(typeof(ApiResponse<CurriculumResponse>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> CreateCurriculum([FromBody] CreateCurriculumRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<CreateCurriculumCommand>(request);
+            return await ExecuteAsync<CreateCurriculumCommand, CurriculumResponse>(command);
+        }
+
+        [HttpPut]
+        [Authorize(Roles = nameof(Role.Admin))]
+        [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> UpdateCurriculum([FromBody] UpdateCurriculumRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<UpdateCurriculumCommand>(request);
+            return await ExecuteAsync<UpdateCurriculumCommand, Unit>(command);
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = nameof(Role.Admin))]
+        [ProducesResponseType(typeof(ApiResponse<Unit>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteCurriculum([FromBody] DeleteCurriculumRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest(new ApiResponse<object>
+                {
+                    StatusCode = (int)Shared.Constants.StatusCode.ModelInvalid,
+                    Message = ResponseMessages.GetMessage(Shared.Constants.StatusCode.ModelInvalid),
+                    Errors = ["The request body does not contain required fields"]
+                });
+            }
+            var command = AppMapper<ModelMappingProfile>.Mapper.Map<DeleteCurriculumCommand>(request);
+            return await ExecuteAsync<DeleteCurriculumCommand, Unit>(command);
+        }
+    }
+}

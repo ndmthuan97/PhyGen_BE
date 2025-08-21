@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PhyGen.Application.Admin.Response
+{
+    public class AdminWeeklyResponse
+    {
+        public int LoginThisWeek { get; set; }
+        public int LoginLastWeek { get; set; }
+        public int TotalUserBeforeNow { get; set; }
+        public decimal TotalRevenue { get; set; }
+        public int TotalBook { get; set; }
+        public int TotalQuestion { get; set; }
+        public double RateRevenue { get; set; }
+        public double LoginRateBeforeNow { get; set; }
+        public double QuestionRate { get; set; }
+        public double UserRateNow { get; set; }
+    }
+}
