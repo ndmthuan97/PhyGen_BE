@@ -84,7 +84,7 @@ namespace PhyGen.Infrastructure.Specifications
             }
             else
             {
-                OrderByDescending = query => query.OrderByDescending(e => e.CreatedAt);
+                OrderByDescending = query => query.OrderByDescending(e => e.ExamCode);
             }
 
             Includes.Add(e => e.ExamCategory);
