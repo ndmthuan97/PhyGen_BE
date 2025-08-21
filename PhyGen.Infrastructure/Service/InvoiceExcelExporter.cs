@@ -127,7 +127,15 @@ public sealed class InvoiceExcelExporter : IInvoiceExcelExporter
             ws.Cell(r, 5).Value = x.AmountVnd;
             ws.Cell(r, 5).Style.NumberFormat.Format = "#,##0";
             ws.Cell(r, 6).Value = x.PaymentMethod;
-            ws.Cell(r, 7).Value = x.Status;
+            string statusDisplay = x.Status switch
+            {
+                "Completed" => "Hoàn thành",
+                "Expired" => "Hết hạn",
+                "Cancelled" => "Hủy bỏ",
+                _ => x.Status // giữ nguyên nếu không khớp
+            };
+
+            ws.Cell(r, 7).Value = statusDisplay;
             r++;
         }
 
@@ -135,6 +143,11 @@ public sealed class InvoiceExcelExporter : IInvoiceExcelExporter
         ws.Cell(r, 1).Value = "TỔNG";
         ws.Range(r, 1, r, 4).Merge().Style.Font.SetBold();
         ws.Cell(r, 5).FormulaA1 = $"SUM(E{headerRow + 1}:E{r - 1})";
+        ws.Cell(r, 5).Style.NumberFormat.Format = "#,##0";
+        r++;
+        ws.Cell(r, 1).Value = "TỔNG (Hoàn thành)";
+        ws.Range(r, 1, r, 4).Merge().Style.Font.SetBold();
+        ws.Cell(r, 5).FormulaA1 = $"SUMIF(G{headerRow + 1}:G{r - 2},\"Hoàn thành\",E{headerRow + 1}:E{r - 2})";
         ws.Cell(r, 5).Style.NumberFormat.Format = "#,##0";
         ws.Range(headerRow, 1, r, header.Length).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
         ws.Range(headerRow, 1, r, header.Length).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
@@ -164,7 +177,7 @@ public sealed class InvoiceExcelExporter : IInvoiceExcelExporter
         s2.Cell("A6").Value = "Huỷ/Expired";
         s2.Cell("B6").Value = canceled;
 
-        s2.Cell("A8").Value = "Tổng số tiền trong kết quả lọc";
+        s2.Cell("A8").Value = "Tổng số tiền đã thanh toán trong kết quả lọc";
         s2.Cell("B8").FormulaA1 = $"'{ws.Name}'!E{r}";   // link sang dòng tổng sheet 1
         s2.Cell("B8").Style.NumberFormat.Format = "#,##0";
 
