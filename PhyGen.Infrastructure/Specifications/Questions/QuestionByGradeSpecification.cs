@@ -54,6 +54,10 @@ namespace PhyGen.Infrastructure.Specifications.Questions
                         break;
                 }
             }
+            else
+            {
+                OrderByDescending = query => query.OrderByDescending(q => q.QuestionCode);
+            }
 
             Includes.Add(q => q.Topic);
             Includes.Add(q => q.Topic.Chapter);

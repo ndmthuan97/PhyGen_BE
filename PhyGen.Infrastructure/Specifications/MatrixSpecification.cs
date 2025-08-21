@@ -77,6 +77,10 @@ namespace PhyGen.Infrastructure.Specifications
                         break;
                 }
             }
+            else
+            {
+                OrderByDescending = query => query.OrderByDescending(m => m.MatrixCode);
+            }
 
             Includes.Add(m => m.Subject);
             Includes.Add(m => m.ExamCategory);
