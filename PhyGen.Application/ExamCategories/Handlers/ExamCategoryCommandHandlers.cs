@@ -26,7 +26,6 @@ namespace PhyGen.Application.ExamCategories.Handlers
         {
             if (await _examCategoryRepository.AlreadyExistAsync(ec => 
                 ec.Name.ToLower() == request.Name.ToLower() &&
-                ec.OrderNo == request.OrderNo &&
                 ec.DeletedAt == null
                 ))
                 throw new ExamCategorySameNameException();
@@ -34,7 +33,7 @@ namespace PhyGen.Application.ExamCategories.Handlers
             var examCategory = new ExamCategory
             {
                 Name = request.Name,
-                OrderNo = request.OrderNo,
+                OrderNo = await _examCategoryRepository.GetOrderNoMaxAsync() + 1
             };
 
             await _examCategoryRepository.AddAsync(examCategory);
@@ -59,7 +58,6 @@ namespace PhyGen.Application.ExamCategories.Handlers
 
             if (await _examCategoryRepository.AlreadyExistAsync(ec => 
                 ec.Name.ToLower() == request.Name.ToLower() &&
-                ec.OrderNo == request.OrderNo &&
                 ec.DeletedAt == null
                 ))
                 throw new ExamCategorySameNameException();

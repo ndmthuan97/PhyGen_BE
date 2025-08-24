@@ -11,6 +11,5 @@ namespace PhyGen.Application.ExamCategories.Commands
     public class CreateExamCategoryCommand : IRequest<ExamCategoryResponse>
     {
         public string Name { get; set; } = string.Empty;
-        public int OrderNo { get; set; }
     }
 }

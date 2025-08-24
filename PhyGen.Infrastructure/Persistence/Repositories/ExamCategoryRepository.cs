@@ -16,5 +16,11 @@ namespace PhyGen.Infrastructure.Persistence.Repositories
         public ExamCategoryRepository(AppDbContext context) : base(context)
         {
         }
+
+        public async Task<int> GetOrderNoMaxAsync()
+        {
+            var maxOrderNo = await _context.ExamCategories.MaxAsync(ec => (int?)ec.OrderNo) ?? 0;
+            return maxOrderNo;
+        }
     }
 }
