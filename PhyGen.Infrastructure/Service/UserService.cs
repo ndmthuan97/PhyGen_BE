@@ -53,24 +53,36 @@ public class UserService : IUserService
             }
         }
 
-        DateTime dateOfBirth = request.DateOfBirth;
-
-        // Kiểm tra DateOfBirth phải >= 18 tuổi
-        if ((DateTime.UtcNow - dateOfBirth).TotalDays < 18 * 365.25)
+        // ---- Kiểm tra ngày sinh ----
+        if (request.DateOfBirth.HasValue)
         {
-            throw new ArgumentException("Người dùng phải >= 18 tuổi");
-        }
+            // Lấy giá trị DateTime thực (non-nullable)
+            var dob = request.DateOfBirth.Value;
 
-        // Chuyển DateTime sang UTC nếu cần (nếu client gửi dạng local)
-        dateOfBirth = DateTime.SpecifyKind(dateOfBirth, DateTimeKind.Utc);
+            // Tính số ngày tuổi
+            var days = (DateTime.UtcNow.Date - dob.Date).TotalDays;
+            if (days < 18 * 365.25)
+            {
+                throw new ArgumentException("Người dùng phải >= 18 tuổi");
+            }
 
-        // Kiểm tra tuổi
-        int age = DateTime.UtcNow.Year - dateOfBirth.Year;
-        if (dateOfBirth.Date > DateTime.UtcNow.AddYears(-age)) age--;
+            // Chuẩn hóa về UTC
+            dob = DateTime.SpecifyKind(dob, DateTimeKind.Utc);
 
-        if (age < 18)
-        {
-            throw new ArgumentException("Bạn phải lớn hơn 18 tuổi");
+            // Tính tuổi chính xác theo năm
+            int age = DateTime.UtcNow.Year - dob.Year;
+            if (dob.Date > DateTime.UtcNow.AddYears(-age).Date)
+            {
+                age--;
+            }
+
+            if (age < 18)
+            {
+                throw new ArgumentException("Bạn phải lớn hơn 18 tuổi");
+            }
+
+            // Gán lại giá trị chuẩn hóa
+            request.DateOfBirth = dob;
         }
 
         // Cập nhật thông tin
@@ -79,7 +91,7 @@ public class UserService : IUserService
         user.Phone = request.Phone;
         user.photoURL = request.PhotoURL;
         user.Gender = request.Gender;
-        user.DateOfBirth = dateOfBirth;
+        user.DateOfBirth = request.DateOfBirth;
 
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
@@ -89,8 +101,14 @@ public class UserService : IUserService
     {
         var query = _context.Users.AsQueryable();
 
-        if (filter.Id.HasValue)
-            query = query.Where(u => u.Id == filter.Id);
+        if (!string.IsNullOrEmpty(filter.NameOrEmail)) 
+        {
+            var keyword = filter.NameOrEmail.Trim().ToLower(); 
+            query = query.Where(u => u.Email.ToLower().Contains(keyword) 
+                                || (u.FirstName + " " + u.LastName).ToLower().Contains(keyword) 
+                                || u.FirstName.ToLower().Contains(keyword) 
+                                || u.LastName.ToLower().Contains(keyword)); 
+        }
 
         if (!string.IsNullOrEmpty(filter.Role))
             query = query.Where(u => u.Role == filter.Role);
