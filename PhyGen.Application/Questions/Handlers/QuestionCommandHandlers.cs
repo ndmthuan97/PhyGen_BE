@@ -120,8 +120,10 @@ namespace PhyGen.Application.Questions.Handlers
                 q.Type == request.Type &&
                 q.DeletedAt == null
             );
-            if (isExist)
-                throw new QuestionAlreadyExistException();
+            if (!isExist)
+            {
+                question.IsDuplicate = false;
+            }
 
             if (question.Status == StatusQEM.Removed && request.Status != StatusQEM.Removed)
                 question.DeletedAt = null;
