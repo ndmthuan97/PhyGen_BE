@@ -43,14 +43,10 @@ namespace PhyGen.Application.Questions.Handlers
             }
 
             var isExist = await _questionRepository.AlreadyExistAsync(q =>
-                q.TopicId == request.TopicId &&
                 q.Content.ToLower() == request.Content.ToLower() &&
                 q.Level == request.Level &&
-                q.Type == request.Type &&
-                q.DeletedAt == null
+                q.Type == request.Type
             );
-            if (isExist)
-                throw new QuestionAlreadyExistException();
 
             var question = new Question
             {
@@ -70,6 +66,11 @@ namespace PhyGen.Application.Questions.Handlers
                 CreatedBy = request.CreatedBy,
                 CreatedAt = DateTime.UtcNow,
             };
+
+            if (isExist)
+            {
+                question.IsDuplicate = true;
+            }
 
             await _questionRepository.AddAsync(question);
             return AppMapper<CoreMappingProfile>.Mapper.Map<QuestionResponse>(question);

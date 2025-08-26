@@ -30,6 +30,8 @@ namespace PhyGen.Domain.Entities
         public StatusQEM Status { get; set; } = StatusQEM.Draft;
         public string QuestionCode { get; set; } = string.Empty;    
 
+        public bool IsDuplicate { get; set; } = false;
+
         public string? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }

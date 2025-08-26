@@ -36,6 +36,8 @@ namespace PhyGen.Application.Questions.Responses
 
         public string QuestionCode { get; set; } = string.Empty;
 
+        public bool IsDuplicate { get; set; }
+
         public string? CreatedBy { get; set; }
         public DateTime? CreatedAt { get; set; }
     }
