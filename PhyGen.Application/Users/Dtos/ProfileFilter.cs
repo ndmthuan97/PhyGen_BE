@@ -9,6 +9,7 @@ namespace PhyGen.Application.Users.Dtos
 {
     public class ProfileFilter : BaseSpecParam
     {
+        public Guid? Id { get; set; }
         public string? NameOrEmail { get; set; }
         public bool? IsConfirm { get; set; }
         public bool? IsActive { get; set; }
