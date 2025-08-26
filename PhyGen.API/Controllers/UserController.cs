@@ -61,6 +61,7 @@ namespace PhyGen.API.Controllers
         [HttpGet("getAllProfiles")]
         [ProducesResponseType(typeof(ApiResponse<Pagination<UserDtos>>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAllProfiles(
+        [FromQuery] Guid? id,
         [FromQuery] string? nameOrEmail,
         [FromQuery] string? Role,
         [FromQuery] bool? isConfirm,
@@ -71,6 +72,7 @@ namespace PhyGen.API.Controllers
         {
             var filter = new ProfileFilter
             {
+                Id = id,
                 NameOrEmail = nameOrEmail,
                 Role = Role,
                 IsConfirm = isConfirm,

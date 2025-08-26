@@ -101,6 +101,9 @@ public class UserService : IUserService
     {
         var query = _context.Users.AsQueryable();
 
+        if (filter.Id.HasValue)
+            query = query.Where(u => u.Id == filter.Id);
+
         if (!string.IsNullOrEmpty(filter.NameOrEmail)) 
         {
             var keyword = filter.NameOrEmail.Trim().ToLower(); 
