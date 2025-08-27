@@ -1,10 +1,8 @@
-﻿using CloudinaryDotNet.Core;
-using DocumentFormat.OpenXml;
+﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using PhyGen.Application.Exams.Interfaces;
 using PhyGen.Application.Exams.Models;
-using PhyGen.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +12,6 @@ using System.Threading.Tasks;
 using A = DocumentFormat.OpenXml.Drawing;
 using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
-using DocumentFormat.OpenXml.Packaging;
 
 namespace PhyGen.Infrastructure.Service.Export
 {
@@ -62,6 +59,8 @@ namespace PhyGen.Infrastructure.Service.Export
                 .ThenBy(s => s.DisplayOrder)
                 .ToList();
 
+            int mcCount = 0, tfCount = 0, saCount = 0;
+
             foreach (var sec in orderedSections)
             {
                 var partTitle = sec.SectionType switch
@@ -74,6 +73,15 @@ namespace PhyGen.Infrastructure.Service.Export
                 };
 
                 body.Append(BuildTitleParagraph(partTitle, size: "26", before: "200", after: "100"));
+
+                // ---- Cộng số câu theo loại section ----
+                var n = sec.Questions?.Count ?? 0;
+                switch (sec.SectionType)
+                {
+                    case "MultipleChoice": mcCount += n; break;
+                    case "TrueFalse": tfCount += n; break;
+                    case "ShortAnswer": saCount += n; break;
+                }
 
                 foreach (var q in sec.Questions ?? Enumerable.Empty<QuestionExportDto>())
                 {
@@ -117,7 +125,11 @@ namespace PhyGen.Infrastructure.Service.Export
                 }
             }
 
+            // ===== 5) VẼ BẢNG ĐÁP ÁN =====
+            AppendAnswerTables(body, mcCount, tfCount, saCount);
+
             main.Document.Save();
+            doc.Dispose();
             return ms.ToArray();
         }
 
@@ -340,5 +352,109 @@ namespace PhyGen.Infrastructure.Service.Export
         }
 
         #endregion
+
+        #region Answer tables (BẢNG ĐÁP ÁN)
+
+        // Gọi một lần để vẽ đủ 3 phần (MultipleChoice/TrueFalse/ShortAnswer)
+        private static void AppendAnswerTables(Body body, int mcCount, int tfCount, int saCount)
+        {
+            const int chunkSize = 10;
+            const int FIRST_COL_PCT = 8; // cột "Câu/Đáp án"
+
+            // I. Trắc nghiệm nhiều lựa chọn
+            if (mcCount > 0)
+            {
+                body.Append(BuildParagraphCenter("ĐÁP ÁN PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN", bold: true));
+                AppendChunkedAnswerTable(body, mcCount, chunkSize, FIRST_COL_PCT);
+            }
+
+            // II. Đúng/Sai
+            if (tfCount > 0)
+            {
+                body.Append(new Paragraph(new Run(new Text("")))
+                {
+                    ParagraphProperties = new ParagraphProperties(new SpacingBetweenLines { Before = "400", After = "100" })
+                });
+                body.Append(BuildParagraphCenter("ĐÁP ÁN PHẦN II: TRẮC NGHIỆM ĐÚNG/SAI", bold: true));
+                AppendChunkedAnswerTable(body, tfCount, chunkSize, FIRST_COL_PCT);
+            }
+
+            // III. Trả lời ngắn
+            if (saCount > 0)
+            {
+                body.Append(new Paragraph(new Run(new Text("")))
+                {
+                    ParagraphProperties = new ParagraphProperties(new SpacingBetweenLines { Before = "400", After = "100" })
+                });
+                body.Append(BuildParagraphCenter("ĐÁP ÁN PHẦN III: TRẮC NGHIỆM TRẢ LỜI NGẮN", bold: true));
+                AppendChunkedAnswerTable(body, saCount, chunkSize, FIRST_COL_PCT);
+            }
+        }
+
+        private static void AppendChunkedAnswerTable(Body body, int total, int chunkSize, int firstColPct)
+        {
+            for (int start = 1; start <= total; start += chunkSize)
+            {
+                int end = Math.Min(start + chunkSize - 1, total);
+                int colsInChunk = end - start + 1;
+                int numColPct = (100 - firstColPct) / colsInChunk;
+
+                var headerCells = new List<TableCell>();
+                var answerCells = new List<TableCell>();
+
+                // cột "Câu"
+                headerCells.Add(BuildCell("Câu", firstColPct, center: true, bold: true));
+                // cột "Đáp án"
+                answerCells.Add(BuildCell("Đáp án", firstColPct, center: true, bold: true));
+
+                for (int i = start; i <= end; i++)
+                {
+                    headerCells.Add(BuildCell(i.ToString(), numColPct, center: true));
+                    answerCells.Add(BuildCell("", numColPct, center: true)); // ô trống cho đáp án
+                }
+
+                var table = new Table(
+                    new TableProperties(
+                        new TableWidth { Type = TableWidthUnitValues.Pct, Width = "5000" },
+                        new TableBorders(
+                            new TopBorder { Val = BorderValues.Single, Size = 6 },
+                            new BottomBorder { Val = BorderValues.Single, Size = 6 },
+                            new LeftBorder { Val = BorderValues.Single, Size = 6 },
+                            new RightBorder { Val = BorderValues.Single, Size = 6 },
+                            new InsideHorizontalBorder { Val = BorderValues.Single, Size = 6 },
+                            new InsideVerticalBorder { Val = BorderValues.Single, Size = 6 }
+                        )
+                    ),
+                    new TableRow(headerCells),
+                    new TableRow(answerCells)
+                );
+
+                body.Append(table);
+                body.Append(new Paragraph(new Run(new Text("")))
+                {
+                    ParagraphProperties = new ParagraphProperties(new SpacingBetweenLines { After = "200" })
+                });
+            }
+        }
+
+        private static TableCell BuildCell(string text, int widthPct, bool center = false, bool bold = false)
+        {
+            var rPr = new RunProperties();
+            if (bold) rPr.Append(new Bold());
+
+            var p = new Paragraph(new Run(new Text(text)) { RunProperties = rPr });
+            if (center) p.ParagraphProperties = new ParagraphProperties(new Justification { Val = JustificationValues.Center });
+
+            var cell = new TableCell(p)
+            {
+                TableCellProperties = new TableCellProperties(
+                    new TableCellWidth { Type = TableWidthUnitValues.Pct, Width = widthPct.ToString() }
+                )
+            };
+            return cell;
+        }
+
+        #endregion
+
     }
 }

@@ -50,14 +50,6 @@ namespace PhyGen.API.Controllers
             );
         }
 
-        [HttpPost("export-word")]
-        public async Task<IActionResult> ExportWord([FromBody] ExamExportModel model, CancellationToken ct)
-        {
-            var bytes = await _exportService.ExportExamToWordAsync(model, ct);
-            return File(bytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                        $"{(model?.Title ?? "DE_THI")}.docx");
-        }
-
         private async Task<Exam?> LoadExamAsync(Guid id, CancellationToken ct)
         {
             return await _db.Exams
