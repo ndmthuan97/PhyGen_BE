@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -24,5 +24,19 @@
     <ProjectReference Include="..\PhyGen.Infrastructure\PhyGen.Infrastructure.csproj" />
     <ProjectReference Include="..\PhyGen.Shared\PhyGen.Shared.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+  <!-- Bỏ các file đã được SDK tự include để tránh trùng -->
+  <Content Remove="latex-mathml\package.json" />
+  <Content Remove="latex-mathml\package-lock.json" />
+</ItemGroup>
+
+<ItemGroup>
+  <!-- Copy toàn bộ thư mục latex-mathml vào output khi build/publish,
+       trừ node_modules và .git (node_modules sẽ restore khi Publish) -->
+  <Content Include="latex-mathml\**\*.*"
+           Exclude="latex-mathml\node_modules\**\*;latex-mathml\.git\**\*"
+           CopyToOutputDirectory="PreserveNewest" />
+</ItemGroup>
 
 </Project>

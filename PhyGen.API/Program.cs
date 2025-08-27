@@ -5,14 +5,15 @@ using Microsoft.IdentityModel.Tokens;
 using PhyGen.API.Mapping;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Models.Requests;
+using PhyGen.Application.Exams.Interfaces;
 using PhyGen.Infrastructure.Extensions;
 using PhyGen.Infrastructure.Persistence.DbContexts;
 using PhyGen.Infrastructure.Persistence.Repositories;
+using PhyGen.Infrastructure.Service;
+using PhyGen.Infrastructure.Service.Export;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
-using PhyGen.Infrastructure.Service.Export;
-using PhyGen.Application.Exams.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -110,6 +111,8 @@ builder.Services.AddScoped<IFormulaConvertPipeline, FormulaConvertPipeline>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IExamExportService, ExamExportService>();
+
+builder.Services.AddHostedService<NodeMathmlHostedService>();
 
 var app = builder.Build();
 
