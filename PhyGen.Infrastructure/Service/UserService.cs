@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhyGen.Application.Authentication.DTOs.Dtos;
@@ -19,11 +20,13 @@ public class UserService : IUserService
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IEmailService _emailService;
 
-    public UserService(AppDbContext context, IMapper mapper)
+    public UserService(AppDbContext context, IEmailService emailService, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
+        _emailService = emailService;  
     }
 
     public async Task<UserDtos?> ViewProfileAsync(string email)
@@ -153,6 +156,7 @@ public class UserService : IUserService
         user.IsActive = false;
 
         _context.Users.Update(user);
+        await SendMail(user.Email, "lock");
         await _context.SaveChangesAsync();
 
         return new
@@ -174,6 +178,7 @@ public class UserService : IUserService
         user.IsActive = true;
 
         _context.Users.Update(user);
+        await SendMail(user.Email, "unlock");
         await _context.SaveChangesAsync();
 
         return new
@@ -182,6 +187,66 @@ public class UserService : IUserService
             Email = user.Email,
             IsActive = user.IsActive
         };
+    }
+    private async Task SendMail(string email, string type)
+    {
+        var mailrequest = new EmailRequest();
+        mailrequest.Email = email;
+
+        if (type == "lock")
+        {
+            mailrequest.Subject = "Thông báo khóa tài khoản";
+            mailrequest.Emailbody = GenerateAccountLockedEmail(email);
+        }
+        else if (type == "unlock")
+        {
+            mailrequest.Subject = "Mở khóa tài khoản";
+            mailrequest.Emailbody = GenerateAccountUnlockedEmail(email);
+        }
+
+        await _emailService.SendEmailAsync(mailrequest);
+    }
+
+    private static string GenerateAccountLockedEmail(string name)
+    {
+        string supportEmail = "phygenfptuni@gmail.com";
+        string emailBody = "<div style='width: 100%; background-color: #f4f4f4; padding: 20px 0; font-family: Arial, sans-serif;'>";
+        emailBody += "<div style='max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>";
+        emailBody += "<h2 style='color: #333; margin-top: 0;'>Tài khoản của bạn đã bị khóa</h2>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Xin chào " + name + ",</p>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Tài khoản của bạn trên <strong>Hệ thống PhyGen</strong> tạm thời bị khóa để đảm bảo an toàn.</p>";
+        emailBody += "<p style='font-size: 15px; color: #555;'><strong>Lý do:</strong> " + "Vi phạm quy tắc của hệ thống" + "</p>";      
+        emailBody += "<div style='margin: 24px 0; padding: 16px; background:#fff6f6; border:1px solid #f5c2c7; border-radius:8px;'>";
+        emailBody += "<p style='margin:0; font-size:14px; color:#a94442;'>Trong thời gian bị khóa, bạn sẽ không thể đăng nhập hoặc thực hiện các thao tác liên quan đến tài khoản.</p>";
+        emailBody += "</div>";
+        emailBody += "<p style='font-size: 14px; color: #888;'>Nếu bạn cần hỗ trợ, vui lòng liên hệ <a href='mailto:" + supportEmail + "'>" + supportEmail + "</a>.</p>";
+        emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;' />";
+        emailBody += "<p style='font-size: 12px; color: #aaa;'>Trân trọng,<br/>Đội ngũ PhyGen</p>";
+        emailBody += "</div>";
+        emailBody += "</div>";
+        return emailBody;
+    }
+
+    private static string GenerateAccountUnlockedEmail(string name)
+    {
+        string email = "https://phygen.io.vn/login";
+        string emailBody = "<div style='width: 100%; background-color: #f4f4f4; padding: 20px 0; font-family: Arial, sans-serif;'>";
+        emailBody += "<div style='max-width: 600px; margin: auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);'>";
+        emailBody += "<h2 style='color: #333; margin-top: 0;'>Tài khoản đã được mở khóa</h2>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Xin chào " + name + ",</p>";
+        emailBody += "<p style='font-size: 16px; color: #555;'>Tài khoản của bạn trên <strong>Hệ thống PhyGen</strong> đã được mở khóa. Bạn có thể tiếp tục sử dụng dịch vụ như bình thường.</p>";
+        if (!string.IsNullOrWhiteSpace(email))
+        {
+            emailBody += "<div style='text-align:center; margin: 28px 0;'>";
+            emailBody += "<a href='" + email + "' style='display:inline-block; background-color:#28a745; color:#fff; text-decoration:none; padding:12px 20px; border-radius:6px; font-size:16px;'>Đăng nhập ngay</a>";
+            emailBody += "</div>";
+        }
+        emailBody += "<p style='font-size: 14px; color: #888;'>Nếu bạn không thực hiện yêu cầu này, vui lòng liên hệ ngay với bộ phận hỗ trợ.</p>";
+        emailBody += "<hr style='margin-top: 40px; border: none; border-top: 1px solid #eee;' />";
+        emailBody += "<p style='font-size: 12px; color: #aaa;'>Trân trọng,<br/>Đội ngũ PhyGen</p>";
+        emailBody += "</div>";
+        emailBody += "</div>";
+        return emailBody;
     }
 }
 
