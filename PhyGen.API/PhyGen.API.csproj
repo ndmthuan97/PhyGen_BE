@@ -25,15 +25,14 @@
     <ProjectReference Include="..\PhyGen.Shared\PhyGen.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-  <!-- Bỏ các file đã được SDK tự include để tránh trùng -->
+  <!-- PhyGen.API.csproj -->
+<ItemGroup>
   <Content Remove="latex-mathml\package.json" />
   <Content Remove="latex-mathml\package-lock.json" />
 </ItemGroup>
 
 <ItemGroup>
-  <!-- Copy toàn bộ thư mục latex-mathml vào output khi build/publish,
-       trừ node_modules và .git (node_modules sẽ restore khi Publish) -->
+  <!-- copy toàn bộ, trừ node_modules -->
   <Content Include="latex-mathml\**\*.*"
            Exclude="latex-mathml\node_modules\**\*;latex-mathml\.git\**\*"
            CopyToOutputDirectory="PreserveNewest" />
