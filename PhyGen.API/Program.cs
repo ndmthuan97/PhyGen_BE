@@ -5,10 +5,12 @@ using Microsoft.IdentityModel.Tokens;
 using PhyGen.API.Mapping;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Models.Requests;
-using PhyGen.Domain.Interfaces;
+using PhyGen.Application.Exams.Interfaces;
 using PhyGen.Infrastructure.Extensions;
 using PhyGen.Infrastructure.Persistence.DbContexts;
 using PhyGen.Infrastructure.Persistence.Repositories;
+using PhyGen.Infrastructure.Service;
+using PhyGen.Infrastructure.Service.Export;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
@@ -96,6 +98,21 @@ builder.Services.AddAuthentication(options =>
         }
     };
 });
+
+var timeoutSeconds = builder.Configuration.GetValue<int?>("LatexMathmlService:TimeoutSeconds") ?? 5;
+builder.Services
+    .AddHttpClient<ILatexConvertService, LatexConvertService>(client =>
+    {
+        client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
+    });
+
+builder.Services.AddSingleton<IMathmlToOmmlService, MathmlToOmmlService>();
+builder.Services.AddScoped<IFormulaConvertPipeline, FormulaConvertPipeline>();
+
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IExamExportService, ExamExportService>();
+
+builder.Services.AddHostedService<NodeMathmlHostedService>();
 
 var app = builder.Build();
 

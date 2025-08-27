@@ -1,10 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using PhyGen.Application.Exams.Commands;
-using PhyGen.Application.Exams.Exceptions;
 using PhyGen.Application.Mapping;
-using PhyGen.Application.Matrices.Commands;
-using PhyGen.Application.Matrices.Exceptions;
 using PhyGen.Application.Questions.Commands;
 using PhyGen.Application.Questions.Exceptions;
 using PhyGen.Application.Questions.Responses;
@@ -13,10 +9,10 @@ using PhyGen.Application.Topics.Exceptions;
 using PhyGen.Domain.Entities;
 using PhyGen.Domain.Interfaces;
 using PhyGen.Shared.Constants;
+using System.Security.Claims;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -123,6 +119,10 @@ namespace PhyGen.Application.Questions.Handlers
             if (!isExist)
             {
                 question.IsDuplicate = false;
+            }
+            else
+            {
+                question.IsDuplicate = true;
             }
 
             if (question.Status == StatusQEM.Removed && request.Status != StatusQEM.Removed)

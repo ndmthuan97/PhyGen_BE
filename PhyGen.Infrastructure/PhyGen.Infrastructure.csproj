@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\MML2OMML.XSL" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\MML2OMML.XSL" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PhyGen.Application\PhyGen.Application.csproj" />
   </ItemGroup>
 
