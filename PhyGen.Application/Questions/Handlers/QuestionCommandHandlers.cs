@@ -124,6 +124,10 @@ namespace PhyGen.Application.Questions.Handlers
             {
                 question.IsDuplicate = false;
             }
+            else
+            {
+                question.IsDuplicate = true;
+            }
 
             if (question.Status == StatusQEM.Removed && request.Status != StatusQEM.Removed)
                 question.DeletedAt = null;
