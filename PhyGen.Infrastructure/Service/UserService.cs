@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.Internal;
+using DocumentFormat.OpenXml.Drawing;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using PhyGen.Application.Authentication.DTOs.Dtos;
 using PhyGen.Application.Authentication.Interface;
@@ -21,12 +24,14 @@ public class UserService : IUserService
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
     private readonly IEmailService _emailService;
+    private readonly IHubContext<UserStatusHub> _hub;
 
-    public UserService(AppDbContext context, IEmailService emailService, IMapper mapper)
+    public UserService(AppDbContext context, IEmailService emailService, IMapper mapper, IHubContext<UserStatusHub> hub)
     {
         _context = context;
         _mapper = mapper;
-        _emailService = emailService;  
+        _emailService = emailService;
+        _hub = hub;
     }
 
     public async Task<UserDtos?> ViewProfileAsync(string email)
@@ -145,26 +150,27 @@ public class UserService : IUserService
         return new Pagination<UserDtos>(filter.PageIndex, filter.PageSize, totalCount, userDtos);
     }
 
-    public async Task<object> LockUserAsync(Guid userId, LockAndUnlockUserRequest request)
+    public async Task<object> LockUserAsync(Guid userId, LockAndUnlockUserRequest request, CancellationToken ct = default)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-        if (user == null)
-        {
-            throw new UserNotFoundException();
-        }
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId, ct)
+                   ?? throw new UserNotFoundException();
 
+        if (!user.IsActive) // idempotent
+            return new { user.Id, user.Email, user.IsActive };
+
+        using var tx = await _context.Database.BeginTransactionAsync(ct);
         user.IsActive = false;
 
-        _context.Users.Update(user);
-        await SendMail(user.Email, "lock");
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(ct);
 
-        return new
-        {
-            Id = user.Id,
-            Email = user.Email,
-            IsActive = user.IsActive
-        };
+        try { await SendMail(user.Email, "lock"); } catch { /* log warning */ }
+
+        await tx.CommitAsync(ct);
+
+        // realtime: bắt buộc
+        await _hub.Clients.Group(user.Id.ToString()).SendAsync("ForceLogout", cancellationToken: ct);
+
+        return new { user.Id, user.Email, user.IsActive };
     }
 
     public async Task<object> UnLockUserAsync(Guid userId, LockAndUnlockUserRequest request)

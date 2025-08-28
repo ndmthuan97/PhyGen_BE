@@ -137,6 +137,22 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.Use(async (ctx, next) =>
+{
+    // bỏ qua hub và swagger nếu muốn
+    if (ctx.Request.Path.StartsWithSegments("/hubs/userStatus"))
+    {
+        await next();
+        return;
+    }
+
+    var guard = ctx.RequestServices.GetRequiredService<ActiveGuard>();
+    if (!await guard.EnsureActiveAsync(ctx)) return; // đã trả 401 nếu bị khóa
+    await next();
+});
+
+app.MapHub<UserStatusHub>("/hubs/userStatus");
+
 app.MapControllers();
 
 await app.RunAsync();
