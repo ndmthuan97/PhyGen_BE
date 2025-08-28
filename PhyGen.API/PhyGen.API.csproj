@@ -25,17 +25,4 @@
     <ProjectReference Include="..\PhyGen.Shared\PhyGen.Shared.csproj" />
   </ItemGroup>
 
-  <!-- PhyGen.API.csproj -->
-<ItemGroup>
-  <Content Remove="latex-mathml\package.json" />
-  <Content Remove="latex-mathml\package-lock.json" />
-</ItemGroup>
-
-<ItemGroup>
-  <!-- copy toàn bộ, trừ node_modules -->
-  <Content Include="latex-mathml\**\*.*"
-           Exclude="latex-mathml\node_modules\**\*;latex-mathml\.git\**\*"
-           CopyToOutputDirectory="PreserveNewest" />
-</ItemGroup>
-
 </Project>
