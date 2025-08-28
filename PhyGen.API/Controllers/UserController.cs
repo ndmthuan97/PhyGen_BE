@@ -90,8 +90,9 @@ namespace PhyGen.API.Controllers
         [HttpPut("lock")]
         public async Task<IActionResult> LockUser([FromQuery] Guid UserId)
         {
+            CancellationToken ct = default;
             var request = new LockAndUnlockUserRequest { UserId = UserId };
-            var updatedUser = await _userService.LockUserAsync(UserId, request);
+            var updatedUser = await _userService.LockUserAsync(UserId, request, ct);
             return Ok(updatedUser);
         }
 
