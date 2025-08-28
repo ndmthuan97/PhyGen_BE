@@ -88,7 +88,13 @@ namespace PhyGen.Application.Exams.Handlers
                             Answer2 = qs.Question.Answer2,
                             Answer3 = qs.Question.Answer3,
                             Answer4 = qs.Question.Answer4,
-                            Score = qs.Score
+                            Score = qs.Score,
+                            QuestionMedias = qs.Question.QuestionMedias.Select(qm => new QuestionMediaResponse
+                            {
+                                Id = qm.Id,
+                                MediaType = qm.MediaType,
+                                Url = qm.Url
+                            }).ToList()
                         }).ToList()
                     }).ToList()
             };

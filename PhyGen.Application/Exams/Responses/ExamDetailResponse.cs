@@ -42,6 +42,15 @@ namespace PhyGen.Application.Exams.Responses
         public string? Answer4 { get; set; }
         public string? CorrectAnswer { get; set; }
         public double? Score { get; set; } 
+
+        public List<QuestionMediaResponse> QuestionMedias { get; set; } = new();
+    }
+
+    public class QuestionMediaResponse
+    {
+        public Guid Id { get; set; }
+        public string MediaType { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
     }
 
 }
