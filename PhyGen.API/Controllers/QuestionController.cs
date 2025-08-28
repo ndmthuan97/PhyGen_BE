@@ -102,6 +102,21 @@ namespace PhyGen.API.Controllers
             return await ExecuteAsync<GetQuestionsByGradeQuery, Pagination<QuestionResponse>>(request);
         }
 
+        [HttpGet("for-create-exam")]
+        [ProducesResponseType(typeof(ApiResponse<Pagination<QuestionResponse>>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetQuestionsForCreateExam([FromQuery] QuestionSpecParam questionSpecParam)
+        {
+            var user = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(user))
+                return Unauthorized(new UserNotFoundException());
+
+            questionSpecParam.IsDuplicate = false;
+
+            var query = new GetQuestionsQuery(questionSpecParam);
+            return await ExecuteAsync<GetQuestionsQuery, Pagination<QuestionResponse>>(query);
+        }
+
+
         [Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(ApiResponse<QuestionResponse>), (int)HttpStatusCode.OK)]

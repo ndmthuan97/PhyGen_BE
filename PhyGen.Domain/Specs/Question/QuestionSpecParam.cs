@@ -20,7 +20,7 @@ namespace PhyGen.Domain.Specs.Question
         public StatusQEM? Status { get; set; }
         public string? QuestionCode { get; set; }
 
-        public bool IsDuplicate { get; set; }
+        public bool? IsDuplicate { get; set; }
 
         public string? Search { get; set; }
 
