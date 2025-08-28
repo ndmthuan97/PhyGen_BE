@@ -73,11 +73,11 @@ public sealed class InvoiceExcelExporter : IInvoiceExcelExporter
             })
             .ToListAsync(ct);
 
-        var totalBill = await _context.Payments.AsNoTracking().CountAsync(ct);
-        var pending = await _context.Payments.AsNoTracking().CountAsync(p => p.Status == PaymentStatus.Pending.ToString(), ct);
-        var completed = await _context.Payments.AsNoTracking().CountAsync(p => p.Status == PaymentStatus.Completed.ToString(), ct);
+        var totalBill = await _context.Payments.AsNoTracking().CountAsync(p => p.CreatedAt <= filter.ToDate & p.CreatedAt >= filter.FromDate, ct);
+        var pending = await _context.Payments.AsNoTracking().CountAsync(p => p.Status == PaymentStatus.Pending.ToString() && p.CreatedAt <= filter.ToDate & p.CreatedAt >= filter.FromDate, ct);
+        var completed = await _context.Payments.AsNoTracking().CountAsync(p => p.Status == PaymentStatus.Completed.ToString() && p.CreatedAt <= filter.ToDate & p.CreatedAt >= filter.FromDate, ct);
         var canceled = await _context.Payments.AsNoTracking().CountAsync(p =>
-                              p.Status == PaymentStatus.Cancelled.ToString() || p.Status == PaymentStatus.Expired.ToString(), ct);
+                              p.Status == PaymentStatus.Cancelled.ToString() && p.CreatedAt <= filter.ToDate & p.CreatedAt >= filter.FromDate || p.Status == PaymentStatus.Expired.ToString() && p.CreatedAt <= filter.ToDate & p.CreatedAt >= filter.FromDate, ct);
 
         using var wb = new XLWorkbook();
 
@@ -160,21 +160,21 @@ public sealed class InvoiceExcelExporter : IInvoiceExcelExporter
 
         // --- Sheet 2: Tổng quan ---
         var s2 = wb.Worksheets.Add("Tổng quan");
-        s2.Cell("A1").Value = "TỔNG QUAN HOÁ ĐƠN";
+        s2.Cell("A1").Value = "TỔNG QUAN HOÁ ĐƠN TRONG BỘ LỌC";
         s2.Range("A1:B1").Merge().Style
             .Font.SetBold().Font.SetFontSize(14)
             .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
-        s2.Cell("A3").Value = "Tổng hoá đơn trong hệ thống";
+        s2.Cell("A3").Value = "Tổng hoá đơn trong hệ thống theo bộ lọc";
         s2.Cell("B3").Value = totalBill;
 
-        s2.Cell("A4").Value = "Đang chờ (Pending)";
+        s2.Cell("A4").Value = "Đang chờ";
         s2.Cell("B4").Value = pending;
 
-        s2.Cell("A5").Value = "Hoàn tất (Completed)";
+        s2.Cell("A5").Value = "Hoàn tất";
         s2.Cell("B5").Value = completed;
 
-        s2.Cell("A6").Value = "Huỷ/Expired";
+        s2.Cell("A6").Value = "Huỷ/Hết hạn";
         s2.Cell("B6").Value = canceled;
 
         s2.Cell("A8").Value = "Tổng số tiền đã thanh toán trong kết quả lọc";
