@@ -50,6 +50,59 @@ namespace PhyGen.API.Controllers
             );
         }
 
+        [HttpGet("{examId:guid}/export-word-multi")]
+        public async Task<IActionResult> ExportWordMulti(Guid examId, [FromQuery] int versions = 1, [FromQuery] bool randomize = true, CancellationToken ct = default)
+        {
+            var exam = await LoadExamAsync(examId, ct);
+            if (exam == null)
+                return NotFound(new { message = "Không tìm thấy đề thi." });
+
+            var model = MapToExportModel(exam);
+
+            // Danh sách các file (tên, data)
+            var files = new List<(string name, byte[] data)>();
+
+            for (int i = 1; i <= Math.Max(1, versions); i++)
+            {
+                var m = randomize ? CloneAndShuffleByType(model) : model;
+
+                // Gán Code/Mã đề khác nhau để đẩy ra header
+                m.Code = i.ToString("00");
+
+                var bytes = await _exportService.ExportExamToWordAsync(m, ct);
+                if (bytes == null || bytes.Length == 0)
+                    return StatusCode(500, $"Không tạo được file Word cho mã đề {i:00}.");
+
+                var fileName = $"{(string.IsNullOrWhiteSpace(exam.Title) ? "DE_THI" : exam.Title).ToUpper()}_V{i:00}.docx";
+                files.Add((fileName, bytes));
+            }
+
+            if (files.Count == 1)
+            {
+                // Nếu chỉ có 1 đề thì trả luôn .docx
+                return File(files[0].data,
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    files[0].name);
+            }
+
+            // Nếu có nhiều đề thì trả về ZIP
+            using var ms = new MemoryStream();
+            using (var zip = new System.IO.Compression.ZipArchive(ms, System.IO.Compression.ZipArchiveMode.Create, true))
+            {
+                foreach (var f in files)
+                {
+                    var entry = zip.CreateEntry(f.name, System.IO.Compression.CompressionLevel.Optimal);
+                    using var es = entry.Open();
+                    await es.WriteAsync(f.data, 0, f.data.Length, ct);
+                }
+            }
+            ms.Position = 0;
+
+            var zipName = $"{(string.IsNullOrWhiteSpace(exam.Title) ? "DE_THI" : exam.Title).ToUpper()}_{files.Count}MADE.zip";
+            return File(ms.ToArray(), "application/zip", zipName);
+        }
+
+
         private async Task<Exam?> LoadExamAsync(Guid id, CancellationToken ct)
         {
             return await _db.Exams
@@ -107,6 +160,75 @@ namespace PhyGen.API.Controllers
                 model.Sections.Add(sec);
             }
             return model;
+        }
+
+        private static ExamExportModel CloneAndShuffleByType(ExamExportModel model)
+        {
+            var rnd = new Random();
+            // 1. Clone shallow model + deep copy Sections + Questions:
+            var clone = new ExamExportModel
+            {
+                Title = model.Title,
+                Subject = model.Subject,
+                Grade = model.Grade,
+                Year = model.Year,
+                Duration = model.Duration,
+                Code = model.Code,
+                Sections = model.Sections.Select(s => new SectionExportDto
+                {
+                    Title = s.Title,
+                    SectionType = s.SectionType,
+                    DisplayOrder = s.DisplayOrder,
+                    Questions = s.Questions?.Select(q => new QuestionExportDto
+                    {
+                        Content = q.Content,
+                        Answer1 = q.Answer1,
+                        Answer2 = q.Answer2,
+                        Answer3 = q.Answer3,
+                        Answer4 = q.Answer4,
+                        Answer5 = q.Answer5,
+                        Answer6 = q.Answer6,
+                        Score = q.Score,
+                        ImageUrls = q.ImageUrls != null ? new List<string>(q.ImageUrls) : null
+                    }).ToList() ?? new List<QuestionExportDto>()
+                }).ToList()
+            };
+
+            // 2. Gom các câu hỏi theo SectionType:
+            var buckets = new Dictionary<string, List<QuestionExportDto>>();
+            foreach (var s in clone.Sections)
+            {
+                if (string.IsNullOrWhiteSpace(s.SectionType)) continue;
+                if (!buckets.TryGetValue(s.SectionType, out var list))
+                {
+                    list = new List<QuestionExportDto>();
+                    buckets[s.SectionType] = list;
+                }
+                if (s.Questions != null) list.AddRange(s.Questions);
+            }
+
+            // 3. Shuffle từng bucket:
+            foreach (var pair in buckets)
+            {
+                var list = pair.Value;
+                for (int i = list.Count - 1; i > 0; i--)
+                {
+                    int j = rnd.Next(i + 1);
+                    (list[i], list[j]) = (list[j], list[i]);
+                }
+            }
+
+            // 4. Phân lại về từng section đúng số câu ban đầu:
+            foreach (var s in clone.Sections)
+            {
+                if (string.IsNullOrWhiteSpace(s.SectionType) || s.Questions == null) continue;
+                var bucket = buckets[s.SectionType];
+                var count = s.Questions.Count;
+                s.Questions = bucket.Take(count).ToList();
+                bucket.RemoveRange(0, Math.Min(count, bucket.Count)); // lấy ra khỏi bucket
+            }
+
+            return clone;
         }
     }
 }

@@ -112,8 +112,6 @@ builder.Services.AddScoped<IFormulaConvertPipeline, FormulaConvertPipeline>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IExamExportService, ExamExportService>();
 
-builder.Services.AddHostedService<NodeMathmlHostedService>();
-
 var app = builder.Build();
 
 // Migrate and seed database
